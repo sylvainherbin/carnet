@@ -1,7 +1,7 @@
 // Service worker « Carnet » — cache-first avec remplissage au fil de l'eau.
 // Les assets Vite étant fingerprintés, une nouvelle version de l'app change
 // leurs URL ; on renouvelle CACHE à chaque déploiement pour purger l'ancien.
-const CACHE = 'carnet-v5';
+const CACHE = 'carnet-v6';
 const PRECACHE = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (e) => {

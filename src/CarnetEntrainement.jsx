@@ -11,6 +11,36 @@ const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${pad(
 const uid = () => Math.random().toString(36).slice(2, 10);
 const fmtDate = (iso) => { const [y, m, d] = iso.split("-"); return `${d}/${m}/${y.slice(2)}`; };
 const e1rm = (kg, reps) => (reps === 1 ? kg : kg * (1 + reps / 30));
+
+// ---- Estimation des calories (nécessite le poids corporel, onglet Poids) ----
+// Tapis : équations ACSM marche (<8 km/h) / course, VO2 en ml/kg/min, 5 kcal par litre d'O2.
+// Muscu : 3.5 MET (Compendium 2011, resistance training 8-15 reps, repos entre séries inclus)
+// sur la durée de séance saisie moins le temps de tapis ; à défaut, 3 min par série.
+const MET_MUSCU = 3.5, MIN_PAR_SERIE = 3;
+const weightFor = (weights, date) => {
+  const w = [...weights].sort((a, b) => a.date.localeCompare(b.date));
+  const past = w.filter((x) => x.date <= date);
+  return (past[past.length - 1] || w[0])?.kg || null;
+};
+const kcalTapis = (t, kg) => {
+  if (!(t.min > 0 && t.km > 0)) return 0;
+  const S = (t.km * 1000) / t.min, g = (t.slope || 0) / 100;
+  const vo2 = S >= 134 ? 3.5 + 0.2 * S + 0.9 * S * g : 3.5 + 0.1 * S + 1.8 * S * g;
+  return (vo2 * kg / 200) * t.min;
+};
+const kcalSeance = (data, date) => {
+  const kg = weightFor(data.weights, date);
+  if (!kg) return null;
+  const tread = data.treadmill.filter((t) => t.date === date);
+  const tKcal = tread.reduce((a, t) => a + kcalTapis(t, kg), 0);
+  const tMin = tread.reduce((a, t) => a + (t.min || 0), 0);
+  const nSets = data.sessions.filter((s) => s.date === date).reduce((a, s) => a + s.sets.length, 0);
+  const durTotal = data.durations.find((x) => x.date === date)?.min || null;
+  const mMin = durTotal ? Math.max(0, durTotal - tMin) : nSets * MIN_PAR_SERIE;
+  const mKcal = nSets > 0 ? (MET_MUSCU * 3.5 * kg / 200) * mMin : 0;
+  if (mKcal + tKcal === 0) return null;
+  return { total: Math.round(mKcal + tKcal), muscu: Math.round(mKcal), tapis: Math.round(tKcal), mMin: Math.round(mMin), durEstimee: !durTotal, kg };
+};
 const num = (v) => (v === "" || v === null || isNaN(Number(v)) ? 0 : Number(v));
 const isoWeek = (iso) => {
   const d = new Date(iso + "T12:00:00"); const day = (d.getDay() + 6) % 7;
@@ -35,7 +65,7 @@ const parseLine = (line) => {
   return { name, sets, note, bad };
 };
 const DEFAULT_EXERCISES = ["Dev incliné", "Dev couché", "Chest press", "Dips", "PullDown", "Row", "Leg extension", "Leg Curl", "Leg press", "Shoulder press"];
-const EMPTY = { exercises: DEFAULT_EXERCISES, sessions: [], treadmill: [], weights: [] };
+const EMPTY = { exercises: DEFAULT_EXERCISES, sessions: [], treadmill: [], weights: [], durations: [] };
 
 // ================= thème =================
 const T = {
@@ -376,6 +406,13 @@ function Seance({ data, update, notify, celebrate }) {
   };
 
   const todays = data.sessions.filter((s) => s.date === date);
+  const dur = data.durations.find((x) => x.date === date)?.min ?? "";
+  const setDurMin = (v) => update((d) => {
+    d.durations = d.durations.filter((x) => x.date !== date);
+    if (num(v) > 0) d.durations.push({ date, min: num(v) });
+    return d;
+  });
+  const kcal = kcalSeance(data, date);
   // Regroupe les entrées du jour par exercice (ordre d'apparition) ; chaque série
   // est numérotée selon l'ordre d'exécution, quelle que soit la méthode de saisie.
   const grouped = (() => {
@@ -401,6 +438,7 @@ function Seance({ data, update, notify, celebrate }) {
         <div className="grid grid-cols-2 gap-3">
           <Field label="date"><input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="inp" /></Field>
           <Field label="groupe"><select value={group} onChange={(e) => setGroup(e.target.value)} className="inp">{GROUPS.map((g) => <option key={g}>{g}</option>)}</select></Field>
+          <Field label="durée séance (min)"><input type="number" inputMode="numeric" min="0" value={dur} onChange={(e) => setDurMin(e.target.value)} className="inp" placeholder="tapis inclus" /></Field>
         </div>
         <div className="flex gap-2">
           <Btn small kind={mode === "texte" ? "primary" : "quiet"} onClick={() => setMode("texte")}>Saisie texte</Btn>
@@ -471,6 +509,12 @@ function Seance({ data, update, notify, celebrate }) {
 
       <Panel boot="boot-3">
         <H right={todays[0]?.group || ""}>Séance du {fmtDate(date)}</H>
+        {kcal && (
+          <p className="text-xs mb-2" style={{ color: T.mute, fontFamily: mono }}>
+            ≈ <span style={{ color: T.amber }}>{kcal.total} kcal</span> · muscu {kcal.muscu} ({kcal.mMin} min{kcal.durEstimee ? " estimées" : ""}) + tapis {kcal.tapis} · base {kcal.kg} kg
+          </p>
+        )}
+        {todays.length > 0 && !kcal && <p className="text-xs mb-2 italic" style={{ color: T.mute }}>Renseigne ton poids (onglet Poids) pour l'estimation des calories.</p>}
         {todays.length === 0 ? <Empty text="Rien d'enregistré pour cette date." /> : (
           <ul>
             {grouped.map((g, i) => (
