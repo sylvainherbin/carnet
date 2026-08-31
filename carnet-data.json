@@ -1191,6 +1191,20 @@
    ],
    "rpe": 8,
    "note": ""
+  },
+  {
+   "id": "5styby76",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 60
+    }
+   ],
+   "rpe": 9,
+   "note": ""
   }
  ],
  "treadmill": [],
