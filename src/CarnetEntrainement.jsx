@@ -14,9 +14,11 @@ const e1rm = (kg, reps) => (reps === 1 ? kg : kg * (1 + reps / 30));
 
 // ---- Estimation des calories (nécessite le poids corporel, onglet Poids) ----
 // Tapis : équations ACSM marche (<8 km/h) / course, VO2 en ml/kg/min, 5 kcal par litre d'O2.
-// Muscu : 3.5 MET (Compendium 2011, resistance training 8-15 reps, repos entre séries inclus)
-// sur la durée de séance saisie moins le temps de tapis ; à défaut, 3 min par série.
-const MET_MUSCU = 3.5, MIN_PAR_SERIE = 3;
+// Muscu : modèle travail/repos — ~6 MET pendant les séries (~40 s chacune), ~2 MET entre.
+// Le temps de muscu vient, par ordre de préférence : des horodatages de saisie en direct
+// (mode formulaire ; pauses plafonnées à 10 min pour absorber un tapis ou une interruption
+// au milieu), de la durée saisie moins le tapis, ou à défaut de 3 min par série.
+const MET_TRAVAIL = 6, MET_REPOS = 2, SEC_PAR_SERIE = 40, PAUSE_MAX = 10, MIN_PAR_SERIE = 3;
 const weightFor = (weights, date) => {
   const w = [...weights].sort((a, b) => a.date.localeCompare(b.date));
   const past = w.filter((x) => x.date <= date);
@@ -34,12 +36,23 @@ const kcalSeance = (data, date) => {
   const tread = data.treadmill.filter((t) => t.date === date);
   const tKcal = tread.reduce((a, t) => a + kcalTapis(t, kg), 0);
   const tMin = tread.reduce((a, t) => a + (t.min || 0), 0);
-  const nSets = data.sessions.filter((s) => s.date === date).reduce((a, s) => a + s.sets.length, 0);
-  const durTotal = data.durations.find((x) => x.date === date)?.min || null;
-  const mMin = durTotal ? Math.max(0, durTotal - tMin) : nSets * MIN_PAR_SERIE;
-  const mKcal = nSets > 0 ? (MET_MUSCU * 3.5 * kg / 200) * mMin : 0;
+  const entries = data.sessions.filter((s) => s.date === date);
+  const nSets = entries.reduce((a, s) => a + s.sets.length, 0);
+  const meta = data.durations.find((x) => x.date === date) || {};
+  const ts = entries.map((s) => s.at).filter(Boolean).sort((a, b) => a - b);
+  const span = ts.length >= 2 ? (ts[ts.length - 1] - ts[0]) / 60000 : 0;
+  let mMin, mode;
+  if (span >= 10) {
+    mMin = MIN_PAR_SERIE; // amorce : la première série précède son enregistrement
+    for (let i = 1; i < ts.length; i++) mMin += Math.min((ts[i] - ts[i - 1]) / 60000, PAUSE_MAX);
+    mode = "chrono";
+  } else if (meta.min > 0) { mMin = Math.max(0, meta.min - tMin); mode = "saisies"; }
+  else { mMin = nSets * MIN_PAR_SERIE; mode = "estimées"; }
+  const workMin = Math.min((nSets * SEC_PAR_SERIE) / 60, mMin);
+  const mKcal = nSets > 0 ? (3.5 * kg / 200) * (MET_TRAVAIL * workMin + MET_REPOS * (mMin - workMin)) : 0;
   if (mKcal + tKcal === 0) return null;
-  return { total: Math.round(mKcal + tKcal), muscu: Math.round(mKcal), tapis: Math.round(tKcal), mMin: Math.round(mMin), durEstimee: !durTotal, kg };
+  return { total: Math.round(mKcal + tKcal), muscu: Math.round(mKcal), tapis: Math.round(tKcal),
+    mMin: Math.round(mMin), mode, kg, hr: meta.hr || null, watch: meta.watch || null };
 };
 const num = (v) => (v === "" || v === null || isNaN(Number(v)) ? 0 : Number(v));
 const isoWeek = (iso) => {
@@ -401,15 +414,17 @@ function Seance({ data, update, notify, celebrate }) {
     const clean = sets.filter((s) => num(s.reps) > 0).map((s) => ({ reps: num(s.reps), kg: num(s.kg) }));
     if (!exercise || clean.length === 0) { notify("Ajoute au moins une série valide"); return; }
     const candidate = { exercise, oldBest: bestFor(exercise), newBest: Math.max(...clean.map((x) => e1rm(x.kg, x.reps))) };
-    update((d) => { d.sessions.push({ id: uid(), date, group, exercise, sets: clean, rpe: rpe === "" ? null : num(rpe), note: note.trim() }); return d; });
+    update((d) => { d.sessions.push({ id: uid(), date, group, exercise, sets: clean, rpe: rpe === "" ? null : num(rpe), note: note.trim(), at: Date.now() }); return d; });
     setSets([{ reps: "", kg: "" }]); setRpe(""); setNote(""); fire(); notify("Exercice enregistré"); firePR([candidate]);
   };
 
   const todays = data.sessions.filter((s) => s.date === date);
-  const dur = data.durations.find((x) => x.date === date)?.min ?? "";
-  const setDurMin = (v) => update((d) => {
-    d.durations = d.durations.filter((x) => x.date !== date);
-    if (num(v) > 0) d.durations.push({ date, min: num(v) });
+  const meta = data.durations.find((x) => x.date === date) || {};
+  const setMeta = (field, v) => update((d) => {
+    let m = d.durations.find((x) => x.date === date);
+    if (!m) { m = { date }; d.durations.push(m); }
+    if (num(v) > 0) m[field] = num(v); else delete m[field];
+    if (!(m.min > 0 || m.hr > 0 || m.watch > 0)) d.durations = d.durations.filter((x) => x !== m);
     return d;
   });
   const kcal = kcalSeance(data, date);
@@ -438,7 +453,11 @@ function Seance({ data, update, notify, celebrate }) {
         <div className="grid grid-cols-2 gap-3">
           <Field label="date"><input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="inp" /></Field>
           <Field label="groupe"><select value={group} onChange={(e) => setGroup(e.target.value)} className="inp">{GROUPS.map((g) => <option key={g}>{g}</option>)}</select></Field>
-          <Field label="durée séance (min)"><input type="number" inputMode="numeric" min="0" value={dur} onChange={(e) => setDurMin(e.target.value)} className="inp" placeholder="tapis inclus" /></Field>
+        </div>
+        <div className="grid grid-cols-3 gap-3">
+          <Field label="durée (min)"><input type="number" inputMode="numeric" min="0" value={meta.min ?? ""} onChange={(e) => setMeta("min", e.target.value)} className="inp" placeholder="auto en direct" /></Field>
+          <Field label="fc moy"><input type="number" inputMode="numeric" min="0" value={meta.hr ?? ""} onChange={(e) => setMeta("hr", e.target.value)} className="inp" /></Field>
+          <Field label="kcal montre"><input type="number" inputMode="decimal" min="0" value={meta.watch ?? ""} onChange={(e) => setMeta("watch", e.target.value)} className="inp" /></Field>
         </div>
         <div className="flex gap-2">
           <Btn small kind={mode === "texte" ? "primary" : "quiet"} onClick={() => setMode("texte")}>Saisie texte</Btn>
@@ -511,7 +530,7 @@ function Seance({ data, update, notify, celebrate }) {
         <H right={todays[0]?.group || ""}>Séance du {fmtDate(date)}</H>
         {kcal && (
           <p className="text-xs mb-2" style={{ color: T.mute, fontFamily: mono }}>
-            ≈ <span style={{ color: T.amber }}>{kcal.total} kcal</span> · muscu {kcal.muscu} ({kcal.mMin} min{kcal.durEstimee ? " estimées" : ""}) + tapis {kcal.tapis} · base {kcal.kg} kg
+            ≈ <span style={{ color: T.amber }}>{kcal.total} kcal</span> · muscu {kcal.muscu} ({kcal.mMin} min {kcal.mode}) + tapis {kcal.tapis} · base {kcal.kg} kg{kcal.hr ? ` · FC ${kcal.hr}` : ""}{kcal.watch ? ` · montre ${kcal.watch} kcal` : ""}
           </p>
         )}
         {todays.length > 0 && !kcal && <p className="text-xs mb-2 italic" style={{ color: T.mute }}>Renseigne ton poids (onglet Poids) pour l'estimation des calories.</p>}
