@@ -1276,6 +1276,20 @@
    ],
    "rpe": 6,
    "note": ""
+  },
+  {
+   "id": "96mydsv4",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Chest press",
+   "sets": [
+    {
+     "reps": 11,
+     "kg": 50
+    }
+   ],
+   "rpe": 9,
+   "note": ""
   }
  ],
  "treadmill": [],
