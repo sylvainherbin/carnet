@@ -1,7 +1,7 @@
 // Service worker « Carnet » — cache-first avec remplissage au fil de l'eau.
 // Les assets Vite étant fingerprintés, une nouvelle version de l'app change
 // leurs URL ; on renouvelle CACHE à chaque déploiement pour purger l'ancien.
-const CACHE = 'carnet-v2';
+const CACHE = 'carnet-v3';
 const PRECACHE = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (e) => {
@@ -19,6 +19,8 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const { request } = e;
   if (request.method !== 'GET') return;
+  // L'API GitHub (synchro) ne doit JAMAIS être servie depuis le cache.
+  if (new URL(request.url).hostname === 'api.github.com') return;
 
   // Navigation : réseau d'abord (pour récupérer les mises à jour), repli hors ligne sur le cache.
   if (request.mode === 'navigate') {

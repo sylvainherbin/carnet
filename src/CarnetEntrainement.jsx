@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
+import { pullRemote, pushRemote } from "./githubSync.js";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart,
 } from "recharts";
@@ -143,15 +144,84 @@ export default function CarnetEntrainement() {
   const [toast, setToast] = useState("");
   const saveTimer = useRef(null);
 
+  // --- synchronisation GitHub ---
+  const GH_TOKEN = "carnet-gh-token", GH_SHA = "carnet-gh-sha", GH_DIRTY = "carnet-gh-dirty", GH_AT = "carnet-gh-at";
+  const dataRef = useRef(data);
+  const adopting = useRef(false);   // vrai quand setData vient du chargement ou de GitHub : ne pas marquer "modifié"
+  const pulledOnce = useRef(false);
+  const pushTimer = useRef(null);
+  const [ghSync, setGhSync] = useState(() => {
+    try { return { hasToken: !!localStorage.getItem(GH_TOKEN), status: "", at: localStorage.getItem(GH_AT) || "" }; }
+    catch { return { hasToken: false, status: "", at: "" }; }
+  });
+  const stamp = (status) => {
+    const at = new Date().toTimeString().slice(0, 5);
+    try { localStorage.setItem(GH_AT, at); } catch (e) { /* privé */ }
+    setGhSync((g) => ({ ...g, status, at }));
+  };
+  const adopt = (rem) => {
+    adopting.current = true;
+    setData({ ...EMPTY, ...rem.data });
+    try { localStorage.setItem(GH_SHA, rem.sha); localStorage.removeItem(GH_DIRTY); } catch (e) { /* privé */ }
+    stamp("données GitHub chargées");
+  };
+  const doPush = async () => {
+    const token = localStorage.getItem(GH_TOKEN); if (!token) return;
+    try {
+      const res = await pushRemote(dataRef.current, localStorage.getItem(GH_SHA) || undefined, token);
+      if (res.conflict) { doPull(); return; } // modifié ailleurs : repasser par la lecture, qui arbitre
+      localStorage.setItem(GH_SHA, res.sha); localStorage.removeItem(GH_DIRTY);
+      stamp("synchronisé");
+    } catch (e) {
+      setGhSync((g) => ({ ...g, status: /40[13]/.test(e.message) ? "jeton invalide ou expiré" : "hors ligne — en attente" }));
+    }
+  };
+  const schedulePush = () => {
+    if (!localStorage.getItem(GH_TOKEN)) return;
+    clearTimeout(pushTimer.current);
+    pushTimer.current = setTimeout(doPush, 2000);
+  };
+  const doPull = async () => {
+    try {
+      const rem = await pullRemote();
+      if (!rem) { if (localStorage.getItem(GH_DIRTY)) schedulePush(); return; }
+      const sha = localStorage.getItem(GH_SHA);
+      const dirty = localStorage.getItem(GH_DIRTY) === "1";
+      if (rem.sha === sha) { if (dirty) schedulePush(); else setGhSync((g) => ({ ...g, status: "à jour" })); return; }
+      const d = dataRef.current;
+      const localEmpty = d.sessions.length === 0 && d.treadmill.length === 0 && d.weights.length === 0;
+      if (localEmpty || (sha && !dirty)) { adopt(rem); return; }
+      // données locales ET distantes divergentes : c'est à l'utilisateur d'arbitrer
+      if (window.confirm("Des données différentes existent sur GitHub (autre appareil ?).\n\nOK — charger celles de GitHub sur cet appareil.\nAnnuler — garder celles de cet appareil (elles écraseront GitHub à la prochaine synchro).")) {
+        adopt(rem);
+      } else {
+        try { localStorage.setItem(GH_SHA, rem.sha); localStorage.setItem(GH_DIRTY, "1"); } catch (e) { /* privé */ }
+        schedulePush();
+      }
+    } catch (e) { setGhSync((g) => ({ ...g, status: "hors ligne" })); }
+  };
+
+  useEffect(() => { dataRef.current = data; }, [data]);
   useEffect(() => {
-    try { const r = localStorage.getItem(STORAGE_KEY); if (r) setData({ ...EMPTY, ...JSON.parse(r) }); }
+    try { const r = localStorage.getItem(STORAGE_KEY); if (r) { adopting.current = true; setData({ ...EMPTY, ...JSON.parse(r) }); } }
     catch (e) { /* première utilisation */ }
     finally { setLoaded(true); }
   }, []);
   useEffect(() => {
+    if (!loaded || pulledOnce.current) return;
+    pulledOnce.current = true;
+    doPull();
+  }, [loaded]);
+  useEffect(() => {
     if (!loaded) return;
     clearTimeout(saveTimer.current);
-    saveTimer.current = setTimeout(() => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) { console.error(e); } }, 400);
+    const adopted = adopting.current; adopting.current = false;
+    saveTimer.current = setTimeout(() => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        if (!adopted) { localStorage.setItem(GH_DIRTY, "1"); schedulePush(); }
+      } catch (e) { console.error(e); }
+    }, 400);
     return () => clearTimeout(saveTimer.current);
   }, [data, loaded]);
 
@@ -197,7 +267,10 @@ export default function CarnetEntrainement() {
           {loaded && tab === "tapis" && <Tapis data={data} update={update} notify={notify} />}
           {loaded && tab === "poids" && <Poids data={data} update={update} notify={notify} />}
           {loaded && tab === "courbes" && <Courbes data={data} />}
-          {loaded && tab === "donnees" && <Donnees data={data} setData={setData} notify={notify} />}
+          {loaded && tab === "donnees" && <Donnees data={data} setData={setData} notify={notify} sync={ghSync}
+            onToken={(t) => { const v = t.trim(); if (!v) return; try { localStorage.setItem(GH_TOKEN, v); localStorage.setItem(GH_DIRTY, "1"); } catch (e) { /* privé */ } setGhSync((g) => ({ ...g, hasToken: true, status: "activation…" })); doPull(); }}
+            onTokenOff={() => { try { localStorage.removeItem(GH_TOKEN); } catch (e) { /* privé */ } setGhSync((g) => ({ ...g, hasToken: false, status: "" })); notify("Synchro désactivée sur cet appareil"); }}
+            onSync={doPull} />}
         </main>
 
         {toast && (
@@ -598,8 +671,9 @@ function Courbes({ data }) {
 }
 
 // ================= Données =================
-function Donnees({ data, setData, notify }) {
+function Donnees({ data, setData, notify, sync, onToken, onTokenOff, onSync }) {
   const [imp, setImp] = useState("");
+  const [tok, setTok] = useState("");
   const fileRef = useRef(null);
   const download = (name, content, type) => {
     const blob = new Blob([content], { type }); const url = URL.createObjectURL(blob);
@@ -645,6 +719,28 @@ function Donnees({ data, setData, notify }) {
         <p className="text-xs text-center" style={{ color: T.mute, fontFamily: mono }}>— ou colle le contenu ci-dessous —</p>
         <textarea value={imp} onChange={(e) => setImp(e.target.value)} rows={4} placeholder="Colle ici le contenu du fichier carnet.json" className="inp" />
         <Btn full kind="quiet" onClick={importJSON}>Remplacer les données par cet import</Btn>
+      </Panel>
+      <Panel boot="boot-3" className="space-y-3">
+        <H right={sync.at ? `dernière : ${sync.at}` : ""}>Synchronisation GitHub</H>
+        {sync.hasToken ? (
+          <>
+            <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>{sync.status || "prête"}</p>
+            <div className="flex gap-2">
+              <Btn kind="quiet" small onClick={onSync}>Synchroniser maintenant</Btn>
+              <Btn kind="danger" small onClick={onTokenOff}>Désactiver ici</Btn>
+            </div>
+          </>
+        ) : (
+          <>
+            <p className="text-xs" style={{ color: T.mute }}>
+              Les données se chargent depuis GitHub sur tous les appareils. Pour que celui-ci puisse aussi y écrire,
+              colle un jeton fine-grained limité au dépôt carnet (permission Contents en écriture).
+            </p>
+            {sync.status && <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>{sync.status}</p>}
+            <input type="password" autoComplete="off" placeholder="github_pat_…" value={tok} onChange={(e) => setTok(e.target.value)} className="inp" />
+            <Btn full kind="quiet" onClick={() => { onToken(tok); setTok(""); }}>Activer la synchronisation</Btn>
+          </>
+        )}
       </Panel>
       <Panel boot="boot-3" className="space-y-2">
         <H>Exercices</H>
