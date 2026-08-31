@@ -1220,6 +1220,20 @@
    ],
    "rpe": 9,
    "note": "Reprise"
+  },
+  {
+   "id": "kn797rdq",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Incline chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 40
+    }
+   ],
+   "rpe": 6,
+   "note": ""
   }
  ],
  "treadmill": [],
