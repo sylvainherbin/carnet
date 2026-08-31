@@ -1262,6 +1262,20 @@
    ],
    "rpe": 7,
    "note": "Reprise"
+  },
+  {
+   "id": "ayo2ldoh",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 6,
+   "note": ""
   }
  ],
  "treadmill": [],
