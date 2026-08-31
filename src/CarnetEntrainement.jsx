@@ -600,9 +600,28 @@ function Courbes({ data }) {
 // ================= Données =================
 function Donnees({ data, setData, notify }) {
   const [imp, setImp] = useState("");
+  const fileRef = useRef(null);
   const download = (name, content, type) => {
     const blob = new Blob([content], { type }); const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; a.download = name; a.click(); URL.revokeObjectURL(url);
+  };
+  // Partage natif (fiable en PWA iOS, permet d'envoyer vers Drive/Fichiers) ; repli téléchargement.
+  const exportFile = async (name, content, type) => {
+    const file = new File([content], name, { type });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: name }); return; }
+      catch (e) { if (e.name === "AbortError") return; }
+    }
+    download(name, content, type);
+  };
+  const applyImport = (text) => {
+    try { const p = JSON.parse(text); if (!p.sessions || !p.weights) throw new Error(); setData({ ...EMPTY, ...p }); setImp(""); notify("Données importées"); }
+    catch { notify("JSON invalide"); }
+  };
+  const onFile = (e) => {
+    const f = e.target.files[0]; e.target.value = "";
+    if (!f) return;
+    const r = new FileReader(); r.onload = () => applyImport(r.result); r.readAsText(f);
   };
   const toCSV = () => {
     const rows = [["type", "date", "groupe", "exercice", "serie", "kg", "reps", "rpe", "min", "km", "pente", "fc", "note"]];
@@ -611,19 +630,19 @@ function Donnees({ data, setData, notify }) {
     data.weights.forEach((w) => rows.push(["poids", w.date, "", "", "", w.kg, "", "", "", "", "", "", ""]));
     return rows.map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(";")).join("\n");
   };
-  const importJSON = () => {
-    try { const p = JSON.parse(imp); if (!p.sessions || !p.weights) throw new Error(); setData({ ...EMPTY, ...p }); setImp(""); notify("Données importées"); }
-    catch { notify("JSON invalide"); }
-  };
+  const importJSON = () => applyImport(imp);
   return (
     <>
       <Panel boot="boot-1" className="space-y-3">
         <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>{data.sessions.length} exercices · {data.treadmill.length} marches · {data.weights.length} pesées</p>
-        <Btn full kind="ghost" onClick={() => download("carnet.json", JSON.stringify(data, null, 2), "application/json")}>Exporter en JSON (sauvegarde)</Btn>
-        <Btn full kind="ghost" onClick={() => download("carnet.csv", toCSV(), "text/csv")}>Exporter en CSV (tableur)</Btn>
+        <Btn full kind="ghost" onClick={() => exportFile("carnet.json", JSON.stringify(data, null, 2), "application/json")}>Exporter en JSON (sauvegarde)</Btn>
+        <Btn full kind="ghost" onClick={() => exportFile("carnet.csv", toCSV(), "text/csv")}>Exporter en CSV (tableur)</Btn>
       </Panel>
       <Panel boot="boot-2" className="space-y-3">
         <H>Importer une sauvegarde JSON</H>
+        <input ref={fileRef} type="file" accept=".json,application/json" onChange={onFile} style={{ display: "none" }} />
+        <Btn full kind="quiet" onClick={() => fileRef.current.click()}>Importer un fichier carnet.json</Btn>
+        <p className="text-xs text-center" style={{ color: T.mute, fontFamily: mono }}>— ou colle le contenu ci-dessous —</p>
         <textarea value={imp} onChange={(e) => setImp(e.target.value)} rows={4} placeholder="Colle ici le contenu du fichier carnet.json" className="inp" />
         <Btn full kind="quiet" onClick={importJSON}>Remplacer les données par cet import</Btn>
       </Panel>
