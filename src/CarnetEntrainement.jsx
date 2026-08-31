@@ -1,0 +1,644 @@
+import { useState, useEffect, useMemo, useRef } from "react";
+import {
+  LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart,
+} from "recharts";
+
+// ================= données / helpers (inchangés) =================
+const STORAGE_KEY = "carnet-entrainement-v1";
+const pad = (n) => String(n).padStart(2, "0");
+const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+const uid = () => Math.random().toString(36).slice(2, 10);
+const fmtDate = (iso) => { const [y, m, d] = iso.split("-"); return `${d}/${m}/${y.slice(2)}`; };
+const e1rm = (kg, reps) => (reps === 1 ? kg : kg * (1 + reps / 30));
+const num = (v) => (v === "" || v === null || isNaN(Number(v)) ? 0 : Number(v));
+const isoWeek = (iso) => {
+  const d = new Date(iso + "T12:00:00"); const day = (d.getDay() + 6) % 7;
+  d.setDate(d.getDate() - day + 3); const firstThu = new Date(d.getFullYear(), 0, 4);
+  const week = 1 + Math.round(((d - firstThu) / 86400000 - 3 + ((firstThu.getDay() + 6) % 7)) / 7);
+  return `${d.getFullYear()}-S${pad(week)}`;
+};
+const GROUPS = ["Pecs", "Dos", "Jambes", "Épaules", "Bras", "Autre"];
+const parseLine = (line) => {
+  if (!line.includes(":")) return { error: "pas de valeurs", raw: line };
+  const idx = line.indexOf(":"); const name = line.slice(0, idx).trim();
+  let vals = line.slice(idx + 1).trim(); let note = "";
+  const mn = vals.match(/\(([^)]*)\)/);
+  if (mn) { note = mn[1].trim(); vals = vals.slice(0, mn.index).trim(); }
+  const sets = []; const bad = [];
+  vals.split(/\s*-\s*/).forEach((p) => {
+    const part = p.trim().replace(",", "."); if (!part) return;
+    const m = part.match(/^([\d.]+)\s*[x×]\s*([\d.]+)$/i);
+    if (m) sets.push({ kg: Number(m[1]), reps: Number(m[2]) }); else bad.push(part);
+  });
+  if (!name || sets.length === 0) return { error: "aucune série lisible", raw: line };
+  return { name, sets, note, bad };
+};
+const DEFAULT_EXERCISES = ["Dev incliné", "Dev couché", "Chest press", "Dips", "PullDown", "Row", "Leg extension", "Leg Curl", "Leg press", "Shoulder press"];
+const EMPTY = { exercises: DEFAULT_EXERCISES, sessions: [], treadmill: [], weights: [] };
+
+// ================= thème =================
+const T = {
+  bg: "#06080E", panel: "rgba(11,16,26,0.92)", panel2: "#0A0E17",
+  cyan: "#00E5FF", magenta: "#FF2D95", amber: "#FFB000", danger: "#FF3B5C", violet: "#7A5CFF",
+  text: "#D8E6F2", mute: "#6C7F97", line: "rgba(0,229,255,0.18)", lineStrong: "rgba(0,229,255,0.45)",
+};
+const mono = "'SF Mono', ui-monospace, Menlo, Consolas, monospace";
+const display = "'Orbitron', 'SF Mono', ui-monospace, monospace";
+const sans = "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
+
+const CSS = `
+@keyframes boot { from { opacity:0; transform: translateY(6px);} to { opacity:1; transform:none;} }
+@keyframes rise { from { opacity:0; transform: translateX(-8px);} to { opacity:1; transform:none;} }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0,229,255,.55);} 100% { box-shadow: 0 0 0 18px rgba(0,229,255,0);} }
+@keyframes scan { 0% { transform: translateY(-100%);} 100% { transform: translateY(400%);} }
+@keyframes blink { 0%,49% { opacity:1;} 50%,100% { opacity:0;} }
+@keyframes toastin { from { opacity:0; transform: translate(-50%, 8px);} to { opacity:1; transform: translate(-50%, 0);} }
+.boot { animation: boot .45s cubic-bezier(.2,.8,.2,1) both; }
+.boot-2 { animation-delay: .08s; } .boot-3 { animation-delay: .16s; } .boot-4 { animation-delay: .24s; }
+.rise { animation: rise .3s ease-out both; }
+.pulse { animation: pulse .7s ease-out; }
+.scanline { position:absolute; left:0; right:0; height:36px; pointer-events:none;
+  background: linear-gradient(180deg, rgba(0,229,255,0) 0%, rgba(0,229,255,.10) 50%, rgba(0,229,255,0) 100%);
+  animation: scan 7s linear infinite; }
+.cursor::after { content:"_"; animation: blink 1s steps(1) infinite; color:${T.cyan}; }
+.toast { animation: toastin .25s ease-out; }
+.grid-bg { background-image:
+  linear-gradient(rgba(0,229,255,.035) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(0,229,255,.035) 1px, transparent 1px);
+  background-size: 28px 28px; }
+.inp { width:100%; background:${T.panel2}; color:${T.text}; border:1px solid ${T.line}; border-radius:6px;
+  padding:10px 12px; font-size:16px; font-family:${mono}; transition: border-color .15s, box-shadow .15s; }
+.inp:focus { outline:none; border-color:${T.cyan}; box-shadow: 0 0 0 1px ${T.cyan}, 0 0 16px rgba(0,229,255,.25); }
+.inp::placeholder { color:${T.mute}; font-family:${sans}; }
+select.inp { appearance:none; background-image: linear-gradient(45deg, transparent 50%, ${T.cyan} 50%), linear-gradient(135deg, ${T.cyan} 50%, transparent 50%);
+  background-position: calc(100% - 18px) 55%, calc(100% - 13px) 55%; background-size: 5px 5px; background-repeat:no-repeat; }
+.btn { border-radius:6px; font-weight:600; letter-spacing:.02em; transition: transform .08s, filter .15s, box-shadow .15s; cursor:pointer; }
+.btn:active { transform: scale(.98); }
+.btn-primary { background:${T.cyan}; color:#03141A; box-shadow: 0 0 18px rgba(0,229,255,.35); }
+.btn-primary:hover { filter: brightness(1.08); }
+.btn-ghost { background:transparent; color:${T.cyan}; border:1px solid ${T.lineStrong}; }
+.btn-quiet { background:rgba(0,229,255,.08); color:${T.cyan}; border:1px solid transparent; }
+.btn-danger { background:transparent; color:${T.danger}; border:1px solid rgba(255,59,92,.5); }
+.tab { transition: color .15s; position:relative; }
+.tab-active::before { content:""; position:absolute; top:-1px; left:20%; right:20%; height:2px; background:${T.cyan};
+  box-shadow: 0 0 10px ${T.cyan}, 0 0 20px ${T.cyan}; }
+.panel { position:relative; overflow:hidden; background:${T.panel}; border:1px solid ${T.line}; border-radius:10px; backdrop-filter: blur(6px); }
+.panel::before { content:""; position:absolute; top:0; left:0; width:22px; height:22px;
+  border-top:2px solid ${T.cyan}; border-left:2px solid ${T.cyan}; border-top-left-radius:10px; opacity:.8; }
+.panel::after { content:""; position:absolute; bottom:0; right:0; width:22px; height:22px;
+  border-bottom:2px solid ${T.cyan}; border-right:2px solid ${T.cyan}; border-bottom-right-radius:10px; opacity:.8; }
+.glow-cyan { filter: drop-shadow(0 0 6px rgba(0,229,255,.55)); }
+.glow-magenta { filter: drop-shadow(0 0 6px rgba(255,45,149,.55)); }
+.glow-violet { filter: drop-shadow(0 0 6px rgba(122,92,255,.55)); }
+.row { border-bottom:1px solid rgba(0,229,255,.10); }
+.row:last-child { border-bottom:none; }
+@media (prefers-reduced-motion: reduce) {
+  .boot,.rise,.pulse,.scanline,.toast,.cursor::after { animation:none !important; }
+}
+`;
+
+// ================= UI =================
+function Panel({ children, className = "", boot }) {
+  return <section className={`panel p-4 ${boot ? "boot " + boot : ""} ${className}`}>{children}</section>;
+}
+function Field({ label, children }) {
+  return (
+    <label className="block">
+      <span className="text-xs tracking-wide" style={{ color: T.mute, fontFamily: mono }}>{label}</span>
+      <div className="mt-1">{children}</div>
+    </label>
+  );
+}
+function Btn({ children, onClick, kind = "primary", full, small, pulse }) {
+  return (
+    <button type="button" onClick={onClick}
+      className={`btn btn-${kind} ${small ? "px-3 py-1.5 text-sm" : "px-4 py-3 text-base"} ${full ? "w-full" : ""} ${pulse ? "pulse" : ""}`}
+      style={{ fontFamily: sans }}>
+      {children}
+    </button>
+  );
+}
+function H({ children, right }) {
+  return (
+    <div className="flex items-baseline justify-between mb-3">
+      <h2 className="font-semibold text-base" style={{ color: T.text }}>{children}</h2>
+      {right && <span className="text-xs" style={{ color: T.mute, fontFamily: mono }}>{right}</span>}
+    </div>
+  );
+}
+function Empty({ text }) {
+  return <p className="text-sm py-6 text-center" style={{ color: T.mute }}>{text}</p>;
+}
+function Del({ onClick }) {
+  return <button type="button" onClick={onClick} className="text-xs px-2 py-1 rounded" style={{ color: T.danger, fontFamily: mono }}>×</button>;
+}
+const tip = { contentStyle: { background: "#0A0E17", border: `1px solid ${T.lineStrong}`, borderRadius: 6, fontFamily: mono, fontSize: 12, color: T.text }, labelStyle: { color: T.mute }, cursor: { stroke: T.lineStrong } };
+const axis = { fontSize: 10, fill: T.mute, fontFamily: mono };
+
+// ================= APP =================
+export default function CarnetEntrainement() {
+  const [data, setData] = useState(EMPTY);
+  const [loaded, setLoaded] = useState(false);
+  const [tab, setTab] = useState("seance");
+  const [toast, setToast] = useState("");
+  const saveTimer = useRef(null);
+
+  useEffect(() => {
+    try { const r = localStorage.getItem(STORAGE_KEY); if (r) setData({ ...EMPTY, ...JSON.parse(r) }); }
+    catch (e) { /* première utilisation */ }
+    finally { setLoaded(true); }
+  }, []);
+  useEffect(() => {
+    if (!loaded) return;
+    clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e) { console.error(e); } }, 400);
+    return () => clearTimeout(saveTimer.current);
+  }, [data, loaded]);
+
+  const notify = (msg) => { setToast(msg); setTimeout(() => setToast(""), 1800); };
+  const update = (fn) => setData((d) => fn(structuredClone(d)));
+
+  // HUD
+  const hud = useMemo(() => {
+    const dates = [...new Set(data.sessions.map((s) => s.date))].sort();
+    const lastDate = dates[dates.length - 1];
+    const lastGroup = lastDate ? data.sessions.find((s) => s.date === lastDate)?.group : null;
+    const thisWeek = isoWeek(todayISO());
+    const weekSessions = dates.filter((d) => isoWeek(d) === thisWeek).length;
+    const w = [...data.weights].sort((a, b) => a.date.localeCompare(b.date));
+    const lastW = w[w.length - 1];
+    const ref = w.length >= 8 ? w[w.length - 8] : w[0];
+    const delta = lastW && ref && lastW !== ref ? lastW.kg - ref.kg : null;
+    return { lastDate, lastGroup, weekSessions, lastW, delta };
+  }, [data]);
+
+  const tabs = [["seance", "Séance"], ["tapis", "Tapis"], ["poids", "Poids"], ["courbes", "Courbes"], ["donnees", "Données"]];
+
+  return (
+    <div className="min-h-screen grid-bg" style={{ background: T.bg, color: T.text, fontFamily: sans }}>
+      <style>{CSS}</style>
+      <div className="max-w-md mx-auto pb-24">
+        <header className="relative px-4 pt-5 pb-4 overflow-hidden boot">
+          <div className="scanline" />
+          <div className="flex items-baseline justify-between">
+            <h1 className="text-2xl font-bold tracking-tight cursor" style={{ color: T.cyan, textShadow: `0 0 14px rgba(0,229,255,.6)`, fontFamily: display, letterSpacing: '.08em' }}>CARNET</h1>
+            <span className="text-xs" style={{ color: T.mute, fontFamily: mono }}>{fmtDate(todayISO())}</span>
+          </div>
+          <div className="mt-3 grid grid-cols-3 gap-2 text-xs" style={{ fontFamily: mono }}>
+            <Hud label="dernière" value={hud.lastDate ? fmtDate(hud.lastDate) : "—"} sub={hud.lastGroup || ""} />
+            <Hud label="semaine" value={`${hud.weekSessions} séance${hud.weekSessions > 1 ? "s" : ""}`} sub="" />
+            <Hud label="poids" value={hud.lastW ? `${hud.lastW.kg.toFixed(1)} kg` : "—"} sub={hud.delta !== null ? `${hud.delta > 0 ? "+" : ""}${hud.delta.toFixed(1)} / 7 j` : ""} color={T.magenta} />
+          </div>
+        </header>
+
+        <main className="px-4 space-y-4" key={tab}>
+          {!loaded && <Empty text="Initialisation…" />}
+          {loaded && tab === "seance" && <Seance data={data} update={update} notify={notify} />}
+          {loaded && tab === "tapis" && <Tapis data={data} update={update} notify={notify} />}
+          {loaded && tab === "poids" && <Poids data={data} update={update} notify={notify} />}
+          {loaded && tab === "courbes" && <Courbes data={data} />}
+          {loaded && tab === "donnees" && <Donnees data={data} setData={setData} notify={notify} />}
+        </main>
+
+        {toast && (
+          <div className="toast fixed left-1/2 bottom-20 px-4 py-2 rounded-md text-sm"
+            style={{ background: "#0A0E17", border: `1px solid ${T.cyan}`, color: T.cyan, fontFamily: mono, boxShadow: "0 0 20px rgba(0,229,255,.35)", transform: "translateX(-50%)" }}>
+            {toast}
+          </div>
+        )}
+
+        <nav className="fixed bottom-0 left-0 right-0" style={{ background: "rgba(6,8,14,.92)", borderTop: `1px solid ${T.line}`, backdropFilter: "blur(10px)" }}>
+          <div className="max-w-md mx-auto grid grid-cols-5">
+            {tabs.map(([k, label]) => (
+              <button key={k} type="button" onClick={() => setTab(k)} className={`tab py-3 text-xs ${tab === k ? "tab-active" : ""}`}
+                style={{ color: tab === k ? T.cyan : T.mute, fontFamily: mono, fontWeight: tab === k ? 700 : 400 }}>
+                {label}
+              </button>
+            ))}
+          </div>
+        </nav>
+      </div>
+    </div>
+  );
+}
+
+function Hud({ label, value, sub, color = T.cyan }) {
+  return (
+    <div className="rounded px-2 py-1.5" style={{ background: "rgba(0,229,255,.05)", border: `1px solid ${T.line}` }}>
+      <div style={{ color: T.mute }}>{label}</div>
+      <div className="font-bold text-sm" style={{ color, textShadow: `0 0 8px ${color}55`, fontFamily: display }}>{value}</div>
+      <div style={{ color: T.mute, minHeight: 14 }}>{sub}</div>
+    </div>
+  );
+}
+
+// ================= Séance =================
+function Seance({ data, update, notify }) {
+  const [date, setDate] = useState(todayISO());
+  const [group, setGroup] = useState(GROUPS[0]);
+  const [mode, setMode] = useState("texte");
+  const [text, setText] = useState("");
+  const [exercise, setExercise] = useState(data.exercises[0] || "");
+  const [newEx, setNewEx] = useState("");
+  const [sets, setSets] = useState([{ reps: "", kg: "" }]);
+  const [rpe, setRpe] = useState("");
+  const [note, setNote] = useState("");
+  const [pulse, setPulse] = useState(false);
+  const fire = () => { setPulse(true); setTimeout(() => setPulse(false), 700); };
+
+  const parsed = useMemo(() => text.split("\n").map((l) => l.trim()).filter(Boolean).map(parseLine), [text]);
+
+  const lastFor = (name) => data.sessions.filter((x) => x.exercise === name).sort((a, b) => b.date.localeCompare(a.date))[0] || null;
+  const last = useMemo(() => lastFor(exercise), [data.sessions, exercise]);
+
+  const saveText = () => {
+    const ok = parsed.filter((p) => !p.error);
+    if (ok.length === 0) { notify("Rien à enregistrer"); return; }
+    update((d) => {
+      ok.forEach((p) => {
+        if (!d.exercises.includes(p.name)) d.exercises.push(p.name);
+        d.sessions.push({ id: uid(), date, group, exercise: p.name, sets: p.sets, rpe: null, note: p.note });
+      });
+      return d;
+    });
+    setText(""); fire(); notify(`${ok.length} exercice(s) enregistré(s)`);
+  };
+  const addExercise = () => {
+    const n = newEx.trim(); if (!n) return;
+    update((d) => { if (!d.exercises.includes(n)) d.exercises.push(n); return d; });
+    setExercise(n); setNewEx("");
+  };
+  const save = () => {
+    const clean = sets.filter((s) => num(s.reps) > 0).map((s) => ({ reps: num(s.reps), kg: num(s.kg) }));
+    if (!exercise || clean.length === 0) { notify("Ajoute au moins une série valide"); return; }
+    update((d) => { d.sessions.push({ id: uid(), date, group, exercise, sets: clean, rpe: rpe === "" ? null : num(rpe), note: note.trim() }); return d; });
+    setSets([{ reps: "", kg: "" }]); setRpe(""); setNote(""); fire(); notify("Exercice enregistré");
+  };
+
+  const todays = data.sessions.filter((s) => s.date === date);
+
+  return (
+    <>
+      <Panel boot="boot-1" className="space-y-3">
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="date"><input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="inp" /></Field>
+          <Field label="groupe"><select value={group} onChange={(e) => setGroup(e.target.value)} className="inp">{GROUPS.map((g) => <option key={g}>{g}</option>)}</select></Field>
+        </div>
+        <div className="flex gap-2">
+          <Btn small kind={mode === "texte" ? "primary" : "quiet"} onClick={() => setMode("texte")}>Saisie texte</Btn>
+          <Btn small kind={mode === "form" ? "primary" : "quiet"} onClick={() => setMode("form")}>Formulaire</Btn>
+        </div>
+      </Panel>
+
+      {mode === "texte" && (
+        <Panel boot="boot-2" className="space-y-3">
+          <textarea value={text} onChange={(e) => setText(e.target.value)} rows={7} className="inp"
+            placeholder={"Une ligne par exercice, kg x reps, séries séparées par un tiret :\nDev incliné : 90x6 - 100x1,5\nPoulie haut du pec : 15x10 (moins mal au coude)"} />
+          {parsed.length > 0 && (
+            <ul className="text-sm space-y-1.5" style={{ fontFamily: mono }}>
+              {parsed.map((p, i) => {
+                const prev = p.error ? null : lastFor(p.name);
+                const bestNow = p.error ? 0 : Math.max(...p.sets.map((s) => e1rm(s.kg, s.reps)));
+                const bestPrev = prev ? Math.max(...prev.sets.map((s) => e1rm(s.kg, s.reps))) : null;
+                const up = bestPrev !== null && bestNow > bestPrev + 0.05;
+                return (
+                  <li key={i} className="rise" style={{ animationDelay: `${i * 40}ms`, color: p.error ? T.danger : T.text }}>
+                    {p.error ? `⚠ ${p.raw} — ${p.error}` : (
+                      <>
+                        <span style={{ color: T.cyan }}>{p.name}</span> {p.sets.map((s) => `${s.kg}×${s.reps}`).join("  ")}
+                        {up && <span style={{ color: T.amber }}> ▲ e1RM {bestNow.toFixed(1)}</span>}
+                        {p.note ? <span style={{ color: T.mute }}> ({p.note})</span> : ""}
+                        {p.bad.length > 0 && <span style={{ color: T.danger }}> — ignoré : {p.bad.join(", ")}</span>}
+                      </>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          <Btn full onClick={saveText} pulse={pulse}>Enregistrer la séance</Btn>
+        </Panel>
+      )}
+
+      {mode === "form" && (
+        <Panel boot="boot-2" className="space-y-3">
+          <Field label="exercice"><select value={exercise} onChange={(e) => setExercise(e.target.value)} className="inp">{data.exercises.map((x) => <option key={x}>{x}</option>)}</select></Field>
+          <div className="flex gap-2">
+            <input placeholder="Nouvel exercice" value={newEx} onChange={(e) => setNewEx(e.target.value)} className="inp" />
+            <Btn kind="quiet" onClick={addExercise}>Ajouter</Btn>
+          </div>
+          {last && <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>dernière fois {fmtDate(last.date)} : {last.sets.map((s) => `${s.kg}×${s.reps}`).join("  ")}</p>}
+          <div className="space-y-2">
+            <div className="grid grid-cols-12 gap-2 text-xs" style={{ color: T.mute, fontFamily: mono }}><span className="col-span-2">#</span><span className="col-span-4">kg</span><span className="col-span-4">reps</span></div>
+            {sets.map((s, i) => (
+              <div key={i} className="grid grid-cols-12 gap-2 items-center rise">
+                <span className="col-span-2 text-sm" style={{ fontFamily: mono, color: T.cyan }}>{pad(i + 1)}</span>
+                <input type="number" inputMode="decimal" step="0.5" value={s.kg} onChange={(e) => setSets(sets.map((x, j) => j === i ? { ...x, kg: e.target.value } : x))} className="col-span-4 inp" />
+                <input type="number" inputMode="decimal" step="0.5" value={s.reps} onChange={(e) => setSets(sets.map((x, j) => j === i ? { ...x, reps: e.target.value } : x))} className="col-span-4 inp" />
+                <div className="col-span-2 text-right"><Del onClick={() => setSets(sets.length > 1 ? sets.filter((_, j) => j !== i) : sets)} /></div>
+              </div>
+            ))}
+            <div className="flex gap-2">
+              <Btn kind="quiet" small onClick={() => setSets([...sets, { ...sets[sets.length - 1] }])}>+ série (copie)</Btn>
+              <Btn kind="quiet" small onClick={() => setSets([...sets, { reps: "", kg: "" }])}>+ série vide</Btn>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="rpe"><input type="number" inputMode="decimal" min="1" max="10" step="0.5" value={rpe} onChange={(e) => setRpe(e.target.value)} className="inp" /></Field>
+            <Field label="note"><input value={note} onChange={(e) => setNote(e.target.value)} className="inp" /></Field>
+          </div>
+          <Btn full onClick={save} pulse={pulse}>Enregistrer l'exercice</Btn>
+        </Panel>
+      )}
+
+      <Panel boot="boot-3">
+        <H right={todays[0]?.group || ""}>Séance du {fmtDate(date)}</H>
+        {todays.length === 0 ? <Empty text="Rien d'enregistré pour cette date." /> : (
+          <ul>
+            {todays.map((s, i) => {
+              const vol = s.sets.reduce((a, x) => a + x.reps * x.kg, 0);
+              const best = Math.max(...s.sets.map((x) => e1rm(x.kg, x.reps)));
+              return (
+                <li key={s.id} className="row py-2.5 flex justify-between items-start gap-2 rise" style={{ animationDelay: `${i * 40}ms` }}>
+                  <div>
+                    <div className="font-medium">{s.exercise}</div>
+                    <div className="text-xs" style={{ color: T.mute, fontFamily: mono }}>
+                      {s.sets.map((x) => `${x.kg}×${x.reps}`).join("  ")} · vol {vol} · e1RM <span style={{ color: T.cyan }}>{best.toFixed(1)}</span>{s.rpe ? ` · RPE ${s.rpe}` : ""}
+                    </div>
+                    {s.note && <div className="text-xs italic" style={{ color: T.amber }}>{s.note}</div>}
+                  </div>
+                  <Del onClick={() => update((d) => { d.sessions = d.sessions.filter((x) => x.id !== s.id); return d; })} />
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </Panel>
+    </>
+  );
+}
+
+// ================= Tapis =================
+function Tapis({ data, update, notify }) {
+  const [f, setF] = useState({ date: todayISO(), min: "", km: "", slope: "", hr: "", note: "" });
+  const [pulse, setPulse] = useState(false);
+  const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
+  const speed = num(f.min) > 0 && num(f.km) > 0 ? num(f.km) / (num(f.min) / 60) : 0;
+  const save = () => {
+    if (num(f.min) <= 0) { notify("Durée obligatoire"); return; }
+    update((d) => { d.treadmill.push({ id: uid(), date: f.date, min: num(f.min), km: num(f.km), slope: num(f.slope), hr: f.hr === "" ? null : num(f.hr), note: f.note.trim() }); return d; });
+    setF({ ...f, min: "", km: "", slope: "", hr: "", note: "" }); setPulse(true); setTimeout(() => setPulse(false), 700); notify("Marche enregistrée");
+  };
+  const list = [...data.treadmill].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 15);
+  return (
+    <>
+      <Panel boot="boot-1" className="space-y-3">
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="date"><input type="date" value={f.date} onChange={set("date")} className="inp" /></Field>
+          <Field label="durée (min)"><input type="number" inputMode="numeric" value={f.min} onChange={set("min")} className="inp" /></Field>
+          <Field label="distance (km)"><input type="number" inputMode="decimal" step="0.01" value={f.km} onChange={set("km")} className="inp" /></Field>
+          <Field label="pente (%)"><input type="number" inputMode="decimal" step="0.5" value={f.slope} onChange={set("slope")} className="inp" /></Field>
+          <Field label="fc moyenne"><input type="number" inputMode="numeric" value={f.hr} onChange={set("hr")} className="inp" /></Field>
+          <Field label="vitesse">
+            <div className="py-2 text-xl font-bold" style={{ fontFamily: mono, color: T.violet, textShadow: speed ? `0 0 10px ${T.violet}88` : "none" }}>{speed ? speed.toFixed(1) + " km/h" : "—"}</div>
+          </Field>
+        </div>
+        <Field label="note"><input value={f.note} onChange={set("note")} className="inp" /></Field>
+        <Btn full onClick={save} pulse={pulse}>Enregistrer la marche</Btn>
+      </Panel>
+      <Panel boot="boot-2">
+        <H>Dernières marches</H>
+        {list.length === 0 ? <Empty text="Aucune marche enregistrée." /> : (
+          <ul>
+            {list.map((t, i) => (
+              <li key={t.id} className="row py-2 flex justify-between items-center gap-2 text-sm rise" style={{ animationDelay: `${i * 30}ms` }}>
+                <span style={{ fontFamily: mono }}>
+                  <span style={{ color: T.violet }}>{fmtDate(t.date)}</span> {t.min} min · {t.km} km
+                  {t.min > 0 && t.km > 0 ? ` · ${(t.km / (t.min / 60)).toFixed(1)} km/h` : ""}{t.slope ? ` · ${t.slope} %` : ""}{t.hr ? ` · ${t.hr} bpm` : ""}
+                </span>
+                <Del onClick={() => update((d) => { d.treadmill = d.treadmill.filter((x) => x.id !== t.id); return d; })} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </Panel>
+    </>
+  );
+}
+
+// ================= Poids =================
+function Poids({ data, update, notify }) {
+  const [date, setDate] = useState(todayISO());
+  const [kg, setKg] = useState("");
+  const [pulse, setPulse] = useState(false);
+  const save = () => {
+    if (num(kg) <= 0) { notify("Poids invalide"); return; }
+    update((d) => { d.weights = d.weights.filter((w) => w.date !== date); d.weights.push({ id: uid(), date, kg: num(kg) }); return d; });
+    setKg(""); setPulse(true); setTimeout(() => setPulse(false), 700); notify("Poids enregistré");
+  };
+  const list = [...data.weights].sort((a, b) => b.date.localeCompare(a.date));
+  const first = list[list.length - 1]; const lastW = list[0];
+  return (
+    <>
+      <Panel boot="boot-1" className="space-y-3">
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="date"><input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="inp" /></Field>
+          <Field label="poids (kg)"><input type="number" inputMode="decimal" step="0.1" value={kg} onChange={(e) => setKg(e.target.value)} className="inp" /></Field>
+        </div>
+        <Btn full onClick={save} pulse={pulse}>Enregistrer le poids</Btn>
+        {first && lastW && first.id !== lastW.id && (
+          <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>
+            depuis le {fmtDate(first.date)} : <span style={{ color: T.magenta }}>{(lastW.kg - first.kg > 0 ? "+" : "") + (lastW.kg - first.kg).toFixed(1)} kg</span>
+          </p>
+        )}
+      </Panel>
+      <Panel boot="boot-2">
+        <H>Relevés</H>
+        {list.length === 0 ? <Empty text="Aucun relevé. Une pesée par jour, la dernière saisie remplace la précédente." /> : (
+          <ul>
+            {list.slice(0, 30).map((w, i) => (
+              <li key={w.id} className="row py-2 flex justify-between text-sm rise" style={{ animationDelay: `${i * 25}ms`, fontFamily: mono }}>
+                <span style={{ color: T.mute }}>{fmtDate(w.date)}</span>
+                <span className="flex gap-3 items-center"><span style={{ color: T.magenta }}>{w.kg.toFixed(1)} kg</span>
+                  <Del onClick={() => update((d) => { d.weights = d.weights.filter((x) => x.id !== w.id); return d; })} /></span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Panel>
+    </>
+  );
+}
+
+// ================= Courbes =================
+function Courbes({ data }) {
+  const used = useMemo(() => [...new Set(data.sessions.map((s) => s.exercise))], [data.sessions]);
+  const [ex, setEx] = useState(used[0] || "");
+  useEffect(() => { if (!used.includes(ex) && used[0]) setEx(used[0]); }, [used]);
+
+  const strength = useMemo(() => {
+    const byDate = {};
+    data.sessions.filter((s) => s.exercise === ex).forEach((s) => {
+      const b = byDate[s.date] || { date: s.date, e1rm: 0, vol: 0 };
+      b.e1rm = Math.max(b.e1rm, ...s.sets.map((x) => e1rm(x.kg, x.reps)));
+      b.vol += s.sets.reduce((a, x) => a + x.reps * x.kg, 0); byDate[s.date] = b;
+    });
+    return Object.values(byDate).sort((a, b) => a.date.localeCompare(b.date)).map((r) => ({ ...r, e1rm: +r.e1rm.toFixed(1), label: fmtDate(r.date) }));
+  }, [data.sessions, ex]);
+  const weight = useMemo(() => {
+    const w = [...data.weights].sort((a, b) => a.date.localeCompare(b.date));
+    return w.map((x, i) => { const win = w.slice(Math.max(0, i - 6), i + 1); return { label: fmtDate(x.date), kg: x.kg, moy7: +(win.reduce((a, y) => a + y.kg, 0) / win.length).toFixed(2) }; });
+  }, [data.weights]);
+  const weeklyVol = useMemo(() => {
+    const m = {}; data.sessions.forEach((s) => { const k = isoWeek(s.date); m[k] = (m[k] || 0) + s.sets.reduce((a, x) => a + x.reps * x.kg, 0); });
+    return Object.entries(m).sort().slice(-12).map(([k, v]) => ({ label: k.slice(5), vol: Math.round(v) }));
+  }, [data.sessions]);
+  const weeklyKm = useMemo(() => {
+    const m = {}; data.treadmill.forEach((t) => { const k = isoWeek(t.date); m[k] = m[k] || { km: 0 }; m[k].km += t.km; });
+    return Object.entries(m).sort().slice(-12).map(([k, v]) => ({ label: k.slice(5), km: +v.km.toFixed(1) }));
+  }, [data.treadmill]);
+  const yDomain = (vals) => { if (!vals.length) return [0, 1]; const mn = Math.min(...vals), mx = Math.max(...vals); const p = Math.max(1, (mx - mn) * 0.15); return [Math.floor(mn - p), Math.ceil(mx + p)]; };
+  const pr = strength.length ? Math.max(...strength.map((r) => r.e1rm)) : null;
+
+  return (
+    <>
+      <Panel boot="boot-1">
+        <H right={pr ? `record e1RM ${pr}` : ""}>Force — 1RM estimé</H>
+        {used.length === 0 ? <Empty text="Enregistre une séance pour voir la progression." /> : (
+          <>
+            <select value={ex} onChange={(e) => setEx(e.target.value)} className="inp mb-3">{used.map((x) => <option key={x}>{x}</option>)}</select>
+            <div style={{ height: 220 }} className="glow-cyan">
+              <ResponsiveContainer>
+                <AreaChart data={strength} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+                  <defs><linearGradient id="gc" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={T.cyan} stopOpacity={0.35} /><stop offset="100%" stopColor={T.cyan} stopOpacity={0} /></linearGradient></defs>
+                  <CartesianGrid stroke="rgba(0,229,255,.08)" strokeDasharray="2 4" />
+                  <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
+                  <YAxis domain={yDomain(strength.map((r) => r.e1rm))} tick={axis} axisLine={false} tickLine={false} />
+                  <Tooltip {...tip} />
+                  <Area type="monotone" dataKey="e1rm" name="e1RM (kg)" stroke={T.cyan} strokeWidth={2} fill="url(#gc)" dot={{ r: 3, fill: T.bg, stroke: T.cyan, strokeWidth: 2 }} activeDot={{ r: 5, fill: T.cyan }} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="text-xs mt-3 mb-1" style={{ color: T.mute, fontFamily: mono }}>volume par séance (kg)</div>
+            <div style={{ height: 140 }}>
+              <ResponsiveContainer>
+                <BarChart data={strength} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
+                  <CartesianGrid stroke="rgba(0,229,255,.08)" strokeDasharray="2 4" vertical={false} />
+                  <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
+                  <YAxis tick={axis} axisLine={false} tickLine={false} />
+                  <Tooltip {...tip} />
+                  <Bar dataKey="vol" name="Volume" fill="rgba(0,229,255,.25)" stroke={T.cyan} radius={[3, 3, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </>
+        )}
+      </Panel>
+
+      <Panel boot="boot-2">
+        <H right={weight.length ? `moy. 7 j ${weight[weight.length - 1].moy7}` : ""}>Poids corporel</H>
+        {weight.length < 2 ? <Empty text="Au moins deux pesées pour tracer une courbe." /> : (
+          <div style={{ height: 220 }} className="glow-magenta">
+            <ResponsiveContainer>
+              <LineChart data={weight} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+                <CartesianGrid stroke="rgba(255,45,149,.08)" strokeDasharray="2 4" />
+                <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
+                <YAxis domain={yDomain(weight.map((r) => r.kg))} tick={axis} axisLine={false} tickLine={false} />
+                <Tooltip {...tip} />
+                <Legend wrapperStyle={{ fontSize: 11, fontFamily: mono, color: T.mute }} />
+                <Line type="monotone" dataKey="kg" name="pesée" stroke="rgba(255,45,149,.35)" strokeWidth={1} dot={{ r: 2, fill: T.magenta, strokeWidth: 0 }} />
+                <Line type="monotone" dataKey="moy7" name="moyenne 7 j" stroke={T.magenta} strokeWidth={2.5} dot={false} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+      </Panel>
+
+      <Panel boot="boot-3">
+        <H>Charge hebdomadaire</H>
+        {weeklyVol.length === 0 && weeklyKm.length === 0 ? <Empty text="Rien à afficher." /> : (
+          <>
+            {weeklyVol.length > 0 && (
+              <>
+                <div className="text-xs mb-1" style={{ color: T.mute, fontFamily: mono }}>volume musculation (kg / semaine)</div>
+                <div style={{ height: 140 }} className="glow-cyan">
+                  <ResponsiveContainer>
+                    <BarChart data={weeklyVol} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
+                      <CartesianGrid stroke="rgba(0,229,255,.08)" strokeDasharray="2 4" vertical={false} />
+                      <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
+                      <YAxis tick={axis} axisLine={false} tickLine={false} />
+                      <Tooltip {...tip} />
+                      <Bar dataKey="vol" name="Volume" fill={T.cyan} radius={[3, 3, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            )}
+            {weeklyKm.length > 0 && (
+              <>
+                <div className="text-xs mt-3 mb-1" style={{ color: T.mute, fontFamily: mono }}>tapis (km / semaine)</div>
+                <div style={{ height: 140 }} className="glow-violet">
+                  <ResponsiveContainer>
+                    <BarChart data={weeklyKm} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
+                      <CartesianGrid stroke="rgba(122,92,255,.1)" strokeDasharray="2 4" vertical={false} />
+                      <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
+                      <YAxis tick={axis} axisLine={false} tickLine={false} />
+                      <Tooltip {...tip} />
+                      <Bar dataKey="km" name="km" fill={T.violet} radius={[3, 3, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            )}
+          </>
+        )}
+      </Panel>
+    </>
+  );
+}
+
+// ================= Données =================
+function Donnees({ data, setData, notify }) {
+  const [imp, setImp] = useState("");
+  const download = (name, content, type) => {
+    const blob = new Blob([content], { type }); const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = name; a.click(); URL.revokeObjectURL(url);
+  };
+  const toCSV = () => {
+    const rows = [["type", "date", "groupe", "exercice", "serie", "kg", "reps", "rpe", "min", "km", "pente", "fc", "note"]];
+    data.sessions.forEach((s) => s.sets.forEach((x, i) => rows.push(["muscu", s.date, s.group || "", s.exercise, i + 1, x.kg, x.reps, s.rpe ?? "", "", "", "", "", s.note])));
+    data.treadmill.forEach((t) => rows.push(["tapis", t.date, "", "", "", "", "", "", t.min, t.km, t.slope, t.hr ?? "", t.note]));
+    data.weights.forEach((w) => rows.push(["poids", w.date, "", "", "", w.kg, "", "", "", "", "", "", ""]));
+    return rows.map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(";")).join("\n");
+  };
+  const importJSON = () => {
+    try { const p = JSON.parse(imp); if (!p.sessions || !p.weights) throw new Error(); setData({ ...EMPTY, ...p }); setImp(""); notify("Données importées"); }
+    catch { notify("JSON invalide"); }
+  };
+  return (
+    <>
+      <Panel boot="boot-1" className="space-y-3">
+        <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>{data.sessions.length} exercices · {data.treadmill.length} marches · {data.weights.length} pesées</p>
+        <Btn full kind="ghost" onClick={() => download("carnet.json", JSON.stringify(data, null, 2), "application/json")}>Exporter en JSON (sauvegarde)</Btn>
+        <Btn full kind="ghost" onClick={() => download("carnet.csv", toCSV(), "text/csv")}>Exporter en CSV (tableur)</Btn>
+      </Panel>
+      <Panel boot="boot-2" className="space-y-3">
+        <H>Importer une sauvegarde JSON</H>
+        <textarea value={imp} onChange={(e) => setImp(e.target.value)} rows={4} placeholder="Colle ici le contenu du fichier carnet.json" className="inp" />
+        <Btn full kind="quiet" onClick={importJSON}>Remplacer les données par cet import</Btn>
+      </Panel>
+      <Panel boot="boot-3" className="space-y-2">
+        <H>Exercices</H>
+        <ul className="text-sm">
+          {data.exercises.map((x) => (
+            <li key={x} className="row py-1.5 flex justify-between items-center"><span>{x}</span>
+              <button type="button" className="text-xs" style={{ color: T.danger, fontFamily: mono }} onClick={() => setData({ ...data, exercises: data.exercises.filter((e) => e !== x) })}>retirer</button></li>
+          ))}
+        </ul>
+      </Panel>
+      <Panel boot="boot-4">
+        <Btn full kind="danger" onClick={() => { if (window.confirm("Effacer toutes les données ?")) { setData(EMPTY); notify("Données effacées"); } }}>Tout effacer</Btn>
+      </Panel>
+    </>
+  );
+}
