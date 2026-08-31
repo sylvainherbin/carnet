@@ -31,8 +31,8 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 5.0,
-     "kg": 90.0
+     "reps": 5,
+     "kg": 90
     }
    ],
    "rpe": null,
@@ -45,7 +45,7 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 9.0,
+     "reps": 9,
      "kg": 17.5
     }
    ],
@@ -59,8 +59,8 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 3.0,
-     "kg": 100.0
+     "reps": 3,
+     "kg": 100
     }
    ],
    "rpe": null,
@@ -73,8 +73,8 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 3.0,
-     "kg": 85.0
+     "reps": 3,
+     "kg": 85
     }
    ],
    "rpe": null,
@@ -87,8 +87,8 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 5.0,
-     "kg": 180.0
+     "reps": 5,
+     "kg": 180
     }
    ],
    "rpe": null,
@@ -101,8 +101,8 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 8.0,
-     "kg": 100.0
+     "reps": 8,
+     "kg": 100
     }
    ],
    "rpe": null,
@@ -115,8 +115,8 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 3.0,
-     "kg": 85.0
+     "reps": 3,
+     "kg": 85
     }
    ],
    "rpe": null,
@@ -129,8 +129,8 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 7.0,
-     "kg": 160.0
+     "reps": 7,
+     "kg": 160
     }
    ],
    "rpe": null,
@@ -143,8 +143,8 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 55.0
+     "reps": 10,
+     "kg": 55
     }
    ],
    "rpe": null,
@@ -157,8 +157,8 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 50.0
+     "reps": 10,
+     "kg": 50
     }
    ],
    "rpe": null,
@@ -171,8 +171,8 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 6.0,
-     "kg": 120.0
+     "reps": 6,
+     "kg": 120
     }
    ],
    "rpe": null,
@@ -185,8 +185,8 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 15.0,
-     "kg": 70.0
+     "reps": 15,
+     "kg": 70
     }
    ],
    "rpe": null,
@@ -199,8 +199,8 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 15.0,
-     "kg": 70.0
+     "reps": 15,
+     "kg": 70
     }
    ],
    "rpe": null,
@@ -213,7 +213,7 @@
    "group": "Épaules",
    "sets": [
     {
-     "reps": 10.0,
+     "reps": 10,
      "kg": 22.5
     }
    ],
@@ -227,8 +227,8 @@
    "group": "Épaules",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 85.0
+     "reps": 10,
+     "kg": 85
     }
    ],
    "rpe": null,
@@ -241,8 +241,8 @@
    "group": "Épaules",
    "sets": [
     {
-     "reps": 6.0,
-     "kg": 90.0
+     "reps": 6,
+     "kg": 90
     }
    ],
    "rpe": null,
@@ -255,8 +255,8 @@
    "group": "Épaules",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 10.0
+     "reps": 10,
+     "kg": 10
     }
    ],
    "rpe": null,
@@ -269,7 +269,7 @@
    "group": "Épaules",
    "sets": [
     {
-     "reps": 10.0,
+     "reps": 10,
      "kg": 12.5
     }
    ],
@@ -284,7 +284,7 @@
    "sets": [
     {
      "reps": 2.5,
-     "kg": 100.0
+     "kg": 100
     }
    ],
    "rpe": null,
@@ -297,7 +297,7 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 4.0,
+     "reps": 4,
      "kg": 17.5
     }
    ],
@@ -311,8 +311,8 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 2.0,
-     "kg": 100.0
+     "reps": 2,
+     "kg": 100
     }
    ],
    "rpe": null,
@@ -325,8 +325,8 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 4.0,
-     "kg": 85.0
+     "reps": 4,
+     "kg": 85
     }
    ],
    "rpe": null,
@@ -339,16 +339,16 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 9.0,
-     "kg": 180.0
+     "reps": 9,
+     "kg": 180
     },
     {
-     "reps": 4.0,
-     "kg": 190.0
+     "reps": 4,
+     "kg": 190
     },
     {
      "reps": 1.5,
-     "kg": 200.0
+     "kg": 200
     }
    ],
    "rpe": null,
@@ -361,12 +361,12 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 100.0
+     "reps": 10,
+     "kg": 100
     },
     {
      "reps": 7.5,
-     "kg": 110.0
+     "kg": 110
     }
    ],
    "rpe": null,
@@ -379,8 +379,8 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 4.0,
-     "kg": 85.0
+     "reps": 4,
+     "kg": 85
     }
    ],
    "rpe": null,
@@ -393,12 +393,12 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 9.0,
-     "kg": 180.0
+     "reps": 9,
+     "kg": 180
     },
     {
      "reps": 2.5,
-     "kg": 200.0
+     "kg": 200
     }
    ],
    "rpe": null,
@@ -411,8 +411,8 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 55.0
+     "reps": 10,
+     "kg": 55
     }
    ],
    "rpe": null,
@@ -425,7 +425,7 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 10.0,
+     "reps": 10,
      "kg": 27.5
     }
    ],
@@ -439,8 +439,8 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 9.0,
-     "kg": 70.0
+     "reps": 9,
+     "kg": 70
     }
    ],
    "rpe": null,
@@ -453,8 +453,8 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 55.0
+     "reps": 10,
+     "kg": 55
     }
    ],
    "rpe": null,
@@ -467,8 +467,8 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 7.0,
-     "kg": 120.0
+     "reps": 7,
+     "kg": 120
     }
    ],
    "rpe": null,
@@ -481,8 +481,8 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 15.0,
-     "kg": 70.0
+     "reps": 15,
+     "kg": 70
     }
    ],
    "rpe": null,
@@ -495,8 +495,8 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 20.0,
-     "kg": 70.0
+     "reps": 20,
+     "kg": 70
     }
    ],
    "rpe": null,
@@ -509,8 +509,8 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 20.0,
-     "kg": 65.0
+     "reps": 20,
+     "kg": 65
     }
    ],
    "rpe": null,
@@ -523,8 +523,8 @@
    "group": "Épaules",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 25.0
+     "reps": 10,
+     "kg": 25
     }
    ],
    "rpe": null,
@@ -537,8 +537,8 @@
    "group": "Épaules",
    "sets": [
     {
-     "reps": 9.0,
-     "kg": 90.0
+     "reps": 9,
+     "kg": 90
     }
    ],
    "rpe": null,
@@ -551,8 +551,8 @@
    "group": "Épaules",
    "sets": [
     {
-     "reps": 6.0,
-     "kg": 100.0
+     "reps": 6,
+     "kg": 100
     }
    ],
    "rpe": null,
@@ -565,8 +565,8 @@
    "group": "Épaules",
    "sets": [
     {
-     "reps": 5.0,
-     "kg": 10.0
+     "reps": 5,
+     "kg": 10
     }
    ],
    "rpe": null,
@@ -579,8 +579,8 @@
    "group": "Épaules",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 15.0
+     "reps": 10,
+     "kg": 15
     }
    ],
    "rpe": null,
@@ -593,12 +593,12 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 6.0,
-     "kg": 90.0
+     "reps": 6,
+     "kg": 90
     },
     {
      "reps": 1.5,
-     "kg": 100.0
+     "kg": 100
     }
    ],
    "rpe": null,
@@ -611,8 +611,8 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 15.0,
-     "kg": 10.0
+     "reps": 15,
+     "kg": 10
     }
    ],
    "rpe": null,
@@ -625,12 +625,12 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 6.0,
-     "kg": 90.0
+     "reps": 6,
+     "kg": 90
     },
     {
-     "reps": 2.0,
-     "kg": 100.0
+     "reps": 2,
+     "kg": 100
     }
    ],
    "rpe": null,
@@ -643,8 +643,8 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 3.0,
-     "kg": 85.0
+     "reps": 3,
+     "kg": 85
     }
    ],
    "rpe": null,
@@ -657,16 +657,16 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 7.0,
-     "kg": 180.0
+     "reps": 7,
+     "kg": 180
     },
     {
-     "reps": 4.0,
-     "kg": 190.0
+     "reps": 4,
+     "kg": 190
     },
     {
      "reps": 1.5,
-     "kg": 200.0
+     "kg": 200
     }
    ],
    "rpe": null,
@@ -679,8 +679,8 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 3.0,
-     "kg": 100.0
+     "reps": 3,
+     "kg": 100
     }
    ],
    "rpe": null,
@@ -693,8 +693,8 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 15.0
+     "reps": 10,
+     "kg": 15
     }
    ],
    "rpe": null,
@@ -707,8 +707,8 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 3.0,
-     "kg": 100.0
+     "reps": 3,
+     "kg": 100
     }
    ],
    "rpe": null,
@@ -721,8 +721,8 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 3.0,
-     "kg": 85.0
+     "reps": 3,
+     "kg": 85
     }
    ],
    "rpe": null,
@@ -735,16 +735,16 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 20.0,
-     "kg": 100.0
+     "reps": 20,
+     "kg": 100
     },
     {
-     "reps": 10.0,
-     "kg": 110.0
+     "reps": 10,
+     "kg": 110
     },
     {
-     "reps": 5.0,
-     "kg": 120.0
+     "reps": 5,
+     "kg": 120
     }
    ],
    "rpe": null,
@@ -757,8 +757,8 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 4.0,
-     "kg": 85.0
+     "reps": 4,
+     "kg": 85
     }
    ],
    "rpe": null,
@@ -771,12 +771,12 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 9.0,
-     "kg": 180.0
+     "reps": 9,
+     "kg": 180
     },
     {
-     "reps": 9.0,
-     "kg": 200.0
+     "reps": 9,
+     "kg": 200
     }
    ],
    "rpe": null,
@@ -789,8 +789,8 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 55.0
+     "reps": 10,
+     "kg": 55
     }
    ],
    "rpe": null,
@@ -803,8 +803,8 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 30.0
+     "reps": 10,
+     "kg": 30
     }
    ],
    "rpe": null,
@@ -817,8 +817,8 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 17.0,
-     "kg": 50.0
+     "reps": 17,
+     "kg": 50
     }
    ],
    "rpe": null,
@@ -831,16 +831,16 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 70.0
+     "reps": 10,
+     "kg": 70
     },
     {
-     "reps": 10.0,
+     "reps": 10,
      "kg": 72.5
     },
     {
-     "reps": 10.0,
-     "kg": 75.0
+     "reps": 10,
+     "kg": 75
     }
    ],
    "rpe": null,
@@ -853,8 +853,8 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 55.0
+     "reps": 10,
+     "kg": 55
     }
    ],
    "rpe": null,
@@ -867,8 +867,8 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 160.0
+     "reps": 10,
+     "kg": 160
     }
    ],
    "rpe": null,
@@ -881,8 +881,8 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 15.0,
-     "kg": 70.0
+     "reps": 15,
+     "kg": 70
     }
    ],
    "rpe": null,
@@ -895,8 +895,8 @@
    "group": "Jambes",
    "sets": [
     {
-     "reps": 20.0,
-     "kg": 65.0
+     "reps": 20,
+     "kg": 65
     }
    ],
    "rpe": null,
@@ -909,8 +909,8 @@
    "group": "Épaules",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 25.0
+     "reps": 10,
+     "kg": 25
     }
    ],
    "rpe": null,
@@ -923,12 +923,12 @@
    "group": "Épaules",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 90.0
+     "reps": 10,
+     "kg": 90
     },
     {
-     "reps": 7.0,
-     "kg": 95.0
+     "reps": 7,
+     "kg": 95
     }
    ],
    "rpe": null,
@@ -941,12 +941,12 @@
    "group": "Épaules",
    "sets": [
     {
-     "reps": 7.0,
-     "kg": 100.0
+     "reps": 7,
+     "kg": 100
     },
     {
-     "reps": 2.0,
-     "kg": 110.0
+     "reps": 2,
+     "kg": 110
     }
    ],
    "rpe": null,
@@ -959,8 +959,8 @@
    "group": "Épaules",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 10.0
+     "reps": 10,
+     "kg": 10
     }
    ],
    "rpe": null,
@@ -973,8 +973,8 @@
    "group": "Épaules",
    "sets": [
     {
-     "reps": 12.0,
-     "kg": 15.0
+     "reps": 12,
+     "kg": 15
     }
    ],
    "rpe": null,
@@ -987,8 +987,8 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 4.0,
-     "kg": 100.0
+     "reps": 4,
+     "kg": 100
     }
    ],
    "rpe": null,
@@ -1001,8 +1001,8 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 15.0
+     "reps": 10,
+     "kg": 15
     }
    ],
    "rpe": null,
@@ -1016,7 +1016,7 @@
    "sets": [
     {
      "reps": 4.5,
-     "kg": 100.0
+     "kg": 100
     }
    ],
    "rpe": null,
@@ -1029,8 +1029,8 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 3.0,
-     "kg": 90.0
+     "reps": 3,
+     "kg": 90
     }
    ],
    "rpe": null,
@@ -1043,12 +1043,12 @@
    "group": "Pecs",
    "sets": [
     {
-     "reps": 9.0,
-     "kg": 180.0
+     "reps": 9,
+     "kg": 180
     },
     {
-     "reps": 4.0,
-     "kg": 200.0
+     "reps": 4,
+     "kg": 200
     }
    ],
    "rpe": null,
@@ -1061,16 +1061,16 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 20.0,
-     "kg": 100.0
+     "reps": 20,
+     "kg": 100
     },
     {
-     "reps": 10.0,
-     "kg": 110.0
+     "reps": 10,
+     "kg": 110
     },
     {
-     "reps": 5.0,
-     "kg": 120.0
+     "reps": 5,
+     "kg": 120
     }
    ],
    "rpe": null,
@@ -1083,8 +1083,8 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 4.0,
-     "kg": 85.0
+     "reps": 4,
+     "kg": 85
     }
    ],
    "rpe": null,
@@ -1097,12 +1097,12 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 9.0,
-     "kg": 180.0
+     "reps": 9,
+     "kg": 180
     },
     {
-     "reps": 9.0,
-     "kg": 200.0
+     "reps": 9,
+     "kg": 200
     }
    ],
    "rpe": null,
@@ -1115,8 +1115,8 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 55.0
+     "reps": 10,
+     "kg": 55
     }
    ],
    "rpe": null,
@@ -1129,8 +1129,8 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 10.0,
-     "kg": 30.0
+     "reps": 10,
+     "kg": 30
     }
    ],
    "rpe": null,
@@ -1143,8 +1143,8 @@
    "group": "Dos",
    "sets": [
     {
-     "reps": 17.0,
-     "kg": 50.0
+     "reps": 17,
+     "kg": 50
     }
    ],
    "rpe": null,
