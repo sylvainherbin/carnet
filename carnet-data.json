@@ -1304,6 +1304,20 @@
    ],
    "rpe": 8,
    "note": ""
+  },
+  {
+   "id": "k2ur1k3c",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 100
+    }
+   ],
+   "rpe": 7,
+   "note": ""
   }
  ],
  "treadmill": [],
