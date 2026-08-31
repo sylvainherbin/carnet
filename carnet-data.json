@@ -1332,6 +1332,20 @@
    ],
    "rpe": 9,
    "note": ""
+  },
+  {
+   "id": "s24t18vf",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 120
+    }
+   ],
+   "rpe": 9,
+   "note": ""
   }
  ],
  "treadmill": [],
