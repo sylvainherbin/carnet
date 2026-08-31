@@ -1149,6 +1149,20 @@
    ],
    "rpe": null,
    "note": ""
+  },
+  {
+   "id": "osal9gp4",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 40
+    }
+   ],
+   "rpe": 6,
+   "note": "Reprise"
   }
  ],
  "treadmill": [],
