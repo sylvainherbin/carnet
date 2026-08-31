@@ -1290,6 +1290,20 @@
    ],
    "rpe": 9,
    "note": ""
+  },
+  {
+   "id": "vkiad08d",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 100
+    }
+   ],
+   "rpe": 8,
+   "note": ""
   }
  ],
  "treadmill": [],
