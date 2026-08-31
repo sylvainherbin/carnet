@@ -93,8 +93,24 @@ select.inp { appearance:none; background-image: linear-gradient(45deg, transpare
 .glow-violet { filter: drop-shadow(0 0 6px rgba(122,92,255,.55)); }
 .row { border-bottom:1px solid rgba(0,229,255,.10); }
 .row:last-child { border-bottom:none; }
+.pr-overlay { position:fixed; inset:0; z-index:60; display:flex; align-items:center; justify-content:center;
+  background: radial-gradient(ellipse at center, rgba(22,15,2,.93) 0%, rgba(3,5,10,.97) 72%);
+  backdrop-filter: blur(10px); animation: prfade .35s ease-out; }
+@keyframes prfade { from { opacity:0; } }
+.pr-box { position:relative; text-align:center; }
+.pr-ring { position:absolute; left:50%; top:50%; width:190px; height:190px; margin:-95px 0 0 -95px;
+  border:1.5px solid rgba(255,176,0,.85); border-radius:50%; pointer-events:none;
+  animation: prring 1.8s cubic-bezier(.2,.7,.3,1) infinite; }
+.pr-ring2 { animation-delay:.6s; border-color: rgba(0,229,255,.45); }
+.pr-ring3 { animation-delay:1.2s; }
+@keyframes prring { 0% { transform: scale(.35); opacity:.9; } 100% { transform: scale(2.4); opacity:0; } }
+.pr-spark { position:absolute; left:50%; top:50%; width:5px; height:5px; border-radius:1px; background:#FFB000;
+  box-shadow:0 0 8px #FFB000; pointer-events:none; animation: prspark 1.1s cubic-bezier(.1,.8,.3,1) forwards; }
+@keyframes prspark { 0% { transform: translate(0,0) scale(1); opacity:1; } 100% { transform: translate(var(--dx), var(--dy)) scale(.3); opacity:0; } }
+.pr-line { opacity:0; animation: rise .35s ease-out forwards; }
 @media (prefers-reduced-motion: reduce) {
-  .boot,.rise,.pulse,.scanline,.toast,.cursor::after { animation:none !important; }
+  .boot,.rise,.pulse,.scanline,.toast,.cursor::after,.pr-ring,.pr-spark,.pr-overlay { animation:none !important; }
+  .pr-line { opacity:1 !important; animation:none !important; }
 }
 `;
 
@@ -142,6 +158,7 @@ export default function CarnetEntrainement() {
   const [loaded, setLoaded] = useState(false);
   const [tab, setTab] = useState("seance");
   const [toast, setToast] = useState("");
+  const [pr, setPr] = useState(null);
   const saveTimer = useRef(null);
 
   // --- synchronisation GitHub ---
@@ -242,7 +259,7 @@ export default function CarnetEntrainement() {
     return { lastDate, lastGroup, weekSessions, lastW, delta };
   }, [data]);
 
-  const tabs = [["seance", "Séance"], ["tapis", "Tapis"], ["poids", "Poids"], ["courbes", "Courbes"], ["donnees", "Données"]];
+  const tabs = [["seance", "Séance"], ["tapis", "Tapis"], ["poids", "Poids"], ["courbes", "Courbes"], ["records", "Records"], ["donnees", "Données"]];
 
   return (
     <div className="min-h-screen grid-bg" style={{ background: T.bg, color: T.text, fontFamily: sans }}>
@@ -263,15 +280,18 @@ export default function CarnetEntrainement() {
 
         <main className="px-4 space-y-4" key={tab}>
           {!loaded && <Empty text="Initialisation…" />}
-          {loaded && tab === "seance" && <Seance data={data} update={update} notify={notify} />}
+          {loaded && tab === "seance" && <Seance data={data} update={update} notify={notify} celebrate={setPr} />}
           {loaded && tab === "tapis" && <Tapis data={data} update={update} notify={notify} />}
           {loaded && tab === "poids" && <Poids data={data} update={update} notify={notify} />}
           {loaded && tab === "courbes" && <Courbes data={data} />}
+          {loaded && tab === "records" && <Records data={data} />}
           {loaded && tab === "donnees" && <Donnees data={data} setData={setData} notify={notify} sync={ghSync}
             onToken={(t) => { const v = t.trim(); if (!v) return; try { localStorage.setItem(GH_TOKEN, v); localStorage.setItem(GH_DIRTY, "1"); } catch (e) { /* privé */ } setGhSync((g) => ({ ...g, hasToken: true, status: "activation…" })); doPull(); }}
             onTokenOff={() => { try { localStorage.removeItem(GH_TOKEN); } catch (e) { /* privé */ } setGhSync((g) => ({ ...g, hasToken: false, status: "" })); notify("Synchro désactivée sur cet appareil"); }}
             onSync={doPull} />}
         </main>
+
+        {pr && <PROverlay pr={pr} onClose={() => setPr(null)} />}
 
         {toast && (
           <div className="toast fixed left-1/2 bottom-20 px-4 py-2 rounded-md text-sm"
@@ -281,7 +301,7 @@ export default function CarnetEntrainement() {
         )}
 
         <nav className="fixed bottom-0 left-0 right-0" style={{ background: "rgba(6,8,14,.92)", borderTop: `1px solid ${T.line}`, backdropFilter: "blur(10px)" }}>
-          <div className="max-w-md mx-auto grid grid-cols-5">
+          <div className="max-w-md mx-auto grid grid-cols-6">
             {tabs.map(([k, label]) => (
               <button key={k} type="button" onClick={() => setTab(k)} className={`tab py-3 text-xs ${tab === k ? "tab-active" : ""}`}
                 style={{ color: tab === k ? T.cyan : T.mute, fontFamily: mono, fontWeight: tab === k ? 700 : 400 }}>
@@ -306,7 +326,7 @@ function Hud({ label, value, sub, color = T.cyan }) {
 }
 
 // ================= Séance =================
-function Seance({ data, update, notify }) {
+function Seance({ data, update, notify, celebrate }) {
   const [date, setDate] = useState(todayISO());
   const [group, setGroup] = useState(GROUPS[0]);
   const [mode, setMode] = useState("texte");
@@ -324,9 +344,15 @@ function Seance({ data, update, notify }) {
   const lastFor = (name) => data.sessions.filter((x) => x.exercise === name).sort((a, b) => b.date.localeCompare(a.date))[0] || null;
   const last = useMemo(() => lastFor(exercise), [data.sessions, exercise]);
 
+  const bestFor = (name) => Math.max(0, ...data.sessions.filter((x) => x.exercise === name).flatMap((x) => x.sets.map((y) => e1rm(y.kg, y.reps))));
+  const firePR = (candidates) => {
+    const prs = candidates.filter((c) => c.oldBest > 0 && c.newBest > c.oldBest + 0.05);
+    if (prs.length) celebrate(prs.sort((a, b) => b.newBest / b.oldBest - a.newBest / a.oldBest)[0]);
+  };
   const saveText = () => {
     const ok = parsed.filter((p) => !p.error);
     if (ok.length === 0) { notify("Rien à enregistrer"); return; }
+    const candidates = ok.map((p) => ({ exercise: p.name, oldBest: bestFor(p.name), newBest: Math.max(...p.sets.map((x) => e1rm(x.kg, x.reps))) }));
     update((d) => {
       ok.forEach((p) => {
         if (!d.exercises.includes(p.name)) d.exercises.push(p.name);
@@ -334,7 +360,7 @@ function Seance({ data, update, notify }) {
       });
       return d;
     });
-    setText(""); fire(); notify(`${ok.length} exercice(s) enregistré(s)`);
+    setText(""); fire(); notify(`${ok.length} exercice(s) enregistré(s)`); firePR(candidates);
   };
   const addExercise = () => {
     const n = newEx.trim(); if (!n) return;
@@ -344,8 +370,9 @@ function Seance({ data, update, notify }) {
   const save = () => {
     const clean = sets.filter((s) => num(s.reps) > 0).map((s) => ({ reps: num(s.reps), kg: num(s.kg) }));
     if (!exercise || clean.length === 0) { notify("Ajoute au moins une série valide"); return; }
+    const candidate = { exercise, oldBest: bestFor(exercise), newBest: Math.max(...clean.map((x) => e1rm(x.kg, x.reps))) };
     update((d) => { d.sessions.push({ id: uid(), date, group, exercise, sets: clean, rpe: rpe === "" ? null : num(rpe), note: note.trim() }); return d; });
-    setSets([{ reps: "", kg: "" }]); setRpe(""); setNote(""); fire(); notify("Exercice enregistré");
+    setSets([{ reps: "", kg: "" }]); setRpe(""); setNote(""); fire(); notify("Exercice enregistré"); firePR([candidate]);
   };
 
   const todays = data.sessions.filter((s) => s.date === date);
@@ -571,15 +598,35 @@ function Courbes({ data }) {
     return Object.entries(m).sort().slice(-12).map(([k, v]) => ({ label: k.slice(5), km: +v.km.toFixed(1) }));
   }, [data.treadmill]);
   const yDomain = (vals) => { if (!vals.length) return [0, 1]; const mn = Math.min(...vals), mx = Math.max(...vals); const p = Math.max(1, (mx - mn) * 0.15); return [Math.floor(mn - p), Math.ceil(mx + p)]; };
-  const pr = strength.length ? Math.max(...strength.map((r) => r.e1rm)) : null;
+  const trend = useMemo(() => {
+    if (strength.length === 0) return null;
+    const prVal = Math.max(...strength.map((r) => r.e1rm));
+    let prIdx = 0; strength.forEach((r, i) => { if (r.e1rm === prVal) prIdx = i; });
+    const since = strength.length - 1 - prIdx; // séances depuis le dernier record
+    const cutoff = new Date(Date.now() - 90 * 86400000).toISOString().slice(0, 10);
+    const win = strength.filter((r) => r.date >= cutoff);
+    const d90 = win.length >= 2 && win[0].e1rm > 0 ? ((win[win.length - 1].e1rm - win[0].e1rm) / win[0].e1rm) * 100 : null;
+    return { prVal, prDate: strength[prIdx].date, since, d90 };
+  }, [strength]);
 
   return (
     <>
       <Panel boot="boot-1">
-        <H right={pr ? `record e1RM ${pr}` : ""}>Force — 1RM estimé</H>
+        <H>Force — 1RM estimé</H>
         {used.length === 0 ? <Empty text="Enregistre une séance pour voir la progression." /> : (
           <>
-            <select value={ex} onChange={(e) => setEx(e.target.value)} className="inp mb-3">{used.map((x) => <option key={x}>{x}</option>)}</select>
+            <select value={ex} onChange={(e) => setEx(e.target.value)} className="inp mb-2">{used.map((x) => <option key={x}>{x}</option>)}</select>
+            {trend && (
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs mb-3" style={{ fontFamily: mono }}>
+                <span style={{ color: T.amber }}>▸ record {trend.prVal.toFixed(1)} · {fmtDate(trend.prDate)}</span>
+                {trend.d90 !== null && (
+                  <span style={{ color: trend.d90 >= 0 ? T.cyan : T.danger }}>
+                    {trend.d90 >= 0 ? "▲" : "▼"} {trend.d90 >= 0 ? "+" : ""}{trend.d90.toFixed(1)} % / 90 j
+                  </span>
+                )}
+                {trend.since >= 5 && <span style={{ color: T.magenta }}>◆ plateau : {trend.since} séances sans record</span>}
+              </div>
+            )}
             <div style={{ height: 220 }} className="glow-cyan">
               <ResponsiveContainer>
                 <AreaChart data={strength} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
@@ -667,6 +714,95 @@ function Courbes({ data }) {
         )}
       </Panel>
     </>
+  );
+}
+
+// ================= Records =================
+function Records({ data }) {
+  const recs = useMemo(() => {
+    const m = {};
+    data.sessions.forEach((sess) => {
+      const r = m[sess.exercise] || (m[sess.exercise] = { e1rm: 0, e1rmDate: "", e1rmSet: null, kg: 0, kgReps: 0, kgDate: "", volByDate: {}, count: 0 });
+      r.count += 1;
+      sess.sets.forEach((x) => {
+        const v = e1rm(x.kg, x.reps);
+        if (v > r.e1rm) { r.e1rm = v; r.e1rmDate = sess.date; r.e1rmSet = x; }
+        if (x.kg > r.kg || (x.kg === r.kg && x.reps > r.kgReps)) { r.kg = x.kg; r.kgReps = x.reps; r.kgDate = sess.date; }
+      });
+      r.volByDate[sess.date] = (r.volByDate[sess.date] || 0) + sess.sets.reduce((a, x) => a + x.reps * x.kg, 0);
+    });
+    return Object.entries(m).map(([name, r]) => {
+      const [volDate, vol] = Object.entries(r.volByDate).sort((a, b) => b[1] - a[1])[0];
+      return { name, ...r, vol: Math.round(vol), volDate };
+    }).sort((a, b) => b.e1rm - a.e1rm);
+  }, [data.sessions]);
+  const lastPR = recs.length ? recs.map((r) => r.e1rmDate).sort().pop() : null;
+  return (
+    <Panel boot="boot-1">
+      <H right={lastPR ? `dernier record ${fmtDate(lastPR)}` : ""}>Records personnels</H>
+      {recs.length === 0 ? <Empty text="Enregistre une séance pour ouvrir le palmarès." /> : (
+        <ul>
+          {recs.map((r, i) => (
+            <li key={r.name} className="row py-3 rise" style={{ animationDelay: `${i * 35}ms` }}>
+              <div className="flex items-baseline gap-2">
+                <span className="text-xs" style={{ fontFamily: mono, color: i < 3 ? T.amber : T.mute }}>{pad(i + 1)}</span>
+                <span className="font-medium flex-1">{r.name}</span>
+                <span className="text-xs" style={{ fontFamily: mono, color: T.mute }}>{r.count} séance{r.count > 1 ? "s" : ""}</span>
+              </div>
+              <div className="text-xs mt-1 pl-6" style={{ fontFamily: mono }}>
+                <span style={{ color: T.amber, textShadow: `0 0 8px ${T.amber}44` }} className="font-bold text-sm">{r.e1rm.toFixed(1)}</span>
+                <span style={{ color: T.mute }}> e1RM · {r.e1rmSet.kg}×{r.e1rmSet.reps} · {fmtDate(r.e1rmDate)}</span>
+              </div>
+              <div className="text-xs mt-0.5 pl-6" style={{ fontFamily: mono, color: T.mute }}>
+                charge <span style={{ color: T.cyan }}>{r.kg} kg</span> ×{r.kgReps} ({fmtDate(r.kgDate)}) · volume <span style={{ color: T.violet }}>{r.vol}</span> ({fmtDate(r.volDate)})
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Panel>
+  );
+}
+
+// ================= Célébration de record =================
+function PROverlay({ pr, onClose }) {
+  const [val, setVal] = useState(pr.oldBest);
+  useEffect(() => {
+    const t0 = performance.now(); const dur = 1400; let raf;
+    const step = (t) => {
+      const k = Math.min(1, (t - t0) / dur);
+      const e = 1 - Math.pow(1 - k, 3); // décélération : le chiffre "atterrit" sur le record
+      setVal(pr.oldBest + (pr.newBest - pr.oldBest) * e);
+      if (k < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    const auto = setTimeout(onClose, 5200);
+    return () => { cancelAnimationFrame(raf); clearTimeout(auto); };
+  }, []);
+  const sparks = useMemo(() => Array.from({ length: 14 }, (_, i) => {
+    const a = (i / 14) * 2 * Math.PI + Math.random() * 0.4;
+    const d = 90 + Math.random() * 70;
+    return { dx: Math.cos(a) * d, dy: Math.sin(a) * d, delay: 0.9 + Math.random() * 0.4 };
+  }), []);
+  return (
+    <div className="pr-overlay" onClick={onClose}>
+      <div className="pr-box px-8 py-10">
+        <div className="pr-ring" /><div className="pr-ring pr-ring2" /><div className="pr-ring pr-ring3" />
+        {sparks.map((s, i) => <span key={i} className="pr-spark" style={{ "--dx": s.dx + "px", "--dy": s.dy + "px", animationDelay: s.delay + "s" }} />)}
+        <div className="pr-line text-xs" style={{ color: T.mute, fontFamily: mono, animationDelay: ".1s" }}>// analyse des séries…</div>
+        <div className="pr-line text-xs mb-3" style={{ color: T.mute, fontFamily: mono, animationDelay: ".45s" }}>// record détecté</div>
+        <div className="pr-line font-bold mb-1" style={{ color: T.amber, fontFamily: display, fontSize: 20, letterSpacing: ".3em", textShadow: "0 0 18px rgba(255,176,0,.8)", animationDelay: ".75s" }}>RECORD BATTU</div>
+        <div className="pr-line text-sm mb-4" style={{ color: T.cyan, fontFamily: mono, animationDelay: ".9s" }}>{pr.exercise}</div>
+        <div className="pr-line" style={{ animationDelay: "1s" }}>
+          <span style={{ fontFamily: display, fontSize: 58, fontWeight: 700, color: T.amber, textShadow: "0 0 30px rgba(255,176,0,.65), 0 0 60px rgba(255,176,0,.3)" }}>{val.toFixed(1)}</span>
+          <span className="text-base ml-2" style={{ color: T.mute, fontFamily: mono }}>kg e1RM</span>
+        </div>
+        <div className="pr-line text-sm mt-3" style={{ fontFamily: mono, color: T.text, animationDelay: "1.5s" }}>
+          précédent {pr.oldBest.toFixed(1)} · <span style={{ color: T.amber }}>+{(pr.newBest - pr.oldBest).toFixed(1)} kg</span>
+        </div>
+        <div className="pr-line text-xs mt-6" style={{ color: T.mute, fontFamily: mono, animationDelay: "2.2s" }}>toucher pour fermer</div>
+      </div>
+    </div>
   );
 }
 
