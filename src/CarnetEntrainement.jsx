@@ -376,6 +376,24 @@ function Seance({ data, update, notify, celebrate }) {
   };
 
   const todays = data.sessions.filter((s) => s.date === date);
+  // Regroupe les entrées du jour par exercice (ordre d'apparition) ; chaque série
+  // est numérotée selon l'ordre d'exécution, quelle que soit la méthode de saisie.
+  const grouped = (() => {
+    const map = new Map();
+    todays.forEach((s) => {
+      if (!map.has(s.exercise)) map.set(s.exercise, []);
+      s.sets.forEach((x, setIdx) => map.get(s.exercise).push({ id: s.id, setIdx, kg: x.kg, reps: x.reps, rpe: s.rpe, note: setIdx === 0 ? s.note : "" }));
+    });
+    return [...map.entries()].map(([exercise, rows]) => ({
+      exercise, rows,
+      vol: rows.reduce((a, r) => a + r.reps * r.kg, 0),
+      best: Math.max(...rows.map((r) => e1rm(r.kg, r.reps))),
+    }));
+  })();
+  const delSet = (id, setIdx) => update((d) => {
+    d.sessions = d.sessions.map((s) => s.id === id ? { ...s, sets: s.sets.filter((_, j) => j !== setIdx) } : s).filter((s) => s.sets.length > 0);
+    return d;
+  });
 
   return (
     <>
@@ -455,22 +473,25 @@ function Seance({ data, update, notify, celebrate }) {
         <H right={todays[0]?.group || ""}>Séance du {fmtDate(date)}</H>
         {todays.length === 0 ? <Empty text="Rien d'enregistré pour cette date." /> : (
           <ul>
-            {todays.map((s, i) => {
-              const vol = s.sets.reduce((a, x) => a + x.reps * x.kg, 0);
-              const best = Math.max(...s.sets.map((x) => e1rm(x.kg, x.reps)));
-              return (
-                <li key={s.id} className="row py-2.5 flex justify-between items-start gap-2 rise" style={{ animationDelay: `${i * 40}ms` }}>
-                  <div>
-                    <div className="font-medium">{s.exercise}</div>
-                    <div className="text-xs" style={{ color: T.mute, fontFamily: mono }}>
-                      {s.sets.map((x) => `${x.kg}×${x.reps}`).join("  ")} · vol {vol} · e1RM <span style={{ color: T.cyan }}>{best.toFixed(1)}</span>{s.rpe ? ` · RPE ${s.rpe}` : ""}
-                    </div>
-                    {s.note && <div className="text-xs italic" style={{ color: T.amber }}>{s.note}</div>}
-                  </div>
-                  <Del onClick={() => update((d) => { d.sessions = d.sessions.filter((x) => x.id !== s.id); return d; })} />
-                </li>
-              );
-            })}
+            {grouped.map((g, i) => (
+              <li key={g.exercise} className="row py-2.5 rise" style={{ animationDelay: `${i * 40}ms` }}>
+                <div className="flex justify-between items-baseline gap-2">
+                  <div className="font-medium">{g.exercise}</div>
+                  <div className="text-xs" style={{ color: T.mute, fontFamily: mono }}>vol {g.vol} · e1RM <span style={{ color: T.cyan }}>{g.best.toFixed(1)}</span></div>
+                </div>
+                <ul className="mt-1.5 space-y-1">
+                  {g.rows.map((r, j) => (
+                    <li key={`${r.id}-${r.setIdx}`} className="flex justify-between items-center gap-2">
+                      <div className="text-xs" style={{ color: T.text, fontFamily: mono }}>
+                        <span style={{ color: T.cyan }}>{pad(j + 1)}</span>  {r.kg}×{r.reps}{r.rpe ? <span style={{ color: T.mute }}> · RPE {r.rpe}</span> : ""}
+                        {r.note && <span className="italic" style={{ color: T.amber }}>  {r.note}</span>}
+                      </div>
+                      <Del onClick={() => delSet(r.id, r.setIdx)} />
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
           </ul>
         )}
       </Panel>
