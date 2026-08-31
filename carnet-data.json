@@ -1,0 +1,1156 @@
+{
+ "exercises": [
+  "Dev incliné",
+  "Poulie haut du pec",
+  "Dev couché",
+  "Chest press",
+  "Dips",
+  "PullDown",
+  "Tirage vertical serré",
+  "Row",
+  "Leg extension",
+  "Leg Curl",
+  "Leg press",
+  "Adducteurs",
+  "Tenseur du fascia lata",
+  "Haltères postérieur",
+  "Upper Back",
+  "Shoulder press",
+  "Poulies latérales",
+  "Poulies antérieures",
+  "Pulley",
+  "Poulie",
+  "Rotary Calf",
+  "Trapèzes"
+ ],
+ "sessions": [
+  {
+   "id": "cy34ncp1",
+   "date": "2025-03-18",
+   "exercise": "Dev incliné",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 5.0,
+     "kg": 90.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "w7abyv9b",
+   "date": "2025-03-18",
+   "exercise": "Poulie haut du pec",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 9.0,
+     "kg": 17.5
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "ym1pp75x",
+   "date": "2025-03-18",
+   "exercise": "Dev couché",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 3.0,
+     "kg": 100.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "l6ers0wu",
+   "date": "2025-03-18",
+   "exercise": "Chest press",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 3.0,
+     "kg": 85.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "pjt1hvfc",
+   "date": "2025-03-18",
+   "exercise": "Dips",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 5.0,
+     "kg": 180.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "gxf24uml",
+   "date": "2025-03-20",
+   "exercise": "PullDown",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 8.0,
+     "kg": 100.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "boaii2rk",
+   "date": "2025-03-20",
+   "exercise": "Tirage vertical serré",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 3.0,
+     "kg": 85.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "xgp0vcu7",
+   "date": "2025-03-20",
+   "exercise": "Row",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 7.0,
+     "kg": 160.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "b1cq4yvh",
+   "date": "2025-03-21",
+   "exercise": "Leg extension",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 55.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "7agoz8lv",
+   "date": "2025-03-21",
+   "exercise": "Leg Curl",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 50.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "n0cdg7z4",
+   "date": "2025-03-21",
+   "exercise": "Leg press",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 6.0,
+     "kg": 120.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "dpmksnrp",
+   "date": "2025-03-21",
+   "exercise": "Adducteurs",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 15.0,
+     "kg": 70.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "9fkxb3as",
+   "date": "2025-03-21",
+   "exercise": "Tenseur du fascia lata",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 15.0,
+     "kg": 70.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "juvj9yvy",
+   "date": "2025-03-25",
+   "exercise": "Haltères postérieur",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 22.5
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "4ylgikmy",
+   "date": "2025-03-25",
+   "exercise": "Upper Back",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 85.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "krxzx7h7",
+   "date": "2025-03-25",
+   "exercise": "Shoulder press",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 6.0,
+     "kg": 90.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "37la6hi3",
+   "date": "2025-03-25",
+   "exercise": "Poulies latérales",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 10.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "whor6xn0",
+   "date": "2025-03-25",
+   "exercise": "Poulies antérieures",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 12.5
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "kh7mz88o",
+   "date": "2025-03-30",
+   "exercise": "Dev incliné",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 2.5,
+     "kg": 100.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "cbh9uw73",
+   "date": "2025-03-30",
+   "exercise": "Poulie haut du pec",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 4.0,
+     "kg": 17.5
+    }
+   ],
+   "rpe": null,
+   "note": "mal au coude"
+  },
+  {
+   "id": "n0fe67ya",
+   "date": "2025-03-30",
+   "exercise": "Dev couché",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 2.0,
+     "kg": 100.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "dyb9yaoz",
+   "date": "2025-03-30",
+   "exercise": "Chest press",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 4.0,
+     "kg": 85.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "c9oxt8vb",
+   "date": "2025-03-30",
+   "exercise": "Dips",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 9.0,
+     "kg": 180.0
+    },
+    {
+     "reps": 4.0,
+     "kg": 190.0
+    },
+    {
+     "reps": 1.5,
+     "kg": 200.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "53t2hp33",
+   "date": "2025-03-31",
+   "exercise": "PullDown",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 100.0
+    },
+    {
+     "reps": 7.5,
+     "kg": 110.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "trucm7m8",
+   "date": "2025-03-31",
+   "exercise": "Tirage vertical serré",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 4.0,
+     "kg": 85.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "vxqfzjbj",
+   "date": "2025-03-31",
+   "exercise": "Row",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 9.0,
+     "kg": 180.0
+    },
+    {
+     "reps": 2.5,
+     "kg": 200.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "344pjkcu",
+   "date": "2025-03-31",
+   "exercise": "Pulley",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 55.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "u40zgtv2",
+   "date": "2025-03-31",
+   "exercise": "Poulie",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 27.5
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "fyhe9ai3",
+   "date": "2025-04-01",
+   "exercise": "Leg extension",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 9.0,
+     "kg": 70.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "svxdw5s3",
+   "date": "2025-04-01",
+   "exercise": "Leg Curl",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 55.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "4fxk4mri",
+   "date": "2025-04-01",
+   "exercise": "Leg press",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 7.0,
+     "kg": 120.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "90c7zlez",
+   "date": "2025-04-01",
+   "exercise": "Adducteurs",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 15.0,
+     "kg": 70.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "apxk3lp5",
+   "date": "2025-04-01",
+   "exercise": "Tenseur du fascia lata",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 20.0,
+     "kg": 70.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "6ks9htyx",
+   "date": "2025-04-01",
+   "exercise": "Rotary Calf",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 20.0,
+     "kg": 65.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "jyfk2c1a",
+   "date": "2025-04-03",
+   "exercise": "Haltères postérieur",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 25.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "u7n9xz3v",
+   "date": "2025-04-03",
+   "exercise": "Upper Back",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 9.0,
+     "kg": 90.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "urxj7so0",
+   "date": "2025-04-03",
+   "exercise": "Shoulder press",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 6.0,
+     "kg": 100.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "f7dtpwyy",
+   "date": "2025-04-03",
+   "exercise": "Poulies latérales",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 5.0,
+     "kg": 10.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "aayrf7da",
+   "date": "2025-04-03",
+   "exercise": "Poulies antérieures",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 15.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "71h8v5nm",
+   "date": "2025-04-04",
+   "exercise": "Dev incliné",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 6.0,
+     "kg": 90.0
+    },
+    {
+     "reps": 1.5,
+     "kg": 100.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "f88rxrh8",
+   "date": "2025-04-04",
+   "exercise": "Poulie haut du pec",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 15.0,
+     "kg": 10.0
+    }
+   ],
+   "rpe": null,
+   "note": "mal au coude"
+  },
+  {
+   "id": "udv7s3sh",
+   "date": "2025-04-04",
+   "exercise": "Dev couché",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 6.0,
+     "kg": 90.0
+    },
+    {
+     "reps": 2.0,
+     "kg": 100.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "7zbx5f39",
+   "date": "2025-04-04",
+   "exercise": "Chest press",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 3.0,
+     "kg": 85.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "z5yeedqx",
+   "date": "2025-04-04",
+   "exercise": "Dips",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 7.0,
+     "kg": 180.0
+    },
+    {
+     "reps": 4.0,
+     "kg": 190.0
+    },
+    {
+     "reps": 1.5,
+     "kg": 200.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "f2fusn7g",
+   "date": "2025-04-13",
+   "exercise": "Dev incliné",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 3.0,
+     "kg": 100.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "gdx50d3z",
+   "date": "2025-04-13",
+   "exercise": "Poulie haut du pec",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 15.0
+    }
+   ],
+   "rpe": null,
+   "note": "moins mal au coude"
+  },
+  {
+   "id": "pdjbfxrg",
+   "date": "2025-04-13",
+   "exercise": "Dev couché",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 3.0,
+     "kg": 100.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "6ff1bvw0",
+   "date": "2025-04-13",
+   "exercise": "Chest press",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 3.0,
+     "kg": 85.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "12j05yjh",
+   "date": "2025-04-15",
+   "exercise": "PullDown",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 20.0,
+     "kg": 100.0
+    },
+    {
+     "reps": 10.0,
+     "kg": 110.0
+    },
+    {
+     "reps": 5.0,
+     "kg": 120.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "brxcnk1n",
+   "date": "2025-04-15",
+   "exercise": "Tirage vertical serré",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 4.0,
+     "kg": 85.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "yvmml4te",
+   "date": "2025-04-15",
+   "exercise": "Row",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 9.0,
+     "kg": 180.0
+    },
+    {
+     "reps": 9.0,
+     "kg": 200.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "iv6urjsf",
+   "date": "2025-04-15",
+   "exercise": "Pulley",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 55.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "r2sjpljj",
+   "date": "2025-04-15",
+   "exercise": "Poulie",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 30.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "lba81wdk",
+   "date": "2025-04-15",
+   "exercise": "Trapèzes",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 17.0,
+     "kg": 50.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "k98pz1f6",
+   "date": "2025-04-16",
+   "exercise": "Leg extension",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 70.0
+    },
+    {
+     "reps": 10.0,
+     "kg": 72.5
+    },
+    {
+     "reps": 10.0,
+     "kg": 75.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "jn7ig9px",
+   "date": "2025-04-16",
+   "exercise": "Leg Curl",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 55.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "g77oq28f",
+   "date": "2025-04-16",
+   "exercise": "Leg press",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 160.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "w2f4udyw",
+   "date": "2025-04-16",
+   "exercise": "Adducteurs",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 15.0,
+     "kg": 70.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "7qnou2ex",
+   "date": "2025-04-16",
+   "exercise": "Rotary Calf",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 20.0,
+     "kg": 65.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "hn9gd4sw",
+   "date": "2025-04-19",
+   "exercise": "Haltères postérieur",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 25.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "c9gsujt9",
+   "date": "2025-04-19",
+   "exercise": "Upper Back",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 90.0
+    },
+    {
+     "reps": 7.0,
+     "kg": 95.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "09d5qdkz",
+   "date": "2025-04-19",
+   "exercise": "Shoulder press",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 7.0,
+     "kg": 100.0
+    },
+    {
+     "reps": 2.0,
+     "kg": 110.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "vbb21ht2",
+   "date": "2025-04-19",
+   "exercise": "Poulies latérales",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 10.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "r5wsywjo",
+   "date": "2025-04-19",
+   "exercise": "Poulies antérieures",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 12.0,
+     "kg": 15.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "af38t4oi",
+   "date": "2025-04-20",
+   "exercise": "Dev incliné",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 4.0,
+     "kg": 100.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "8ef6a7wa",
+   "date": "2025-04-20",
+   "exercise": "Poulie haut du pec",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 15.0
+    }
+   ],
+   "rpe": null,
+   "note": "moins mal au coude"
+  },
+  {
+   "id": "pqo5wbnp",
+   "date": "2025-04-20",
+   "exercise": "Dev couché",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 4.5,
+     "kg": 100.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "hidcerrp",
+   "date": "2025-04-20",
+   "exercise": "Chest press",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 3.0,
+     "kg": 90.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "s62jf3on",
+   "date": "2025-04-20",
+   "exercise": "Dips",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 9.0,
+     "kg": 180.0
+    },
+    {
+     "reps": 4.0,
+     "kg": 200.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "sm2oljp2",
+   "date": "2025-04-22",
+   "exercise": "PullDown",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 20.0,
+     "kg": 100.0
+    },
+    {
+     "reps": 10.0,
+     "kg": 110.0
+    },
+    {
+     "reps": 5.0,
+     "kg": 120.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "puw0x0il",
+   "date": "2025-04-22",
+   "exercise": "Tirage vertical serré",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 4.0,
+     "kg": 85.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "sj4dfy9u",
+   "date": "2025-04-22",
+   "exercise": "Row",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 9.0,
+     "kg": 180.0
+    },
+    {
+     "reps": 9.0,
+     "kg": 200.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "2xvtdog7",
+   "date": "2025-04-22",
+   "exercise": "Pulley",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 55.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "jz6nz118",
+   "date": "2025-04-22",
+   "exercise": "Poulie",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 10.0,
+     "kg": 30.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "o2fiyaxx",
+   "date": "2025-04-22",
+   "exercise": "Trapèzes",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 17.0,
+     "kg": 50.0
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  }
+ ],
+ "treadmill": [],
+ "weights": []
+}
