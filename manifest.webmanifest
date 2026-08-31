@@ -1,0 +1,17 @@
+{
+  "name": "Carnet",
+  "short_name": "Carnet",
+  "description": "Carnet d'entraînement — musculation, tapis, poids corporel",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#06080E",
+  "theme_color": "#06080E",
+  "lang": "fr",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
