@@ -1163,6 +1163,20 @@
    ],
    "rpe": 6,
    "note": "Reprise"
+  },
+  {
+   "id": "biiqlbpi",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": ""
   }
  ],
  "treadmill": [],
