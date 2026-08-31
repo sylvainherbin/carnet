@@ -1348,7 +1348,17 @@
    "note": ""
   }
  ],
- "treadmill": [],
+ "treadmill": [
+  {
+   "id": "ads5w9v9",
+   "date": "2026-08-31",
+   "min": 15,
+   "km": 1.21,
+   "slope": 13,
+   "hr": 150,
+   "note": "Reprise"
+  }
+ ],
  "weights": [
   {
    "id": "69v5iqae",
