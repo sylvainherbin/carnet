@@ -16,6 +16,26 @@ const b64decode = (b64) => {
   return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0)));
 };
 
+// Fichiers FC déposés par le raccourci Apple Watch : un JSON [{t, bpm}, …]
+// par entraînement, nommé fc/AAAA-MM-JJ-HHMM.json. Chaque fichier est créé une
+// seule fois et jamais réécrit — aucun sha à gérer côté Raccourcis.
+const FC_DIR = "https://api.github.com/repos/sylvainherbin/carnet/contents/fc";
+
+export async function listFcFiles() {
+  const r = await fetch(`${FC_DIR}?ref=main`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
+  if (r.status === 404) return []; // pas encore de dossier fc/
+  if (!r.ok) throw new Error(`GitHub ${r.status}`);
+  const j = await r.json();
+  return j.filter((f) => f.type === "file" && f.name.endsWith(".json")).map((f) => f.name);
+}
+
+export async function pullFcFile(name) {
+  const r = await fetch(`${FC_DIR}/${encodeURIComponent(name)}?ref=main`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
+  if (!r.ok) throw new Error(`GitHub ${r.status}`);
+  const j = await r.json();
+  return JSON.parse(b64decode(j.content));
+}
+
 export async function pullRemote() {
   const r = await fetch(`${API}?ref=main`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
   if (r.status === 404) return null; // pas encore de fichier distant

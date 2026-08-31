@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { pullRemote, pushRemote } from "./githubSync.js";
+import { pullRemote, pushRemote, listFcFiles, pullFcFile } from "./githubSync.js";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart,
 } from "recharts";
@@ -52,7 +52,7 @@ const kcalSeance = (data, date) => {
   const mKcal = nSets > 0 ? (3.5 * kg / 200) * (MET_TRAVAIL * workMin + MET_REPOS * (mMin - workMin)) : 0;
   if (mKcal + tKcal === 0) return null;
   return { total: Math.round(mKcal + tKcal), muscu: Math.round(mKcal), tapis: Math.round(tKcal),
-    mMin: Math.round(mMin), mode, kg, hr: meta.hr || null, watch: meta.watch || null };
+    mMin: Math.round(mMin), mode, kg, hr: meta.hr || null, hrMax: meta.hrMax || null, watch: meta.watch || null };
 };
 const num = (v) => (v === "" || v === null || isNaN(Number(v)) ? 0 : Number(v));
 const isoWeek = (iso) => {
@@ -261,6 +261,43 @@ export default function CarnetEntrainement() {
     } catch (e) { setGhSync((g) => ({ ...g, status: "hors ligne" })); }
   };
 
+  const notify = (msg) => { setToast(msg); setTimeout(() => setToast(""), 1800); };
+  const update = (fn) => setData((d) => fn(structuredClone(d)));
+
+  // --- FC Apple Watch : croise les fichiers fc/<date>-*.json déposés par le
+  // raccourci avec les jours de séance récents, et remplit fc moy / fc max du
+  // jour s'ils sont vides. Idempotent : un jour déjà pourvu n'est plus relu.
+  const importFc = async () => {
+    try {
+      const d = dataRef.current;
+      const limit = new Date(Date.now() - 14 * 864e5).toISOString().slice(0, 10);
+      const dates = new Set([todayISO(), ...d.sessions.map((s) => s.date), ...d.treadmill.map((t) => t.date)]);
+      const want = [...dates].filter((dt) => dt >= limit && !((d.durations.find((x) => x.date === dt) || {}).hr > 0));
+      if (want.length === 0) return;
+      const files = await listFcFiles();
+      const byDate = want.map((dt) => [dt, files.filter((n) => n.startsWith(dt))]).filter(([, f]) => f.length > 0);
+      const found = [];
+      for (const [dt, names] of byDate) {
+        const samples = (await Promise.all(names.map(pullFcFile))).flat();
+        const bpm = samples.map((s) => Number(String(s.bpm).replace(",", ".").replace(/[^0-9.]/g, ""))).filter((v) => v > 20 && v < 250);
+        if (bpm.length === 0) continue;
+        found.push({ date: dt, hr: Math.round(bpm.reduce((a, v) => a + v, 0) / bpm.length), hrMax: Math.round(Math.max(...bpm)) });
+      }
+      if (found.length === 0) return;
+      update((dd) => {
+        found.forEach(({ date, hr, hrMax }) => {
+          let m = dd.durations.find((x) => x.date === date);
+          if (!m) { m = { date }; dd.durations.push(m); }
+          if (!(m.hr > 0)) m.hr = hr;
+          if (!(m.hrMax > 0)) m.hrMax = hrMax;
+        });
+        return dd;
+      });
+      const f = found[found.length - 1];
+      notify(`FC montre importée : ${f.hr} bpm moy · ${f.hrMax} max`);
+    } catch (e) { console.error("import FC", e); }
+  };
+
   useEffect(() => { dataRef.current = data; }, [data]);
   useEffect(() => {
     try { const r = localStorage.getItem(STORAGE_KEY); if (r) { adopting.current = true; setData({ ...EMPTY, ...JSON.parse(r) }); } }
@@ -270,7 +307,7 @@ export default function CarnetEntrainement() {
   useEffect(() => {
     if (!loaded || pulledOnce.current) return;
     pulledOnce.current = true;
-    doPull();
+    doPull().finally(() => setTimeout(importFc, 1200)); // après l'éventuel adopt(), une fois dataRef à jour
   }, [loaded]);
   useEffect(() => {
     if (!loaded) return;
@@ -284,9 +321,6 @@ export default function CarnetEntrainement() {
     }, 400);
     return () => clearTimeout(saveTimer.current);
   }, [data, loaded]);
-
-  const notify = (msg) => { setToast(msg); setTimeout(() => setToast(""), 1800); };
-  const update = (fn) => setData((d) => fn(structuredClone(d)));
 
   // HUD
   const hud = useMemo(() => {
@@ -424,7 +458,7 @@ function Seance({ data, update, notify, celebrate }) {
     let m = d.durations.find((x) => x.date === date);
     if (!m) { m = { date }; d.durations.push(m); }
     if (num(v) > 0) m[field] = num(v); else delete m[field];
-    if (!(m.min > 0 || m.hr > 0 || m.watch > 0)) d.durations = d.durations.filter((x) => x !== m);
+    if (!(m.min > 0 || m.hr > 0 || m.watch > 0 || m.hrMax > 0)) d.durations = d.durations.filter((x) => x !== m);
     return d;
   });
   const kcal = kcalSeance(data, date);
@@ -530,7 +564,7 @@ function Seance({ data, update, notify, celebrate }) {
         <H right={todays[0]?.group || ""}>Séance du {fmtDate(date)}</H>
         {kcal && (
           <p className="text-xs mb-2" style={{ color: T.mute, fontFamily: mono }}>
-            ≈ <span style={{ color: T.amber }}>{kcal.total} kcal</span> · muscu {kcal.muscu} ({kcal.mMin} min {kcal.mode}) + tapis {kcal.tapis} · base {kcal.kg} kg{kcal.hr ? ` · FC ${kcal.hr}` : ""}{kcal.watch ? ` · montre ${kcal.watch} kcal` : ""}
+            ≈ <span style={{ color: T.amber }}>{kcal.total} kcal</span> · muscu {kcal.muscu} ({kcal.mMin} min {kcal.mode}) + tapis {kcal.tapis} · base {kcal.kg} kg{kcal.hr ? ` · FC ${kcal.hr}${kcal.hrMax ? ` max ${kcal.hrMax}` : ""}` : ""}{kcal.watch ? ` · montre ${kcal.watch} kcal` : ""}
           </p>
         )}
         {todays.length > 0 && !kcal && <p className="text-xs mb-2 italic" style={{ color: T.mute }}>Renseigne ton poids (onglet Poids) pour l'estimation des calories.</p>}
