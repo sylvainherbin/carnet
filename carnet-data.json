@@ -1541,6 +1541,21 @@
    "rpe": 6,
    "note": "Reprise",
    "at": 1788252560337
+  },
+  {
+   "id": "gwcn10ly",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 80
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1788252878820
   }
  ],
  "treadmill": [
