@@ -20,6 +20,36 @@ const e1rm = (kg, reps) => (reps === 1 ? kg : kg * (1 + reps / 30));
 // au milieu), de la durée saisie moins le tapis, ou à défaut de 3 min par série.
 const MET_TRAVAIL = 6, MET_REPOS = 2, SEC_PAR_SERIE = 40, PAUSE_MAX = 10, MIN_PAR_SERIE = 3;
 
+// Le raccourci iOS dépose deux formats dans fc/. Le premier, historique, est un
+// tableau de paires {t, bpm} construit par une boucle « Répéter avec chaque
+// élément » — inutilisable dès qu'un vrai entraînement porte le nombre de mesures
+// à plusieurs centaines, la boucle n'aboutissant plus. Le second, compact, est
+// { t, b } : deux chaînes parallèles séparées par « | », produites d'un coup par
+// « Combiner le texte » sur la liste entière. On lit les deux.
+const parseMs = (s) => {
+  const str = String(s).trim();
+  // Horodatage ISO à fuseau explicite (ancien format) : Date.parse suffit.
+  if (/[Zz]$|[+-]\d\d:?\d\d$/.test(str)) return Date.parse(str);
+  // « AAAA-MM-JJ HH:MM:SS » sans fuseau : c'est l'heure locale de la montre, que
+  // WebKit refuse de parser tel quel. On construit la date explicitement, ce qui
+  // la rend comparable aux horodatages de saisie, eux aussi locaux.
+  const m = /^(\d{4})-(\d\d)-(\d\d)[ T](\d\d):(\d\d):(\d\d)/.exec(str);
+  return m ? new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]).getTime() : NaN;
+};
+const parseFcFile = (raw) => {
+  let rows;
+  if (Array.isArray(raw)) rows = raw.map((s) => [s.t, s.bpm]);
+  else {
+    const ts = String(raw?.t ?? "").split("|"), bs = String(raw?.b ?? "").split("|");
+    rows = ts.map((t, i) => [t, bs[i]]);
+  }
+  return rows.map(([t, b]) => ({
+    ms: parseMs(t),
+    day: String(t).trim().slice(0, 10),
+    bpm: Number(String(b).replace(",", ".").replace(/[^0-9.]/g, "")),
+  }));
+};
+
 // Pendant un entraînement, la montre mesure la FC en continu (~5 s) ; au repos,
 // seulement toutes les quelques minutes, avec de brèves rafales opportunistes.
 // La plus longue plage à cadence serrée est donc la séance. Le seuil de 10 min
@@ -307,8 +337,7 @@ export default function CarnetEntrainement() {
       const days = new Set([...windows.keys()].flatMap((dt) => [dt, nextDay(dt)]));
       const names = (await listFcFiles()).filter((n) => days.has(n.slice(0, 10)));
       if (names.length === 0) return;
-      const samples = (await Promise.all(names.map(pullFcFile))).flat()
-        .map((s) => ({ ms: Date.parse(s.t), day: String(s.t).slice(0, 10), bpm: Number(String(s.bpm).replace(",", ".").replace(/[^0-9.]/g, "")) }))
+      const samples = (await Promise.all(names.map(pullFcFile))).flatMap(parseFcFile)
         .filter((s) => s.ms > 0 && s.bpm > 20 && s.bpm < 250)
         .sort((a, b) => a.ms - b.ms);
       const found = [];
