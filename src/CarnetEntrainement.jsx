@@ -50,6 +50,18 @@ const parseFcFile = (raw) => {
   }));
 };
 
+// Courbe conservée avec la séance : une moyenne par tranche de 30 s, soit ~150
+// points pour une heure d'entraînement. Assez fin pour lire la forme de l'effort,
+// assez léger pour voyager dans le fichier de synchronisation (~600 octets).
+const FC_PAS = 30000;
+const courbeFc = (arr) => {
+  const t0 = Math.floor(arr[0].ms / FC_PAS) * FC_PAS;
+  const seaux = [];
+  arr.forEach((s) => { const i = Math.floor((s.ms - t0) / FC_PAS); (seaux[i] ||= []).push(s.bpm); });
+  const n = Math.floor((arr[arr.length - 1].ms - t0) / FC_PAS) + 1;
+  return { t0, v: Array.from({ length: n }, (_, i) => (seaux[i] ? Math.round(seaux[i].reduce((a, b) => a + b, 0) / seaux[i].length) : null)) };
+};
+
 // Pendant un entraînement, la montre mesure la FC en continu (~5 s) ; au repos,
 // seulement toutes les quelques minutes, avec de brèves rafales opportunistes.
 // La plus longue plage à cadence serrée est donc la séance. Le seuil de 10 min
@@ -326,11 +338,18 @@ export default function CarnetEntrainement() {
       const windows = new Map();
       [...new Set(d.sessions.map((s) => s.date))].forEach((dt) => {
         if (dt < limit) return;
-        if ((d.durations.find((x) => x.date === dt) || {}).hr > 0) return;
-        const ts = d.sessions.filter((s) => s.date === dt).map((s) => s.at).filter(Boolean).sort((a, b) => a - b);
+        // On revient sur une date déjà résumée tant qu'il lui manque le détail par
+        // exercice ou la courbe : les séances importées avant leur arrivée les gagnent.
+        const m0 = d.durations.find((x) => x.date === dt) || {};
+        if (m0.hr > 0 && m0.ex && m0.fc) return;
+        const ss = d.sessions.filter((s) => s.date === dt && s.at).sort((a, b) => a.at - b.at);
+        // Chaque saisie couvre la période qui la sépare de la précédente : ses séries
+        // et la récupération entre elles. Découper ainsi plutôt que par exercice laisse
+        // un mouvement repris plus tard agréger ses tranches sans absorber l'intervalle.
+        const blocs = ss.map((x, i) => ({ ex: x.exercise, from: i ? ss[i - 1].at : x.at - MIN_PAR_SERIE * 60000, to: x.at }));
         // Sans horodatage de saisie (mode texte), la fenêtre reste inconnue :
         // null déclenche la détection par densité sur les échantillons du jour.
-        windows.set(dt, ts.length >= 2 ? [ts[0] - MIN_PAR_SERIE * 60000, ts[ts.length - 1] + 120000] : null);
+        windows.set(dt, ss.length >= 2 ? { win: [blocs[0].from, ss[ss.length - 1].at + 120000], blocs } : null);
       });
       if (windows.size === 0) return;
       const nextDay = (iso) => new Date(new Date(`${iso}T12:00:00`).getTime() + 864e5).toISOString().slice(0, 10);
@@ -345,18 +364,33 @@ export default function CarnetEntrainement() {
         .filter((s) => s.ms > 0 && s.bpm > 20 && s.bpm < 250)
         .sort((a, b) => a.ms - b.ms);
       const found = [];
-      windows.forEach((win, date) => {
-        const bpm = (win ? samples.filter((s) => s.ms >= win[0] && s.ms <= win[1]) : denseRun(samples.filter((s) => s.day === date))).map((s) => s.bpm);
-        if (bpm.length === 0) return;
-        found.push({ date, n: bpm.length, hr: Math.round(bpm.reduce((a, v) => a + v, 0) / bpm.length), hrMax: Math.round(Math.max(...bpm)) });
+      const moy = (v) => Math.round(v.reduce((a, x) => a + x, 0) / v.length);
+      windows.forEach((w, date) => {
+        const dans = w ? samples.filter((s) => s.ms >= w.win[0] && s.ms <= w.win[1]) : denseRun(samples.filter((s) => s.day === date));
+        if (dans.length === 0) return;
+        const bpm = dans.map((s) => s.bpm);
+        const rec = { date, n: bpm.length, hr: moy(bpm), hrMax: Math.round(Math.max(...bpm)), fc: courbeFc(dans) };
+        if (w) {
+          const parEx = new Map();
+          w.blocs.forEach((b) => {
+            const v = samples.filter((s) => s.ms >= b.from && s.ms <= b.to).map((s) => s.bpm);
+            if (v.length === 0) return;
+            if (!parEx.has(b.ex)) parEx.set(b.ex, []);
+            parEx.get(b.ex).push(...v);
+          });
+          if (parEx.size > 0) rec.ex = [...parEx].map(([n, v]) => ({ n, c: v.length, hr: moy(v), hrMax: Math.round(Math.max(...v)) }));
+        }
+        found.push(rec);
       });
       if (found.length === 0) return;
       update((dd) => {
-        found.forEach(({ date, hr, hrMax }) => {
+        found.forEach(({ date, hr, hrMax, ex, fc }) => {
           let m = dd.durations.find((x) => x.date === date);
           if (!m) { m = { date }; dd.durations.push(m); }
           if (!(m.hr > 0)) m.hr = hr;
           if (!(m.hrMax > 0)) m.hrMax = hrMax;
+          if (ex && !m.ex) m.ex = ex;
+          if (fc && !m.fc) m.fc = fc;
         });
         return dd;
       });
@@ -525,10 +559,19 @@ function Seance({ data, update, notify, celebrate }) {
     let m = d.durations.find((x) => x.date === date);
     if (!m) { m = { date }; d.durations.push(m); }
     if (num(v) > 0) m[field] = num(v); else delete m[field];
-    if (!(m.min > 0 || m.hr > 0 || m.watch > 0 || m.hrMax > 0)) d.durations = d.durations.filter((x) => x !== m);
+    if (!(m.min > 0 || m.hr > 0 || m.watch > 0 || m.hrMax > 0 || m.ex || m.fc)) d.durations = d.durations.filter((x) => x !== m);
     return d;
   });
   const kcal = kcalSeance(data, date);
+  // Les creux d'une tranche isolée sont un artefact du sous-échantillonnage, pas
+  // une mesure manquante : la courbe est tracée d'un trait (connectNulls).
+  const fcSerie = useMemo(() => {
+    if (!meta.fc?.v?.length) return null;
+    return meta.fc.v.map((bpm, i) => {
+      const d = new Date(meta.fc.t0 + i * 30000);
+      return { h: `${pad(d.getHours())}:${pad(d.getMinutes())}`, bpm };
+    });
+  }, [meta.fc]);
   // Regroupe les entrées du jour par exercice (ordre d'apparition) ; chaque série
   // est numérotée selon l'ordre d'exécution, quelle que soit la méthode de saisie.
   const grouped = (() => {
@@ -541,6 +584,7 @@ function Seance({ data, update, notify, celebrate }) {
       exercise, rows,
       vol: rows.reduce((a, r) => a + r.reps * r.kg, 0),
       best: Math.max(...rows.map((r) => e1rm(r.kg, r.reps))),
+      fc: (meta.ex || []).find((e) => e.n === exercise) || null,
     }));
   })();
   // Séance de référence : la dernière fois que ce groupe musculaire a été
@@ -687,13 +731,35 @@ function Seance({ data, update, notify, celebrate }) {
           </p>
         )}
         {todays.length > 0 && !kcal && <p className="text-xs mb-2 italic" style={{ color: T.mute }}>Renseigne ton poids (onglet Poids) pour l'estimation des calories.</p>}
+        {fcSerie && fcSerie.length > 1 && (
+          <div className="mb-3">
+            <div className="text-xs mb-1" style={{ color: T.mute, fontFamily: mono }}>
+              fréquence cardiaque · {fcSerie.length} tranches de 30 s{meta.hrMax ? ` · pic ${meta.hrMax}` : ""}
+            </div>
+            <div style={{ height: 150 }}>
+              <ResponsiveContainer>
+                <AreaChart data={fcSerie} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
+                  <defs><linearGradient id="gfc" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={T.danger} stopOpacity={0.4} /><stop offset="100%" stopColor={T.danger} stopOpacity={0} /></linearGradient></defs>
+                  <CartesianGrid stroke="rgba(255,59,92,.10)" strokeDasharray="2 4" />
+                  <XAxis dataKey="h" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} minTickGap={40} />
+                  <YAxis domain={["dataMin - 6", "dataMax + 6"]} tick={axis} axisLine={false} tickLine={false} width={34} />
+                  <Tooltip {...tip} />
+                  <Area type="monotone" dataKey="bpm" name="bpm" stroke={T.danger} strokeWidth={2} fill="url(#gfc)" dot={false} activeDot={{ r: 4, fill: T.danger }} connectNulls />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
         {todays.length === 0 ? <Empty text="Rien d'enregistré pour cette date." /> : (
           <ul>
             {grouped.map((g, i) => (
               <li key={g.exercise} className="row py-2.5 rise" style={{ animationDelay: `${i * 40}ms` }}>
                 <div className="flex justify-between items-baseline gap-2">
                   <div className="font-medium">{g.exercise}</div>
-                  <div className="text-xs" style={{ color: T.mute, fontFamily: mono }}>vol {g.vol} · e1RM <span style={{ color: T.cyan }}>{g.best.toFixed(1)}</span></div>
+                  <div className="text-xs" style={{ color: T.mute, fontFamily: mono }}>
+                    vol {g.vol} · e1RM <span style={{ color: T.cyan }}>{g.best.toFixed(1)}</span>
+                    {g.fc && <> · FC <span style={{ color: T.danger }}>{g.fc.hr}</span> ↑{g.fc.hrMax}</>}
+                  </div>
                 </div>
                 <ul className="mt-1.5 space-y-1">
                   {g.rows.map((r, j) => (
