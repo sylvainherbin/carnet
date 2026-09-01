@@ -126,21 +126,6 @@ const isoWeek = (iso) => {
   return `${d.getFullYear()}-S${pad(week)}`;
 };
 const GROUPS = ["Pecs", "Dos", "Jambes", "Épaules", "Bras", "Autre"];
-const parseLine = (line) => {
-  if (!line.includes(":")) return { error: "pas de valeurs", raw: line };
-  const idx = line.indexOf(":"); const name = line.slice(0, idx).trim();
-  let vals = line.slice(idx + 1).trim(); let note = "";
-  const mn = vals.match(/\(([^)]*)\)/);
-  if (mn) { note = mn[1].trim(); vals = vals.slice(0, mn.index).trim(); }
-  const sets = []; const bad = [];
-  vals.split(/\s*-\s*/).forEach((p) => {
-    const part = p.trim().replace(",", "."); if (!part) return;
-    const m = part.match(/^([\d.]+)\s*[x×]\s*([\d.]+)$/i);
-    if (m) sets.push({ kg: Number(m[1]), reps: Number(m[2]) }); else bad.push(part);
-  });
-  if (!name || sets.length === 0) return { error: "aucune série lisible", raw: line };
-  return { name, sets, note, bad };
-};
 const DEFAULT_EXERCISES = ["Dev incliné", "Dev couché", "Chest press", "Dips", "PullDown", "Row", "Leg extension", "Leg Curl", "Leg press", "Shoulder press"];
 const EMPTY = { exercises: DEFAULT_EXERCISES, sessions: [], treadmill: [], weights: [], durations: [] };
 
@@ -355,7 +340,7 @@ export default function CarnetEntrainement() {
         // Le tapis se fait souvent avant ou après la muscu : quand son départ est
         // connu, la fenêtre s'étend pour l'englober, sinon sa FC tomberait hors champ.
         const taps = d.treadmill.filter((t) => t.date === dt && t.at0 > 0 && t.min > 0);
-        // Sans horodatage de saisie (mode texte), la fenêtre reste inconnue :
+        // Une séance ancienne, saisie sans horodatage, laisse la fenêtre inconnue :
         // null déclenche la détection par densité sur les échantillons du jour.
         if (ss.length < 2) { windows.set(dt, null); return; }
         const win = [blocs[0].from, ss[ss.length - 1].at + 120000];
@@ -538,8 +523,6 @@ function Hud({ label, value, sub, color = T.cyan }) {
 function Seance({ data, update, notify, celebrate }) {
   const [date, setDate] = useState(todayISO());
   const [group, setGroup] = useState(GROUPS[0]);
-  const [mode, setMode] = useState("texte");
-  const [text, setText] = useState("");
   const [exercise, setExercise] = useState(data.exercises[0] || "");
   const [newEx, setNewEx] = useState("");
   const [sets, setSets] = useState([{ reps: "", kg: "" }]);
@@ -548,8 +531,6 @@ function Seance({ data, update, notify, celebrate }) {
   const [pulse, setPulse] = useState(false);
   const fire = () => { setPulse(true); setTimeout(() => setPulse(false), 700); };
 
-  const parsed = useMemo(() => text.split("\n").map((l) => l.trim()).filter(Boolean).map(parseLine), [text]);
-
   const lastFor = (name) => data.sessions.filter((x) => x.exercise === name).sort((a, b) => b.date.localeCompare(a.date))[0] || null;
   const last = useMemo(() => lastFor(exercise), [data.sessions, exercise]);
 
@@ -557,19 +538,6 @@ function Seance({ data, update, notify, celebrate }) {
   const firePR = (candidates) => {
     const prs = candidates.filter((c) => c.oldBest > 0 && c.newBest > c.oldBest + 0.05);
     if (prs.length) celebrate(prs.sort((a, b) => b.newBest / b.oldBest - a.newBest / a.oldBest)[0]);
-  };
-  const saveText = () => {
-    const ok = parsed.filter((p) => !p.error);
-    if (ok.length === 0) { notify("Rien à enregistrer"); return; }
-    const candidates = ok.map((p) => ({ exercise: p.name, oldBest: bestFor(p.name), newBest: Math.max(...p.sets.map((x) => e1rm(x.kg, x.reps))) }));
-    update((d) => {
-      ok.forEach((p) => {
-        if (!d.exercises.includes(p.name)) d.exercises.push(p.name);
-        d.sessions.push({ id: uid(), date, group, exercise: p.name, sets: p.sets, rpe: null, note: p.note });
-      });
-      return d;
-    });
-    setText(""); fire(); notify(`${ok.length} exercice(s) enregistré(s)`); firePR(candidates);
   };
   const addExercise = () => {
     const n = newEx.trim(); if (!n) return;
@@ -598,10 +566,17 @@ function Seance({ data, update, notify, celebrate }) {
   // une mesure manquante : la courbe est tracée d'un trait (connectNulls).
   const fcSerie = useMemo(() => {
     if (!meta.fc?.v?.length) return null;
-    return meta.fc.v.map((bpm, i) => ({ h: hhmm(meta.fc.t0 + i * 30000), bpm }));
+    return meta.fc.v.map((bpm, i) => ({ i, h: hhmm(meta.fc.t0 + i * 30000), bpm }));
   }, [meta.fc]);
-  // Plages de tapis à surligner sur la courbe. L'axe étant catégoriel, les bornes
-  // sont des libellés d'abscisse : on convertit les horaires en indices de tranche.
+  // L'abscisse est l'indice de tranche, pas l'heure : deux tranches de 30 s tombent
+  // dans la même minute, et un axe catégoriel à libellés dupliqués ne sait plus où
+  // ancrer une plage. L'heure redevient une étiquette au moment de l'affichage.
+  const fcTicks = useMemo(() => {
+    if (!fcSerie) return [];
+    const pas = Math.max(1, Math.ceil(fcSerie.length / 5));
+    return fcSerie.map((p) => p.i).filter((i) => i % pas === 0);
+  }, [fcSerie]);
+  // Plages de tapis à surligner sur la courbe, bornées au domaine tracé.
   const fcTapis = useMemo(() => {
     if (!fcSerie || !meta.fc) return [];
     const dernier = fcSerie.length - 1;
@@ -609,7 +584,7 @@ function Seance({ data, update, notify, celebrate }) {
       const i = Math.round((t.at0 - meta.fc.t0) / 30000);
       const j = Math.round((t.at0 + t.min * 60000 - meta.fc.t0) / 30000);
       if (j < 0 || i > dernier) return null;
-      return { x1: fcSerie[Math.max(0, i)].h, x2: fcSerie[Math.min(dernier, j)].h };
+      return { x1: Math.max(0, i), x2: Math.min(dernier, j) };
     }).filter(Boolean);
   }, [fcSerie, meta.fc, data.treadmill, date]);
   // Regroupe les entrées du jour par exercice (ordre d'apparition) ; chaque série
@@ -667,44 +642,9 @@ function Seance({ data, update, notify, celebrate }) {
           <Field label="fc moy"><input type="number" inputMode="numeric" min="0" value={meta.hr ?? ""} onChange={(e) => setMeta("hr", e.target.value)} className="inp" /></Field>
           <Field label="kcal montre"><input type="number" inputMode="decimal" min="0" value={meta.watch ?? ""} onChange={(e) => setMeta("watch", e.target.value)} className="inp" /></Field>
         </div>
-        <div className="flex gap-2">
-          <Btn small kind={mode === "texte" ? "primary" : "quiet"} onClick={() => setMode("texte")}>Saisie texte</Btn>
-          <Btn small kind={mode === "form" ? "primary" : "quiet"} onClick={() => setMode("form")}>Formulaire</Btn>
-        </div>
       </Panel>
 
-      {mode === "texte" && (
-        <Panel boot="boot-2" className="space-y-3">
-          <textarea value={text} onChange={(e) => setText(e.target.value)} rows={7} className="inp"
-            placeholder={"Une ligne par exercice, kg x reps, séries séparées par un tiret :\nDev incliné : 90x6 - 100x1,5\nPoulie haut du pec : 15x10 (moins mal au coude)"} />
-          {parsed.length > 0 && (
-            <ul className="text-sm space-y-1.5" style={{ fontFamily: mono }}>
-              {parsed.map((p, i) => {
-                const prev = p.error ? null : lastFor(p.name);
-                const bestNow = p.error ? 0 : Math.max(...p.sets.map((s) => e1rm(s.kg, s.reps)));
-                const bestPrev = prev ? Math.max(...prev.sets.map((s) => e1rm(s.kg, s.reps))) : null;
-                const up = bestPrev !== null && bestNow > bestPrev + 0.05;
-                return (
-                  <li key={i} className="rise" style={{ animationDelay: `${i * 40}ms`, color: p.error ? T.danger : T.text }}>
-                    {p.error ? `⚠ ${p.raw} — ${p.error}` : (
-                      <>
-                        <span style={{ color: T.cyan }}>{p.name}</span> {p.sets.map((s) => `${s.kg}×${s.reps}`).join("  ")}
-                        {up && <span style={{ color: T.amber }}> ▲ e1RM {bestNow.toFixed(1)}</span>}
-                        {p.note ? <span style={{ color: T.mute }}> ({p.note})</span> : ""}
-                        {p.bad.length > 0 && <span style={{ color: T.danger }}> — ignoré : {p.bad.join(", ")}</span>}
-                      </>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-          <Btn full onClick={saveText} pulse={pulse}>Enregistrer la séance</Btn>
-        </Panel>
-      )}
-
-      {mode === "form" && (
-        <Panel boot="boot-2" className="space-y-3">
+      <Panel boot="boot-2" className="space-y-3">
           <Field label="exercice"><select value={exercise} onChange={(e) => setExercise(e.target.value)} className="inp">{data.exercises.map((x) => <option key={x}>{x}</option>)}</select></Field>
           <div className="flex gap-2">
             <input placeholder="Nouvel exercice" value={newEx} onChange={(e) => setNewEx(e.target.value)} className="inp" />
@@ -730,9 +670,8 @@ function Seance({ data, update, notify, celebrate }) {
             <Field label="rpe"><input type="number" inputMode="decimal" min="1" max="10" step="0.5" value={rpe} onChange={(e) => setRpe(e.target.value)} className="inp" /></Field>
             <Field label="note"><input value={note} onChange={(e) => setNote(e.target.value)} className="inp" /></Field>
           </div>
-          <Btn full onClick={save} pulse={pulse}>Enregistrer l'exercice</Btn>
-        </Panel>
-      )}
+        <Btn full onClick={save} pulse={pulse}>Enregistrer l'exercice</Btn>
+      </Panel>
 
       {previous && (
         <Panel boot="boot-3">
@@ -780,12 +719,13 @@ function Seance({ data, update, notify, celebrate }) {
             </div>
             <div style={{ height: 150 }}>
               <ResponsiveContainer>
-                <AreaChart data={fcSerie} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
+                <AreaChart data={fcSerie} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
                   <defs><linearGradient id="gfc" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={T.danger} stopOpacity={0.4} /><stop offset="100%" stopColor={T.danger} stopOpacity={0} /></linearGradient></defs>
                   <CartesianGrid stroke="rgba(255,59,92,.10)" strokeDasharray="2 4" />
-                  <XAxis dataKey="h" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} minTickGap={40} />
-                  <YAxis domain={["dataMin - 6", "dataMax + 6"]} tick={axis} axisLine={false} tickLine={false} width={34} />
-                  <Tooltip {...tip} />
+                  <XAxis dataKey="i" type="number" domain={[0, fcSerie.length - 1]} ticks={fcTicks}
+                    tickFormatter={(i) => fcSerie[i]?.h ?? ""} tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
+                  <YAxis domain={["dataMin - 6", "dataMax + 6"]} tick={axis} axisLine={false} tickLine={false} width={38} />
+                  <Tooltip {...tip} labelFormatter={(i) => fcSerie[i]?.h ?? ""} />
                   {fcTapis.map((z, i) => <ReferenceArea key={i} x1={z.x1} x2={z.x2} fill={T.violet} fillOpacity={0.16} stroke={T.violet} strokeOpacity={0.35} />)}
                   <Area type="monotone" dataKey="bpm" name="bpm" stroke={T.danger} strokeWidth={2} fill="url(#gfc)" dot={false} activeDot={{ r: 4, fill: T.danger }} connectNulls />
                 </AreaChart>
