@@ -337,7 +337,11 @@ export default function CarnetEntrainement() {
       const days = new Set([...windows.keys()].flatMap((dt) => [dt, nextDay(dt)]));
       const names = (await listFcFiles()).filter((n) => days.has(n.slice(0, 10)));
       if (names.length === 0) return;
-      const samples = (await Promise.all(names.map(pullFcFile))).flatMap(parseFcFile)
+      // Un fichier vide ou malformé — raccourci iOS à moitié réglé, dépôt interrompu —
+      // ne doit pas faire échouer l'import des autres : on l'écarte et on continue.
+      const samples = (await Promise.all(names.map((n) =>
+        pullFcFile(n).then(parseFcFile).catch((e) => { console.error("FC illisible", n, e); return []; })
+      ))).flat()
         .filter((s) => s.ms > 0 && s.bpm > 20 && s.bpm < 250)
         .sort((a, b) => a.ms - b.ms);
       const found = [];
