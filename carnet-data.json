@@ -1361,6 +1361,21 @@
    "rpe": 7,
    "note": "Reprise",
    "at": 1788249577277
+  },
+  {
+   "id": "tuumengg",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 40
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788249762508
   }
  ],
  "treadmill": [
