@@ -510,6 +510,28 @@ function Seance({ data, update, notify, celebrate }) {
       best: Math.max(...rows.map((r) => e1rm(r.kg, r.reps))),
     }));
   })();
+  // Séance de référence : la dernière fois que ce groupe musculaire a été
+  // travaillé, avec le repère de ce qui a déjà été refait aujourd'hui — de quoi
+  // servir à la fois de liste d'exercices et d'objectif, sans quitter l'onglet.
+  const previous = useMemo(() => {
+    const dates = [...new Set(data.sessions.filter((s) => s.group === group && s.date < date).map((s) => s.date))].sort();
+    const prevDate = dates[dates.length - 1];
+    if (!prevDate) return null;
+    const map = new Map();
+    data.sessions.filter((s) => s.date === prevDate && s.group === group).forEach((s) => {
+      if (!map.has(s.exercise)) map.set(s.exercise, []);
+      s.sets.forEach((x) => map.get(s.exercise).push(x));
+    });
+    const bestToday = new Map();
+    todays.forEach((s) => bestToday.set(s.exercise, Math.max(bestToday.get(s.exercise) || 0, ...s.sets.map((x) => e1rm(x.kg, x.reps)))));
+    const items = [...map.entries()].map(([exercise, sets]) => {
+      const best = Math.max(...sets.map((x) => e1rm(x.kg, x.reps)));
+      return { exercise, sets, best, vol: sets.reduce((a, x) => a + x.kg * x.reps, 0),
+        done: bestToday.has(exercise), delta: bestToday.has(exercise) ? bestToday.get(exercise) - best : null };
+    });
+    return { date: prevDate, items, vol: items.reduce((a, x) => a + x.vol, 0), reste: items.filter((x) => !x.done).length };
+  }, [data.sessions, group, date, todays]);
+
   const delSet = (id, setIdx) => update((d) => {
     d.sessions = d.sessions.map((s) => s.id === id ? { ...s, sets: s.sets.filter((_, j) => j !== setIdx) } : s).filter((s) => s.sets.length > 0);
     return d;
@@ -594,7 +616,37 @@ function Seance({ data, update, notify, celebrate }) {
         </Panel>
       )}
 
-      <Panel boot="boot-3">
+      {previous && (
+        <Panel boot="boot-3">
+          <H right={`${group} · ${fmtDate(previous.date)}`}>Séance précédente</H>
+          <p className="text-xs mb-2" style={{ color: T.mute, fontFamily: mono }}>
+            volume {Math.round(previous.vol)} kg · {previous.items.length} exercice{previous.items.length > 1 ? "s" : ""}
+            {previous.reste > 0 && todays.length > 0 && <span style={{ color: T.amber }}>  ▸ {previous.reste} à refaire</span>}
+          </p>
+          <ul>
+            {previous.items.map((it, i) => (
+              <li key={it.exercise} className="row py-2 rise" style={{ animationDelay: `${i * 40}ms`, opacity: it.done ? 0.55 : 1 }}>
+                <div className="flex justify-between items-baseline gap-2">
+                  <div className="text-sm font-medium">
+                    <span style={{ color: it.done ? T.cyan : T.mute, fontFamily: mono }}>{it.done ? "✓" : "○"}</span> {it.exercise}
+                  </div>
+                  <div className="text-xs whitespace-nowrap" style={{ color: T.mute, fontFamily: mono }}>
+                    e1RM {it.best.toFixed(1)}
+                    {it.delta !== null && Math.abs(it.delta) >= 0.05 && (
+                      <span style={{ color: it.delta > 0 ? T.amber : T.danger }}>  {it.delta > 0 ? "+" : ""}{it.delta.toFixed(1)}</span>
+                    )}
+                  </div>
+                </div>
+                <div className="text-xs mt-1" style={{ color: T.text, fontFamily: mono }}>
+                  {it.sets.map((s) => `${s.kg}×${s.reps}`).join("   ")}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Panel>
+      )}
+
+      <Panel boot="boot-4">
         <H right={todays[0]?.group || ""}>Séance du {fmtDate(date)}</H>
         {kcal && (
           <p className="text-xs mb-2" style={{ color: T.mute, fontFamily: mono }}>
