@@ -1,34 +1,34 @@
 {
  "exercises": [
-  "Dev inclin\u00e9",
+  "Dev incliné",
   "Poulie haut du pec",
-  "Dev couch\u00e9",
+  "Dev couché",
   "Chest press",
   "Dips",
   "PullDown",
-  "Tirage vertical serr\u00e9",
+  "Tirage vertical serré",
   "Row",
   "Leg extension",
   "Leg Curl",
   "Leg press",
   "Adducteurs",
   "Tenseur du fascia lata",
-  "Halt\u00e8res post\u00e9rieur",
+  "Haltères postérieur",
   "Upper Back",
   "Shoulder press",
-  "Poulies lat\u00e9rales",
-  "Poulies ant\u00e9rieures",
+  "Poulies latérales",
+  "Poulies antérieures",
   "Pulley",
   "Poulie",
   "Rotary Calf",
-  "Trap\u00e8zes",
+  "Trapèzes",
   "Incline chest press"
  ],
  "sessions": [
   {
    "id": "cy34ncp1",
    "date": "2025-03-18",
-   "exercise": "Dev inclin\u00e9",
+   "exercise": "Dev incliné",
    "group": "Pecs",
    "sets": [
     {
@@ -56,7 +56,7 @@
   {
    "id": "ym1pp75x",
    "date": "2025-03-18",
-   "exercise": "Dev couch\u00e9",
+   "exercise": "Dev couché",
    "group": "Pecs",
    "sets": [
     {
@@ -112,7 +112,7 @@
   {
    "id": "boaii2rk",
    "date": "2025-03-20",
-   "exercise": "Tirage vertical serr\u00e9",
+   "exercise": "Tirage vertical serré",
    "group": "Dos",
    "sets": [
     {
@@ -210,8 +210,8 @@
   {
    "id": "juvj9yvy",
    "date": "2025-03-25",
-   "exercise": "Halt\u00e8res post\u00e9rieur",
-   "group": "\u00c9paules",
+   "exercise": "Haltères postérieur",
+   "group": "Épaules",
    "sets": [
     {
      "reps": 10,
@@ -225,7 +225,7 @@
    "id": "4ylgikmy",
    "date": "2025-03-25",
    "exercise": "Upper Back",
-   "group": "\u00c9paules",
+   "group": "Épaules",
    "sets": [
     {
      "reps": 10,
@@ -239,7 +239,7 @@
    "id": "krxzx7h7",
    "date": "2025-03-25",
    "exercise": "Shoulder press",
-   "group": "\u00c9paules",
+   "group": "Épaules",
    "sets": [
     {
      "reps": 6,
@@ -252,8 +252,8 @@
   {
    "id": "37la6hi3",
    "date": "2025-03-25",
-   "exercise": "Poulies lat\u00e9rales",
-   "group": "\u00c9paules",
+   "exercise": "Poulies latérales",
+   "group": "Épaules",
    "sets": [
     {
      "reps": 10,
@@ -266,8 +266,8 @@
   {
    "id": "whor6xn0",
    "date": "2025-03-25",
-   "exercise": "Poulies ant\u00e9rieures",
-   "group": "\u00c9paules",
+   "exercise": "Poulies antérieures",
+   "group": "Épaules",
    "sets": [
     {
      "reps": 10,
@@ -280,7 +280,7 @@
   {
    "id": "kh7mz88o",
    "date": "2025-03-30",
-   "exercise": "Dev inclin\u00e9",
+   "exercise": "Dev incliné",
    "group": "Pecs",
    "sets": [
     {
@@ -308,7 +308,7 @@
   {
    "id": "n0fe67ya",
    "date": "2025-03-30",
-   "exercise": "Dev couch\u00e9",
+   "exercise": "Dev couché",
    "group": "Pecs",
    "sets": [
     {
@@ -376,7 +376,7 @@
   {
    "id": "trucm7m8",
    "date": "2025-03-31",
-   "exercise": "Tirage vertical serr\u00e9",
+   "exercise": "Tirage vertical serré",
    "group": "Dos",
    "sets": [
     {
@@ -520,8 +520,8 @@
   {
    "id": "jyfk2c1a",
    "date": "2025-04-03",
-   "exercise": "Halt\u00e8res post\u00e9rieur",
-   "group": "\u00c9paules",
+   "exercise": "Haltères postérieur",
+   "group": "Épaules",
    "sets": [
     {
      "reps": 10,
@@ -535,7 +535,7 @@
    "id": "u7n9xz3v",
    "date": "2025-04-03",
    "exercise": "Upper Back",
-   "group": "\u00c9paules",
+   "group": "Épaules",
    "sets": [
     {
      "reps": 9,
@@ -549,7 +549,7 @@
    "id": "urxj7so0",
    "date": "2025-04-03",
    "exercise": "Shoulder press",
-   "group": "\u00c9paules",
+   "group": "Épaules",
    "sets": [
     {
      "reps": 6,
@@ -562,8 +562,8 @@
   {
    "id": "f7dtpwyy",
    "date": "2025-04-03",
-   "exercise": "Poulies lat\u00e9rales",
-   "group": "\u00c9paules",
+   "exercise": "Poulies latérales",
+   "group": "Épaules",
    "sets": [
     {
      "reps": 5,
@@ -576,8 +576,8 @@
   {
    "id": "aayrf7da",
    "date": "2025-04-03",
-   "exercise": "Poulies ant\u00e9rieures",
-   "group": "\u00c9paules",
+   "exercise": "Poulies antérieures",
+   "group": "Épaules",
    "sets": [
     {
      "reps": 10,
@@ -590,7 +590,7 @@
   {
    "id": "71h8v5nm",
    "date": "2025-04-04",
-   "exercise": "Dev inclin\u00e9",
+   "exercise": "Dev incliné",
    "group": "Pecs",
    "sets": [
     {
@@ -622,7 +622,7 @@
   {
    "id": "udv7s3sh",
    "date": "2025-04-04",
-   "exercise": "Dev couch\u00e9",
+   "exercise": "Dev couché",
    "group": "Pecs",
    "sets": [
     {
@@ -676,7 +676,7 @@
   {
    "id": "f2fusn7g",
    "date": "2025-04-13",
-   "exercise": "Dev inclin\u00e9",
+   "exercise": "Dev incliné",
    "group": "Pecs",
    "sets": [
     {
@@ -704,7 +704,7 @@
   {
    "id": "pdjbfxrg",
    "date": "2025-04-13",
-   "exercise": "Dev couch\u00e9",
+   "exercise": "Dev couché",
    "group": "Pecs",
    "sets": [
     {
@@ -754,7 +754,7 @@
   {
    "id": "brxcnk1n",
    "date": "2025-04-15",
-   "exercise": "Tirage vertical serr\u00e9",
+   "exercise": "Tirage vertical serré",
    "group": "Dos",
    "sets": [
     {
@@ -814,7 +814,7 @@
   {
    "id": "lba81wdk",
    "date": "2025-04-15",
-   "exercise": "Trap\u00e8zes",
+   "exercise": "Trapèzes",
    "group": "Dos",
    "sets": [
     {
@@ -906,8 +906,8 @@
   {
    "id": "hn9gd4sw",
    "date": "2025-04-19",
-   "exercise": "Halt\u00e8res post\u00e9rieur",
-   "group": "\u00c9paules",
+   "exercise": "Haltères postérieur",
+   "group": "Épaules",
    "sets": [
     {
      "reps": 10,
@@ -921,7 +921,7 @@
    "id": "c9gsujt9",
    "date": "2025-04-19",
    "exercise": "Upper Back",
-   "group": "\u00c9paules",
+   "group": "Épaules",
    "sets": [
     {
      "reps": 10,
@@ -939,7 +939,7 @@
    "id": "09d5qdkz",
    "date": "2025-04-19",
    "exercise": "Shoulder press",
-   "group": "\u00c9paules",
+   "group": "Épaules",
    "sets": [
     {
      "reps": 7,
@@ -956,8 +956,8 @@
   {
    "id": "vbb21ht2",
    "date": "2025-04-19",
-   "exercise": "Poulies lat\u00e9rales",
-   "group": "\u00c9paules",
+   "exercise": "Poulies latérales",
+   "group": "Épaules",
    "sets": [
     {
      "reps": 10,
@@ -970,8 +970,8 @@
   {
    "id": "r5wsywjo",
    "date": "2025-04-19",
-   "exercise": "Poulies ant\u00e9rieures",
-   "group": "\u00c9paules",
+   "exercise": "Poulies antérieures",
+   "group": "Épaules",
    "sets": [
     {
      "reps": 12,
@@ -984,7 +984,7 @@
   {
    "id": "af38t4oi",
    "date": "2025-04-20",
-   "exercise": "Dev inclin\u00e9",
+   "exercise": "Dev incliné",
    "group": "Pecs",
    "sets": [
     {
@@ -1012,7 +1012,7 @@
   {
    "id": "pqo5wbnp",
    "date": "2025-04-20",
-   "exercise": "Dev couch\u00e9",
+   "exercise": "Dev couché",
    "group": "Pecs",
    "sets": [
     {
@@ -1080,7 +1080,7 @@
   {
    "id": "puw0x0il",
    "date": "2025-04-22",
-   "exercise": "Tirage vertical serr\u00e9",
+   "exercise": "Tirage vertical serré",
    "group": "Dos",
    "sets": [
     {
@@ -1140,7 +1140,7 @@
   {
    "id": "o2fiyaxx",
    "date": "2025-04-22",
-   "exercise": "Trap\u00e8zes",
+   "exercise": "Trapèzes",
    "group": "Dos",
    "sets": [
     {
@@ -1155,7 +1155,7 @@
    "id": "osal9gp4",
    "date": "2026-08-31",
    "group": "Pecs",
-   "exercise": "Dev inclin\u00e9",
+   "exercise": "Dev incliné",
    "sets": [
     {
      "reps": 15,
@@ -1169,7 +1169,7 @@
    "id": "biiqlbpi",
    "date": "2026-08-31",
    "group": "Pecs",
-   "exercise": "Dev inclin\u00e9",
+   "exercise": "Dev incliné",
    "sets": [
     {
      "reps": 10,
@@ -1183,7 +1183,7 @@
    "id": "tzwkq4ye",
    "date": "2026-08-31",
    "group": "Pecs",
-   "exercise": "Dev inclin\u00e9",
+   "exercise": "Dev incliné",
    "sets": [
     {
      "reps": 15,
@@ -1197,7 +1197,7 @@
    "id": "5styby76",
    "date": "2026-08-31",
    "group": "Pecs",
-   "exercise": "Dev inclin\u00e9",
+   "exercise": "Dev incliné",
    "sets": [
     {
      "reps": 15,
@@ -1346,6 +1346,21 @@
    ],
    "rpe": 9,
    "note": ""
+  },
+  {
+   "id": "slp5ocju",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 30
+    }
+   ],
+   "rpe": 7,
+   "note": "Reprise",
+   "at": 1788249577277
   }
  ],
  "treadmill": [
