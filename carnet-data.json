@@ -1391,6 +1391,21 @@
    "rpe": 8,
    "note": "",
    "at": 1788249982694
+  },
+  {
+   "id": "m4nh363w",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 60
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1788250260786
   }
  ],
  "treadmill": [
