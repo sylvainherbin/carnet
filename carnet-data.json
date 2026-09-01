@@ -1597,6 +1597,15 @@
    "slope": 13,
    "hr": 150,
    "note": "Reprise"
+  },
+  {
+   "id": "yfykyghv",
+   "date": "2026-09-01",
+   "min": 15,
+   "km": 1.21,
+   "slope": 13,
+   "hr": 150,
+   "note": "Courbatures de la veille"
   }
  ],
  "weights": [
