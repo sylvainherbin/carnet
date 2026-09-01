@@ -1511,6 +1511,21 @@
    "rpe": 10,
    "note": "",
    "at": 1788252005052
+  },
+  {
+   "id": "t38z1p6s",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 40
+    }
+   ],
+   "rpe": 10,
+   "note": "",
+   "at": 1788252341719
   }
  ],
  "treadmill": [
