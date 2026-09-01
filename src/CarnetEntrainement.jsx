@@ -109,6 +109,16 @@ const kcalSeance = (data, date) => {
   if (span >= 10) {
     mMin = MIN_PAR_SERIE; // amorce : la première série précède son enregistrement
     for (let i = 1; i < ts.length; i++) mMin += Math.min((ts[i] - ts[i - 1]) / 60000, PAUSE_MAX);
+    // Le trajet vers le tapis, ou le retour, sépare deux chronos et ne tombait
+    // dans aucun des deux. Plafonné comme une pause entre séries : un tapis fait
+    // le soir ne doit pas gonfler la séance du matin. Un tapis intercalé au
+    // milieu de la muscu est déjà couvert par la boucle ci-dessus.
+    const debut = ts[0] - MIN_PAR_SERIE * 60000, fin = ts[ts.length - 1];
+    tread.forEach((t) => {
+      if (!(t.at0 > 0 && t.min > 0)) return;
+      if (t.at0 >= fin) mMin += Math.min((t.at0 - fin) / 60000, PAUSE_MAX);
+      else if (t.at0 + t.min * 60000 <= debut) mMin += Math.min((debut - t.at0 - t.min * 60000) / 60000, PAUSE_MAX);
+    });
     mode = "chrono";
   } else if (meta.min > 0) { mMin = Math.max(0, meta.min - tMin); mode = "saisies"; }
   else { mMin = nSets * MIN_PAR_SERIE; mode = "estimées"; }
@@ -249,6 +259,10 @@ export default function CarnetEntrainement() {
   const [data, setData] = useState(EMPTY);
   const [loaded, setLoaded] = useState(false);
   const [tab, setTab] = useState("seance");
+  // Le défilement appartient désormais à un conteneur interne : il faut le
+  // ramener en haut soi-même quand on change d'onglet.
+  const scroller = useRef(null);
+  useEffect(() => { scroller.current?.scrollTo(0, 0); }, [tab]);
   const [toast, setToast] = useState("");
   const [pr, setPr] = useState(null);
   const saveTimer = useRef(null);
@@ -456,9 +470,14 @@ export default function CarnetEntrainement() {
   const tabs = [["seance", "Séance"], ["tapis", "Tapis"], ["poids", "Poids"], ["courbes", "Courbes"], ["records", "Records"], ["donnees", "Données"]];
 
   return (
-    <div className="min-h-screen grid-bg" style={{ background: T.bg, color: T.text, fontFamily: sans }}>
+    // Hauteur figée et défilement interne : la barre d'onglets reste un élément
+    // du flux plutôt qu'un position:fixed, que Safari iOS décroche du bas de
+    // l'écran au rebond de fin de page.
+    <div className="grid-bg" style={{ background: T.bg, color: T.text, fontFamily: sans,
+      height: "100dvh", display: "flex", flexDirection: "column", position: "relative", overflow: "hidden" }}>
       <style>{CSS}</style>
-      <div className="max-w-md mx-auto pb-24">
+      <div ref={scroller} className="flex-1 overflow-y-auto">
+      <div className="max-w-md mx-auto pb-4">
         <header className="relative px-4 pt-5 pb-4 overflow-hidden boot">
           <div className="scanline" />
           <div className="flex items-baseline justify-between">
@@ -485,26 +504,28 @@ export default function CarnetEntrainement() {
             onSync={doPull} />}
         </main>
 
-        {pr && <PROverlay pr={pr} onClose={() => setPr(null)} />}
-
-        {toast && (
-          <div className="toast fixed left-1/2 bottom-20 px-4 py-2 rounded-md text-sm"
-            style={{ background: "#0A0E17", border: `1px solid ${T.cyan}`, color: T.cyan, fontFamily: mono, boxShadow: "0 0 20px rgba(0,229,255,.35)", transform: "translateX(-50%)" }}>
-            {toast}
-          </div>
-        )}
-
-        <nav className="fixed bottom-0 left-0 right-0" style={{ background: "rgba(6,8,14,.92)", borderTop: `1px solid ${T.line}`, backdropFilter: "blur(10px)" }}>
-          <div className="max-w-md mx-auto grid grid-cols-6">
-            {tabs.map(([k, label]) => (
-              <button key={k} type="button" onClick={() => setTab(k)} className={`tab py-3 text-xs ${tab === k ? "tab-active" : ""}`}
-                style={{ color: tab === k ? T.cyan : T.mute, fontFamily: mono, fontWeight: tab === k ? 700 : 400 }}>
-                {label}
-              </button>
-            ))}
-          </div>
-        </nav>
+        </div>
       </div>
+
+      {pr && <PROverlay pr={pr} onClose={() => setPr(null)} />}
+
+      {toast && (
+        <div className="toast absolute left-1/2 bottom-20 px-4 py-2 rounded-md text-sm z-50"
+          style={{ background: "#0A0E17", border: `1px solid ${T.cyan}`, color: T.cyan, fontFamily: mono, boxShadow: "0 0 20px rgba(0,229,255,.35)", transform: "translateX(-50%)" }}>
+          {toast}
+        </div>
+      )}
+
+      <nav className="shrink-0" style={{ background: "rgba(6,8,14,.92)", borderTop: `1px solid ${T.line}`, paddingBottom: "env(safe-area-inset-bottom)" }}>
+        <div className="max-w-md mx-auto grid grid-cols-6">
+          {tabs.map(([k, label]) => (
+            <button key={k} type="button" onClick={() => setTab(k)} className={`tab py-3 text-xs ${tab === k ? "tab-active" : ""}`}
+              style={{ color: tab === k ? T.cyan : T.mute, fontFamily: mono, fontWeight: tab === k ? 700 : 400 }}>
+              {label}
+            </button>
+          ))}
+        </div>
+      </nav>
     </div>
   );
 }
