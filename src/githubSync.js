@@ -33,7 +33,32 @@ export async function pullFcFile(name) {
   const r = await fetch(`${FC_DIR}/${encodeURIComponent(name)}?ref=main`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
   if (!r.ok) throw new Error(`GitHub ${r.status}`);
   const j = await r.json();
-  return JSON.parse(b64decode(j.content));
+  const txt = b64decode(j.content).trim();
+  try { return JSON.parse(txt); }
+  catch (e) {
+    // Le raccourci iOS a déjà déposé le même objet deux fois de suite — « {…}{…} ».
+    // Plutôt que d'exiger un producteur irréprochable, on lit le premier objet
+    // complet et on ignore la suite : les doublons portent les mêmes échantillons.
+    const end = matchEnd(txt);
+    if (end < 0) throw e;
+    return JSON.parse(txt.slice(0, end));
+  }
+}
+
+// Fin (exclue) du premier objet ou tableau JSON de txt, en suivant l'imbrication
+// et en ignorant les accolades qui tombent à l'intérieur d'une chaîne.
+function matchEnd(txt) {
+  const close = { "{": "}", "[": "]" }[txt[0]];
+  if (!close) return -1;
+  let depth = 0, inStr = false;
+  for (let i = 0; i < txt.length; i++) {
+    const c = txt[i];
+    if (inStr) { if (c === "\\") i++; else if (c === '"') inStr = false; continue; }
+    if (c === '"') inStr = true;
+    else if (c === "{" || c === "[") depth++;
+    else if (c === "}" || c === "]") { depth--; if (depth === 0) return i + 1; }
+  }
+  return -1;
 }
 
 export async function pullRemote() {
