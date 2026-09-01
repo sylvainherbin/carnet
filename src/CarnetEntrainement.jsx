@@ -1,11 +1,15 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { pullRemote, pushRemote, listFcFiles, pullFcFile } from "./githubSync.js";
 import {
-  LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart,
+  LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea,
 } from "recharts";
 
 // ================= données / helpers (inchangés) =================
 const STORAGE_KEY = "carnet-entrainement-v1";
+// Départ du tapis en cours. Hors de l'état React et de la synchro : le tapis se
+// déroule souvent app fermée, et un départ oublié ne doit pas partir sur GitHub.
+const TAPIS_START = "carnet-tapis-start";
+const hhmm = (ms) => { const d = new Date(ms); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
 const pad = (n) => String(n).padStart(2, "0");
 const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
 const uid = () => Math.random().toString(36).slice(2, 10);
@@ -341,15 +345,25 @@ export default function CarnetEntrainement() {
         // On revient sur une date déjà résumée tant qu'il lui manque le détail par
         // exercice ou la courbe : les séances importées avant leur arrivée les gagnent.
         const m0 = d.durations.find((x) => x.date === dt) || {};
-        if (m0.hr > 0 && m0.ex && m0.fc) return;
+        const tapAFaire = d.treadmill.some((t) => t.date === dt && t.at0 > 0 && !(t.hr > 0));
+        if (m0.hr > 0 && m0.ex && m0.fc && !tapAFaire) return;
         const ss = d.sessions.filter((s) => s.date === dt && s.at).sort((a, b) => a.at - b.at);
         // Chaque saisie couvre la période qui la sépare de la précédente : ses séries
         // et la récupération entre elles. Découper ainsi plutôt que par exercice laisse
         // un mouvement repris plus tard agréger ses tranches sans absorber l'intervalle.
         const blocs = ss.map((x, i) => ({ ex: x.exercise, from: i ? ss[i - 1].at : x.at - MIN_PAR_SERIE * 60000, to: x.at }));
+        // Le tapis se fait souvent avant ou après la muscu : quand son départ est
+        // connu, la fenêtre s'étend pour l'englober, sinon sa FC tomberait hors champ.
+        const taps = d.treadmill.filter((t) => t.date === dt && t.at0 > 0 && t.min > 0);
         // Sans horodatage de saisie (mode texte), la fenêtre reste inconnue :
         // null déclenche la détection par densité sur les échantillons du jour.
-        windows.set(dt, ss.length >= 2 ? { win: [blocs[0].from, ss[ss.length - 1].at + 120000], blocs } : null);
+        if (ss.length < 2) { windows.set(dt, null); return; }
+        const win = [blocs[0].from, ss[ss.length - 1].at + 120000];
+        taps.forEach((t) => {
+          win[0] = Math.min(win[0], t.at0);
+          win[1] = Math.max(win[1], t.at0 + t.min * 60000);
+        });
+        windows.set(dt, { win, blocs, taps });
       });
       if (windows.size === 0) return;
       const nextDay = (iso) => new Date(new Date(`${iso}T12:00:00`).getTime() + 864e5).toISOString().slice(0, 10);
@@ -379,18 +393,27 @@ export default function CarnetEntrainement() {
             parEx.get(b.ex).push(...v);
           });
           if (parEx.size > 0) rec.ex = [...parEx].map(([n, v]) => ({ n, c: v.length, hr: moy(v), hrMax: Math.round(Math.max(...v)) }));
+          // FC du tapis : la durée saisie borne la plage, le départ vient du bouton.
+          rec.tap = w.taps.map((t) => {
+            const v = samples.filter((s) => s.ms >= t.at0 && s.ms <= t.at0 + t.min * 60000).map((s) => s.bpm);
+            return v.length ? { id: t.id, hr: moy(v) } : null;
+          }).filter(Boolean);
         }
         found.push(rec);
       });
       if (found.length === 0) return;
       update((dd) => {
-        found.forEach(({ date, hr, hrMax, ex, fc }) => {
+        found.forEach(({ date, hr, hrMax, ex, fc, tap }) => {
           let m = dd.durations.find((x) => x.date === date);
           if (!m) { m = { date }; dd.durations.push(m); }
           if (!(m.hr > 0)) m.hr = hr;
           if (!(m.hrMax > 0)) m.hrMax = hrMax;
           if (ex && !m.ex) m.ex = ex;
           if (fc && !m.fc) m.fc = fc;
+          (tap || []).forEach(({ id, hr: v }) => {
+            const t = dd.treadmill.find((x) => x.id === id);
+            if (t && !(t.hr > 0)) t.hr = v;
+          });
         });
         return dd;
       });
@@ -567,11 +590,20 @@ function Seance({ data, update, notify, celebrate }) {
   // une mesure manquante : la courbe est tracée d'un trait (connectNulls).
   const fcSerie = useMemo(() => {
     if (!meta.fc?.v?.length) return null;
-    return meta.fc.v.map((bpm, i) => {
-      const d = new Date(meta.fc.t0 + i * 30000);
-      return { h: `${pad(d.getHours())}:${pad(d.getMinutes())}`, bpm };
-    });
+    return meta.fc.v.map((bpm, i) => ({ h: hhmm(meta.fc.t0 + i * 30000), bpm }));
   }, [meta.fc]);
+  // Plages de tapis à surligner sur la courbe. L'axe étant catégoriel, les bornes
+  // sont des libellés d'abscisse : on convertit les horaires en indices de tranche.
+  const fcTapis = useMemo(() => {
+    if (!fcSerie || !meta.fc) return [];
+    const dernier = fcSerie.length - 1;
+    return data.treadmill.filter((t) => t.date === date && t.at0 > 0 && t.min > 0).map((t) => {
+      const i = Math.round((t.at0 - meta.fc.t0) / 30000);
+      const j = Math.round((t.at0 + t.min * 60000 - meta.fc.t0) / 30000);
+      if (j < 0 || i > dernier) return null;
+      return { x1: fcSerie[Math.max(0, i)].h, x2: fcSerie[Math.min(dernier, j)].h };
+    }).filter(Boolean);
+  }, [fcSerie, meta.fc, data.treadmill, date]);
   // Regroupe les entrées du jour par exercice (ordre d'apparition) ; chaque série
   // est numérotée selon l'ordre d'exécution, quelle que soit la méthode de saisie.
   const grouped = (() => {
@@ -735,6 +767,7 @@ function Seance({ data, update, notify, celebrate }) {
           <div className="mb-3">
             <div className="text-xs mb-1" style={{ color: T.mute, fontFamily: mono }}>
               fréquence cardiaque · {fcSerie.length} tranches de 30 s{meta.hrMax ? ` · pic ${meta.hrMax}` : ""}
+              {fcTapis.length > 0 && <span style={{ color: T.violet }}> · zone violette = tapis</span>}
             </div>
             <div style={{ height: 150 }}>
               <ResponsiveContainer>
@@ -744,6 +777,7 @@ function Seance({ data, update, notify, celebrate }) {
                   <XAxis dataKey="h" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} minTickGap={40} />
                   <YAxis domain={["dataMin - 6", "dataMax + 6"]} tick={axis} axisLine={false} tickLine={false} width={34} />
                   <Tooltip {...tip} />
+                  {fcTapis.map((z, i) => <ReferenceArea key={i} x1={z.x1} x2={z.x2} fill={T.violet} fillOpacity={0.16} stroke={T.violet} strokeOpacity={0.35} />)}
                   <Area type="monotone" dataKey="bpm" name="bpm" stroke={T.danger} strokeWidth={2} fill="url(#gfc)" dot={false} activeDot={{ r: 4, fill: T.danger }} connectNulls />
                 </AreaChart>
               </ResponsiveContainer>
@@ -785,12 +819,33 @@ function Seance({ data, update, notify, celebrate }) {
 function Tapis({ data, update, notify }) {
   const [f, setF] = useState({ date: todayISO(), min: "", km: "", slope: "", hr: "", note: "" });
   const [pulse, setPulse] = useState(false);
+  // Départ relu du stockage : le tapis dure vingt minutes pendant lesquelles le
+  // téléphone est posé, écran éteint, et l'app peut être déchargée entre-temps.
+  const [at0, setAt0] = useState(() => { try { return Number(localStorage.getItem(TAPIS_START)) || 0; } catch (e) { return 0; } });
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    if (!at0) return;
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [at0]);
+  const ecoule = at0 ? Math.max(0, Math.round((now - at0) / 60000)) : 0;
+  const start = () => {
+    const t = Date.now();
+    setAt0(t); setNow(t);
+    try { localStorage.setItem(TAPIS_START, String(t)); } catch (e) { /* stockage indisponible */ }
+    notify(`Départ noté à ${hhmm(t)}`);
+  };
+  const annuler = () => { setAt0(0); try { localStorage.removeItem(TAPIS_START); } catch (e) { /* rien à retirer */ } };
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
   const speed = num(f.min) > 0 && num(f.km) > 0 ? num(f.km) / (num(f.min) / 60) : 0;
   const save = () => {
-    if (num(f.min) <= 0) { notify("Durée obligatoire"); return; }
-    update((d) => { d.treadmill.push({ id: uid(), date: f.date, min: num(f.min), km: num(f.km), slope: num(f.slope), hr: f.hr === "" ? null : num(f.hr), note: f.note.trim() }); return d; });
-    setF({ ...f, min: "", km: "", slope: "", hr: "", note: "" }); setPulse(true); setTimeout(() => setPulse(false), 700); notify("Marche enregistrée");
+    // Départ pointé et durée laissée vide : le temps écoulé fait office de durée.
+    const min = num(f.min) > 0 ? num(f.min) : ecoule;
+    if (min <= 0) { notify("Durée obligatoire"); return; }
+    update((d) => { d.treadmill.push({ id: uid(), date: f.date, min, km: num(f.km), slope: num(f.slope), hr: f.hr === "" ? null : num(f.hr), note: f.note.trim(), at0: at0 || null }); return d; });
+    setF({ ...f, min: "", km: "", slope: "", hr: "", note: "" }); annuler();
+    setPulse(true); setTimeout(() => setPulse(false), 700);
+    notify(at0 ? "Marche enregistrée · FC au prochain import" : "Marche enregistrée");
   };
   const list = [...data.treadmill].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 15);
   return (
@@ -807,6 +862,14 @@ function Tapis({ data, update, notify }) {
           </Field>
         </div>
         <Field label="note"><input value={f.note} onChange={set("note")} className="inp" /></Field>
+        {at0 ? (
+          <div className="flex items-center justify-between gap-3 text-xs" style={{ fontFamily: mono, color: T.mute }}>
+            <span>départ <span style={{ color: T.violet }}>{hhmm(at0)}</span> · {ecoule} min écoulée{ecoule > 1 ? "s" : ""}</span>
+            <button onClick={annuler} className="underline" style={{ color: T.mute }}>annuler</button>
+          </div>
+        ) : (
+          <Btn full onClick={start}>Start · noter le départ</Btn>
+        )}
         <Btn full onClick={save} pulse={pulse}>Enregistrer la marche</Btn>
       </Panel>
       <Panel boot="boot-2">
@@ -817,7 +880,7 @@ function Tapis({ data, update, notify }) {
               <li key={t.id} className="row py-2 flex justify-between items-center gap-2 text-sm rise" style={{ animationDelay: `${i * 30}ms` }}>
                 <span style={{ fontFamily: mono }}>
                   <span style={{ color: T.violet }}>{fmtDate(t.date)}</span> {t.min} min · {t.km} km
-                  {t.min > 0 && t.km > 0 ? ` · ${(t.km / (t.min / 60)).toFixed(1)} km/h` : ""}{t.slope ? ` · ${t.slope} %` : ""}{t.hr ? ` · ${t.hr} bpm` : ""}
+                  {t.min > 0 && t.km > 0 ? ` · ${(t.km / (t.min / 60)).toFixed(1)} km/h` : ""}{t.slope ? ` · ${t.slope} %` : ""}{t.hr ? ` · ${t.hr} bpm` : ""}{t.at0 ? ` · ${hhmm(t.at0)}` : ""}
                 </span>
                 <Del onClick={() => update((d) => { d.treadmill = d.treadmill.filter((x) => x.id !== t.id); return d; })} />
               </li>
