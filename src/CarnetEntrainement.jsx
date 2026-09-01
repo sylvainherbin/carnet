@@ -346,12 +346,12 @@ export default function CarnetEntrainement() {
         // exercice ou la courbe : les séances importées avant leur arrivée les gagnent.
         const m0 = d.durations.find((x) => x.date === dt) || {};
         const tapAFaire = d.treadmill.some((t) => t.date === dt && t.at0 > 0 && !(t.hr > 0));
-        if (m0.hr > 0 && m0.ex && m0.fc && !tapAFaire) return;
+        if (m0.hr > 0 && m0.ex && m0.fc && m0.pics && !tapAFaire) return;
         const ss = d.sessions.filter((s) => s.date === dt && s.at).sort((a, b) => a.at - b.at);
         // Chaque saisie couvre la période qui la sépare de la précédente : ses séries
         // et la récupération entre elles. Découper ainsi plutôt que par exercice laisse
         // un mouvement repris plus tard agréger ses tranches sans absorber l'intervalle.
-        const blocs = ss.map((x, i) => ({ ex: x.exercise, from: i ? ss[i - 1].at : x.at - MIN_PAR_SERIE * 60000, to: x.at }));
+        const blocs = ss.map((x, i) => ({ ex: x.exercise, id: x.id, solo: x.sets.length === 1, from: i ? ss[i - 1].at : x.at - MIN_PAR_SERIE * 60000, to: x.at }));
         // Le tapis se fait souvent avant ou après la muscu : quand son départ est
         // connu, la fenêtre s'étend pour l'englober, sinon sa FC tomberait hors champ.
         const taps = d.treadmill.filter((t) => t.date === dt && t.at0 > 0 && t.min > 0);
@@ -393,6 +393,13 @@ export default function CarnetEntrainement() {
             parEx.get(b.ex).push(...v);
           });
           if (parEx.size > 0) rec.ex = [...parEx].map(([n, v]) => ({ n, c: v.length, hr: moy(v), hrMax: Math.round(Math.max(...v)) }));
+          // Pic par série : le sommet atteint dans le bloc, qui est la réponse du cœur
+          // à la série elle-même. Réservé aux saisies d'une seule série — au-delà, le
+          // bloc en couvre plusieurs et rien ne permet de les départager.
+          rec.pics = w.blocs.filter((b) => b.solo).map((b) => {
+            const v = samples.filter((x) => x.ms >= b.from && x.ms <= b.to).map((x) => x.bpm);
+            return v.length ? { id: b.id, pic: Math.round(Math.max(...v)) } : null;
+          }).filter(Boolean);
           // FC du tapis : la durée saisie borne la plage, le départ vient du bouton.
           rec.tap = w.taps.map((t) => {
             const v = samples.filter((s) => s.ms >= t.at0 && s.ms <= t.at0 + t.min * 60000).map((s) => s.bpm);
@@ -403,12 +410,13 @@ export default function CarnetEntrainement() {
       });
       if (found.length === 0) return;
       update((dd) => {
-        found.forEach(({ date, hr, hrMax, ex, fc, tap }) => {
+        found.forEach(({ date, hr, hrMax, ex, pics, fc, tap }) => {
           let m = dd.durations.find((x) => x.date === date);
           if (!m) { m = { date }; dd.durations.push(m); }
           if (!(m.hr > 0)) m.hr = hr;
           if (!(m.hrMax > 0)) m.hrMax = hrMax;
-          if (ex && !m.ex) m.ex = ex;
+          if (!m.ex) m.ex = ex || [];
+          if (!m.pics) m.pics = pics || [];
           if (fc && !m.fc) m.fc = fc;
           (tap || []).forEach(({ id, hr: v }) => {
             const t = dd.treadmill.find((x) => x.id === id);
@@ -582,7 +590,7 @@ function Seance({ data, update, notify, celebrate }) {
     let m = d.durations.find((x) => x.date === date);
     if (!m) { m = { date }; d.durations.push(m); }
     if (num(v) > 0) m[field] = num(v); else delete m[field];
-    if (!(m.min > 0 || m.hr > 0 || m.watch > 0 || m.hrMax > 0 || m.ex || m.fc)) d.durations = d.durations.filter((x) => x !== m);
+    if (!(m.min > 0 || m.hr > 0 || m.watch > 0 || m.hrMax > 0 || m.ex?.length || m.pics?.length || m.fc)) d.durations = d.durations.filter((x) => x !== m);
     return d;
   });
   const kcal = kcalSeance(data, date);
@@ -610,7 +618,8 @@ function Seance({ data, update, notify, celebrate }) {
     const map = new Map();
     todays.forEach((s) => {
       if (!map.has(s.exercise)) map.set(s.exercise, []);
-      s.sets.forEach((x, setIdx) => map.get(s.exercise).push({ id: s.id, setIdx, kg: x.kg, reps: x.reps, rpe: s.rpe, note: setIdx === 0 ? s.note : "" }));
+      const pic = s.sets.length === 1 ? (meta.pics || []).find((q) => q.id === s.id)?.pic : null;
+      s.sets.forEach((x, setIdx) => map.get(s.exercise).push({ id: s.id, setIdx, kg: x.kg, reps: x.reps, rpe: s.rpe, pic, note: setIdx === 0 ? s.note : "" }));
     });
     return [...map.entries()].map(([exercise, rows]) => ({
       exercise, rows,
@@ -800,6 +809,7 @@ function Seance({ data, update, notify, celebrate }) {
                     <li key={`${r.id}-${r.setIdx}`} className="flex justify-between items-center gap-2">
                       <div className="text-xs" style={{ color: T.text, fontFamily: mono }}>
                         <span style={{ color: T.cyan }}>{pad(j + 1)}</span>  {r.kg}×{r.reps}{r.rpe ? <span style={{ color: T.mute }}> · RPE {r.rpe}</span> : ""}
+                        {r.pic ? <span style={{ color: T.danger }}> · FC ↑{r.pic}</span> : ""}
                         {r.note && <span className="italic" style={{ color: T.amber }}>  {r.note}</span>}
                       </div>
                       <Del onClick={() => delSet(r.id, r.setIdx)} />
