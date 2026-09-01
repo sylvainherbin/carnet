@@ -20,14 +20,19 @@ const b64decode = (b64) => {
 // par entraînement, nommé fc/AAAA-MM-JJ-HHMM.json. Chaque fichier est créé une
 // seule fois et jamais réécrit — aucun sha à gérer côté Raccourcis.
 const FC_DIR = "https://api.github.com/repos/sylvainherbin/carnet/contents/fc";
+// Relevés quotidiens (FC de repos, VFC) déposés à midi par un second raccourci,
+// un fichier daily/AAAA-MM-JJ.json par jour.
+const DAILY_DIR = "https://api.github.com/repos/sylvainherbin/carnet/contents/daily";
 
-export async function listFcFiles() {
-  const r = await fetch(`${FC_DIR}?ref=main`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
-  if (r.status === 404) return []; // pas encore de dossier fc/
+async function listJson(dir) {
+  const r = await fetch(`${dir}?ref=main`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
+  if (r.status === 404) return []; // dossier pas encore créé
   if (!r.ok) throw new Error(`GitHub ${r.status}`);
   const j = await r.json();
   return j.filter((f) => f.type === "file" && f.name.endsWith(".json")).map((f) => f.name);
 }
+export const listFcFiles = () => listJson(FC_DIR);
+export const listDailyFiles = () => listJson(DAILY_DIR);
 
 export async function pullFcFile(name) {
   const r = await fetch(`${FC_DIR}/${encodeURIComponent(name)}?ref=main`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });

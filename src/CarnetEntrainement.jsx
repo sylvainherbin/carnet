@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { pullRemote, pushRemote, listFcFiles, pullFcFile } from "./githubSync.js";
+import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles } from "./githubSync.js";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea,
 } from "recharts";
@@ -259,6 +259,9 @@ export default function CarnetEntrainement() {
   const [data, setData] = useState(EMPTY);
   const [loaded, setLoaded] = useState(false);
   const [tab, setTab] = useState("seance");
+  // Dernier relevé quotidien présent sur GitHub : undefined tant qu'on ne sait
+  // pas (hors ligne), null si le dossier est vide.
+  const [dailyLast, setDailyLast] = useState(undefined);
   // Le défilement appartient désormais à un conteneur interne : il faut le
   // ramener en haut soi-même quand on change d'onglet.
   const scroller = useRef(null);
@@ -439,7 +442,34 @@ export default function CarnetEntrainement() {
     if (!loaded || pulledOnce.current) return;
     pulledOnce.current = true;
     doPull().finally(() => setTimeout(importFc, 1200)); // après l'éventuel adopt(), une fois dataRef à jour
+    listDailyFiles().then((n) => setDailyLast(n.length ? n.sort().pop().slice(0, 10) : null)).catch(() => {});
   }, [loaded]);
+
+  // Absences à signaler. Les raccourcis iOS échouent sans bruit : un dépôt qui
+  // n'a pas eu lieu ne se voit qu'ici, en comparant ce qu'on attend à ce qu'on a.
+  const alertes = useMemo(() => {
+    const out = [];
+    const limit = new Date(Date.now() - 14 * 864e5).toISOString().slice(0, 10);
+    // Une séance horodatée dont la courbe manque encore, passé un délai de trois
+    // heures après la dernière série pour laisser l'automatisation de fin
+    // d'entraînement faire son dépôt.
+    const sans = [...new Set(data.sessions.map((s) => s.date))].filter((dt) => {
+      if (dt < limit) return false;
+      const ts = data.sessions.filter((s) => s.date === dt && s.at).map((s) => s.at);
+      if (ts.length < 2 || Date.now() - Math.max(...ts) < 3 * 3600000) return false;
+      return !(data.durations.find((x) => x.date === dt) || {}).fc;
+    }).sort();
+    if (sans.length) out.push(`FC Apple Watch absente pour la séance du ${fmtDate(sans[sans.length - 1])}${sans.length > 1 ? ` et ${sans.length - 1} autre${sans.length > 2 ? "s" : ""}` : ""}`);
+    // Le relevé quotidien tombe à midi : celui du jour peut légitimement manquer
+    // le matin, celui de la veille jamais.
+    if (dailyLast !== undefined) {
+      const d = new Date(); d.setDate(d.getDate() - 1);
+      const hier = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+      if (dailyLast === null) out.push("Aucun relevé quotidien reçu");
+      else if (dailyLast < hier) out.push(`Relevé quotidien : dernier reçu le ${fmtDate(dailyLast)}`);
+    }
+    return out;
+  }, [data.sessions, data.durations, dailyLast]);
   useEffect(() => {
     if (!loaded) return;
     clearTimeout(saveTimer.current);
@@ -491,6 +521,11 @@ export default function CarnetEntrainement() {
           </div>
         </header>
 
+        {alertes.length > 0 && (
+          <div className="mx-4 mb-4 px-3 py-2 rounded-md text-xs space-y-1" style={{ fontFamily: mono, color: T.amber, border: `1px solid ${T.amber}66`, background: "rgba(255,176,0,.07)" }}>
+            {alertes.map((a) => <div key={a}>⚠ {a}</div>)}
+          </div>
+        )}
         <main className="px-4 space-y-4" key={tab}>
           {!loaded && <Empty text="Initialisation…" />}
           {loaded && tab === "seance" && <Seance data={data} update={update} notify={notify} celebrate={setPr} />}
