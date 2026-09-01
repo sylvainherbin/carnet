@@ -19,6 +19,24 @@ const e1rm = (kg, reps) => (reps === 1 ? kg : kg * (1 + reps / 30));
 // (mode formulaire ; pauses plafonnées à 10 min pour absorber un tapis ou une interruption
 // au milieu), de la durée saisie moins le tapis, ou à défaut de 3 min par série.
 const MET_TRAVAIL = 6, MET_REPOS = 2, SEC_PAR_SERIE = 40, PAUSE_MAX = 10, MIN_PAR_SERIE = 3;
+
+// Pendant un entraînement, la montre mesure la FC en continu (~5 s) ; au repos,
+// seulement toutes les quelques minutes, avec de brèves rafales opportunistes.
+// La plus longue plage à cadence serrée est donc la séance. Le seuil de 10 min
+// écarte ces rafales : faute de plage assez longue, on préfère ne rien conclure.
+const denseRun = (samples) => {
+  let best = [], run = [];
+  const close = () => {
+    const span = run.length ? run[run.length - 1].ms - run[0].ms : 0;
+    if (span >= 10 * 60000 && span > (best.length ? best[best.length - 1].ms - best[0].ms : 0)) best = run;
+  };
+  samples.forEach((s, i) => {
+    if (i > 0 && s.ms - samples[i - 1].ms <= 60000) run.push(s);
+    else { close(); run = [s]; }
+  });
+  close();
+  return best;
+};
 const weightFor = (weights, date) => {
   const w = [...weights].sort((a, b) => a.date.localeCompare(b.date));
   const past = w.filter((x) => x.date <= date);
@@ -264,25 +282,41 @@ export default function CarnetEntrainement() {
   const notify = (msg) => { setToast(msg); setTimeout(() => setToast(""), 1800); };
   const update = (fn) => setData((d) => fn(structuredClone(d)));
 
-  // --- FC Apple Watch : croise les fichiers fc/<date>-*.json déposés par le
-  // raccourci avec les jours de séance récents, et remplit fc moy / fc max du
-  // jour s'ils sont vides. Idempotent : un jour déjà pourvu n'est plus relu.
+  // --- FC Apple Watch ---------------------------------------------------
+  // Le raccourci iOS déverse dans fc/ tous les échantillons que Santé lui rend,
+  // sans filtrage : plusieurs heures de FC de fond entourent la séance. C'est
+  // donc ici qu'on trie, en ne retenant que les battements tombant dans la
+  // fenêtre réelle de la séance, déduite des horodatages de saisie. Le nom du
+  // fichier n'est jamais utilisé comme date : il porte l'heure d'envoi, qui
+  // bascule au lendemain pour une séance de fin de soirée.
   const importFc = async () => {
     try {
       const d = dataRef.current;
       const limit = new Date(Date.now() - 14 * 864e5).toISOString().slice(0, 10);
-      const dates = new Set([todayISO(), ...d.sessions.map((s) => s.date), ...d.treadmill.map((t) => t.date)]);
-      const want = [...dates].filter((dt) => dt >= limit && !((d.durations.find((x) => x.date === dt) || {}).hr > 0));
-      if (want.length === 0) return;
-      const files = await listFcFiles();
-      const byDate = want.map((dt) => [dt, files.filter((n) => n.startsWith(dt))]).filter(([, f]) => f.length > 0);
+      const windows = new Map();
+      [...new Set(d.sessions.map((s) => s.date))].forEach((dt) => {
+        if (dt < limit) return;
+        if ((d.durations.find((x) => x.date === dt) || {}).hr > 0) return;
+        const ts = d.sessions.filter((s) => s.date === dt).map((s) => s.at).filter(Boolean).sort((a, b) => a - b);
+        // Sans horodatage de saisie (mode texte), la fenêtre reste inconnue :
+        // null déclenche la détection par densité sur les échantillons du jour.
+        windows.set(dt, ts.length >= 2 ? [ts[0] - MIN_PAR_SERIE * 60000, ts[ts.length - 1] + 120000] : null);
+      });
+      if (windows.size === 0) return;
+      const nextDay = (iso) => new Date(new Date(`${iso}T12:00:00`).getTime() + 864e5).toISOString().slice(0, 10);
+      const days = new Set([...windows.keys()].flatMap((dt) => [dt, nextDay(dt)]));
+      const names = (await listFcFiles()).filter((n) => days.has(n.slice(0, 10)));
+      if (names.length === 0) return;
+      const samples = (await Promise.all(names.map(pullFcFile))).flat()
+        .map((s) => ({ ms: Date.parse(s.t), day: String(s.t).slice(0, 10), bpm: Number(String(s.bpm).replace(",", ".").replace(/[^0-9.]/g, "")) }))
+        .filter((s) => s.ms > 0 && s.bpm > 20 && s.bpm < 250)
+        .sort((a, b) => a.ms - b.ms);
       const found = [];
-      for (const [dt, names] of byDate) {
-        const samples = (await Promise.all(names.map(pullFcFile))).flat();
-        const bpm = samples.map((s) => Number(String(s.bpm).replace(",", ".").replace(/[^0-9.]/g, ""))).filter((v) => v > 20 && v < 250);
-        if (bpm.length === 0) continue;
-        found.push({ date: dt, hr: Math.round(bpm.reduce((a, v) => a + v, 0) / bpm.length), hrMax: Math.round(Math.max(...bpm)) });
-      }
+      windows.forEach((win, date) => {
+        const bpm = (win ? samples.filter((s) => s.ms >= win[0] && s.ms <= win[1]) : denseRun(samples.filter((s) => s.day === date))).map((s) => s.bpm);
+        if (bpm.length === 0) return;
+        found.push({ date, n: bpm.length, hr: Math.round(bpm.reduce((a, v) => a + v, 0) / bpm.length), hrMax: Math.round(Math.max(...bpm)) });
+      });
       if (found.length === 0) return;
       update((dd) => {
         found.forEach(({ date, hr, hrMax }) => {
@@ -294,7 +328,7 @@ export default function CarnetEntrainement() {
         return dd;
       });
       const f = found[found.length - 1];
-      notify(`FC montre importée : ${f.hr} bpm moy · ${f.hrMax} max`);
+      notify(`FC importée : ${f.hr} bpm moy · ${f.hrMax} max (${f.n} mesures)`);
     } catch (e) { console.error("import FC", e); }
   };
 
