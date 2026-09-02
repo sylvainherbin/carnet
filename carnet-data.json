@@ -1917,6 +1917,21 @@
    "rpe": 2,
    "note": "",
    "at": 1788335706017
+  },
+  {
+   "id": "rakr1go6",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Adducteurs",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 35
+    }
+   ],
+   "rpe": 2,
+   "note": "",
+   "at": 1788336001487
   }
  ],
  "treadmill": [
