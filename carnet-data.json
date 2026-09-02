@@ -1953,6 +1953,16 @@
    "hr": 150,
    "note": "Courbatures de la veille",
    "at0": 1788254100000
+  },
+  {
+   "id": "8rmk2tlm",
+   "date": "2026-09-02",
+   "min": 17,
+   "km": 1.4,
+   "slope": 13,
+   "hr": null,
+   "note": "",
+   "at0": 1788336186733
   }
  ],
  "weights": [
