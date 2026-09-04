@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile } from "./githubSync.js";
+import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, courbeFc, resumeNuit, denseRun, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT } from "./calculs.js";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea,
 } from "recharts";
@@ -10,178 +11,11 @@ const STORAGE_KEY = "carnet-entrainement-v1";
 // déroule souvent app fermée, et un départ oublié ne doit pas partir sur GitHub.
 const TAPIS_START = "carnet-tapis-start";
 const hhmm = (ms) => { const d = new Date(ms); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
-const pad = (n) => String(n).padStart(2, "0");
 const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
 const uid = () => Math.random().toString(36).slice(2, 10);
 const fmtDate = (iso) => { const [y, m, d] = iso.split("-"); return `${d}/${m}/${y.slice(2)}`; };
-const e1rm = (kg, reps) => (reps === 1 ? kg : kg * (1 + reps / 30));
-
-// ---- Estimation des calories (nécessite le poids corporel, onglet Poids) ----
-// Tapis : équations ACSM marche (<8 km/h) / course, VO2 en ml/kg/min, 5 kcal par litre d'O2.
-// Muscu : modèle travail/repos — ~6 MET pendant les séries (~40 s chacune), ~2 MET entre.
-// Le temps de muscu vient, par ordre de préférence : des horodatages de saisie en direct
-// (mode formulaire ; pauses plafonnées à 10 min pour absorber un tapis ou une interruption
-// au milieu), de la durée saisie moins le tapis, ou à défaut de 3 min par série.
-const MET_TRAVAIL = 6, MET_REPOS = 2, SEC_PAR_SERIE = 40, PAUSE_MAX = 10, MIN_PAR_SERIE = 3;
-
-// Le raccourci iOS dépose deux formats dans fc/. Le premier, historique, est un
-// tableau de paires {t, bpm} construit par une boucle « Répéter avec chaque
-// élément » — inutilisable dès qu'un vrai entraînement porte le nombre de mesures
-// à plusieurs centaines, la boucle n'aboutissant plus. Le second, compact, est
-// { t, b } : deux chaînes parallèles séparées par « | », produites d'un coup par
-// « Combiner le texte » sur la liste entière. On lit les deux.
-const parseMs = (s) => {
-  const str = String(s).trim();
-  // Horodatage ISO à fuseau explicite (ancien format) : Date.parse suffit.
-  if (/[Zz]$|[+-]\d\d:?\d\d$/.test(str)) return Date.parse(str);
-  // « AAAA-MM-JJ HH:MM:SS » sans fuseau : c'est l'heure locale de la montre, que
-  // WebKit refuse de parser tel quel. On construit la date explicitement, ce qui
-  // la rend comparable aux horodatages de saisie, eux aussi locaux.
-  const m = /^(\d{4})-(\d\d)-(\d\d)[ T](\d\d):(\d\d):(\d\d)/.exec(str);
-  return m ? new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]).getTime() : NaN;
-};
-const parseFcFile = (raw) => {
-  let rows;
-  if (Array.isArray(raw)) rows = raw.map((s) => [s.t, s.bpm]);
-  else {
-    const ts = String(raw?.t ?? "").split("|"), bs = String(raw?.b ?? "").split("|");
-    rows = ts.map((t, i) => [t, bs[i]]);
-  }
-  return rows.map(([t, b]) => ({
-    ms: parseMs(t),
-    day: String(t).trim().slice(0, 10),
-    bpm: Number(String(b).replace(",", ".").replace(/[^0-9.]/g, "")),
-  }));
-};
-
-// Courbe conservée avec la séance : une moyenne par tranche de 30 s, soit ~150
-// points pour une heure d'entraînement. Assez fin pour lire la forme de l'effort,
-// assez léger pour voyager dans le fichier de synchronisation (~600 octets).
-const FC_PAS = 30000;
-const courbeFc = (arr) => {
-  const t0 = Math.floor(arr[0].ms / FC_PAS) * FC_PAS;
-  const seaux = [];
-  arr.forEach((s) => { const i = Math.floor((s.ms - t0) / FC_PAS); (seaux[i] ||= []).push(s.bpm); });
-  const n = Math.floor((arr[arr.length - 1].ms - t0) / FC_PAS) + 1;
-  return { t0, v: Array.from({ length: n }, (_, i) => (seaux[i] ? Math.round(seaux[i].reduce((a, b) => a + b, 0) / seaux[i].length) : null)) };
-};
-
-// ---- Relevé quotidien : la nuit ----
-// Le raccourci de midi dépose la FC depuis minuit et la VFC du jour, sous la
-// même forme compacte que fc/ : { fc_t, fc, vfc }, chaînes « | ». Les premiers
-// fichiers portaient à la place la « FC de repos » d'Apple (repos), une moyenne
-// de journée sans rapport avec la nuit — gardée à titre d'archive. Les phases
-// de sommeil (som_d, som_f, som_v : début, fin, phase) sont prévues ; tant
-// qu'elles manquent, la nuit est prise entre minuit et NUIT_FIN heures.
-const NUIT_FIN = 7;
-const splitNum = (s) => String(s ?? "").split("|").map((x) => Number(String(x).replace(",", ".").replace(/[^0-9.]/g, ""))).filter((x) => x > 0);
-const mediane = (v) => { const s = [...v].sort((a, b) => a - b), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
-const localMs = (iso, h = 0) => { const [y, m, d] = iso.split("-").map(Number); return new Date(y, m - 1, d, h).getTime(); };
-// Segments de sommeil : dort = vrai hors « éveillé » et « au lit ». Les libellés
-// viennent de Santé dans la langue du téléphone ; on reconnaît les deux états à
-// exclure et on tient tout le reste (léger, profond, paradoxal, « endormi ») pour
-// du sommeil, ce qui reste juste si Apple en ajoute un.
-const parseSommeil = (raw) => {
-  if (!raw?.som_d) return [];
-  const ds = String(raw.som_d).split("|"), fs = String(raw.som_f ?? "").split("|"), vs = String(raw.som_v ?? "").split("|");
-  return ds.map((d, i) => ({ from: parseMs(d), to: parseMs(fs[i]), dort: !/éveil|awake|au lit|in bed/i.test(vs[i] || "") }))
-    .filter((p) => p.from > 0 && p.to > p.from);
-};
-const resumeNuit = (raw, date) => {
-  const fc = parseFcFile({ t: raw?.fc_t ?? "", b: raw?.fc ?? "" }).filter((s) => s.ms > 0 && s.bpm > 20 && s.bpm < 250);
-  const som = parseSommeil(raw);
-  const dort = som.filter((p) => p.dort);
-  const plages = dort.length ? dort.map((p) => [p.from, p.to]) : [[localMs(date), localMs(date, NUIT_FIN)]];
-  const nuit = fc.filter((s) => plages.some(([a, b]) => s.ms >= a && s.ms <= b)).map((s) => s.bpm);
-  const rec = { date, n: nuit.length };
-  if (nuit.length) {
-    rec.min = Math.round(Math.min(...nuit));
-    rec.moy = Math.round(nuit.reduce((a, b) => a + b, 0) / nuit.length);
-  }
-  const vfc = splitNum(raw?.vfc);
-  if (vfc.length) { rec.vfc = Math.round(mediane(vfc) * 10) / 10; rec.vfcN = vfc.length; }
-  const repos = Number(raw?.repos);
-  if (repos > 0) rec.repos = Math.round(repos);
-  if (dort.length) {
-    rec.dodo = Math.round(dort.reduce((a, p) => a + (p.to - p.from), 0) / 60000);
-    rec.coucher = Math.min(...dort.map((p) => p.from));
-    rec.lever = Math.max(...dort.map((p) => p.to));
-  }
-  return rec;
-};
-
-// Pendant un entraînement, la montre mesure la FC en continu (~5 s) ; au repos,
-// seulement toutes les quelques minutes, avec de brèves rafales opportunistes.
-// La plus longue plage à cadence serrée est donc la séance. Le seuil de 10 min
-// écarte ces rafales : faute de plage assez longue, on préfère ne rien conclure.
-const denseRun = (samples) => {
-  let best = [], run = [];
-  const close = () => {
-    const span = run.length ? run[run.length - 1].ms - run[0].ms : 0;
-    if (span >= 10 * 60000 && span > (best.length ? best[best.length - 1].ms - best[0].ms : 0)) best = run;
-  };
-  samples.forEach((s, i) => {
-    if (i > 0 && s.ms - samples[i - 1].ms <= 60000) run.push(s);
-    else { close(); run = [s]; }
-  });
-  close();
-  return best;
-};
-const weightFor = (weights, date) => {
-  const w = [...weights].sort((a, b) => a.date.localeCompare(b.date));
-  const past = w.filter((x) => x.date <= date);
-  return (past[past.length - 1] || w[0])?.kg || null;
-};
-const kcalTapis = (t, kg) => {
-  if (!(t.min > 0 && t.km > 0)) return 0;
-  const S = (t.km * 1000) / t.min, g = (t.slope || 0) / 100;
-  const vo2 = S >= 134 ? 3.5 + 0.2 * S + 0.9 * S * g : 3.5 + 0.1 * S + 1.8 * S * g;
-  return (vo2 * kg / 200) * t.min;
-};
-const kcalSeance = (data, date) => {
-  const kg = weightFor(data.weights, date);
-  if (!kg) return null;
-  const tread = data.treadmill.filter((t) => t.date === date);
-  const tKcal = tread.reduce((a, t) => a + kcalTapis(t, kg), 0);
-  const tMin = tread.reduce((a, t) => a + (t.min || 0), 0);
-  const entries = data.sessions.filter((s) => s.date === date);
-  const nSets = entries.reduce((a, s) => a + s.sets.length, 0);
-  const meta = data.durations.find((x) => x.date === date) || {};
-  const ts = entries.map((s) => s.at).filter(Boolean).sort((a, b) => a - b);
-  const span = ts.length >= 2 ? (ts[ts.length - 1] - ts[0]) / 60000 : 0;
-  let mMin, mode;
-  if (span >= 10) {
-    mMin = MIN_PAR_SERIE; // amorce : la première série précède son enregistrement
-    for (let i = 1; i < ts.length; i++) mMin += Math.min((ts[i] - ts[i - 1]) / 60000, PAUSE_MAX);
-    // Le trajet vers le tapis, ou le retour, sépare deux chronos et ne tombait
-    // dans aucun des deux. Plafonné comme une pause entre séries : un tapis fait
-    // le soir ne doit pas gonfler la séance du matin. Un tapis intercalé au
-    // milieu de la muscu est déjà couvert par la boucle ci-dessus.
-    const debut = ts[0] - MIN_PAR_SERIE * 60000, fin = ts[ts.length - 1];
-    tread.forEach((t) => {
-      if (!(t.at0 > 0 && t.min > 0)) return;
-      if (t.at0 >= fin) mMin += Math.min((t.at0 - fin) / 60000, PAUSE_MAX);
-      else if (t.at0 + t.min * 60000 <= debut) mMin += Math.min((debut - t.at0 - t.min * 60000) / 60000, PAUSE_MAX);
-    });
-    mode = "chrono";
-  } else if (meta.min > 0) { mMin = Math.max(0, meta.min - tMin); mode = "saisies"; }
-  else { mMin = nSets * MIN_PAR_SERIE; mode = "estimées"; }
-  const workMin = Math.min((nSets * SEC_PAR_SERIE) / 60, mMin);
-  const mKcal = nSets > 0 ? (3.5 * kg / 200) * (MET_TRAVAIL * workMin + MET_REPOS * (mMin - workMin)) : 0;
-  if (mKcal + tKcal === 0) return null;
-  return { total: Math.round(mKcal + tKcal), muscu: Math.round(mKcal), tapis: Math.round(tKcal),
-    mMin: Math.round(mMin), mode, kg, hr: meta.hr || null, hrMax: meta.hrMax || null, watch: meta.watch || null };
-};
-const num = (v) => (v === "" || v === null || isNaN(Number(v)) ? 0 : Number(v));
-const isoWeek = (iso) => {
-  const d = new Date(iso + "T12:00:00"); const day = (d.getDay() + 6) % 7;
-  d.setDate(d.getDate() - day + 3); const firstThu = new Date(d.getFullYear(), 0, 4);
-  const week = 1 + Math.round(((d - firstThu) / 86400000 - 3 + ((firstThu.getDay() + 6) % 7)) / 7);
-  return `${d.getFullYear()}-S${pad(week)}`;
-};
-const GROUPS = ["Pecs", "Dos", "Jambes", "Épaules", "Bras", "Autre"];
 const DEFAULT_EXERCISES = ["Dev incliné", "Dev couché", "Chest press", "Dips", "PullDown", "Row", "Leg extension", "Leg Curl", "Leg press", "Shoulder press"];
-const EMPTY = { exercises: DEFAULT_EXERCISES, sessions: [], treadmill: [], weights: [], durations: [], daily: [] };
+const EMPTY = { exercises: DEFAULT_EXERCISES, sessions: [], treadmill: [], weights: [], durations: [], daily: [], pas: {} };
 
 // ================= thème =================
 const T = {
@@ -659,6 +493,17 @@ function Hud({ label, value, sub, color = T.cyan }) {
   );
 }
 
+// Verdict de progression : le geste à faire, puis ce qui le justifie.
+function Verdict({ v, court }) {
+  const style = { monte: [T.amber, "▲ monte à"], descend: [T.danger, "▼ redescends à"], reste: [T.cyan, "= reste à"], "?": [T.mute, "? reste à"] }[v.verdict];
+  return (
+    <span>
+      <span style={{ color: style[0] }}>{style[1]} {v.cible} kg</span>
+      <span style={{ color: T.mute }}> · {court ? "" : `${v.kg} kg le ${fmtDate(v.date)}, `}{v.rpes.length ? `RPE ${v.rpes.join(" / ")}` : v.motif}{v.rpes.length === 1 ? ` (${v.motif})` : ""}</span>
+    </span>
+  );
+}
+
 // ================= Séance =================
 function Seance({ data, update, notify, celebrate }) {
   const [date, setDate] = useState(todayISO());
@@ -674,7 +519,13 @@ function Seance({ data, update, notify, celebrate }) {
   const lastFor = (name) => data.sessions.filter((x) => x.exercise === name).sort((a, b) => b.date.localeCompare(a.date))[0] || null;
   const last = useMemo(() => lastFor(exercise), [data.sessions, exercise]);
 
-  const bestFor = (name) => Math.max(0, ...data.sessions.filter((x) => x.exercise === name).flatMap((x) => x.sets.map((y) => e1rm(y.kg, y.reps))));
+  const bestFor = (name) => recordE1rm(data.sessions, name);
+  // Cran de charge propre à l'exercice (les machines n'ont pas toutes le même) ;
+  // le bouton fait tourner 2,5 → 5 → 10.
+  const pasDe = (name) => data.pas?.[name] || PAS_DEFAUT;
+  const cyclePas = () => update((d) => { const suite = { 2.5: 5, 5: 10, 10: 2.5 }; (d.pas ||= {})[exercise] = suite[pasDe(exercise)] || PAS_DEFAUT; return d; });
+  const verdict = useMemo(() => verdictProgression(data.sessions, exercise, date, pasDe(exercise)), [data.sessions, data.pas, exercise, date]);
+  const parGroupe = useMemo(() => seriesParGroupe(data.sessions, date), [data.sessions, date]);
   const firePR = (candidates) => {
     const prs = candidates.filter((c) => c.oldBest > 0 && c.newBest > c.oldBest + 0.05);
     if (prs.length) celebrate(prs.sort((a, b) => b.newBest / b.oldBest - a.newBest / a.oldBest)[0]);
@@ -740,6 +591,7 @@ function Seance({ data, update, notify, celebrate }) {
       exercise, rows,
       vol: rows.reduce((a, r) => a + r.reps * r.kg, 0),
       best: Math.max(...rows.map((r) => e1rm(r.kg, r.reps))),
+      record: recordE1rm(data.sessions, exercise),
       fc: (meta.ex || []).find((e) => e.n === exercise) || null,
     }));
   })();
@@ -760,10 +612,11 @@ function Seance({ data, update, notify, celebrate }) {
     const items = [...map.entries()].map(([exercise, sets]) => {
       const best = Math.max(...sets.map((x) => e1rm(x.kg, x.reps)));
       return { exercise, sets, best, vol: sets.reduce((a, x) => a + x.kg * x.reps, 0),
-        done: bestToday.has(exercise), delta: bestToday.has(exercise) ? bestToday.get(exercise) - best : null };
+        done: bestToday.has(exercise), delta: bestToday.has(exercise) ? bestToday.get(exercise) - best : null,
+        verdict: verdictProgression(data.sessions, exercise, date, pasDe(exercise)) };
     });
     return { date: prevDate, items, vol: items.reduce((a, x) => a + x.vol, 0), reste: items.filter((x) => !x.done).length };
-  }, [data.sessions, group, date, todays]);
+  }, [data.sessions, data.pas, group, date, todays]);
 
   const delSet = (id, setIdx) => update((d) => {
     d.sessions = d.sessions.map((s) => s.id === id ? { ...s, sets: s.sets.filter((_, j) => j !== setIdx) } : s).filter((s) => s.sets.length > 0);
@@ -782,6 +635,21 @@ function Seance({ data, update, notify, celebrate }) {
           <Field label="fc moy"><input type="number" inputMode="numeric" min="0" value={meta.hr ?? ""} onChange={(e) => setMeta("hr", e.target.value)} className="inp" /></Field>
           <Field label="kcal montre"><input type="number" inputMode="decimal" min="0" value={meta.watch ?? ""} onChange={(e) => setMeta("watch", e.target.value)} className="inp" /></Field>
         </div>
+        {Object.keys(parGroupe).length > 0 && (
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs" style={{ fontFamily: mono }}>
+            {Object.entries(parGroupe).map(([g, n]) => {
+              const c = n > SERIES_MAX ? T.danger : n === SERIES_MAX ? T.amber : T.cyan;
+              return (
+                <div key={g}>
+                  <div className="flex justify-between"><span style={{ color: T.mute }}>{g}</span><span style={{ color: c }}>{n} / {SERIES_MAX} séries</span></div>
+                  <div className="mt-0.5 h-1 rounded" style={{ background: "rgba(0,229,255,.08)" }}>
+                    <div className="h-1 rounded" style={{ width: `${Math.min(100, (n / SERIES_MAX) * 100)}%`, background: c, boxShadow: `0 0 6px ${c}` }} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </Panel>
 
       <Panel boot="boot-2" className="space-y-3">
@@ -791,6 +659,12 @@ function Seance({ data, update, notify, celebrate }) {
             <Btn kind="quiet" onClick={addExercise}>Ajouter</Btn>
           </div>
           {last && <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>dernière fois {fmtDate(last.date)} : {last.sets.map((s) => `${s.kg}×${s.reps}`).join("  ")}</p>}
+          {verdict && (
+            <div className="flex items-center justify-between gap-2 text-xs" style={{ fontFamily: mono }}>
+              <Verdict v={verdict} />
+              <button type="button" onClick={cyclePas} className="px-2 py-0.5 rounded" style={{ color: T.mute, border: `1px solid ${T.line}` }}>pas {verdict.pas}</button>
+            </div>
+          )}
           <div className="space-y-2">
             <div className="grid grid-cols-12 gap-2 text-xs" style={{ color: T.mute, fontFamily: mono }}><span className="col-span-2">#</span><span className="col-span-4">kg</span><span className="col-span-4">reps</span></div>
             {sets.map((s, i) => (
@@ -837,6 +711,7 @@ function Seance({ data, update, notify, celebrate }) {
                 <div className="text-xs mt-1" style={{ color: T.text, fontFamily: mono }}>
                   {it.sets.map((s) => `${s.kg}×${s.reps}`).join("   ")}
                 </div>
+                {it.verdict && !it.done && <div className="text-xs mt-0.5" style={{ fontFamily: mono }}><Verdict v={it.verdict} court /></div>}
               </li>
             ))}
           </ul>
@@ -881,6 +756,9 @@ function Seance({ data, update, notify, celebrate }) {
                   <div className="font-medium">{g.exercise}</div>
                   <div className="text-xs" style={{ color: T.mute, fontFamily: mono }}>
                     vol {g.vol} · e1RM <span style={{ color: T.cyan }}>{g.best.toFixed(1)}</span>
+                    {g.record > 0 && (g.best >= g.record - 0.05
+                      ? <span style={{ color: T.amber }}> · record</span>
+                      : <> · <span style={{ color: T.amber }}>{Math.round((g.best / g.record) * 100)} %</span> du record</>)}
                     {g.fc && <> · FC <span style={{ color: T.danger }}>{g.fc.hr}</span> ↑{g.fc.hrMax}</>}
                   </div>
                 </div>
@@ -1348,6 +1226,7 @@ function Donnees({ data, setData, notify, sync, onToken, onTokenOff, onSync }) {
         <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>{data.sessions.length} exercices · {data.treadmill.length} marches · {data.weights.length} pesées</p>
         <Btn full kind="ghost" onClick={() => exportFile("carnet.json", JSON.stringify(data, null, 2), "application/json")}>Exporter en JSON (sauvegarde)</Btn>
         <Btn full kind="ghost" onClick={() => exportFile("carnet.csv", toCSV(), "text/csv")}>Exporter en CSV (tableur)</Btn>
+        <Btn full kind="ghost" onClick={() => exportFile("carnet-jours.csv", exportDerive(data), "text/csv")}>Exporter le tableau journalier (CSV)</Btn>
       </Panel>
       <Panel boot="boot-2" className="space-y-3">
         <H>Importer une sauvegarde JSON</H>
