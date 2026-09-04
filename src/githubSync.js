@@ -20,8 +20,9 @@ const b64decode = (b64) => {
 // par entraînement, nommé fc/AAAA-MM-JJ-HHMM.json. Chaque fichier est créé une
 // seule fois et jamais réécrit — aucun sha à gérer côté Raccourcis.
 const FC_DIR = "https://api.github.com/repos/sylvainherbin/carnet/contents/fc";
-// Relevés quotidiens (FC de repos, VFC) déposés à midi par un second raccourci,
-// un fichier daily/AAAA-MM-JJ.json par jour.
+// Relevés quotidiens déposés à midi par un second raccourci, un fichier
+// daily/AAAA-MM-JJ.json par jour : FC de la nuit et VFC, sous la même forme
+// compacte { fc_t, fc, vfc } de chaînes « | ».
 const DAILY_DIR = "https://api.github.com/repos/sylvainherbin/carnet/contents/daily";
 
 async function listJson(dir) {
@@ -34,8 +35,8 @@ async function listJson(dir) {
 export const listFcFiles = () => listJson(FC_DIR);
 export const listDailyFiles = () => listJson(DAILY_DIR);
 
-export async function pullFcFile(name) {
-  const r = await fetch(`${FC_DIR}/${encodeURIComponent(name)}?ref=main`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
+async function pullJsonFile(dir, name) {
+  const r = await fetch(`${dir}/${encodeURIComponent(name)}?ref=main`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
   if (!r.ok) throw new Error(`GitHub ${r.status}`);
   const j = await r.json();
   const txt = b64decode(j.content).trim();
@@ -49,6 +50,8 @@ export async function pullFcFile(name) {
     return JSON.parse(txt.slice(0, end));
   }
 }
+export const pullFcFile = (name) => pullJsonFile(FC_DIR, name);
+export const pullDailyFile = (name) => pullJsonFile(DAILY_DIR, name);
 
 // Fin (exclue) du premier objet ou tableau JSON de txt, en suivant l'imbrication
 // et en ignorant les accolades qui tombent à l'intérieur d'une chaîne.

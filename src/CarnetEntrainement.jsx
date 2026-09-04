@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles } from "./githubSync.js";
+import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile } from "./githubSync.js";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea,
 } from "recharts";
@@ -64,6 +64,50 @@ const courbeFc = (arr) => {
   arr.forEach((s) => { const i = Math.floor((s.ms - t0) / FC_PAS); (seaux[i] ||= []).push(s.bpm); });
   const n = Math.floor((arr[arr.length - 1].ms - t0) / FC_PAS) + 1;
   return { t0, v: Array.from({ length: n }, (_, i) => (seaux[i] ? Math.round(seaux[i].reduce((a, b) => a + b, 0) / seaux[i].length) : null)) };
+};
+
+// ---- Relevé quotidien : la nuit ----
+// Le raccourci de midi dépose la FC depuis minuit et la VFC du jour, sous la
+// même forme compacte que fc/ : { fc_t, fc, vfc }, chaînes « | ». Les premiers
+// fichiers portaient à la place la « FC de repos » d'Apple (repos), une moyenne
+// de journée sans rapport avec la nuit — gardée à titre d'archive. Les phases
+// de sommeil (som_d, som_f, som_v : début, fin, phase) sont prévues ; tant
+// qu'elles manquent, la nuit est prise entre minuit et NUIT_FIN heures.
+const NUIT_FIN = 7;
+const splitNum = (s) => String(s ?? "").split("|").map((x) => Number(String(x).replace(",", ".").replace(/[^0-9.]/g, ""))).filter((x) => x > 0);
+const mediane = (v) => { const s = [...v].sort((a, b) => a - b), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+const localMs = (iso, h = 0) => { const [y, m, d] = iso.split("-").map(Number); return new Date(y, m - 1, d, h).getTime(); };
+// Segments de sommeil : dort = vrai hors « éveillé » et « au lit ». Les libellés
+// viennent de Santé dans la langue du téléphone ; on reconnaît les deux états à
+// exclure et on tient tout le reste (léger, profond, paradoxal, « endormi ») pour
+// du sommeil, ce qui reste juste si Apple en ajoute un.
+const parseSommeil = (raw) => {
+  if (!raw?.som_d) return [];
+  const ds = String(raw.som_d).split("|"), fs = String(raw.som_f ?? "").split("|"), vs = String(raw.som_v ?? "").split("|");
+  return ds.map((d, i) => ({ from: parseMs(d), to: parseMs(fs[i]), dort: !/éveil|awake|au lit|in bed/i.test(vs[i] || "") }))
+    .filter((p) => p.from > 0 && p.to > p.from);
+};
+const resumeNuit = (raw, date) => {
+  const fc = parseFcFile({ t: raw?.fc_t ?? "", b: raw?.fc ?? "" }).filter((s) => s.ms > 0 && s.bpm > 20 && s.bpm < 250);
+  const som = parseSommeil(raw);
+  const dort = som.filter((p) => p.dort);
+  const plages = dort.length ? dort.map((p) => [p.from, p.to]) : [[localMs(date), localMs(date, NUIT_FIN)]];
+  const nuit = fc.filter((s) => plages.some(([a, b]) => s.ms >= a && s.ms <= b)).map((s) => s.bpm);
+  const rec = { date, n: nuit.length };
+  if (nuit.length) {
+    rec.min = Math.round(Math.min(...nuit));
+    rec.moy = Math.round(nuit.reduce((a, b) => a + b, 0) / nuit.length);
+  }
+  const vfc = splitNum(raw?.vfc);
+  if (vfc.length) { rec.vfc = Math.round(mediane(vfc) * 10) / 10; rec.vfcN = vfc.length; }
+  const repos = Number(raw?.repos);
+  if (repos > 0) rec.repos = Math.round(repos);
+  if (dort.length) {
+    rec.dodo = Math.round(dort.reduce((a, p) => a + (p.to - p.from), 0) / 60000);
+    rec.coucher = Math.min(...dort.map((p) => p.from));
+    rec.lever = Math.max(...dort.map((p) => p.to));
+  }
+  return rec;
 };
 
 // Pendant un entraînement, la montre mesure la FC en continu (~5 s) ; au repos,
@@ -137,7 +181,7 @@ const isoWeek = (iso) => {
 };
 const GROUPS = ["Pecs", "Dos", "Jambes", "Épaules", "Bras", "Autre"];
 const DEFAULT_EXERCISES = ["Dev incliné", "Dev couché", "Chest press", "Dips", "PullDown", "Row", "Leg extension", "Leg Curl", "Leg press", "Shoulder press"];
-const EMPTY = { exercises: DEFAULT_EXERCISES, sessions: [], treadmill: [], weights: [], durations: [] };
+const EMPTY = { exercises: DEFAULT_EXERCISES, sessions: [], treadmill: [], weights: [], durations: [], daily: [] };
 
 // ================= thème =================
 const T = {
@@ -432,6 +476,31 @@ export default function CarnetEntrainement() {
     } catch (e) { console.error("import FC", e); }
   };
 
+  // --- relevé quotidien ---------------------------------------------------
+  // Chaque fichier est résumé une fois (FC de nuit, VFC, sommeil) et le résumé
+  // voyage avec les données : les autres appareils n'ont rien à retélécharger.
+  const importDaily = async () => {
+    try {
+      const names = (await listDailyFiles()).sort();
+      setDailyLast(names.length ? names[names.length - 1].slice(0, 10) : null);
+      const limit = new Date(Date.now() - 14 * 864e5).toISOString().slice(0, 10);
+      const have = new Set(dataRef.current.daily.map((x) => x.date));
+      const todo = names.filter((n) => n.slice(0, 10) >= limit && !have.has(n.slice(0, 10)));
+      if (todo.length === 0) return;
+      const recs = (await Promise.all(todo.map((n) =>
+        pullDailyFile(n).then((raw) => resumeNuit(raw, n.slice(0, 10))).catch((e) => { console.error("relevé illisible", n, e); return null; })
+      ))).filter(Boolean);
+      if (recs.length === 0) return;
+      update((dd) => {
+        recs.forEach((r) => { if (!dd.daily.some((x) => x.date === r.date)) dd.daily.push(r); });
+        dd.daily.sort((a, b) => a.date.localeCompare(b.date));
+        return dd;
+      });
+      const f = recs[recs.length - 1];
+      if (f.n) notify(`Nuit du ${fmtDate(f.date)} : FC ${f.min} min · ${f.moy} moy${f.vfc ? ` · VFC ${f.vfc} ms` : ""}`);
+    } catch (e) { console.error("import relevé", e); }
+  };
+
   useEffect(() => { dataRef.current = data; }, [data]);
   useEffect(() => {
     try { const r = localStorage.getItem(STORAGE_KEY); if (r) { adopting.current = true; setData({ ...EMPTY, ...JSON.parse(r) }); } }
@@ -441,8 +510,7 @@ export default function CarnetEntrainement() {
   useEffect(() => {
     if (!loaded || pulledOnce.current) return;
     pulledOnce.current = true;
-    doPull().finally(() => setTimeout(importFc, 1200)); // après l'éventuel adopt(), une fois dataRef à jour
-    listDailyFiles().then((n) => setDailyLast(n.length ? n.sort().pop().slice(0, 10) : null)).catch(() => {});
+    doPull().finally(() => setTimeout(() => { importFc(); importDaily(); }, 1200)); // après l'éventuel adopt(), une fois dataRef à jour
   }, [loaded]);
 
   // Absences à signaler. Les raccourcis iOS échouent sans bruit : un dépôt qui
@@ -468,8 +536,12 @@ export default function CarnetEntrainement() {
       if (dailyLast === null) out.push("Aucun relevé quotidien reçu");
       else if (dailyLast < hier) out.push(`Relevé quotidien : dernier reçu le ${fmtDate(dailyLast)}`);
     }
+    // Un relevé arrivé mais sans rien dedans : la montre n'a pas été portée, ou
+    // Santé n'a rien rendu au raccourci.
+    const dern = data.daily[data.daily.length - 1];
+    if (dern && !dern.n && !dern.vfc && !dern.repos) out.push(`Relevé quotidien du ${fmtDate(dern.date)} vide — montre portée ?`);
     return out;
-  }, [data.sessions, data.durations, dailyLast]);
+  }, [data.sessions, data.durations, data.daily, dailyLast]);
   useEffect(() => {
     if (!loaded) return;
     clearTimeout(saveTimer.current);
@@ -494,7 +566,11 @@ export default function CarnetEntrainement() {
     const lastW = w[w.length - 1];
     const ref = w.length >= 8 ? w[w.length - 8] : w[0];
     const delta = lastW && ref && lastW !== ref ? lastW.kg - ref.kg : null;
-    return { lastDate, lastGroup, weekSessions, lastW, delta };
+    // La dernière nuit résumée, si elle est récente : celle d'aujourd'hui ou d'hier.
+    const dern = data.daily[data.daily.length - 1];
+    const veille = new Date(Date.now() - 864e5);
+    const nuit = dern && (dern.n > 0 || dern.vfc > 0) && dern.date >= `${veille.getFullYear()}-${pad(veille.getMonth() + 1)}-${pad(veille.getDate())}` ? dern : null;
+    return { lastDate, lastGroup, weekSessions, lastW, delta, nuit };
   }, [data]);
 
   const tabs = [["seance", "Séance"], ["tapis", "Tapis"], ["poids", "Poids"], ["courbes", "Courbes"], ["records", "Records"], ["donnees", "Données"]];
@@ -519,6 +595,14 @@ export default function CarnetEntrainement() {
             <Hud label="semaine" value={`${hud.weekSessions} séance${hud.weekSessions > 1 ? "s" : ""}`} sub="" />
             <Hud label="poids" value={hud.lastW ? `${hud.lastW.kg.toFixed(1)} kg` : "—"} sub={hud.delta !== null ? `${hud.delta > 0 ? "+" : ""}${hud.delta.toFixed(1)} / 7 j` : ""} color={T.magenta} />
           </div>
+          {hud.nuit && (
+            <div className="mt-2 text-xs" style={{ fontFamily: mono, color: T.mute }}>
+              nuit du {fmtDate(hud.nuit.date)}
+              {hud.nuit.n > 0 && <> · FC <span style={{ color: T.danger }}>{hud.nuit.min}</span> min · {hud.nuit.moy} moy</>}
+              {hud.nuit.vfc > 0 && <> · VFC <span style={{ color: T.violet }}>{hud.nuit.vfc}</span> ms</>}
+              {hud.nuit.dodo > 0 && <> · {Math.floor(hud.nuit.dodo / 60)} h {pad(hud.nuit.dodo % 60)} dormies</>}
+            </div>
+          )}
         </header>
 
         {alertes.length > 0 && (
@@ -970,6 +1054,10 @@ function Courbes({ data }) {
     return Object.entries(m).sort().slice(-12).map(([k, v]) => ({ label: k.slice(5), km: +v.km.toFixed(1) }));
   }, [data.treadmill]);
   const yDomain = (vals) => { if (!vals.length) return [0, 1]; const mn = Math.min(...vals), mx = Math.max(...vals); const p = Math.max(1, (mx - mn) * 0.15); return [Math.floor(mn - p), Math.ceil(mx + p)]; };
+  // Les trente dernières nuits mesurées ; un relevé vide (montre non portée) ne
+  // trace rien plutôt qu'un zéro.
+  const nuits = useMemo(() => data.daily.filter((d) => d.n > 0 || d.vfc > 0).slice(-30).map((d) => ({ label: fmtDate(d.date).slice(0, 5), min: d.min ?? null, moy: d.moy ?? null, vfc: d.vfc ?? null, dodo: d.dodo ? +(d.dodo / 60).toFixed(1) : null })), [data.daily]);
+  const nuitsFc = nuits.filter((d) => d.min !== null), nuitsVfc = nuits.filter((d) => d.vfc !== null);
   const trend = useMemo(() => {
     if (strength.length === 0) return null;
     const prVal = Math.max(...strength.map((r) => r.e1rm));
@@ -1047,6 +1135,47 @@ function Courbes({ data }) {
       </Panel>
 
       <Panel boot="boot-3">
+        <H right={nuits.length ? `${nuits.length} nuit${nuits.length > 1 ? "s" : ""}` : ""}>Récupération — nuit</H>
+        {nuits.length === 0 ? <Empty text="Le relevé quotidien de midi alimentera cette courbe (montre portée la nuit)." /> : (
+          <>
+            {nuitsFc.length > 0 && (
+              <>
+                <div className="text-xs mb-1" style={{ color: T.mute, fontFamily: mono }}>FC de nuit (bpm) · minimum et moyenne</div>
+                <div style={{ height: 160 }}>
+                  <ResponsiveContainer>
+                    <LineChart data={nuitsFc} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+                      <CartesianGrid stroke="rgba(255,59,92,.10)" strokeDasharray="2 4" />
+                      <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
+                      <YAxis domain={yDomain(nuitsFc.flatMap((r) => [r.min, r.moy]))} tick={axis} axisLine={false} tickLine={false} />
+                      <Tooltip {...tip} />
+                      <Line type="monotone" dataKey="moy" name="moyenne" stroke="rgba(255,59,92,.45)" strokeWidth={1.5} dot={{ r: 2, fill: T.danger, strokeWidth: 0 }} connectNulls />
+                      <Line type="monotone" dataKey="min" name="minimum" stroke={T.danger} strokeWidth={2.5} dot={{ r: 3, fill: T.bg, stroke: T.danger, strokeWidth: 2 }} connectNulls />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            )}
+            {nuitsVfc.length > 0 && (
+              <>
+                <div className="text-xs mt-3 mb-1" style={{ color: T.mute, fontFamily: mono }}>VFC (ms) · médiane de la nuit</div>
+                <div style={{ height: 120 }} className="glow-violet">
+                  <ResponsiveContainer>
+                    <BarChart data={nuitsVfc} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
+                      <CartesianGrid stroke="rgba(122,92,255,.1)" strokeDasharray="2 4" vertical={false} />
+                      <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
+                      <YAxis tick={axis} axisLine={false} tickLine={false} />
+                      <Tooltip {...tip} />
+                      <Bar dataKey="vfc" name="VFC" fill={T.violet} radius={[3, 3, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            )}
+          </>
+        )}
+      </Panel>
+
+      <Panel boot="boot-4">
         <H>Charge hebdomadaire</H>
         {weeklyVol.length === 0 && weeklyKm.length === 0 ? <Empty text="Rien à afficher." /> : (
           <>
