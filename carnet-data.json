@@ -2052,6 +2052,21 @@
    "rpe": 7,
    "note": "",
    "at": 1788770572038
+  },
+  {
+   "id": "l924inft",
+   "date": "2026-09-07",
+   "group": "Épaules",
+   "exercise": "Poulies latérales",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 7.5
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788770868389
   }
  ],
  "treadmill": [
