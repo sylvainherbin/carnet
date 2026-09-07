@@ -1977,6 +1977,21 @@
    "rpe": 10,
    "note": "",
    "at": 1788768903796
+  },
+  {
+   "id": "70nduzor",
+   "date": "2026-09-07",
+   "group": "Épaules",
+   "exercise": "Upper Back",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788769425659
   }
  ],
  "treadmill": [
