@@ -2157,6 +2157,21 @@
    "rpe": 7,
    "note": "",
    "at": 1788856842558
+  },
+  {
+   "id": "h77es52h",
+   "date": "2026-09-08",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 110
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788857311881
   }
  ],
  "treadmill": [
