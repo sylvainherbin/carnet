@@ -2367,6 +2367,21 @@
    "rpe": 7,
    "note": "",
    "at": 1789029543182
+  },
+  {
+   "id": "w3xrgixj",
+   "date": "2026-09-10",
+   "group": "Dos",
+   "exercise": "PullDown",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789029725435
   }
  ],
  "treadmill": [
