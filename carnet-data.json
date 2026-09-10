@@ -2322,6 +2322,21 @@
    "rpe": 7,
    "note": "",
    "at": 1789028771447
+  },
+  {
+   "id": "mymzxgbw",
+   "date": "2026-09-10",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 80
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789028978984
   }
  ],
  "treadmill": [
