@@ -2412,6 +2412,21 @@
    "rpe": 7,
    "note": "",
    "at": 1789030416256
+  },
+  {
+   "id": "ecper6in",
+   "date": "2026-09-10",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 35
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789030529172
   }
  ],
  "treadmill": [
