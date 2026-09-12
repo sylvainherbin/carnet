@@ -2637,6 +2637,21 @@
    "rpe": 7,
    "note": "",
    "at": 1789200468607
+  },
+  {
+   "id": "4zjw5443",
+   "date": "2026-09-12",
+   "group": "Jambes",
+   "exercise": "Rotary Calf",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789200658218
   }
  ],
  "treadmill": [
