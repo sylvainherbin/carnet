@@ -2818,6 +2818,21 @@
    "rpe": 7,
    "note": "",
    "at": 1789377192905
+  },
+  {
+   "id": "daaorrca",
+   "date": "2026-09-14",
+   "group": "Pecs",
+   "exercise": "Upper Back",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 65
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789382390066
   }
  ],
  "treadmill": [
