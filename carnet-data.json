@@ -2652,6 +2652,21 @@
    "rpe": 7,
    "note": "",
    "at": 1789200658218
+  },
+  {
+   "id": "a6n0tbc0",
+   "date": "2026-09-14",
+   "group": "Épaules",
+   "exercise": "Shoulder press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789374545234
   }
  ],
  "treadmill": [
