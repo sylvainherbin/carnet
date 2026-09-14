@@ -2758,6 +2758,21 @@
    "rpe": 7,
    "note": "",
    "at": 1789375964761
+  },
+  {
+   "id": "n2szac5t",
+   "date": "2026-09-14",
+   "group": "Épaules",
+   "exercise": "Haltères latérales",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 10
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789376190129
   }
  ],
  "treadmill": [
