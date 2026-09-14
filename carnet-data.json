@@ -2803,6 +2803,21 @@
    "rpe": 7,
    "note": "",
    "at": 1789376590465
+  },
+  {
+   "id": "w755atuu",
+   "date": "2026-09-14",
+   "group": "Épaules",
+   "exercise": "Haltères postérieur",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 17.5
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789376821058
   }
  ],
  "treadmill": [
