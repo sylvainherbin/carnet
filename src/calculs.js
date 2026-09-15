@@ -129,7 +129,9 @@ export const resumeNuit = (raw, date) => {
 // de nuit, donc tout ce qui en découle), les champs saisis à la main sont
 // repris de l'entrée existante. Une entrée sans relevé (n absent : créée par
 // une saisie manuelle, comme l'heure du dernier repas) est complétée de même.
-export const CHAMPS_MANUELS = ["repas"];
+// repas : heure de fin du dernier repas ; decision : { d, regle, motif }, la
+// décision du matin telle que le coach l'a prise — l'app n'applique aucune règle.
+export const CHAMPS_MANUELS = ["repas", "decision"];
 export const fusionNuit = (existant, frais) => {
   const x = { ...frais };
   CHAMPS_MANUELS.forEach((k) => { if (existant[k] !== undefined) x[k] = existant[k]; });
@@ -251,7 +253,8 @@ export const recordE1rm = (sessions, exercise, jusqua) =>
 // kcal, tapis, nuit, poids, notes. Mêmes fonctions que l'app, donc mêmes chiffres.
 export const ligneJour = (data, date) => {
   const ss = data.sessions.filter((s) => s.date === date);
-  const l = { date, groupes: [...new Set(ss.map((s) => s.group))].join("+"), series: 0, tonnage: 0 };
+  const dec = (data.daily || []).find((d) => d.date === date)?.decision || {};
+  const l = { date, decision: dec.d ?? "", regle: dec.regle ?? "", motif: dec.motif ?? "", groupes: [...new Set(ss.map((s) => s.group))].join("+"), series: 0, tonnage: 0 };
   GROUPS.forEach((g) => {
     const sg = ss.filter((s) => s.group === g);
     l[`series_${g}`] = sg.reduce((a, s) => a + s.sets.length, 0);

@@ -411,7 +411,8 @@ export default function CarnetEntrainement() {
     const dern = data.daily[data.daily.length - 1];
     const veille = new Date(Date.now() - 864e5);
     const nuit = dern && (dern.n > 0 || dern.vfc > 0) && dern.date >= `${veille.getFullYear()}-${pad(veille.getMonth() + 1)}-${pad(veille.getDate())}` ? dern : null;
-    return { lastDate, lastGroup, weekSessions, lastW, delta, nuit };
+    const decision = data.daily.find((x) => x.date === todayISO())?.decision || null;
+    return { lastDate, lastGroup, weekSessions, lastW, delta, nuit, decision };
   }, [data]);
 
   const tabs = [["seance", "Séance"], ["tapis", "Tapis"], ["poids", "Poids"], ["courbes", "Courbes"], ["records", "Records"], ["donnees", "Données"]];
@@ -436,6 +437,11 @@ export default function CarnetEntrainement() {
             <Hud label="semaine" value={`${hud.weekSessions} séance${hud.weekSessions > 1 ? "s" : ""}`} sub="" />
             <Hud label="poids" value={hud.lastW ? `${hud.lastW.kg.toFixed(1)} kg` : "—"} sub={hud.delta !== null ? `${hud.delta > 0 ? "+" : ""}${hud.delta.toFixed(1)} / 7 j` : ""} color={T.magenta} />
           </div>
+          {hud.decision?.d && (
+            <div className="mt-2 text-xs" style={{ fontFamily: mono, color: T.mute }}>
+              aujourd'hui : <span style={{ color: libDecision(hud.decision.d)[2] }}>{libDecision(hud.decision.d)[1]}</span>{hud.decision.regle ? ` · ${hud.decision.regle}` : ""}
+            </div>
+          )}
           {hud.nuit && (
             <div className="mt-2 text-xs" style={{ fontFamily: mono, color: T.mute }}>
               nuit du {fmtDate(hud.nuit.date)}
@@ -500,6 +506,10 @@ function Hud({ label, value, sub, color = T.cyan }) {
   );
 }
 
+// Les trois décisions du matin : clé stockée, libellé, couleur.
+const DECISIONS = [["maintenu", "maintenu", T.cyan], ["allege", "allégé", T.amber], ["repos", "repos", T.magenta]];
+const libDecision = (k) => DECISIONS.find((x) => x[0] === k) || [k, k, T.mute];
+
 // Verdict de progression : le geste à faire, puis ce qui le justifie.
 function Verdict({ v, court }) {
   const style = { monte: [T.amber, "▲ monte à"], descend: [T.danger, "▼ redescends à"], reste: [T.cyan, "= reste à"], "?": [T.mute, "? reste à"] }[v.verdict];
@@ -533,6 +543,17 @@ function Seance({ data, update, notify, celebrate }) {
   const cyclePas = () => update((d) => { const suite = { 2.5: 5, 5: 10, 10: 2.5 }; (d.pas ||= {})[exercise] = suite[pasDe(exercise)] || PAS_DEFAUT; return d; });
   const verdict = useMemo(() => verdictProgression(data.sessions, exercise, date, pasDe(exercise)), [data.sessions, data.pas, exercise, date]);
   const parGroupe = useMemo(() => seriesParGroupe(data.sessions, date), [data.sessions, date]);
+  // Décision du matin, telle que le coach l'a prise : rien n'est calculé ici,
+  // l'app garde la trace dans l'entrée daily du jour (créée si besoin).
+  const decision = data.daily.find((x) => x.date === date)?.decision || {};
+  const setDecision = (champ, v) => update((d) => {
+    let x = d.daily.find((y) => y.date === date);
+    if (!x) { x = { date }; d.daily.push(x); d.daily.sort((a, b) => a.date.localeCompare(b.date)); }
+    const dec = { ...(x.decision || {}), [champ]: v };
+    if (!dec.d && !dec.regle && !dec.motif) { delete x.decision; if (Object.keys(x).length === 1) d.daily = d.daily.filter((y) => y !== x); }
+    else x.decision = dec;
+    return d;
+  });
   const firePR = (candidates) => {
     const prs = candidates.filter((c) => c.oldBest > 0 && c.newBest > c.oldBest + 0.05);
     if (prs.length) celebrate(prs.sort((a, b) => b.newBest / b.oldBest - a.newBest / a.oldBest)[0]);
@@ -657,6 +678,20 @@ function Seance({ data, update, notify, celebrate }) {
             })}
           </div>
         )}
+        <div className="space-y-2">
+          <div className="flex items-center gap-4 text-xs" style={{ fontFamily: mono }}>
+            <span style={{ color: T.mute }}>décision</span>
+            {DECISIONS.map(([k, label, c]) => (
+              <label key={k} className="flex items-center gap-1" style={{ color: decision.d === k ? c : T.mute }}>
+                <input type="radio" name="decision" checked={decision.d === k} onChange={() => setDecision("d", k)} style={{ accentColor: c }} />{label}
+              </label>
+            ))}
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            <Field label="règle"><input value={decision.regle || ""} onChange={(e) => setDecision("regle", e.target.value)} className="inp" placeholder="R1" /></Field>
+            <div className="col-span-2"><Field label="motif"><input value={decision.motif || ""} onChange={(e) => setDecision("motif", e.target.value)} className="inp" placeholder="le chiffre qui a décidé" /></Field></div>
+          </div>
+        </div>
       </Panel>
 
       <Panel boot="boot-2" className="space-y-3">
