@@ -66,8 +66,12 @@ export const courbeFc = (arr) => {
 export const NUIT_FIN = 7;
 // Version de la méthode de résumé. Un relevé déjà résumé avec une version plus
 // ancienne est repassé à l'ouverture pour gagner les champs ajoutés depuis
-// (v2 : hMin), sans toucher à ceux qu'il porte déjà.
-export const NUIT_VERSION = 2;
+// (v2 : hMin ; v3 : nuit restreinte au dernier bloc de sommeil). Les champs
+// saisis à la main (repas) sont conservés tels quels.
+export const NUIT_VERSION = 3;
+// Deux segments de sommeil séparés de plus de NUIT_TROU heures appartiennent à
+// deux nuits différentes.
+export const NUIT_TROU = 4;
 export const splitNum = (s) => String(s ?? "").split("|").map((x) => Number(String(x).replace(",", ".").replace(/[^0-9.]/g, ""))).filter((x) => x > 0);
 export const mediane = (v) => { const s = [...v].sort((a, b) => a - b), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
 export const lendemain = (iso) => { const [y, m, d] = iso.split("-").map(Number); const x = new Date(y, m - 1, d + 1); return `${x.getFullYear()}-${pad(x.getMonth() + 1)}-${pad(x.getDate())}`; };
@@ -82,9 +86,18 @@ export const parseSommeil = (raw) => {
   return ds.map((d, i) => ({ from: parseMs(d), to: parseMs(fs[i]), dort: !/éveil|awake|au lit|in bed/i.test(vs[i] || "") }))
     .filter((p) => p.from > 0 && p.to > p.from);
 };
+// Le raccourci peut remonter plus d'une nuit de segments : on ne garde que le
+// dernier bloc contigu — segments triés par début, coupure là où le trou entre
+// la fin d'un segment et le début du suivant dépasse NUIT_TROU heures.
+export const derniereNuit = (som) => {
+  const tri = [...som].sort((a, b) => a.from - b.from);
+  let bloc = [];
+  tri.forEach((p) => { if (bloc.length && p.from - bloc[bloc.length - 1].to > NUIT_TROU * 3600000) bloc = []; bloc.push(p); });
+  return bloc;
+};
 export const resumeNuit = (raw, date) => {
   const fc = parseFcFile({ t: raw?.fc_t ?? "", b: raw?.fc ?? "" }).filter((s) => s.ms > 0 && s.bpm > 20 && s.bpm < 250);
-  const som = parseSommeil(raw);
+  const som = derniereNuit(parseSommeil(raw));
   const dort = som.filter((p) => p.dort);
   const plages = dort.length ? dort.map((p) => [p.from, p.to]) : [[localMs(date), localMs(date, NUIT_FIN)]];
   const nuit = fc.filter((s) => plages.some(([a, b]) => s.ms >= a && s.ms <= b));
@@ -106,19 +119,20 @@ export const resumeNuit = (raw, date) => {
   if (repos > 0) rec.repos = Math.round(repos);
   if (dort.length) {
     rec.dodo = Math.round(dort.reduce((a, p) => a + (p.to - p.from), 0) / 60000);
-    rec.coucher = Math.min(...dort.map((p) => p.from));
-    rec.lever = Math.max(...dort.map((p) => p.to));
+    rec.coucher = som[0].from;
+    rec.lever = som[som.length - 1].to;
   }
   return rec;
 };
-// Rapproche un résumé frais d'une entrée déjà en place. Une entrée sans relevé
-// (n absent : créée par une saisie manuelle, comme l'heure du dernier repas)
-// reçoit le résumé entier ; une entrée résumée avec une version antérieure ne
-// gagne que les champs nouveaux. Les champs manuels ne sont jamais touchés.
+// Rapproche un résumé frais d'une entrée déjà en place : les champs calculés
+// viennent tous du résumé frais (une nouvelle version peut changer la fenêtre
+// de nuit, donc tout ce qui en découle), les champs saisis à la main sont
+// repris de l'entrée existante. Une entrée sans relevé (n absent : créée par
+// une saisie manuelle, comme l'heure du dernier repas) est complétée de même.
+export const CHAMPS_MANUELS = ["repas"];
 export const fusionNuit = (existant, frais) => {
-  if (existant.n === undefined) return { ...existant, ...frais };
-  const x = { ...existant, v: frais.v };
-  if (frais.hMin) x.hMin = frais.hMin;
+  const x = { ...frais };
+  CHAMPS_MANUELS.forEach((k) => { if (existant[k] !== undefined) x[k] = existant[k]; });
   return x;
 };
 export const nuitAJour = (existant) => existant.n !== undefined && (existant.v || 1) >= NUIT_VERSION;
