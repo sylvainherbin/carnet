@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile } from "./githubSync.js";
-import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, courbeFc, resumeNuit, denseRun, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT } from "./calculs.js";
+import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, courbeFc, resumeNuit, NUIT_VERSION, denseRun, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT } from "./calculs.js";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea,
 } from "recharts";
@@ -318,20 +318,28 @@ export default function CarnetEntrainement() {
       const names = (await listDailyFiles()).sort();
       setDailyLast(names.length ? names[names.length - 1].slice(0, 10) : null);
       const limit = new Date(Date.now() - 14 * 864e5).toISOString().slice(0, 10);
-      const have = new Set(dataRef.current.daily.map((x) => x.date));
-      const todo = names.filter((n) => n.slice(0, 10) >= limit && !have.has(n.slice(0, 10)));
+      const have = new Map(dataRef.current.daily.map((x) => [x.date, x]));
+      // Nouveaux relevés des deux dernières semaines, plus les résumés d'une
+      // version antérieure dont le fichier est encore là : ceux-ci ne gagnent
+      // que les champs nouveaux, le reste de l'entrée est conservé tel quel.
+      const todo = names.filter((n) => { const x = have.get(n.slice(0, 10)); return x ? (x.v || 1) < NUIT_VERSION : n.slice(0, 10) >= limit; });
       if (todo.length === 0) return;
       const recs = (await Promise.all(todo.map((n) =>
         pullDailyFile(n).then((raw) => resumeNuit(raw, n.slice(0, 10))).catch((e) => { console.error("relevé illisible", n, e); return null; })
       ))).filter(Boolean);
       if (recs.length === 0) return;
       update((dd) => {
-        recs.forEach((r) => { if (!dd.daily.some((x) => x.date === r.date)) dd.daily.push(r); });
+        recs.forEach((r) => {
+          const x = dd.daily.find((y) => y.date === r.date);
+          if (!x) dd.daily.push(r);
+          else { x.v = r.v; if (r.hMin) x.hMin = r.hMin; }
+        });
         dd.daily.sort((a, b) => a.date.localeCompare(b.date));
         return dd;
       });
-      const f = recs[recs.length - 1];
-      if (f.n) notify(`Nuit du ${fmtDate(f.date)} : FC ${f.min} min · ${f.moy} moy${f.vfc ? ` · VFC ${f.vfc} ms` : ""}`);
+      const neufs = recs.filter((r) => !have.has(r.date));
+      const f = neufs[neufs.length - 1];
+      if (f?.n) notify(`Nuit du ${fmtDate(f.date)} : FC ${f.min} min à ${f.hMin} · ${f.moy} moy${f.vfc ? ` · VFC ${f.vfc} ms` : ""}`);
     } catch (e) { console.error("import relevé", e); }
   };
 
@@ -432,7 +440,7 @@ export default function CarnetEntrainement() {
           {hud.nuit && (
             <div className="mt-2 text-xs" style={{ fontFamily: mono, color: T.mute }}>
               nuit du {fmtDate(hud.nuit.date)}
-              {hud.nuit.n > 0 && <> · FC <span style={{ color: T.danger }}>{hud.nuit.min}</span> min · {hud.nuit.moy} moy</>}
+              {hud.nuit.n > 0 && <> · FC <span style={{ color: T.danger }}>{hud.nuit.min}</span> min{hud.nuit.hMin ? ` à ${hud.nuit.hMin}` : ""} · {hud.nuit.moy} moy</>}
               {hud.nuit.vfc > 0 && <> · VFC <span style={{ color: T.violet }}>{hud.nuit.vfc}</span> ms</>}
               {hud.nuit.dodo > 0 && <> · {Math.floor(hud.nuit.dodo / 60)} h {pad(hud.nuit.dodo % 60)} dormies</>}
             </div>
@@ -934,7 +942,7 @@ function Courbes({ data }) {
   const yDomain = (vals) => { if (!vals.length) return [0, 1]; const mn = Math.min(...vals), mx = Math.max(...vals); const p = Math.max(1, (mx - mn) * 0.15); return [Math.floor(mn - p), Math.ceil(mx + p)]; };
   // Les trente dernières nuits mesurées ; un relevé vide (montre non portée) ne
   // trace rien plutôt qu'un zéro.
-  const nuits = useMemo(() => data.daily.filter((d) => d.n > 0 || d.vfc > 0).slice(-30).map((d) => ({ label: fmtDate(d.date).slice(0, 5), min: d.min ?? null, moy: d.moy ?? null, vfc: d.vfc ?? null, dodo: d.dodo ? +(d.dodo / 60).toFixed(1) : null })), [data.daily]);
+  const nuits = useMemo(() => data.daily.filter((d) => d.n > 0 || d.vfc > 0).slice(-30).map((d) => ({ label: fmtDate(d.date).slice(0, 5), min: d.min ?? null, hMin: d.hMin ?? null, moy: d.moy ?? null, vfc: d.vfc ?? null, dodo: d.dodo ? +(d.dodo / 60).toFixed(1) : null })), [data.daily]);
   const nuitsFc = nuits.filter((d) => d.min !== null), nuitsVfc = nuits.filter((d) => d.vfc !== null);
   const trend = useMemo(() => {
     if (strength.length === 0) return null;
@@ -1025,7 +1033,7 @@ function Courbes({ data }) {
                       <CartesianGrid stroke="rgba(255,59,92,.10)" strokeDasharray="2 4" />
                       <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                       <YAxis domain={yDomain(nuitsFc.flatMap((r) => [r.min, r.moy]))} tick={axis} axisLine={false} tickLine={false} />
-                      <Tooltip {...tip} />
+                      <Tooltip {...tip} formatter={(v, name, item) => [name === "minimum" && item?.payload?.hMin ? `${v} à ${item.payload.hMin}` : v, name]} />
                       <Line type="monotone" dataKey="moy" name="moyenne" stroke="rgba(255,59,92,.45)" strokeWidth={1.5} dot={{ r: 2, fill: T.danger, strokeWidth: 0 }} connectNulls />
                       <Line type="monotone" dataKey="min" name="minimum" stroke={T.danger} strokeWidth={2.5} dot={{ r: 3, fill: T.bg, stroke: T.danger, strokeWidth: 2 }} connectNulls />
                     </LineChart>

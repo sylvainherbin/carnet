@@ -64,6 +64,10 @@ export const courbeFc = (arr) => {
 // de sommeil (som_d, som_f, som_v : début, fin, phase) sont prévues ; tant
 // qu'elles manquent, la nuit est prise entre minuit et NUIT_FIN heures.
 export const NUIT_FIN = 7;
+// Version de la méthode de résumé. Un relevé déjà résumé avec une version plus
+// ancienne est repassé à l'ouverture pour gagner les champs ajoutés depuis
+// (v2 : hMin), sans toucher à ceux qu'il porte déjà.
+export const NUIT_VERSION = 2;
 export const splitNum = (s) => String(s ?? "").split("|").map((x) => Number(String(x).replace(",", ".").replace(/[^0-9.]/g, ""))).filter((x) => x > 0);
 export const mediane = (v) => { const s = [...v].sort((a, b) => a - b), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
 export const localMs = (iso, h = 0) => { const [y, m, d] = iso.split("-").map(Number); return new Date(y, m - 1, d, h).getTime(); };
@@ -82,11 +86,18 @@ export const resumeNuit = (raw, date) => {
   const som = parseSommeil(raw);
   const dort = som.filter((p) => p.dort);
   const plages = dort.length ? dort.map((p) => [p.from, p.to]) : [[localMs(date), localMs(date, NUIT_FIN)]];
-  const nuit = fc.filter((s) => plages.some(([a, b]) => s.ms >= a && s.ms <= b)).map((s) => s.bpm);
-  const rec = { date, n: nuit.length };
+  const nuit = fc.filter((s) => plages.some(([a, b]) => s.ms >= a && s.ms <= b));
+  const rec = { date, v: NUIT_VERSION, n: nuit.length };
   if (nuit.length) {
-    rec.min = Math.round(Math.min(...nuit));
-    rec.moy = Math.round(nuit.reduce((a, b) => a + b, 0) / nuit.length);
+    const bpm = nuit.map((s) => s.bpm);
+    rec.min = Math.round(Math.min(...bpm));
+    rec.moy = Math.round(bpm.reduce((a, b) => a + b, 0) / bpm.length);
+    // Heure à laquelle le plancher est atteint pour la première fois. Santé rend
+    // parfois des valeurs fractionnaires (51,6) : on compare les valeurs arrondies,
+    // pour que l'heure corresponde au minimum tel qu'il est affiché.
+    const premier = nuit.find((s) => Math.round(s.bpm) === rec.min);
+    const d = new Date(premier.ms);
+    rec.hMin = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
   }
   const vfc = splitNum(raw?.vfc);
   if (vfc.length) { rec.vfc = Math.round(mediane(vfc) * 10) / 10; rec.vfcN = vfc.length; }
@@ -232,7 +243,7 @@ export const ligneJour = (data, date) => {
   l.tapis_min = tap.reduce((a, t) => a + (t.min || 0), 0) || "";
   l.tapis_km = +tap.reduce((a, t) => a + (t.km || 0), 0).toFixed(2) || "";
   const nuit = (data.daily || []).find((d) => d.date === date) || {};
-  l.nuit_fc_min = nuit.min ?? ""; l.nuit_fc_moy = nuit.moy ?? ""; l.nuit_n = nuit.n ?? ""; l.vfc = nuit.vfc ?? ""; l.sommeil_min = nuit.dodo ?? "";
+  l.nuit_fc_min = nuit.min ?? ""; l.nuit_fc_moy = nuit.moy ?? ""; l.nuit_fc_hmin = nuit.hMin ?? ""; l.nuit_n = nuit.n ?? ""; l.vfc = nuit.vfc ?? ""; l.sommeil_min = nuit.dodo ?? "";
   l.poids = data.weights.find((w) => w.date === date)?.kg ?? "";
   l.notes = ss.map((s) => s.note).filter(Boolean).join(" / ");
   return l;
