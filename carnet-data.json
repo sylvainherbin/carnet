@@ -2848,6 +2848,21 @@
    "rpe": 8,
    "note": "",
    "at": 1789461274780
+  },
+  {
+   "id": "kfs4s420",
+   "date": "2026-09-15",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 65
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1789461502437
   }
  ],
  "treadmill": [
