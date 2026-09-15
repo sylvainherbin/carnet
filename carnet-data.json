@@ -2863,6 +2863,21 @@
    "rpe": 8,
    "note": "",
    "at": 1789461502437
+  },
+  {
+   "id": "6vdi3evk",
+   "date": "2026-09-15",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 7,
+     "kg": 65
+    }
+   ],
+   "rpe": 10,
+   "note": "",
+   "at": 1789461823765
   }
  ],
  "treadmill": [
