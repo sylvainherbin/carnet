@@ -1,7 +1,7 @@
 // Service worker « Carnet » — cache-first avec remplissage au fil de l'eau.
 // Les assets Vite étant fingerprintés, une nouvelle version de l'app change
 // leurs URL ; on renouvelle CACHE à chaque déploiement pour purger l'ancien.
-const CACHE = 'carnet-v24';
+const CACHE = 'carnet-v25';
 const PRECACHE = ['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (e) => {
@@ -23,9 +23,12 @@ self.addEventListener('fetch', (e) => {
   if (new URL(request.url).hostname === 'api.github.com') return;
 
   // Navigation : réseau d'abord (pour récupérer les mises à jour), repli hors ligne sur le cache.
+  // « no-cache » force la revalidation auprès du serveur : GitHub Pages annonce
+  // dix minutes de cache HTTP sur index.html, et un index périmé pointerait vers
+  // des assets fingerprintés d'une version précédente.
   if (request.mode === 'navigate') {
     e.respondWith(
-      fetch(request)
+      fetch(request, { cache: 'no-cache' })
         .then((r) => { const copy = r.clone(); caches.open(CACHE).then((c) => c.put(request, copy)); return r; })
         .catch(() => caches.match(request).then((r) => r || caches.match('./index.html')))
     );
