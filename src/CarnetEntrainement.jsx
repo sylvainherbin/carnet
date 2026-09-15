@@ -877,10 +877,13 @@ function Poids({ data, update, notify }) {
     update((d) => { d.weights = d.weights.filter((w) => w.date !== date); d.weights.push({ id: uid(), date, kg: num(kg) }); return d; });
     setKg(""); setPulse(true); setTimeout(() => setPulse(false), 700); notify("Poids enregistré");
   };
-  // Heure de fin du dernier repas de la date choisie. Elle précède la nuit qui
-  // suit : on la range dans l'entrée daily du lendemain, à côté du résumé de
-  // cette nuit, pour que repas et minimum de FC se lisent sur la même ligne.
-  const nuitDe = lendemain(date);
+  // Fin du dernier repas : un bouton horodaté, pressé en se levant de table.
+  // L'heure précède la nuit qui suit : elle est rangée dans l'entrée daily de
+  // cette nuit, à côté de son résumé, pour que repas et minimum de FC se lisent
+  // sur la même ligne. Avant 06:00, la nuit est celle du jour même (repas tardif
+  // passé minuit) ; sinon celle du lendemain.
+  const maintenant = new Date();
+  const nuitDe = maintenant.getHours() < 6 ? todayISO() : lendemain(todayISO());
   const repas = data.daily.find((x) => x.date === nuitDe)?.repas || "";
   const setRepas = (h) => update((d) => {
     let x = d.daily.find((y) => y.date === nuitDe);
@@ -888,6 +891,7 @@ function Poids({ data, update, notify }) {
     else if (x) { delete x.repas; if (Object.keys(x).length === 1) d.daily = d.daily.filter((y) => y !== x); }
     return d;
   });
+  const finRepas = () => { const h = hhmm(Date.now()); setRepas(h); notify(`Fin du repas à ${h}`); };
   const list = [...data.weights].sort((a, b) => b.date.localeCompare(a.date));
   const first = list[list.length - 1]; const lastW = list[0];
   return (
@@ -898,7 +902,12 @@ function Poids({ data, update, notify }) {
           <Field label="poids (kg)"><input type="number" inputMode="decimal" step="0.1" value={kg} onChange={(e) => setKg(e.target.value)} className="inp" /></Field>
         </div>
         <Btn full onClick={save} pulse={pulse}>Enregistrer le poids</Btn>
-        <Field label="dernier repas (fin, HH:MM) — enregistré aussitôt"><input type="time" value={repas} onChange={(e) => setRepas(e.target.value)} className="inp" /></Field>
+        <div className="flex items-center gap-3">
+          <Btn kind="ghost" onClick={finRepas}>Fin du repas</Btn>
+          <span className="text-xs" style={{ color: T.mute, fontFamily: mono }}>
+            {repas ? <>dernier repas <span style={{ color: T.amber }}>{repas}</span> → nuit du {fmtDate(nuitDe)} <Del onClick={() => setRepas("")} /></> : "appuie en te levant de table"}
+          </span>
+        </div>
         {first && lastW && first.id !== lastW.id && (
           <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>
             depuis le {fmtDate(first.date)} : <span style={{ color: T.magenta }}>{(lastW.kg - first.kg > 0 ? "+" : "") + (lastW.kg - first.kg).toFixed(1)} kg</span>
