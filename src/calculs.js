@@ -70,6 +70,7 @@ export const NUIT_FIN = 7;
 export const NUIT_VERSION = 2;
 export const splitNum = (s) => String(s ?? "").split("|").map((x) => Number(String(x).replace(",", ".").replace(/[^0-9.]/g, ""))).filter((x) => x > 0);
 export const mediane = (v) => { const s = [...v].sort((a, b) => a - b), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+export const lendemain = (iso) => { const [y, m, d] = iso.split("-").map(Number); const x = new Date(y, m - 1, d + 1); return `${x.getFullYear()}-${pad(x.getMonth() + 1)}-${pad(x.getDate())}`; };
 export const localMs = (iso, h = 0) => { const [y, m, d] = iso.split("-").map(Number); return new Date(y, m - 1, d, h).getTime(); };
 // Segments de sommeil : dort = vrai hors « éveillé » et « au lit ». Les libellés
 // viennent de Santé dans la langue du téléphone ; on reconnaît les deux états à
@@ -110,6 +111,17 @@ export const resumeNuit = (raw, date) => {
   }
   return rec;
 };
+// Rapproche un résumé frais d'une entrée déjà en place. Une entrée sans relevé
+// (n absent : créée par une saisie manuelle, comme l'heure du dernier repas)
+// reçoit le résumé entier ; une entrée résumée avec une version antérieure ne
+// gagne que les champs nouveaux. Les champs manuels ne sont jamais touchés.
+export const fusionNuit = (existant, frais) => {
+  if (existant.n === undefined) return { ...existant, ...frais };
+  const x = { ...existant, v: frais.v };
+  if (frais.hMin) x.hMin = frais.hMin;
+  return x;
+};
+export const nuitAJour = (existant) => existant.n !== undefined && (existant.v || 1) >= NUIT_VERSION;
 
 // Pendant un entraînement, la montre mesure la FC en continu (~5 s) ; au repos,
 // seulement toutes les quelques minutes, avec de brèves rafales opportunistes.
@@ -243,6 +255,7 @@ export const ligneJour = (data, date) => {
   l.tapis_min = tap.reduce((a, t) => a + (t.min || 0), 0) || "";
   l.tapis_km = +tap.reduce((a, t) => a + (t.km || 0), 0).toFixed(2) || "";
   const nuit = (data.daily || []).find((d) => d.date === date) || {};
+  l.repas = nuit.repas ?? "";
   l.nuit_fc_min = nuit.min ?? ""; l.nuit_fc_moy = nuit.moy ?? ""; l.nuit_fc_hmin = nuit.hMin ?? ""; l.nuit_n = nuit.n ?? ""; l.vfc = nuit.vfc ?? ""; l.sommeil_min = nuit.dodo ?? "";
   l.poids = data.weights.find((w) => w.date === date)?.kg ?? "";
   l.notes = ss.map((s) => s.note).filter(Boolean).join(" / ");

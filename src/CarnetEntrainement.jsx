@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile } from "./githubSync.js";
-import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, courbeFc, resumeNuit, NUIT_VERSION, denseRun, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT } from "./calculs.js";
+import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, courbeFc, resumeNuit, fusionNuit, nuitAJour, lendemain, denseRun, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT } from "./calculs.js";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea,
 } from "recharts";
@@ -322,7 +322,7 @@ export default function CarnetEntrainement() {
       // Nouveaux relevés des deux dernières semaines, plus les résumés d'une
       // version antérieure dont le fichier est encore là : ceux-ci ne gagnent
       // que les champs nouveaux, le reste de l'entrée est conservé tel quel.
-      const todo = names.filter((n) => { const x = have.get(n.slice(0, 10)); return x ? (x.v || 1) < NUIT_VERSION : n.slice(0, 10) >= limit; });
+      const todo = names.filter((n) => { const x = have.get(n.slice(0, 10)); return x ? !nuitAJour(x) : n.slice(0, 10) >= limit; });
       if (todo.length === 0) return;
       const recs = (await Promise.all(todo.map((n) =>
         pullDailyFile(n).then((raw) => resumeNuit(raw, n.slice(0, 10))).catch((e) => { console.error("relevé illisible", n, e); return null; })
@@ -330,14 +330,13 @@ export default function CarnetEntrainement() {
       if (recs.length === 0) return;
       update((dd) => {
         recs.forEach((r) => {
-          const x = dd.daily.find((y) => y.date === r.date);
-          if (!x) dd.daily.push(r);
-          else { x.v = r.v; if (r.hMin) x.hMin = r.hMin; }
+          const i = dd.daily.findIndex((y) => y.date === r.date);
+          if (i < 0) dd.daily.push(r); else dd.daily[i] = fusionNuit(dd.daily[i], r);
         });
         dd.daily.sort((a, b) => a.date.localeCompare(b.date));
         return dd;
       });
-      const neufs = recs.filter((r) => !have.has(r.date));
+      const neufs = recs.filter((r) => have.get(r.date)?.n === undefined);
       const f = neufs[neufs.length - 1];
       if (f?.n) notify(`Nuit du ${fmtDate(f.date)} : FC ${f.min} min à ${f.hMin} · ${f.moy} moy${f.vfc ? ` · VFC ${f.vfc} ms` : ""}`);
     } catch (e) { console.error("import relevé", e); }
@@ -381,7 +380,7 @@ export default function CarnetEntrainement() {
     // Un relevé arrivé mais sans rien dedans : la montre n'a pas été portée, ou
     // Santé n'a rien rendu au raccourci.
     const dern = data.daily[data.daily.length - 1];
-    if (dern && !dern.n && !dern.vfc && !dern.repos) out.push(`Relevé quotidien du ${fmtDate(dern.date)} vide — montre portée ?`);
+    if (dern && dern.n === 0 && !dern.vfc && !dern.repos) out.push(`Relevé quotidien du ${fmtDate(dern.date)} vide — montre portée ?`);
     return out;
   }, [data.sessions, data.durations, data.daily, dailyLast]);
   useEffect(() => {
@@ -878,6 +877,17 @@ function Poids({ data, update, notify }) {
     update((d) => { d.weights = d.weights.filter((w) => w.date !== date); d.weights.push({ id: uid(), date, kg: num(kg) }); return d; });
     setKg(""); setPulse(true); setTimeout(() => setPulse(false), 700); notify("Poids enregistré");
   };
+  // Heure de fin du dernier repas de la date choisie. Elle précède la nuit qui
+  // suit : on la range dans l'entrée daily du lendemain, à côté du résumé de
+  // cette nuit, pour que repas et minimum de FC se lisent sur la même ligne.
+  const nuitDe = lendemain(date);
+  const repas = data.daily.find((x) => x.date === nuitDe)?.repas || "";
+  const setRepas = (h) => update((d) => {
+    let x = d.daily.find((y) => y.date === nuitDe);
+    if (h) { if (!x) { x = { date: nuitDe }; d.daily.push(x); d.daily.sort((a, b) => a.date.localeCompare(b.date)); } x.repas = h; }
+    else if (x) { delete x.repas; if (Object.keys(x).length === 1) d.daily = d.daily.filter((y) => y !== x); }
+    return d;
+  });
   const list = [...data.weights].sort((a, b) => b.date.localeCompare(a.date));
   const first = list[list.length - 1]; const lastW = list[0];
   return (
@@ -888,6 +898,7 @@ function Poids({ data, update, notify }) {
           <Field label="poids (kg)"><input type="number" inputMode="decimal" step="0.1" value={kg} onChange={(e) => setKg(e.target.value)} className="inp" /></Field>
         </div>
         <Btn full onClick={save} pulse={pulse}>Enregistrer le poids</Btn>
+        <Field label="dernier repas (fin, HH:MM) — enregistré aussitôt"><input type="time" value={repas} onChange={(e) => setRepas(e.target.value)} className="inp" /></Field>
         {first && lastW && first.id !== lastW.id && (
           <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>
             depuis le {fmtDate(first.date)} : <span style={{ color: T.magenta }}>{(lastW.kg - first.kg > 0 ? "+" : "") + (lastW.kg - first.kg).toFixed(1)} kg</span>
