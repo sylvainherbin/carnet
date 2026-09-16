@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile } from "./githubSync.js";
-import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, courbeFc, resumeNuit, fusionNuit, nuitAJour, lendemain, denseRun, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT } from "./calculs.js";
+import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, nuitAJour, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT } from "./calculs.js";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea,
 } from "recharts";
@@ -227,23 +227,7 @@ export default function CarnetEntrainement() {
         const m0 = d.durations.find((x) => x.date === dt) || {};
         const tapAFaire = d.treadmill.some((t) => t.date === dt && t.at0 > 0 && !(t.hr > 0));
         if (m0.hr > 0 && m0.ex && m0.fc && m0.pics && !tapAFaire) return;
-        const ss = d.sessions.filter((s) => s.date === dt && s.at).sort((a, b) => a.at - b.at);
-        // Chaque saisie couvre la période qui la sépare de la précédente : ses séries
-        // et la récupération entre elles. Découper ainsi plutôt que par exercice laisse
-        // un mouvement repris plus tard agréger ses tranches sans absorber l'intervalle.
-        const blocs = ss.map((x, i) => ({ ex: x.exercise, id: x.id, solo: x.sets.length === 1, from: i ? ss[i - 1].at : x.at - MIN_PAR_SERIE * 60000, to: x.at }));
-        // Le tapis se fait souvent avant ou après la muscu : quand son départ est
-        // connu, la fenêtre s'étend pour l'englober, sinon sa FC tomberait hors champ.
-        const taps = d.treadmill.filter((t) => t.date === dt && t.at0 > 0 && t.min > 0);
-        // Une séance ancienne, saisie sans horodatage, laisse la fenêtre inconnue :
-        // null déclenche la détection par densité sur les échantillons du jour.
-        if (ss.length < 2) { windows.set(dt, null); return; }
-        const win = [blocs[0].from, ss[ss.length - 1].at + 120000];
-        taps.forEach((t) => {
-          win[0] = Math.min(win[0], t.at0);
-          win[1] = Math.max(win[1], t.at0 + t.min * 60000);
-        });
-        windows.set(dt, { win, blocs, taps });
+        windows.set(dt, fenetreSeance(d.sessions, d.treadmill, dt));
       });
       if (windows.size === 0) return;
       const nextDay = (iso) => new Date(new Date(`${iso}T12:00:00`).getTime() + 864e5).toISOString().slice(0, 10);
@@ -258,35 +242,9 @@ export default function CarnetEntrainement() {
         .filter((s) => s.ms > 0 && s.bpm > 20 && s.bpm < 250)
         .sort((a, b) => a.ms - b.ms);
       const found = [];
-      const moy = (v) => Math.round(v.reduce((a, x) => a + x, 0) / v.length);
       windows.forEach((w, date) => {
-        const dans = w ? samples.filter((s) => s.ms >= w.win[0] && s.ms <= w.win[1]) : denseRun(samples.filter((s) => s.day === date));
-        if (dans.length === 0) return;
-        const bpm = dans.map((s) => s.bpm);
-        const rec = { date, n: bpm.length, hr: moy(bpm), hrMax: Math.round(Math.max(...bpm)), fc: courbeFc(dans) };
-        if (w) {
-          const parEx = new Map();
-          w.blocs.forEach((b) => {
-            const v = samples.filter((s) => s.ms >= b.from && s.ms <= b.to).map((s) => s.bpm);
-            if (v.length === 0) return;
-            if (!parEx.has(b.ex)) parEx.set(b.ex, []);
-            parEx.get(b.ex).push(...v);
-          });
-          if (parEx.size > 0) rec.ex = [...parEx].map(([n, v]) => ({ n, c: v.length, hr: moy(v), hrMax: Math.round(Math.max(...v)) }));
-          // Pic par série : le sommet atteint dans le bloc, qui est la réponse du cœur
-          // à la série elle-même. Réservé aux saisies d'une seule série — au-delà, le
-          // bloc en couvre plusieurs et rien ne permet de les départager.
-          rec.pics = w.blocs.filter((b) => b.solo).map((b) => {
-            const v = samples.filter((x) => x.ms >= b.from && x.ms <= b.to).map((x) => x.bpm);
-            return v.length ? { id: b.id, pic: Math.round(Math.max(...v)) } : null;
-          }).filter(Boolean);
-          // FC du tapis : la durée saisie borne la plage, le départ vient du bouton.
-          rec.tap = w.taps.map((t) => {
-            const v = samples.filter((s) => s.ms >= t.at0 && s.ms <= t.at0 + t.min * 60000).map((s) => s.bpm);
-            return v.length ? { id: t.id, hr: moy(v) } : null;
-          }).filter(Boolean);
-        }
-        found.push(rec);
+        const rec = resumeSeance(samples, w, date);
+        if (rec) found.push(rec);
       });
       if (found.length === 0) return;
       update((dd) => {

@@ -1,16 +1,20 @@
-# React + Vite
+# Carnet
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Carnet d'entraînement personnel : PWA hors-ligne (React + Vite + Tailwind),
+synchronisée par l'API GitHub sur `carnet-data.json`, alimentée par deux
+raccourcis iOS qui déposent la FC de séance (`fc/`) et le relevé quotidien de
+nuit (`daily/`). Servie par GitHub Pages depuis la branche `gh-pages`.
 
-Currently, two official plugins are available:
+- `src/calculs.js` : tous les calculs, sans React — testés hors navigateur.
+- `src/githubSync.js` : lecture/écriture GitHub, lecture tolérante des fichiers déposés.
+- `src/CarnetEntrainement.jsx` : l'interface.
+- `tests/` : tests sur des copies figées de vrais fichiers (`tests/fixtures/`).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```
+npm test              # node --test, aucune dépendance
+npm run lint          # oxlint
+scripts/deploy.sh v28 "message"   # lint + tests + build + push + vérification en ligne
+```
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Le script de déploiement ne supprime jamais les anciens assets de `gh-pages` :
+Pages sert `index.html` avec un cache de 10 min qui peut encore pointer dessus.

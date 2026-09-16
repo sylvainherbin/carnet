@@ -39,12 +39,15 @@ async function pullJsonFile(dir, name) {
   const r = await fetch(`${dir}/${encodeURIComponent(name)}?ref=main`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
   if (!r.ok) throw new Error(`GitHub ${r.status}`);
   const j = await r.json();
-  const txt = b64decode(j.content).trim();
+  return lireJson(b64decode(j.content));
+}
+// Le raccourci iOS a déjà déposé le même objet deux fois de suite — « {…}{…} ».
+// Plutôt que d'exiger un producteur irréprochable, on lit le premier objet
+// complet et on ignore la suite : les doublons portent les mêmes échantillons.
+export function lireJson(texte) {
+  const txt = String(texte).trim();
   try { return JSON.parse(txt); }
   catch (e) {
-    // Le raccourci iOS a déjà déposé le même objet deux fois de suite — « {…}{…} ».
-    // Plutôt que d'exiger un producteur irréprochable, on lit le premier objet
-    // complet et on ignore la suite : les doublons portent les mêmes échantillons.
     const end = matchEnd(txt);
     if (end < 0) throw e;
     return JSON.parse(txt.slice(0, end));

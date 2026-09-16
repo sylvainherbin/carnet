@@ -156,6 +156,57 @@ export const denseRun = (samples) => {
   close();
   return best;
 };
+// ---- Séance : fenêtre et résumé FC -------------------------------------
+// Le raccourci dépose tous les échantillons de la journée ; c'est ici qu'on ne
+// retient que ceux de la séance, déduite des horodatages de saisie. Chaque saisie
+// couvre la période qui la sépare de la précédente : ses séries et la récupération
+// entre elles. Découper ainsi plutôt que par exercice laisse un mouvement repris
+// plus tard agréger ses tranches sans absorber l'intervalle. Le tapis, souvent
+// avant ou après la muscu, étend la fenêtre quand son départ est connu. Moins de
+// deux saisies horodatées : fenêtre inconnue (null), l'appelant se rabat sur la
+// détection par densité.
+export const fenetreSeance = (sessions, treadmill, date) => {
+  const ss = sessions.filter((s) => s.date === date && s.at).sort((a, b) => a.at - b.at);
+  if (ss.length < 2) return null;
+  const blocs = ss.map((x, i) => ({ ex: x.exercise, id: x.id, solo: x.sets.length === 1, from: i ? ss[i - 1].at : x.at - MIN_PAR_SERIE * 60000, to: x.at }));
+  const taps = treadmill.filter((t) => t.date === date && t.at0 > 0 && t.min > 0);
+  const win = [blocs[0].from, ss[ss.length - 1].at + 120000];
+  taps.forEach((t) => {
+    win[0] = Math.min(win[0], t.at0);
+    win[1] = Math.max(win[1], t.at0 + t.min * 60000);
+  });
+  return { win, blocs, taps };
+};
+const moyenne = (v) => Math.round(v.reduce((a, x) => a + x, 0) / v.length);
+// Résumé FC d'une séance à partir des échantillons triés et de sa fenêtre (ou
+// null : densité). hr/hrMax sur toute la fenêtre, courbe par 30 s, puis par
+// exercice, par série et par tapis. Le pic par série est le sommet du bloc de la
+// saisie : chaque série enregistrée dès qu'elle est finie a donc le sien ; une
+// saisie groupant plusieurs séries n'en a pas, rien ne permet de les départager.
+export const resumeSeance = (samples, w, date) => {
+  const dans = w ? samples.filter((s) => s.ms >= w.win[0] && s.ms <= w.win[1]) : denseRun(samples.filter((s) => s.day === date));
+  if (dans.length === 0) return null;
+  const bpm = dans.map((s) => s.bpm);
+  const rec = { date, n: bpm.length, hr: moyenne(bpm), hrMax: Math.round(Math.max(...bpm)), fc: courbeFc(dans) };
+  if (!w) return rec;
+  const parEx = new Map();
+  w.blocs.forEach((b) => {
+    const v = samples.filter((s) => s.ms >= b.from && s.ms <= b.to).map((s) => s.bpm);
+    if (v.length === 0) return;
+    if (!parEx.has(b.ex)) parEx.set(b.ex, []);
+    parEx.get(b.ex).push(...v);
+  });
+  if (parEx.size > 0) rec.ex = [...parEx].map(([n, v]) => ({ n, c: v.length, hr: moyenne(v), hrMax: Math.round(Math.max(...v)) }));
+  rec.pics = w.blocs.filter((b) => b.solo).map((b) => {
+    const v = samples.filter((x) => x.ms >= b.from && x.ms <= b.to).map((x) => x.bpm);
+    return v.length ? { id: b.id, pic: Math.round(Math.max(...v)) } : null;
+  }).filter(Boolean);
+  rec.tap = w.taps.map((t) => {
+    const v = samples.filter((s) => s.ms >= t.at0 && s.ms <= t.at0 + t.min * 60000).map((s) => s.bpm);
+    return v.length ? { id: t.id, hr: moyenne(v) } : null;
+  }).filter(Boolean);
+  return rec;
+};
 export const weightFor = (weights, date) => {
   const w = [...weights].sort((a, b) => a.date.localeCompare(b.date));
   const past = w.filter((x) => x.date <= date);
