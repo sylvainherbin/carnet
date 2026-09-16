@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile } from "./githubSync.js";
-import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, nuitAJour, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision } from "./calculs.js";
+import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, nuitAJour, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp } from "./calculs.js";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea,
 } from "recharts";
@@ -369,8 +369,9 @@ export default function CarnetEntrainement() {
     const dern = data.daily[data.daily.length - 1];
     const veille = new Date(Date.now() - 864e5);
     const nuit = dern && (dern.n > 0 || dern.vfc > 0) && dern.date >= `${veille.getFullYear()}-${pad(veille.getMonth() + 1)}-${pad(veille.getDate())}` ? dern : null;
+    const tempEcart = nuit ? ecartTemp(data.daily, nuit.date) : null;
     const decision = data.daily.find((x) => x.date === todayISO())?.decision || null;
-    return { lastDate, lastGroup, weekSessions, lastW, delta, nuit, decision };
+    return { lastDate, lastGroup, weekSessions, lastW, delta, nuit, tempEcart, decision };
   }, [data]);
 
   const tabs = [["seance", "Séance"], ["tapis", "Tapis"], ["poids", "Poids"], ["courbes", "Courbes"], ["records", "Records"], ["donnees", "Données"]];
@@ -406,6 +407,9 @@ export default function CarnetEntrainement() {
               {hud.nuit.n > 0 && <> · FC <span style={{ color: T.danger }}>{hud.nuit.min}</span> min{hud.nuit.hMin ? ` à ${hud.nuit.hMin}` : ""} · {hud.nuit.moy} moy</>}
               {hud.nuit.vfc > 0 && <> · VFC <span style={{ color: T.violet }}>{hud.nuit.vfc}</span> ms</>}
               {hud.nuit.dodo > 0 && <> · {Math.floor(hud.nuit.dodo / 60)} h {pad(hud.nuit.dodo % 60)} dormies</>}
+              {hud.nuit.resp > 0 && <> · resp <span style={{ color: T.cyan }}>{hud.nuit.resp}</span>/min</>}
+              {hud.nuit.spo2 > 0 && <> · SpO2 <span style={{ color: T.cyan }}>{hud.nuit.spo2}</span> %</>}
+              {hud.nuit.temp > 0 && <> · <span style={{ color: T.amber }}>{hud.nuit.temp.toFixed(1)} °C</span>{hud.tempEcart !== null ? ` (${hud.tempEcart > 0 ? "+" : ""}${hud.tempEcart.toFixed(2)})` : ""}</>}
             </div>
           )}
         </header>
@@ -963,8 +967,9 @@ function Courbes({ data }) {
   const yDomain = (vals) => { if (!vals.length) return [0, 1]; const mn = Math.min(...vals), mx = Math.max(...vals); const p = Math.max(1, (mx - mn) * 0.15); return [Math.floor(mn - p), Math.ceil(mx + p)]; };
   // Les trente dernières nuits mesurées ; un relevé vide (montre non portée) ne
   // trace rien plutôt qu'un zéro.
-  const nuits = useMemo(() => data.daily.filter((d) => d.n > 0 || d.vfc > 0).slice(-30).map((d) => ({ label: fmtDate(d.date).slice(0, 5), min: d.min ?? null, hMin: d.hMin ?? null, moy: d.moy ?? null, vfc: d.vfc ?? null, dodo: d.dodo ? +(d.dodo / 60).toFixed(1) : null })), [data.daily]);
+  const nuits = useMemo(() => data.daily.filter((d) => d.n > 0 || d.vfc > 0).slice(-30).map((d) => ({ label: fmtDate(d.date).slice(0, 5), min: d.min ?? null, hMin: d.hMin ?? null, moy: d.moy ?? null, vfc: d.vfc ?? null, dodo: d.dodo ? +(d.dodo / 60).toFixed(1) : null, resp: d.resp ?? null, temp: d.temp ?? null, tempEcart: ecartTemp(data.daily, d.date) })), [data.daily]);
   const nuitsFc = nuits.filter((d) => d.min !== null), nuitsVfc = nuits.filter((d) => d.vfc !== null);
+  const nuitsResp = nuits.filter((d) => d.resp !== null), nuitsTemp = nuits.filter((d) => d.tempEcart !== null);
   const trend = useMemo(() => {
     if (strength.length === 0) return null;
     const prVal = Math.max(...strength.map((r) => r.e1rm));
@@ -1043,7 +1048,7 @@ function Courbes({ data }) {
 
       <Panel boot="boot-3">
         <H right={nuits.length ? `${nuits.length} nuit${nuits.length > 1 ? "s" : ""}` : ""}>Récupération — nuit</H>
-        {nuits.length === 0 ? <Empty text="Le relevé quotidien de midi alimentera cette courbe (montre portée la nuit)." /> : (
+        {nuits.length === 0 ? <Empty text="Le relevé quotidien du matin alimentera cette courbe (montre portée la nuit)." /> : (
           <>
             {nuitsFc.length > 0 && (
               <>
@@ -1073,6 +1078,38 @@ function Courbes({ data }) {
                       <YAxis tick={axis} axisLine={false} tickLine={false} />
                       <Tooltip {...tip} />
                       <Bar dataKey="vfc" name="VFC" fill={T.violet} radius={[3, 3, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            )}
+            {nuitsResp.length > 1 && (
+              <>
+                <div className="text-xs mt-3 mb-1" style={{ color: T.mute, fontFamily: mono }}>Respiration (/min) · médiane de la nuit</div>
+                <div style={{ height: 100 }}>
+                  <ResponsiveContainer>
+                    <LineChart data={nuitsResp} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+                      <CartesianGrid stroke="rgba(0,229,255,.10)" strokeDasharray="2 4" />
+                      <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
+                      <YAxis domain={yDomain(nuitsResp.map((r) => r.resp))} tick={axis} axisLine={false} tickLine={false} />
+                      <Tooltip {...tip} />
+                      <Line type="monotone" dataKey="resp" name="respiration" stroke={T.cyan} strokeWidth={2} dot={{ r: 2.5, fill: T.bg, stroke: T.cyan, strokeWidth: 2 }} connectNulls />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            )}
+            {nuitsTemp.length > 0 && (
+              <>
+                <div className="text-xs mt-3 mb-1" style={{ color: T.mute, fontFamily: mono }}>Température du poignet (°C) · écart à ta médiane des 28 nuits</div>
+                <div style={{ height: 100 }}>
+                  <ResponsiveContainer>
+                    <BarChart data={nuitsTemp} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
+                      <CartesianGrid stroke="rgba(255,176,0,.1)" strokeDasharray="2 4" vertical={false} />
+                      <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
+                      <YAxis tick={axis} axisLine={false} tickLine={false} />
+                      <Tooltip {...tip} formatter={(v, name, item) => [`${v > 0 ? "+" : ""}${v} (${item?.payload?.temp} °C)`, name]} />
+                      <Bar dataKey="tempEcart" name="écart" fill={T.amber} radius={[3, 3, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>

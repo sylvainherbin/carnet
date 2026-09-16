@@ -66,9 +66,10 @@ export const courbeFc = (arr) => {
 export const NUIT_FIN = 7;
 // Version de la méthode de résumé. Un relevé déjà résumé avec une version plus
 // ancienne est repassé à l'ouverture pour gagner les champs ajoutés depuis
-// (v2 : hMin ; v3 : nuit restreinte au dernier bloc de sommeil). Les champs
-// saisis à la main (repas) sont conservés tels quels.
-export const NUIT_VERSION = 3;
+// (v2 : hMin ; v3 : nuit restreinte au dernier bloc de sommeil ; v4 : VFC
+// limitée au sommeil quand vfc_t existe, respiration, SpO2 et température du
+// poignet). Les champs saisis à la main (repas, decision) sont conservés.
+export const NUIT_VERSION = 4;
 // Deux segments de sommeil séparés de plus de NUIT_TROU heures appartiennent à
 // deux nuits différentes.
 export const NUIT_TROU = 4;
@@ -95,6 +96,14 @@ export const derniereNuit = (som) => {
   tri.forEach((p) => { if (bloc.length && p.from - bloc[bloc.length - 1].to > NUIT_TROU * 3600000) bloc = []; bloc.push(p); });
   return bloc;
 };
+// Série horodatée du relevé (deux chaînes « | » parallèles), restreinte aux
+// plages données ; les valeurs non numériques ou nulles sont écartées.
+const paires = (ts, vs, plages) => {
+  if (!ts || !vs) return [];
+  const t = String(ts).split("|"), v = String(vs).split("|");
+  return t.map((x, i) => ({ ms: parseMs(x), v: Number(String(v[i] ?? "").replace(",", ".").replace(/[^0-9.]/g, "")) }))
+    .filter((p) => p.ms > 0 && p.v > 0 && plages.some(([a, b]) => p.ms >= a && p.ms <= b));
+};
 export const resumeNuit = (raw, date) => {
   const fc = parseFcFile({ t: raw?.fc_t ?? "", b: raw?.fc ?? "" }).filter((s) => s.ms > 0 && s.bpm > 20 && s.bpm < 250);
   const som = derniereNuit(parseSommeil(raw));
@@ -113,8 +122,24 @@ export const resumeNuit = (raw, date) => {
     const d = new Date(premier.ms);
     rec.hMin = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
   }
-  const vfc = splitNum(raw?.vfc);
+  // VFC : Santé mesure aussi le jour, et la valeur de jour vaut la moitié de
+  // celle de nuit. Avec les horodatages (vfc_t, raccourci v2), on ne garde que
+  // les mesures faites pendant le sommeil ; sans, on prend tout le relevé.
+  const vfcNuit = paires(raw?.vfc_t, raw?.vfc, plages).map((p) => p.v);
+  const vfc = vfcNuit.length ? vfcNuit : splitNum(raw?.vfc);
   if (vfc.length) { rec.vfc = Math.round(mediane(vfc) * 10) / 10; rec.vfcN = vfc.length; }
+  // Fréquence respiratoire et SpO2 pendant le sommeil (raccourci v2).
+  const resp = paires(raw?.resp_t, raw?.resp, plages).map((p) => p.v);
+  if (resp.length) { rec.resp = Math.round(mediane(resp) * 10) / 10; rec.respN = resp.length; }
+  const spo2 = paires(raw?.spo2_t, raw?.spo2, plages).map((p) => p.v);
+  if (spo2.length) { rec.spo2 = Math.round(mediane(spo2)); rec.spo2Min = Math.round(Math.min(...spo2)); }
+  // Température du poignet : une mesure absolue par nuit (°C), horodatée au
+  // début du suivi de sommeil, parfois avant le premier segment. On prend la
+  // dernière tombée entre six heures avant le coucher et le lever ; l'écart à
+  // la référence personnelle se calcule ensuite sur l'historique (ecartTemp).
+  const debut = Math.min(...plages.map((p) => p[0])), fin = Math.max(...plages.map((p) => p[1]));
+  const temp = paires(raw?.temp_t, raw?.temp, [[debut - 6 * 3600000, fin]]).sort((a, b) => a.ms - b.ms);
+  if (temp.length) rec.temp = Math.round(temp[temp.length - 1].v * 100) / 100;
   const repos = Number(raw?.repos);
   if (repos > 0) rec.repos = Math.round(repos);
   if (dort.length) {
@@ -138,6 +163,18 @@ export const fusionNuit = (existant, frais) => {
   return x;
 };
 export const nuitAJour = (existant) => existant.n !== undefined && (existant.v || 1) >= NUIT_VERSION;
+// Écart de la température du poignet à la référence personnelle : la médiane
+// des TEMP_REF_NUITS nuits précédentes qui en ont une, à partir de
+// TEMP_REF_MIN valeurs. Santé affiche le même genre d'écart, mais sur une
+// référence qu'il ne montre pas ; ici elle est recalculable.
+export const TEMP_REF_NUITS = 28, TEMP_REF_MIN = 5;
+export const ecartTemp = (daily, date) => {
+  const x = daily.find((d) => d.date === date);
+  if (!(x?.temp > 0)) return null;
+  const ref = daily.filter((d) => d.date < date && d.temp > 0).slice(-TEMP_REF_NUITS).map((d) => d.temp);
+  if (ref.length < TEMP_REF_MIN) return null;
+  return Math.round((x.temp - mediane(ref)) * 100) / 100;
+};
 
 // Pendant un entraînement, la montre mesure la FC en continu (~5 s) ; au repos,
 // seulement toutes les quelques minutes, avec de brèves rafales opportunistes.
@@ -345,7 +382,9 @@ export const ligneJour = (data, date) => {
   l.tapis_km = +tap.reduce((a, t) => a + (t.km || 0), 0).toFixed(2) || "";
   const nuit = (data.daily || []).find((d) => d.date === date) || {};
   l.repas = nuit.repas ?? "";
-  l.nuit_fc_min = nuit.min ?? ""; l.nuit_fc_moy = nuit.moy ?? ""; l.nuit_fc_hmin = nuit.hMin ?? ""; l.nuit_n = nuit.n ?? ""; l.vfc = nuit.vfc ?? ""; l.sommeil_min = nuit.dodo ?? "";
+  l.nuit_fc_min = nuit.min ?? ""; l.nuit_fc_moy = nuit.moy ?? ""; l.nuit_fc_hmin = nuit.hMin ?? ""; l.nuit_n = nuit.n ?? ""; l.vfc = nuit.vfc ?? "";
+  l.nuit_resp = nuit.resp ?? ""; l.nuit_spo2 = nuit.spo2 ?? ""; l.nuit_spo2_min = nuit.spo2Min ?? ""; l.nuit_temp = nuit.temp ?? ""; l.nuit_temp_ecart = ecartTemp(data.daily || [], date) ?? "";
+  l.sommeil_min = nuit.dodo ?? "";
   l.poids = data.weights.find((w) => w.date === date)?.kg ?? "";
   l.notes = ss.map((s) => s.note).filter(Boolean).join(" / ");
   return l;
