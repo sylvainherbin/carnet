@@ -506,8 +506,19 @@ function Seance({ data, update, notify, celebrate }) {
   // Toujours la date du jour au moment du clic, pas celle du formulaire : une
   // app restée ouverte depuis la veille garde l'ancienne date dans le champ, et
   // la décision du 16 s'était retrouvée sur la ligne du 15.
-  const decision = data.daily.find((x) => x.date === todayISO())?.decision || {};
-  const setDecision = (champ, v) => update((d) => { d.daily = poserDecision(d.daily, todayISO(), champ, v); return d; });
+  const decisionSauvee = data.daily.find((x) => x.date === todayISO())?.decision || {};
+  const formeDecision = (x) => ({ d: x.d || "", regle: x.regle || "", motif: x.motif || "" });
+  const [dec, setDec] = useState(() => formeDecision(decisionSauvee));
+  // La saisie reste locale jusqu'au bouton, comme une série jusqu'à
+  // « Enregistrer l'exercice » ; le formulaire se réaligne si la valeur
+  // enregistrée change ailleurs (synchro depuis un autre appareil).
+  const cleSauvee = JSON.stringify(formeDecision(decisionSauvee));
+  useEffect(() => { setDec(JSON.parse(cleSauvee)); }, [cleSauvee]);
+  const decisionModifiee = JSON.stringify(dec) !== cleSauvee;
+  const saveDecision = () => {
+    update((d) => { d.daily = poserDecision(d.daily, todayISO(), dec); return d; });
+    notify(dec.d || dec.regle || dec.motif ? "Décision enregistrée" : "Décision effacée");
+  };
   const firePR = (candidates) => {
     const prs = candidates.filter((c) => c.oldBest > 0 && c.newBest > c.oldBest + 0.05);
     if (prs.length) celebrate(prs.sort((a, b) => b.newBest / b.oldBest - a.newBest / a.oldBest)[0]);
@@ -636,15 +647,16 @@ function Seance({ data, update, notify, celebrate }) {
           <div className="flex items-center gap-4 text-xs" style={{ fontFamily: mono }}>
             <span style={{ color: T.mute }}>décision du {fmtDate(todayISO())}</span>
             {DECISIONS.map(([k, label, c]) => (
-              <label key={k} className="flex items-center gap-1" style={{ color: decision.d === k ? c : T.mute }}>
-                <input type="radio" name="decision" checked={decision.d === k} onChange={() => setDecision("d", k)} style={{ accentColor: c }} />{label}
+              <label key={k} className="flex items-center gap-1" style={{ color: dec.d === k ? c : T.mute }}>
+                <input type="radio" name="decision" checked={dec.d === k} onChange={() => setDec({ ...dec, d: k })} style={{ accentColor: c }} />{label}
               </label>
             ))}
           </div>
           <div className="grid grid-cols-3 gap-3">
-            <Field label="règle"><input value={decision.regle || ""} onChange={(e) => setDecision("regle", e.target.value)} className="inp" placeholder="R1" /></Field>
-            <div className="col-span-2"><Field label="motif"><input value={decision.motif || ""} onChange={(e) => setDecision("motif", e.target.value)} className="inp" placeholder="le chiffre qui a décidé" /></Field></div>
+            <Field label="règle"><input value={dec.regle} onChange={(e) => setDec({ ...dec, regle: e.target.value })} className="inp" placeholder="R1" /></Field>
+            <div className="col-span-2"><Field label="motif"><input value={dec.motif} onChange={(e) => setDec({ ...dec, motif: e.target.value })} className="inp" placeholder="le chiffre qui a décidé" /></Field></div>
           </div>
+          <Btn full kind={decisionModifiee ? "primary" : "quiet"} onClick={saveDecision}>Enregistrer la décision</Btn>
         </div>
       </Panel>
 
