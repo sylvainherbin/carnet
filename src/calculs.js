@@ -287,6 +287,26 @@ export const verdictProgression = (sessions, exercise, avant, pas = PAS_DEFAUT) 
   return { ...base, verdict: "reste", cible: kg };
 };
 
+// ---- Décision du matin ----------------------------------------------------
+// Pose un champ de la décision ({ d, regle, motif }) sur l'entrée daily de la
+// date donnée — le jour courant au moment du clic, jamais la date du formulaire
+// de séance, qui peut dater de la veille dans une app restée ouverte. Si la nuit
+// n'a pas encore été importée, l'entrée est créée vide (souche complétée ensuite
+// par fusionNuit). Une décision entièrement effacée retire le champ, et la
+// souche avec lui. Ne modifie pas le tableau reçu.
+export const poserDecision = (daily, date, champ, v) => {
+  const out = daily.map((x) => ({ ...x }));
+  let x = out.find((y) => y.date === date);
+  if (!x) { x = { date }; out.push(x); out.sort((a, b) => a.date.localeCompare(b.date)); }
+  const dec = { ...(x.decision || {}), [champ]: v };
+  if (!dec.d && !dec.regle && !dec.motif) {
+    delete x.decision;
+    return Object.keys(x).length === 1 ? out.filter((y) => y !== x) : out;
+  }
+  x.decision = dec;
+  return out;
+};
+
 // Plafond du coach : douze séries par groupe musculaire et par séance.
 export const SERIES_MAX = 12;
 export const seriesParGroupe = (sessions, date) => {

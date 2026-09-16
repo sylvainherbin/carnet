@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile } from "./githubSync.js";
-import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, nuitAJour, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT } from "./calculs.js";
+import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, nuitAJour, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision } from "./calculs.js";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea,
 } from "recharts";
@@ -502,16 +502,12 @@ function Seance({ data, update, notify, celebrate }) {
   const verdict = useMemo(() => verdictProgression(data.sessions, exercise, date, pasDe(exercise)), [data.sessions, data.pas, exercise, date]);
   const parGroupe = useMemo(() => seriesParGroupe(data.sessions, date), [data.sessions, date]);
   // Décision du matin, telle que le coach l'a prise : rien n'est calculé ici,
-  // l'app garde la trace dans l'entrée daily du jour (créée si besoin).
-  const decision = data.daily.find((x) => x.date === date)?.decision || {};
-  const setDecision = (champ, v) => update((d) => {
-    let x = d.daily.find((y) => y.date === date);
-    if (!x) { x = { date }; d.daily.push(x); d.daily.sort((a, b) => a.date.localeCompare(b.date)); }
-    const dec = { ...(x.decision || {}), [champ]: v };
-    if (!dec.d && !dec.regle && !dec.motif) { delete x.decision; if (Object.keys(x).length === 1) d.daily = d.daily.filter((y) => y !== x); }
-    else x.decision = dec;
-    return d;
-  });
+  // l'app garde la trace dans l'entrée daily du jour courant (créée si besoin).
+  // Toujours la date du jour au moment du clic, pas celle du formulaire : une
+  // app restée ouverte depuis la veille garde l'ancienne date dans le champ, et
+  // la décision du 16 s'était retrouvée sur la ligne du 15.
+  const decision = data.daily.find((x) => x.date === todayISO())?.decision || {};
+  const setDecision = (champ, v) => update((d) => { d.daily = poserDecision(d.daily, todayISO(), champ, v); return d; });
   const firePR = (candidates) => {
     const prs = candidates.filter((c) => c.oldBest > 0 && c.newBest > c.oldBest + 0.05);
     if (prs.length) celebrate(prs.sort((a, b) => b.newBest / b.oldBest - a.newBest / a.oldBest)[0]);
@@ -638,7 +634,7 @@ function Seance({ data, update, notify, celebrate }) {
         )}
         <div className="space-y-2">
           <div className="flex items-center gap-4 text-xs" style={{ fontFamily: mono }}>
-            <span style={{ color: T.mute }}>décision</span>
+            <span style={{ color: T.mute }}>décision du {fmtDate(todayISO())}</span>
             {DECISIONS.map(([k, label, c]) => (
               <label key={k} className="flex items-center gap-1" style={{ color: decision.d === k ? c : T.mute }}>
                 <input type="radio" name="decision" checked={decision.d === k} onChange={() => setDecision("d", k)} style={{ accentColor: c }} />{label}

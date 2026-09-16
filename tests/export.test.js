@@ -12,7 +12,7 @@ test("export dérivé : en-tête, une ligne par date, ligne du 15/09", () => {
   const dates = new Set([...data.sessions, ...data.treadmill, ...data.weights, ...data.daily].map((x) => x.date));
   assert.equal(lignes.length, 1 + dates.size);
   assert.equal(lignes.find((l) => l.startsWith("2026-09-15")),
-    "2026-09-15;repos;R1;sommeil 6h00;Pecs;12;8965;12;8965;0;0;0;0;0;0;0;0;0;0;7.8;10;94;133;422;;15;1.55;;50;54;08:15;114;44.7;478;75.1;");
+    "2026-09-15;maintenu;;séance faite;Pecs;12;8965;12;8965;0;0;0;0;0;0;0;0;0;0;7.8;10;94;133;422;;15;1.55;;50;54;08:15;114;44.7;478;75.1;");
   assert.equal(exportDerive({ sessions: [], treadmill: [], weights: [], daily: [] }), "");
 });
 
