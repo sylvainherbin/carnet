@@ -5272,7 +5272,8 @@
    "lever": 1789457757000,
    "decision": {
     "d": "repos",
-    "motif": ""
+    "motif": "s",
+    "regle": "R1"
    }
   },
   {
