@@ -5291,7 +5291,8 @@
    "repas": "19:25",
    "decision": {
     "d": "repos",
-    "regle": "R1"
+    "regle": "R1",
+    "motif": "sommeil 6h00"
    }
   }
  ],
