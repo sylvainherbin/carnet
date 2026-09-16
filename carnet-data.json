@@ -5290,7 +5290,8 @@
    "lever": 1789535721000,
    "repas": "19:25",
    "decision": {
-    "d": "repos"
+    "d": "repos",
+    "regle": "R1"
    }
   }
  ],
