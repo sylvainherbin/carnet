@@ -68,9 +68,10 @@ export const NUIT_FIN = 7;
 // ancienne est repassé à l'ouverture pour gagner les champs ajoutés depuis
 // (v2 : hMin ; v3 : nuit restreinte au dernier bloc de sommeil ; v4 : VFC
 // limitée au sommeil quand vfc_t existe, respiration, SpO2 et température du
-// poignet ; v5 : nuit non reçue). Les champs saisis à la main (repas, decision)
-// sont conservés.
-export const NUIT_VERSION = 5;
+// poignet ; v5 : nuit non reçue ; v6 : plus de repli sur la VFC de journée
+// quand les horodatages existent). Les champs saisis à la main (repas,
+// decision) sont conservés.
+export const NUIT_VERSION = 6;
 // Deux segments de sommeil séparés de plus de NUIT_TROU heures appartiennent à
 // deux nuits différentes.
 export const NUIT_TROU = 4;
@@ -133,9 +134,11 @@ export const resumeNuit = (raw, date) => {
   }
   // VFC : Santé mesure aussi le jour, et la valeur de jour vaut la moitié de
   // celle de nuit. Avec les horodatages (vfc_t, raccourci v2), on ne garde que
-  // les mesures faites pendant le sommeil ; sans, on prend tout le relevé.
-  const vfcNuit = paires(raw?.vfc_t, raw?.vfc, plages).map((p) => p.v);
-  const vfc = vfcNuit.length ? vfcNuit : splitNum(raw?.vfc);
+  // les mesures faites pendant le sommeil, et s'il n'y en a aucune on préfère
+  // ne rien écrire : un repli sur le relevé entier ferait passer une VFC de
+  // journée pour une VFC de nuit, sans que rien ne le signale. Le repli ne sert
+  // donc qu'aux anciens fichiers, déposés sans horodatages.
+  const vfc = raw?.vfc_t ? paires(raw.vfc_t, raw?.vfc, plages).map((p) => p.v) : splitNum(raw?.vfc);
   if (vfc.length) { rec.vfc = Math.round(mediane(vfc) * 10) / 10; rec.vfcN = vfc.length; }
   // Fréquence respiratoire et SpO2 pendant le sommeil (raccourci v2).
   const resp = paires(raw?.resp_t, raw?.resp, plages).map((p) => p.v);
@@ -172,6 +175,25 @@ export const fusionNuit = (existant, frais) => {
   return x;
 };
 export const nuitAJour = (existant) => existant.n !== undefined && (existant.v || 1) >= NUIT_VERSION;
+// Un carnet importé ou lu depuis GitHub doit avoir la forme attendue : les
+// champs tableaux en sont bien, `pas` est un objet. Un JSON valide mais de
+// forme fausse (« sessions » à {}, par exemple) plantait le rendu, et comme il
+// était aussitôt enregistré, il plantait aussi à la réouverture.
+export const CHAMPS_LISTES = ["exercises", "sessions", "treadmill", "weights", "durations", "daily"];
+export const carnetValide = (p) => !!p && typeof p === "object" && !Array.isArray(p)
+  && Array.isArray(p.sessions) && Array.isArray(p.weights)
+  && CHAMPS_LISTES.every((k) => p[k] === undefined || Array.isArray(p[k]))
+  && (p.pas === undefined || (typeof p.pas === "object" && p.pas !== null && !Array.isArray(p.pas)));
+
+// Carnet sans rien à perdre : c'est ce qui autorise à adopter la version
+// distante sans demander confirmation. Une décision du matin, une heure de
+// repas ou un exercice ajouté comptent, eux : ils vivent dans daily, durations
+// et exercises, et non dans les seules séances.
+export const carnetVide = (d, exercicesDefaut = []) =>
+  ["sessions", "treadmill", "weights", "durations", "daily"].every((k) => !d?.[k]?.length)
+  && !Object.keys(d?.pas || {}).length
+  && (d?.exercises || []).every((x) => exercicesDefaut.includes(x));
+
 // Relevés à résumer, parmi les fichiers du dossier daily/ ({ name, sha }, sha
 // étant l'empreinte git du contenu que donne le listage GitHub). Le raccourci
 // réécrit le fichier du jour à chaque passage : un résumé à jour de version

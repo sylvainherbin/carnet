@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile } from "./githubSync.js";
-import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, dailyAImporter, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp, repriseSeance } from "./calculs.js";
+import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, dailyAImporter, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp, repriseSeance, carnetValide, carnetVide } from "./calculs.js";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea,
 } from "recharts";
@@ -15,6 +15,8 @@ const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${pad(
 const uid = () => Math.random().toString(36).slice(2, 10);
 const fmtDate = (iso) => { const [y, m, d] = iso.split("-"); return `${d}/${m}/${y.slice(2)}`; };
 const DEFAULT_EXERCISES = ["Dev incliné", "Dev couché", "Chest press", "Dips", "PullDown", "Row", "Leg extension", "Leg Curl", "Leg press", "Shoulder press"];
+// Délai minimal entre deux relectures automatiques des relevés.
+const RELECTURE_MS = 2 * 60000;
 const EMPTY = { exercises: DEFAULT_EXERCISES, sessions: [], treadmill: [], weights: [], durations: [], daily: [], pas: {} };
 
 // ================= thème =================
@@ -171,10 +173,16 @@ export default function CarnetEntrainement() {
   };
   const doPush = async () => {
     const token = localStorage.getItem(GH_TOKEN); if (!token) return;
+    // Ce qui part maintenant : une saisie faite pendant l'envoi n'y est pas, et
+    // retirer le marqueur « modifié » la déclarerait synchronisée à tort. Elle
+    // serait alors adoptée sans confirmation à la première divergence.
+    const envoi = dataRef.current, empreinte = JSON.stringify(envoi);
     try {
-      const res = await pushRemote(dataRef.current, localStorage.getItem(GH_SHA) || undefined, token);
+      const res = await pushRemote(envoi, localStorage.getItem(GH_SHA) || undefined, token);
       if (res.conflict) { doPull(); return; } // modifié ailleurs : repasser par la lecture, qui arbitre
-      localStorage.setItem(GH_SHA, res.sha); localStorage.removeItem(GH_DIRTY);
+      localStorage.setItem(GH_SHA, res.sha);
+      if (JSON.stringify(dataRef.current) !== empreinte) { localStorage.setItem(GH_DIRTY, "1"); schedulePush(); stamp("synchronisé — suite en attente"); return; }
+      localStorage.removeItem(GH_DIRTY);
       stamp("synchronisé");
     } catch (e) {
       setGhSync((g) => ({ ...g, status: /40[13]/.test(e.message) ? "jeton invalide ou expiré" : "hors ligne — en attente" }));
@@ -193,7 +201,7 @@ export default function CarnetEntrainement() {
       const dirty = localStorage.getItem(GH_DIRTY) === "1";
       if (rem.sha === sha) { if (dirty) schedulePush(); else setGhSync((g) => ({ ...g, status: "à jour" })); return; }
       const d = dataRef.current;
-      const localEmpty = d.sessions.length === 0 && d.treadmill.length === 0 && d.weights.length === 0;
+      const localEmpty = carnetVide(d, DEFAULT_EXERCISES);
       if (localEmpty || (sha && !dirty)) { adopt(rem); return; }
       // données locales ET distantes divergentes : c'est à l'utilisateur d'arbitrer
       if (window.confirm("Des données différentes existent sur GitHub (autre appareil ?).\n\nOK — charger celles de GitHub sur cet appareil.\nAnnuler — garder celles de cet appareil (elles écraseront GitHub à la prochaine synchro).")) {
@@ -311,10 +319,27 @@ export default function CarnetEntrainement() {
     catch (e) { /* première utilisation */ }
     finally { setLoaded(true); }
   }, []);
+  // Chaque relecture coûte plusieurs requêtes GitHub anonymes, plafonnées à 60
+  // par heure et par adresse : un retour dans l'app toutes les deux minutes
+  // suffit largement ; le bouton, lui, relit sans délai.
+  const derniereRelecture = useRef(0);
   useEffect(() => {
     if (!loaded || pulledOnce.current) return;
     pulledOnce.current = true;
+    derniereRelecture.current = Date.now();
     doPull().finally(() => setTimeout(() => { importFc(); importDaily(); }, 1200)); // après l'éventuel adopt(), une fois dataRef à jour
+  }, [loaded]);
+  // Tout relire : le bouton « Synchroniser maintenant », le retour dans l'app et
+  // le retour du réseau. Les relevés du matin tombent souvent pendant que l'app
+  // est restée ouverte, et l'import ne se faisait qu'à l'ouverture.
+  const relireTout = () => { derniereRelecture.current = Date.now(); return doPull().finally(() => setTimeout(() => { importFc(); importDaily(); }, 1200)); };
+  useEffect(() => {
+    if (!loaded) return;
+    const auRetour = () => { if (document.visibilityState === "visible" && Date.now() - derniereRelecture.current > RELECTURE_MS) relireTout(); };
+    const enLigne = () => { if (localStorage.getItem(GH_DIRTY)) schedulePush(); relireTout(); };
+    document.addEventListener("visibilitychange", auRetour);
+    window.addEventListener("online", enLigne);
+    return () => { document.removeEventListener("visibilitychange", auRetour); window.removeEventListener("online", enLigne); };
   }, [loaded]);
 
   // Absences à signaler. Les raccourcis iOS échouent sans bruit : un dépôt qui
@@ -435,7 +460,7 @@ export default function CarnetEntrainement() {
           {loaded && tab === "donnees" && <Donnees data={data} setData={setData} notify={notify} sync={ghSync}
             onToken={(t) => { const v = t.trim(); if (!v) return; try { localStorage.setItem(GH_TOKEN, v); localStorage.setItem(GH_DIRTY, "1"); } catch (e) { /* privé */ } setGhSync((g) => ({ ...g, hasToken: true, status: "activation…" })); doPull(); }}
             onTokenOff={() => { try { localStorage.removeItem(GH_TOKEN); } catch (e) { /* privé */ } setGhSync((g) => ({ ...g, hasToken: false, status: "" })); notify("Synchro désactivée sur cet appareil"); }}
-            onSync={doPull} />}
+            onSync={relireTout} />}
         </main>
 
         </div>
