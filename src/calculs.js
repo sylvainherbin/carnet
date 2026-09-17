@@ -68,8 +68,9 @@ export const NUIT_FIN = 7;
 // ancienne est repassé à l'ouverture pour gagner les champs ajoutés depuis
 // (v2 : hMin ; v3 : nuit restreinte au dernier bloc de sommeil ; v4 : VFC
 // limitée au sommeil quand vfc_t existe, respiration, SpO2 et température du
-// poignet). Les champs saisis à la main (repas, decision) sont conservés.
-export const NUIT_VERSION = 4;
+// poignet ; v5 : nuit non reçue). Les champs saisis à la main (repas, decision)
+// sont conservés.
+export const NUIT_VERSION = 5;
 // Deux segments de sommeil séparés de plus de NUIT_TROU heures appartiennent à
 // deux nuits différentes.
 export const NUIT_TROU = 4;
@@ -106,11 +107,19 @@ const paires = (ts, vs, plages) => {
 };
 export const resumeNuit = (raw, date) => {
   const fc = parseFcFile({ t: raw?.fc_t ?? "", b: raw?.fc ?? "" }).filter((s) => s.ms > 0 && s.bpm > 20 && s.bpm < 250);
-  const som = derniereNuit(parseSommeil(raw));
+  // Un dernier bloc qui se termine avant le jour du relevé est la nuit
+  // précédente : Santé n'a pas encore reçu celle-ci de la montre (dépôt fait
+  // pendant le sommeil, ou avant la synchronisation). On ne la lui attribue
+  // pas : pas de durée ni d'horaires, FC prise sur la fenêtre de repli, et
+  // somAbsent le signale — une règle fondée sur le sommeil ne s'applique pas.
+  const bloc = derniereNuit(parseSommeil(raw));
+  const somAbsent = bloc.length > 0 && Math.max(...bloc.map((p) => p.to)) < localMs(date);
+  const som = somAbsent ? [] : bloc;
   const dort = som.filter((p) => p.dort);
   const plages = dort.length ? dort.map((p) => [p.from, p.to]) : [[localMs(date), localMs(date, NUIT_FIN)]];
   const nuit = fc.filter((s) => plages.some(([a, b]) => s.ms >= a && s.ms <= b));
   const rec = { date, v: NUIT_VERSION, n: nuit.length };
+  if (somAbsent) rec.somAbsent = true;
   if (nuit.length) {
     const bpm = nuit.map((s) => s.bpm);
     rec.min = Math.round(Math.min(...bpm));
@@ -163,6 +172,20 @@ export const fusionNuit = (existant, frais) => {
   return x;
 };
 export const nuitAJour = (existant) => existant.n !== undefined && (existant.v || 1) >= NUIT_VERSION;
+// Relevés à résumer, parmi les fichiers du dossier daily/ ({ name, sha }, sha
+// étant l'empreinte git du contenu que donne le listage GitHub). Le raccourci
+// réécrit le fichier du jour à chaque passage : un résumé à jour de version
+// peut donc porter sur un contenu dépassé. L'entrée garde l'empreinte du
+// fichier résumé (champ sha) ; une empreinte différente, ou absente, relance le
+// résumé quel que soit l'âge du relevé. Un fichier sans entrée n'est pris que
+// s'il date d'après limit.
+export const dailyAImporter = (fichiers, daily, limit) => {
+  const have = new Map(daily.map((x) => [x.date, x]));
+  return fichiers.filter(({ name, sha }) => {
+    const x = have.get(name.slice(0, 10));
+    return x ? !nuitAJour(x) || x.sha !== sha : name.slice(0, 10) >= limit;
+  });
+};
 // Écart de la température du poignet à la référence personnelle : la médiane
 // des TEMP_REF_NUITS nuits précédentes qui en ont une, à partir de
 // TEMP_REF_MIN valeurs. Santé affiche le même genre d'écart, mais sur une

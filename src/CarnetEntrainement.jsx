@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile } from "./githubSync.js";
-import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, nuitAJour, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp } from "./calculs.js";
+import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, dailyAImporter, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp } from "./calculs.js";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea,
 } from "recharts";
@@ -273,17 +273,19 @@ export default function CarnetEntrainement() {
   // voyage avec les données : les autres appareils n'ont rien à retélécharger.
   const importDaily = async () => {
     try {
-      const names = (await listDailyFiles()).sort();
-      setDailyLast(names.length ? names[names.length - 1].slice(0, 10) : null);
+      const fichiers = (await listDailyFiles()).sort((a, b) => a.name.localeCompare(b.name));
+      setDailyLast(fichiers.length ? fichiers[fichiers.length - 1].name.slice(0, 10) : null);
       const limit = new Date(Date.now() - 14 * 864e5).toISOString().slice(0, 10);
       const have = new Map(dataRef.current.daily.map((x) => [x.date, x]));
-      // Nouveaux relevés des deux dernières semaines, plus les résumés d'une
-      // version antérieure dont le fichier est encore là : ceux-ci ne gagnent
-      // que les champs nouveaux, le reste de l'entrée est conservé tel quel.
-      const todo = names.filter((n) => { const x = have.get(n.slice(0, 10)); return x ? !nuitAJour(x) : n.slice(0, 10) >= limit; });
+      // Nouveaux relevés des deux dernières semaines, plus ceux dont le résumé
+      // est d'une version antérieure ou porte sur un contenu réécrit depuis :
+      // les champs calculés sont refaits, repas et décision conservés.
+      const todo = dailyAImporter(fichiers, dataRef.current.daily, limit);
       if (todo.length === 0) return;
-      const recs = (await Promise.all(todo.map((n) =>
-        pullDailyFile(n).then((raw) => resumeNuit(raw, n.slice(0, 10))).catch((e) => { console.error("relevé illisible", n, e); return null; })
+      // L'empreinte vient du listage : si le fichier change entre le listage et
+      // la lecture, le résumé sera simplement refait à l'ouverture suivante.
+      const recs = (await Promise.all(todo.map(({ name, sha }) =>
+        pullDailyFile(name).then((raw) => ({ ...resumeNuit(raw, name.slice(0, 10)), sha })).catch((e) => { console.error("relevé illisible", name, e); return null; })
       ))).filter(Boolean);
       if (recs.length === 0) return;
       update((dd) => {
@@ -294,7 +296,10 @@ export default function CarnetEntrainement() {
         dd.daily.sort((a, b) => a.date.localeCompare(b.date));
         return dd;
       });
-      const neufs = recs.filter((r) => have.get(r.date)?.n === undefined);
+      // Annoncés : les relevés neufs et ceux dont le fichier a été réécrit (pas
+      // les simples passages à une nouvelle version, ni la première prise
+      // d'empreinte).
+      const neufs = recs.filter((r) => { const x = have.get(r.date); return x?.n === undefined || (x.sha && x.sha !== r.sha); });
       const f = neufs[neufs.length - 1];
       if (f?.n) notify(`Nuit du ${fmtDate(f.date)} : FC ${f.min} min à ${f.hMin} · ${f.moy} moy${f.vfc ? ` · VFC ${f.vfc} ms` : ""}`);
     } catch (e) { console.error("import relevé", e); }
@@ -368,7 +373,7 @@ export default function CarnetEntrainement() {
     // La dernière nuit résumée, si elle est récente : celle d'aujourd'hui ou d'hier.
     const dern = data.daily[data.daily.length - 1];
     const veille = new Date(Date.now() - 864e5);
-    const nuit = dern && (dern.n > 0 || dern.vfc > 0) && dern.date >= `${veille.getFullYear()}-${pad(veille.getMonth() + 1)}-${pad(veille.getDate())}` ? dern : null;
+    const nuit = dern && (dern.n > 0 || dern.vfc > 0 || dern.somAbsent) && dern.date >= `${veille.getFullYear()}-${pad(veille.getMonth() + 1)}-${pad(veille.getDate())}` ? dern : null;
     const tempEcart = nuit ? ecartTemp(data.daily, nuit.date) : null;
     const decision = data.daily.find((x) => x.date === todayISO())?.decision || null;
     return { lastDate, lastGroup, weekSessions, lastW, delta, nuit, tempEcart, decision };
@@ -406,6 +411,7 @@ export default function CarnetEntrainement() {
               nuit du {fmtDate(hud.nuit.date)}
               {hud.nuit.n > 0 && <> · FC <span style={{ color: T.danger }}>{hud.nuit.min}</span> min{hud.nuit.hMin ? ` à ${hud.nuit.hMin}` : ""} · {hud.nuit.moy} moy</>}
               {hud.nuit.vfc > 0 && <> · VFC <span style={{ color: T.violet }}>{hud.nuit.vfc}</span> ms</>}
+              {hud.nuit.somAbsent && <> · <span style={{ color: T.amber }}>sommeil non reçu</span> · R1 non applicable</>}
               {hud.nuit.dodo > 0 && <> · {Math.floor(hud.nuit.dodo / 60)} h {pad(hud.nuit.dodo % 60)} dormies</>}
               {hud.nuit.resp > 0 && <> · resp <span style={{ color: T.cyan }}>{hud.nuit.resp}</span>/min</>}
               {hud.nuit.spo2 > 0 && <> · SpO2 <span style={{ color: T.cyan }}>{hud.nuit.spo2}</span> %</>}

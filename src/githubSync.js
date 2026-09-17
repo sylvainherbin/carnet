@@ -30,9 +30,10 @@ async function listJson(dir) {
   if (r.status === 404) return []; // dossier pas encore créé
   if (!r.ok) throw new Error(`GitHub ${r.status}`);
   const j = await r.json();
-  return j.filter((f) => f.type === "file" && f.name.endsWith(".json")).map((f) => f.name);
+  return j.filter((f) => f.type === "file" && f.name.endsWith(".json")).map((f) => ({ name: f.name, sha: f.sha }));
 }
-export const listFcFiles = () => listJson(FC_DIR);
+export const listFcFiles = () => listJson(FC_DIR).then((fs) => fs.map((f) => f.name));
+// { name, sha } : l'empreinte sert à repérer un relevé réécrit (dailyAImporter).
 export const listDailyFiles = () => listJson(DAILY_DIR);
 
 async function pullJsonFile(dir, name) {
