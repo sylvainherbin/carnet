@@ -3148,6 +3148,21 @@
    "rpe": 7,
    "note": "",
    "at": 1789633718189
+  },
+  {
+   "id": "uec247ei",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 40
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789633995592
   }
  ],
  "treadmill": [
