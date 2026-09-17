@@ -3118,6 +3118,21 @@
    "rpe": 8,
    "note": "",
    "at": 1789633209510
+  },
+  {
+   "id": "usa7olby",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789633449849
   }
  ],
  "treadmill": [
