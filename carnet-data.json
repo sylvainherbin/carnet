@@ -3028,6 +3028,21 @@
    "rpe": 6,
    "note": "",
    "at": 1789631857420
+  },
+  {
+   "id": "igteecvp",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 85
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1789632001650
   }
  ],
  "treadmill": [
