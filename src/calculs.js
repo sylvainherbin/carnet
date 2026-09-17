@@ -368,6 +368,18 @@ export const poserDecision = (daily, date, dec) => {
   return out;
 };
 
+// Groupe et exercice à reprendre dans le formulaire de séance : ceux de la
+// dernière série enregistrée à cette date (heure de saisie, ordre du tableau à
+// défaut), ou null si la date n'en a pas. Sans ça, l'app rouverte en pleine
+// séance revenait sur le premier groupe, et une série d'Upper Back du 14/09
+// avait été classée en Pecs.
+export const repriseSeance = (sessions, date) => {
+  const jour = sessions.map((s, i) => ({ s, i })).filter(({ s }) => s.date === date);
+  if (!jour.length) return null;
+  const { s } = jour.sort((a, b) => (a.s.at || 0) - (b.s.at || 0) || a.i - b.i)[jour.length - 1];
+  return { group: s.group || null, exercise: s.exercise || null };
+};
+
 // Plafond du coach : douze séries par groupe musculaire et par séance.
 export const SERIES_MAX = 12;
 export const seriesParGroupe = (sessions, date) => {

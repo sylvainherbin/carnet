@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile } from "./githubSync.js";
-import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, dailyAImporter, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp } from "./calculs.js";
+import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, dailyAImporter, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp, repriseSeance } from "./calculs.js";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea,
 } from "recharts";
@@ -500,6 +500,16 @@ function Seance({ data, update, notify, celebrate }) {
   const [note, setNote] = useState("");
   const [pulse, setPulse] = useState(false);
   const fire = () => { setPulse(true); setTimeout(() => setPulse(false), 700); };
+  // Le formulaire reprend le groupe et l'exercice de la dernière série de la
+  // date : à l'ouverture, au changement de date, et quand une synchro apporte
+  // des séries. Après un enregistrement, la reprise est ce qu'on vient de
+  // saisir : le formulaire ne bouge pas.
+  const reprise = JSON.stringify(repriseSeance(data.sessions, date));
+  useEffect(() => {
+    const r = JSON.parse(reprise);
+    if (r?.group && GROUPS.includes(r.group)) setGroup(r.group);
+    if (r?.exercise) setExercise(r.exercise);
+  }, [reprise]);
 
   const lastFor = (name) => data.sessions.filter((x) => x.exercise === name).sort((a, b) => b.date.localeCompare(a.date))[0] || null;
   const last = useMemo(() => lastFor(exercise), [data.sessions, exercise]);
