@@ -24,7 +24,8 @@
   "Trapèzes",
   "Incline chest press",
   "Leg press 2",
-  "Haltères latérales"
+  "Haltères latérales",
+  "Hack squat"
  ],
  "sessions": [
   {
@@ -5720,12 +5721,17 @@
    "min": 50,
    "moy": 56,
    "hMin": "08:29",
-   "vfc": 35.1,
-   "vfcN": 4,
+   "vfc": 38.8,
+   "vfcN": 2,
+   "resp": 14,
+   "respN": 33,
+   "spo2": 95,
+   "spo2Min": 94,
+   "temp": 35.54,
    "dodo": 320,
    "coucher": 1789607390000,
    "lever": 1789627309000,
-   "sha": "722e5b42462de1c54e133a0dbba3c935e863618c",
+   "sha": "dd7d0b09f3c7c6cbc4459d913b524a283c2e1f91",
    "repas": "19:35",
    "decision": {
     "d": "allege",
