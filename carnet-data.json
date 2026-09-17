@@ -3178,6 +3178,21 @@
    "rpe": 7,
    "note": "",
    "at": 1789634163466
+  },
+  {
+   "id": "ayyfbps7",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 40
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789634321396
   }
  ],
  "treadmill": [
