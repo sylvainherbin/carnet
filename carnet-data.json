@@ -3043,6 +3043,21 @@
    "rpe": 6,
    "note": "",
    "at": 1789632001650
+  },
+  {
+   "id": "0zscos95",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 85
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1789632296008
   }
  ],
  "treadmill": [
