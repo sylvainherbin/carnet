@@ -5761,7 +5761,12 @@
    "coucher": 1789784051000,
    "lever": 1789804752000,
    "sha": "6801103a4df4203f7b2f2e983ae89effbeba3cea",
-   "repas": "20:37"
+   "repas": "20:37",
+   "decision": {
+    "d": "repos",
+    "regle": "R1",
+    "motif": "dette de sommeil, jambes decalées à Dimanche"
+   }
   }
  ],
  "pas": {
