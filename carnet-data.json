@@ -3254,6 +3254,21 @@
    "rpe": 6,
    "note": "Nouvelle machine",
    "at": 1789894287539
+  },
+  {
+   "id": "iqol2sgm",
+   "date": "2026-09-20",
+   "group": "Jambes",
+   "exercise": "Hack squat",
+   "sets": [
+    {
+     "reps": 5,
+     "kg": 40
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1789894595744
   }
  ],
  "treadmill": [
