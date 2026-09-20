@@ -1,23 +1,50 @@
 {
   "date": "2026-09-21",
   "v": 1,
-  "ecrit": "2026-09-20T19:40:00Z",
+  "ecrit": "2026-09-20T20:05:00Z",
   "seance": {
     "groupe": "Épaules",
     "titre": "Épaules — phase 2, jour 2",
     "notion": "https://app.notion.com/p/3e1f7b92e8f0814b8603c439a29b46c1",
     "exercices": [
-      { "nom": "Shoulder press", "series": 3, "reps": 10, "kg": 65, "note": "si la 1re sort à 9, tu la notes et tu passes à l'Upper Back" },
-      { "nom": "Upper Back", "series": 3, "reps": 12, "kg": 70 },
-      { "nom": "Haltères latérales", "series": 3, "reps": 10, "kg": 12.5, "pas": 2.5, "note": "pas 2,5 posé par le plan" },
-      { "nom": "Haltères postérieur", "series": 3, "reps": 15, "kg": 20 }
+      {
+        "nom": "Shoulder press",
+        "series": 3,
+        "reps": 10,
+        "kg": 65,
+        "note": "si la 1re sort à 9, tu la notes et tu passes à l'Upper Back"
+      },
+      {
+        "nom": "Upper Back",
+        "series": 3,
+        "reps": 12,
+        "kg": 70
+      },
+      {
+        "nom": "Haltères latérales",
+        "series": 3,
+        "reps": 10,
+        "kg": 12.5,
+        "pas": 2.5,
+        "note": "pas 2,5 posé par le plan"
+      },
+      {
+        "nom": "Haltères postérieur",
+        "series": 3,
+        "reps": 15,
+        "kg": 20
+      }
     ],
     "echauffement": [
       "Shoulder press 40 × 10",
       "Shoulder press 55 × 6",
       "Haltères latérales 5 × 15"
     ],
-    "tapis": { "min": 10, "pente": 13, "kmh": 5.5 }
+    "tapis": {
+      "min": 10,
+      "pente": 13,
+      "kmh": 5.5
+    }
   },
   "points": [
     "Premier enchaînement de deux jours depuis la reprise. Décision du matin à venir.",
