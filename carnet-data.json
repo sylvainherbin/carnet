@@ -5791,7 +5791,12 @@
    "coucher": 1789865402000,
    "lever": 1789890323000,
    "sha": "c43c6dc92ce2ffdbbb2101aa5ba7f793daa6167c",
-   "repas": "18:49"
+   "repas": "18:49",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1",
+    "motif": "sommeil 6h45"
+   }
   }
  ],
  "pas": {
