@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { carnet } from "./aide.js";
 import { exportDerive, ligneJour, isoWeek, lendemain } from "../src/calculs.js";
 
-const ENTETE = "date;decision;regle;motif;groupes;series;tonnage;series_Pecs;tonnage_Pecs;series_Dos;tonnage_Dos;series_Jambes;tonnage_Jambes;series_Épaules;tonnage_Épaules;series_Bras;tonnage_Bras;series_Autre;tonnage_Autre;rpe_moy;rpe_max;fc_seance;fc_max;kcal;kcal_montre;tapis_min;tapis_km;repas;nuit_fc_min;nuit_fc_moy;nuit_fc_hmin;nuit_n;vfc;nuit_resp;nuit_spo2;nuit_spo2_min;nuit_temp;nuit_temp_ecart;sommeil_min;poids;notes";
+const ENTETE = "date;decision;regle;motif;decision_par;groupes;series;tonnage;series_Pecs;tonnage_Pecs;series_Dos;tonnage_Dos;series_Jambes;tonnage_Jambes;series_Épaules;tonnage_Épaules;series_Bras;tonnage_Bras;series_Autre;tonnage_Autre;rpe_moy;rpe_max;rpe_auto;fc_seance;fc_max;kcal;kcal_montre;tapis_min;tapis_km;repas;nuit_fc_min;nuit_fc_moy;nuit_fc_hmin;nuit_n;vfc;nuit_resp;nuit_spo2;nuit_spo2_min;nuit_temp;nuit_temp_ecart;sommeil_min;plan_prevues;plan_faites;plan_conforme;poids;notes";
 
 test("export dérivé : en-tête, une ligne par date, ligne du 15/09", () => {
   const data = carnet();
@@ -12,7 +12,7 @@ test("export dérivé : en-tête, une ligne par date, ligne du 15/09", () => {
   const dates = new Set([...data.sessions, ...data.treadmill, ...data.weights, ...data.daily].map((x) => x.date));
   assert.equal(lignes.length, 1 + dates.size);
   assert.equal(lignes.find((l) => l.startsWith("2026-09-15")),
-    "2026-09-15;maintenu;;séance faite;Pecs;12;8965;12;8965;0;0;0;0;0;0;0;0;0;0;7.8;10;94;133;422;;15;1.55;;50;54;08:15;114;44.7;;;;;;478;75.1;");
+    "2026-09-15;maintenu;;séance faite;;Pecs;12;8965;12;8965;0;0;0;0;0;0;0;0;0;0;7.8;10;;94;133;422;;15;1.55;;50;54;08:15;114;44.7;;;;;;478;;;;75.1;");
   assert.equal(exportDerive({ sessions: [], treadmill: [], weights: [], daily: [] }), "");
 });
 

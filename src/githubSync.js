@@ -25,6 +25,19 @@ const FC_DIR = "https://api.github.com/repos/sylvainherbin/carnet/contents/fc";
 // compacte { fc_t, fc, vfc } de chaînes « | ».
 const DAILY_DIR = "https://api.github.com/repos/sylvainherbin/carnet/contents/daily";
 
+// Plan du jour écrit par le coach : plan/AAAA-MM-JJ.json. L'app ne fait que le
+// lire — aucune écriture, aucune suppression, donc aucune course avec la
+// synchro de carnet-data.json ni avec les raccourcis qui écrivent daily/.
+const PLAN_DIR = "https://api.github.com/repos/sylvainherbin/carnet/contents/plan";
+// Absent : 404 sans erreur, c'est le cas normal tant que le coach n'a pas écrit.
+export async function pullPlanFile(date) {
+  const r = await fetch(`${PLAN_DIR}/${encodeURIComponent(date)}.json?ref=main&t=${Date.now()}`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
+  if (r.status === 404) return null;
+  if (!r.ok) throw new Error(`GitHub ${r.status}`);
+  const j = await r.json();
+  return lireJson(b64decode(j.content));
+}
+
 async function listJson(dir) {
   const r = await fetch(`${dir}?ref=main`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
   if (r.status === 404) return []; // dossier pas encore créé

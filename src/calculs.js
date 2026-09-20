@@ -359,14 +359,120 @@ export const verdictProgression = (sessions, exercise, avant, pas = PAS_DEFAUT) 
   const prev = sessions.filter((s) => s.exercise === exercise && s.date < avant);
   if (prev.length === 0) return null;
   const date = prev.map((s) => s.date).sort().pop();
-  const sets = prev.filter((s) => s.date === date).flatMap((s) => s.sets.map((x) => ({ ...x, rpe: s.rpe })));
+  const sets = prev.filter((s) => s.date === date).flatMap((s) => s.sets.map((x) => ({ ...x, rpe: s.rpe, rpeAuto: !!s.rpeAuto })));
   const kg = chargeTravail(sets);
-  const rpes = sets.filter((x) => x.kg === kg && x.rpe > 0).map((x) => x.rpe);
-  const base = { exercise, date, kg, rpes, pas };
+  const notees = sets.filter((x) => x.kg === kg && x.rpe > 0);
+  const rpes = notees.map((x) => x.rpe);
+  // Un RPE laissé à sa valeur par défaut n'est pas une mesure : le verdict est
+  // calculé pareil, mais il est signalé, sinon une séance où le RPE n'a pas été
+  // renseigné ferait monter les charges toute seule.
+  const base = { exercise, date, kg, rpes, pas, rpeAuto: notees.length > 0 && notees.every((x) => x.rpeAuto) };
   if (rpes.length < 2) return { ...base, verdict: "?", cible: kg, motif: rpes.length ? "une seule série notée" : "RPE non saisi" };
   if (rpes.every((r) => r <= 7)) return { ...base, verdict: "monte", cible: kg + pas };
   if (rpes.every((r) => r >= 9)) return { ...base, verdict: "descend", cible: Math.max(0, kg - pas) };
   return { ...base, verdict: "reste", cible: kg };
+};
+
+
+// Valeur par défaut du champ RPE d'une nouvelle série : la série se valide
+// sans y toucher, et elle est alors marquée rpeAuto (voir verdictProgression).
+export const RPE_DEFAUT = 7;
+
+// ---- Plan du jour, écrit par le coach -------------------------------------
+// Le coach dépose plan/AAAA-MM-JJ.json dans le dépôt ; l'app le lit, ne l'écrit
+// jamais et ne le supprime jamais. Le fichier peut être réécrit plusieurs fois
+// dans la journée : on prend la dernière version, sans fusion. Tout est
+// optionnel sauf la date, et un champ inconnu est ignoré — un plan mal formé ne
+// doit jamais empêcher la saisie à la main.
+const txt = (x) => (typeof x === "string" ? x.trim() : "");
+const liste = (x) => (Array.isArray(x) ? x.map(txt).filter(Boolean) : []);
+const nb = (x) => { const n = Number(x); return Number.isFinite(n) && n > 0 ? n : 0; };
+export const lirePlan = (raw) => {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw) || !txt(raw.date)) return null;
+  const s = raw.seance && typeof raw.seance === "object" && !Array.isArray(raw.seance) ? raw.seance : null;
+  const exercices = Array.isArray(s?.exercices)
+    ? s.exercices.filter((x) => x && typeof x === "object" && txt(x.nom))
+      .map((x) => ({ nom: txt(x.nom), series: nb(x.series), reps: nb(x.reps), kg: nb(x.kg), note: txt(x.note), pas: nb(x.pas) }))
+    : [];
+  const d = raw.decision && typeof raw.decision === "object" ? raw.decision : null;
+  const tapis = s?.tapis && typeof s.tapis === "object" ? { min: nb(s.tapis.min), pente: nb(s.tapis.pente), kmh: nb(s.tapis.kmh) } : null;
+  return {
+    date: txt(raw.date), v: nb(raw.v) || 1, ecrit: txt(raw.ecrit),
+    decision: d && (txt(d.d) || txt(d.regle) || txt(d.motif)) ? { d: txt(d.d), regle: txt(d.regle), motif: txt(d.motif) } : null,
+    nuit: txt(raw.nuit),
+    seance: s ? { groupe: txt(s.groupe), titre: txt(s.titre), notion: txt(s.notion), exercices, echauffement: liste(s.echauffement), tapis } : null,
+    points: liste(raw.points),
+  };
+};
+
+// Avancement du prescrit : une ligne par exercice prévu (séries faites sur
+// séries prévues), le total prévu, et le total réellement enregistré ce
+// jour-là — les séries hors plan comprises, puisque c'est l'écart qui
+// intéresse le coach.
+export const avancementPlan = (plan, sessions, date) => {
+  const faitesPar = new Map();
+  sessions.filter((s) => s.date === date).forEach((s) => faitesPar.set(s.exercise, (faitesPar.get(s.exercise) || 0) + s.sets.length));
+  const lignes = (plan?.seance?.exercices || []).map((x) => {
+    const faites = faitesPar.get(x.nom) || 0;
+    return { ...x, faites, fini: x.series > 0 && faites >= x.series };
+  });
+  const prevues = lignes.reduce((a, x) => a + x.series, 0);
+  const faites = [...faitesPar.values()].reduce((a, n) => a + n, 0);
+  return { lignes, prevues, faites, tousFinis: lignes.length > 0 && lignes.every((x) => x.fini) };
+};
+
+// Séance terminée : tous les exercices prévus ont leur compte, ou bien un
+// résumé de séance existe pour la date. Le résumé vient de l'import FC, qui ne
+// le produit qu'à partir de deux saisies horodatées : un fichier fc/ déposé un
+// jour sans série — arrivé le 16/09 — ne compte donc pas, et on exige en plus
+// au moins une série ce jour-là.
+export const seanceTerminee = (plan, sessions, durations, date) => {
+  const av = avancementPlan(plan, sessions, date);
+  if (av.tousFinis) return true;
+  const meta = (durations || []).find((x) => x.date === date);
+  return av.faites > 0 && !!(meta?.ex?.length || meta?.pics?.length);
+};
+
+// Prévu contre fait, rangé dans la ligne daily quand la séance est finie :
+// c'est la mesure de l'écart entre la prescription et la réalité (le 17/09,
+// décision « allégé, 8 séries », 12 séries faites).
+export const planPrevuFait = (plan, sessions, date) => {
+  const av = avancementPlan(plan, sessions, date);
+  if (!av.lignes.length) return null;
+  return { prevues: av.prevues, faites: av.faites, conforme: av.tousFinis && av.faites === av.prevues };
+};
+
+// Décision à écrire sur la ligne du jour quand le plan en porte une : rien si
+// le plan n'en a pas, rien si la décision en place a été saisie ou modifiée à
+// la main (par « moi »), rien si elle est déjà identique. Sinon la décision du
+// coach, marquée « coach ». C'est ce qui permet au coach de réécrire son plan
+// dans la journée sans jamais écraser un choix de Sylvain.
+export const decisionAEcrire = (sauvee, planDecision) => {
+  if (!planDecision?.d && !planDecision?.regle && !planDecision?.motif) return null;
+  const s = sauvee || {};
+  if (s.d !== undefined && s.par !== "coach") return null;
+  const p = { d: planDecision.d || "", regle: planDecision.regle || "", motif: planDecision.motif || "", par: "coach" };
+  if (s.d === p.d && (s.regle || "") === p.regle && (s.motif || "") === p.motif) return null;
+  return p;
+};
+
+// Ce que le plan apporte et qui manque encore : exercices inconnus à créer,
+// crans de charge à poser. Un pas déjà réglé n'est jamais écrasé — c'est
+// Sylvain qui a le dernier mot sur la machine qu'il a sous les yeux.
+export const manquesDuPlan = (plan, exercises = [], pas = {}) =>
+  (plan?.seance?.exercices || [])
+    .map((x) => ({ nom: x.nom, creer: !exercises.includes(x.nom), pas: x.pas > 0 && pas[x.nom] === undefined ? x.pas : 0 }))
+    .filter((x) => x.creer || x.pas > 0);
+
+// Écrit ce résumé sur la ligne daily de la date, comme poserDecision. Ne
+// modifie pas le tableau reçu.
+export const poserPlanFait = (daily, date, resume) => {
+  const out = daily.map((x) => ({ ...x }));
+  let x = out.find((y) => y.date === date);
+  if (!x) { x = { date }; out.push(x); out.sort((a, b) => a.date.localeCompare(b.date)); }
+  if (!resume) { delete x.plan; return Object.keys(x).length === 1 ? out.filter((y) => y !== x) : out; }
+  x.plan = { ...resume };
+  return out;
 };
 
 // ---- Décision du matin ----------------------------------------------------
@@ -382,6 +488,10 @@ export const poserDecision = (daily, date, dec) => {
   let x = out.find((y) => y.date === date);
   if (!x) { x = { date }; out.push(x); out.sort((a, b) => a.date.localeCompare(b.date)); }
   const propre = { d: dec?.d || "", regle: (dec?.regle || "").trim(), motif: (dec?.motif || "").trim() };
+  // Origine de la décision : « coach » si elle vient du plan et n'a pas été
+  // retouchée, « moi » dès que Sylvain l'a saisie ou modifiée, y compris pour
+  // revenir à la valeur du plan.
+  if (dec?.par) propre.par = dec.par;
   if (!propre.d && !propre.regle && !propre.motif) {
     delete x.decision;
     return Object.keys(x).length === 1 ? out.filter((y) => y !== x) : out;
@@ -420,7 +530,7 @@ export const recordE1rm = (sessions, exercise, jusqua) =>
 export const ligneJour = (data, date) => {
   const ss = data.sessions.filter((s) => s.date === date);
   const dec = (data.daily || []).find((d) => d.date === date)?.decision || {};
-  const l = { date, decision: dec.d ?? "", regle: dec.regle ?? "", motif: dec.motif ?? "", groupes: [...new Set(ss.map((s) => s.group))].join("+"), series: 0, tonnage: 0 };
+  const l = { date, decision: dec.d ?? "", regle: dec.regle ?? "", motif: dec.motif ?? "", decision_par: dec.par ?? "", groupes: [...new Set(ss.map((s) => s.group))].join("+"), series: 0, tonnage: 0 };
   GROUPS.forEach((g) => {
     const sg = ss.filter((s) => s.group === g);
     l[`series_${g}`] = sg.reduce((a, s) => a + s.sets.length, 0);
@@ -430,6 +540,7 @@ export const ligneJour = (data, date) => {
   const rpes = ss.filter((s) => s.rpe > 0).flatMap((s) => s.sets.map(() => s.rpe));
   l.rpe_moy = rpes.length ? +(rpes.reduce((a, b) => a + b, 0) / rpes.length).toFixed(1) : "";
   l.rpe_max = rpes.length ? Math.max(...rpes) : "";
+  l.rpe_auto = ss.filter((s) => s.rpeAuto).reduce((a, s) => a + s.sets.length, 0) || "";
   const meta = data.durations.find((x) => x.date === date) || {};
   l.fc_seance = meta.hr || ""; l.fc_max = meta.hrMax || "";
   const kcal = kcalSeance(data, date);
@@ -442,6 +553,8 @@ export const ligneJour = (data, date) => {
   l.nuit_fc_min = nuit.min ?? ""; l.nuit_fc_moy = nuit.moy ?? ""; l.nuit_fc_hmin = nuit.hMin ?? ""; l.nuit_n = nuit.n ?? ""; l.vfc = nuit.vfc ?? "";
   l.nuit_resp = nuit.resp ?? ""; l.nuit_spo2 = nuit.spo2 ?? ""; l.nuit_spo2_min = nuit.spo2Min ?? ""; l.nuit_temp = nuit.temp ?? ""; l.nuit_temp_ecart = ecartTemp(data.daily || [], date) ?? "";
   l.sommeil_min = nuit.dodo ?? "";
+  const pl = (data.daily || []).find((d) => d.date === date)?.plan || {};
+  l.plan_prevues = pl.prevues ?? ""; l.plan_faites = pl.faites ?? ""; l.plan_conforme = pl.conforme === undefined ? "" : pl.conforme;
   l.poids = data.weights.find((w) => w.date === date)?.kg ?? "";
   l.notes = ss.map((s) => s.note).filter(Boolean).join(" / ");
   return l;

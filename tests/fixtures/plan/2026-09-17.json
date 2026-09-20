@@ -1,0 +1,21 @@
+{
+  "date": "2026-09-17",
+  "v": 1,
+  "ecrit": "2026-09-17T08:12:00Z",
+  "decision": { "d": "allege", "regle": "R1", "motif": "sommeil 5 h 20" },
+  "nuit": "5 h 20, plancher 50 à 08:29, VFC 38.8.",
+  "seance": {
+    "groupe": "Dos",
+    "titre": "Dos — allégé",
+    "notion": "https://app.notion.com/p/exemple",
+    "exercices": [
+      { "nom": "Row", "series": 2, "reps": 10, "kg": 80, "note": "si la 1re sort à 9, stop l'exercice" },
+      { "nom": "PullDown", "series": 2, "reps": 12, "kg": 60 },
+      { "nom": "Tirage vertical serré", "series": 2, "reps": 12, "kg": 55 },
+      { "nom": "Hack squat", "series": 2, "reps": 10, "kg": 70, "pas": 5 }
+    ],
+    "echauffement": ["Row 40 × 10", "PullDown 30 × 12"],
+    "tapis": { "min": 10, "pente": 13, "kmh": 5.5 }
+  },
+  "points": ["Poulie haut du pec : pas au programme"]
+}

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile } from "./githubSync.js";
-import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, dailyAImporter, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp, repriseSeance, carnetValide, carnetVide } from "./calculs.js";
+import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile, pullPlanFile } from "./githubSync.js";
+import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, dailyAImporter, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp, repriseSeance, carnetValide, carnetVide, lirePlan, avancementPlan, seanceTerminee, planPrevuFait, poserPlanFait, decisionAEcrire, manquesDuPlan, RPE_DEFAUT } from "./calculs.js";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea,
 } from "recharts";
@@ -15,6 +15,12 @@ const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${pad(
 const uid = () => Math.random().toString(36).slice(2, 10);
 const fmtDate = (iso) => { const [y, m, d] = iso.split("-"); return `${d}/${m}/${y.slice(2)}`; };
 const DEFAULT_EXERCISES = ["Dev incliné", "Dev couché", "Chest press", "Dips", "PullDown", "Row", "Leg extension", "Leg Curl", "Leg press", "Shoulder press"];
+// Dernier plan lu, gardé pour la salle : l'API GitHub n'est jamais mise en
+// cache par le service worker (la synchro doit toujours voir la vraie version),
+// donc c'est ici qu'un plan déjà lu survit à une ouverture hors ligne.
+const PLAN_CACHE = "carnet-plan";
+// Date pour laquelle le bloc « Séance du jour » a été masqué à la main.
+const PLAN_MASQUE = "carnet-plan-masque";
 // Délai minimal entre deux relectures automatiques des relevés.
 const RELECTURE_MS = 2 * 60000;
 const EMPTY = { exercises: DEFAULT_EXERCISES, sessions: [], treadmill: [], weights: [], durations: [], daily: [], pas: {} };
@@ -147,6 +153,12 @@ export default function CarnetEntrainement() {
   const scroller = useRef(null);
   useEffect(() => { scroller.current?.scrollTo(0, 0); }, [tab]);
   const [toast, setToast] = useState("");
+  // Plan du jour : lu depuis le cache d'abord, pour que la salle sans réseau
+  // affiche quand même la séance prescrite.
+  const [plan, setPlan] = useState(() => {
+    try { const r = localStorage.getItem(PLAN_CACHE); const p = r ? lirePlan(JSON.parse(r)) : null; return p && p.date === todayISO() ? p : null; }
+    catch (e) { return null; }
+  });
   const [pr, setPr] = useState(null);
   const saveTimer = useRef(null);
 
@@ -211,6 +223,16 @@ export default function CarnetEntrainement() {
         schedulePush();
       }
     } catch (e) { setGhSync((g) => ({ ...g, status: "hors ligne" })); }
+  };
+
+  // --- plan du jour -------------------------------------------------------
+  const chargerPlan = async () => {
+    const jour = todayISO();
+    try {
+      const p = lirePlan(await pullPlanFile(jour));
+      setPlan(p && p.date === jour ? p : null);
+      try { if (p && p.date === jour) localStorage.setItem(PLAN_CACHE, JSON.stringify(p)); else localStorage.removeItem(PLAN_CACHE); } catch (e) { /* privé */ }
+    } catch (e) { /* hors ligne ou plan illisible : on garde ce qu'on a */ }
   };
 
   const notify = (msg) => { setToast(msg); setTimeout(() => setToast(""), 1800); };
@@ -327,12 +349,13 @@ export default function CarnetEntrainement() {
     if (!loaded || pulledOnce.current) return;
     pulledOnce.current = true;
     derniereRelecture.current = Date.now();
+    chargerPlan();
     doPull().finally(() => setTimeout(() => { importFc(); importDaily(); }, 1200)); // après l'éventuel adopt(), une fois dataRef à jour
   }, [loaded]);
   // Tout relire : le bouton « Synchroniser maintenant », le retour dans l'app et
   // le retour du réseau. Les relevés du matin tombent souvent pendant que l'app
   // est restée ouverte, et l'import ne se faisait qu'à l'ouverture.
-  const relireTout = () => { derniereRelecture.current = Date.now(); return doPull().finally(() => setTimeout(() => { importFc(); importDaily(); }, 1200)); };
+  const relireTout = () => { derniereRelecture.current = Date.now(); chargerPlan(); return doPull().finally(() => setTimeout(() => { importFc(); importDaily(); }, 1200)); };
   useEffect(() => {
     if (!loaded) return;
     const auRetour = () => { if (document.visibilityState === "visible" && Date.now() - derniereRelecture.current > RELECTURE_MS) relireTout(); };
@@ -428,7 +451,7 @@ export default function CarnetEntrainement() {
           </div>
           {hud.decision?.d && (
             <div className="mt-2 text-xs" style={{ fontFamily: mono, color: T.mute }}>
-              aujourd'hui : <span style={{ color: libDecision(hud.decision.d)[2] }}>{libDecision(hud.decision.d)[1]}</span>{hud.decision.regle ? ` · ${hud.decision.regle}` : ""}
+              aujourd'hui : <span style={{ color: libDecision(hud.decision.d)[2] }}>{libDecision(hud.decision.d)[1]}</span>{hud.decision.regle ? ` · ${hud.decision.regle}` : ""}{hud.decision.par ? ` · ${hud.decision.par}` : ""}
             </div>
           )}
           {hud.nuit && (
@@ -452,7 +475,7 @@ export default function CarnetEntrainement() {
         )}
         <main className="px-4 space-y-4" key={tab}>
           {!loaded && <Empty text="Initialisation…" />}
-          {loaded && tab === "seance" && <Seance data={data} update={update} notify={notify} celebrate={setPr} />}
+          {loaded && tab === "seance" && <Seance data={data} update={update} notify={notify} celebrate={setPr} plan={plan} />}
           {loaded && tab === "tapis" && <Tapis data={data} update={update} notify={notify} />}
           {loaded && tab === "poids" && <Poids data={data} update={update} notify={notify} />}
           {loaded && tab === "courbes" && <Courbes data={data} />}
@@ -510,18 +533,22 @@ function Verdict({ v, court }) {
     <span>
       <span style={{ color: style[0] }}>{style[1]} {v.cible} kg</span>
       <span style={{ color: T.mute }}> · {court ? "" : `${v.kg} kg le ${fmtDate(v.date)}, `}{v.rpes.length ? `RPE ${v.rpes.join(" / ")}` : v.motif}{v.rpes.length === 1 ? ` (${v.motif})` : ""}</span>
+      {v.rpeAuto && <span style={{ color: T.amber }}> · RPE non renseigné</span>}
     </span>
   );
 }
 
 // ================= Séance =================
-function Seance({ data, update, notify, celebrate }) {
+function Seance({ data, update, notify, celebrate, plan }) {
   const [date, setDate] = useState(todayISO());
   const [group, setGroup] = useState(GROUPS[0]);
   const [exercise, setExercise] = useState(data.exercises[0] || "");
   const [newEx, setNewEx] = useState("");
   const [sets, setSets] = useState([{ reps: "", kg: "" }]);
-  const [rpe, setRpe] = useState("");
+  const [rpe, setRpe] = useState(String(RPE_DEFAUT));
+  // Vrai dès que Sylvain touche au champ RPE, même pour y remettre 7 : une
+  // valeur choisie est une mesure, la valeur par défaut n'en est pas une.
+  const [rpeTouche, setRpeTouche] = useState(false);
   const [note, setNote] = useState("");
   const [pulse, setPulse] = useState(false);
   const fire = () => { setPulse(true); setTimeout(() => setPulse(false), 700); };
@@ -546,6 +573,40 @@ function Seance({ data, update, notify, celebrate }) {
   const cyclePas = () => update((d) => { const suite = { 2.5: 5, 5: 10, 10: 2.5 }; (d.pas ||= {})[exercise] = suite[pasDe(exercise)] || PAS_DEFAUT; return d; });
   const verdict = useMemo(() => verdictProgression(data.sessions, exercise, date, pasDe(exercise)), [data.sessions, data.pas, exercise, date]);
   const parGroupe = useMemo(() => seriesParGroupe(data.sessions, date), [data.sessions, date]);
+  // --- plan du jour -------------------------------------------------------
+  // Le plan ne vaut que pour sa date : si le formulaire est sur un autre jour,
+  // le bloc disparaît et la saisie reste celle d'avant.
+  const planDuJour = plan && plan.date === date ? plan : null;
+  const av = useMemo(() => avancementPlan(planDuJour, data.sessions, date), [planDuJour, data.sessions, date]);
+  const finie = useMemo(() => seanceTerminee(planDuJour, data.sessions, data.durations, date), [planDuJour, data.sessions, data.durations, date]);
+  const [masqueJour, setMasqueJour] = useState(() => { try { return localStorage.getItem(PLAN_MASQUE) || ""; } catch (e) { return ""; } });
+  const masquerPlan = () => { try { localStorage.setItem(PLAN_MASQUE, date); } catch (e) { /* privé */ } setMasqueJour(date); };
+  // Rien n'est jamais supprimé : le fichier reste la trace du prescrit, le bloc
+  // se contente de disparaître quand la séance est faite ou masquée à la main.
+  const planVisible = !!planDuJour && !finie && masqueJour !== date;
+
+  // Exercices et crans de charge annoncés par le plan : créés une fois, sans
+  // saisie. Un pas déjà réglé n'est pas écrasé.
+  const manques = JSON.stringify(manquesDuPlan(planDuJour, data.exercises, data.pas));
+  useEffect(() => {
+    const list = JSON.parse(manques);
+    if (!list.length) return;
+    update((d) => {
+      list.forEach(({ nom, creer, pas }) => {
+        if (creer && !d.exercises.includes(nom)) d.exercises.push(nom);
+        if (pas > 0 && d.pas?.[nom] === undefined) { (d.pas ||= {})[nom] = pas; }
+      });
+      return d;
+    });
+  }, [manques]);
+
+  // Groupe du plan tant qu'aucune série n'a été enregistrée ce jour-là ;
+  // ensuite, c'est la reprise qui commande (ce qui a réellement été saisi).
+  const groupePlan = planDuJour?.seance?.groupe || "";
+  useEffect(() => {
+    if (groupePlan && GROUPS.includes(groupePlan) && av.faites === 0) setGroup(groupePlan);
+  }, [groupePlan, av.faites]);
+
   // Décision du matin, telle que le coach l'a prise : rien n'est calculé ici,
   // l'app garde la trace dans l'entrée daily du jour courant (créée si besoin).
   // Toujours la date du jour au moment du clic, pas celle du formulaire : une
@@ -560,8 +621,27 @@ function Seance({ data, update, notify, celebrate }) {
   const cleSauvee = JSON.stringify(formeDecision(decisionSauvee));
   useEffect(() => { setDec(JSON.parse(cleSauvee)); }, [cleSauvee]);
   const decisionModifiee = JSON.stringify(dec) !== cleSauvee;
+  // La décision du plan s'écrit d'elle-même sur la ligne du jour, marquée
+  // « coach ». Dès que Sylvain l'a saisie ou modifiée, elle est marquée
+  // « moi » et une réécriture du plan ne la touche plus.
+  const decisionPlan = plan?.date === todayISO() && plan?.decision ? JSON.stringify(plan.decision) : "";
+  const aEcrire = JSON.stringify(decisionAEcrire(data.daily.find((x) => x.date === todayISO())?.decision, decisionPlan ? JSON.parse(decisionPlan) : null));
+  useEffect(() => {
+    const p = JSON.parse(aEcrire);
+    if (p) update((d) => { d.daily = poserDecision(d.daily, todayISO(), p); return d; });
+  }, [aEcrire]);
+
+  // Prévu contre fait, une fois la séance terminée.
+  useEffect(() => {
+    if (!planDuJour || !finie) return;
+    const resume = planPrevuFait(planDuJour, data.sessions, date);
+    const deja = data.daily.find((x) => x.date === date)?.plan;
+    if (!resume || (deja && deja.prevues === resume.prevues && deja.faites === resume.faites && deja.conforme === resume.conforme)) return;
+    update((d) => { d.daily = poserPlanFait(d.daily, date, resume); return d; });
+  }, [finie, planDuJour, data.sessions, data.daily, date]);
+
   const saveDecision = () => {
-    update((d) => { d.daily = poserDecision(d.daily, todayISO(), dec); return d; });
+    update((d) => { d.daily = poserDecision(d.daily, todayISO(), { ...dec, par: "moi" }); return d; });
     notify(dec.d || dec.regle || dec.motif ? "Décision enregistrée" : "Décision effacée");
   };
   const firePR = (candidates) => {
@@ -577,8 +657,9 @@ function Seance({ data, update, notify, celebrate }) {
     const clean = sets.filter((s) => num(s.reps) > 0).map((s) => ({ reps: num(s.reps), kg: num(s.kg) }));
     if (!exercise || clean.length === 0) { notify("Ajoute au moins une série valide"); return; }
     const candidate = { exercise, oldBest: bestFor(exercise), newBest: Math.max(...clean.map((x) => e1rm(x.kg, x.reps))) };
-    update((d) => { d.sessions.push({ id: uid(), date, group, exercise, sets: clean, rpe: rpe === "" ? null : num(rpe), note: note.trim(), at: Date.now() }); return d; });
-    setSets([{ reps: "", kg: "" }]); setRpe(""); setNote(""); fire(); notify("Exercice enregistré"); firePR([candidate]);
+    const auto = !rpeTouche && num(rpe) === RPE_DEFAUT;
+    update((d) => { d.sessions.push({ id: uid(), date, group, exercise, sets: clean, rpe: rpe === "" ? null : num(rpe), ...(auto ? { rpeAuto: true } : {}), note: note.trim(), at: Date.now() }); return d; });
+    setSets([{ reps: "", kg: "" }]); setRpe(String(RPE_DEFAUT)); setRpeTouche(false); setNote(""); fire(); notify("Exercice enregistré"); firePR([candidate]);
   };
 
   const todays = data.sessions.filter((s) => s.date === date);
@@ -623,7 +704,7 @@ function Seance({ data, update, notify, celebrate }) {
     todays.forEach((s) => {
       if (!map.has(s.exercise)) map.set(s.exercise, []);
       const pic = s.sets.length === 1 ? (meta.pics || []).find((q) => q.id === s.id)?.pic : null;
-      s.sets.forEach((x, setIdx) => map.get(s.exercise).push({ id: s.id, setIdx, kg: x.kg, reps: x.reps, rpe: s.rpe, pic, note: setIdx === 0 ? s.note : "" }));
+      s.sets.forEach((x, setIdx) => map.get(s.exercise).push({ id: s.id, setIdx, kg: x.kg, reps: x.reps, rpe: s.rpe, rpeAuto: !!s.rpeAuto, pic, note: setIdx === 0 ? s.note : "" }));
     });
     return [...map.entries()].map(([exercise, rows]) => ({
       exercise, rows,
@@ -663,6 +744,50 @@ function Seance({ data, update, notify, celebrate }) {
 
   return (
     <>
+      {planVisible && (
+        <Panel boot="boot-1" className="space-y-2">
+          <H right={planDuJour.seance?.groupe || ""}>{planDuJour.seance?.titre || "Séance du jour"}</H>
+          {planDuJour.nuit && <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>{planDuJour.nuit}</p>}
+          {planDuJour.seance?.notion && (
+            <a href={planDuJour.seance.notion} target="_blank" rel="noreferrer" className="block text-xs" style={{ color: T.cyan, fontFamily: mono }}>ouvrir dans Notion ↗</a>
+          )}
+          {planDuJour.seance?.echauffement?.length > 0 && (
+            <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>échauffement : {planDuJour.seance.echauffement.join(" · ")}</p>
+          )}
+          {av.lignes.length > 0 && (
+            <ul>
+              {av.lignes.map((x, i) => (
+                <li key={x.nom} className="row py-2 rise" style={{ animationDelay: `${i * 40}ms`, opacity: x.fini ? 0.55 : 1 }}>
+                  <div className="flex justify-between items-baseline gap-2">
+                    <div className="text-sm font-medium">
+                      <span style={{ color: x.fini ? T.cyan : T.mute, fontFamily: mono }}>{x.fini ? "✓" : "○"}</span> {x.nom}
+                    </div>
+                    <div className="text-xs whitespace-nowrap" style={{ color: T.mute, fontFamily: mono }}>
+                      {x.series > 0 && x.reps > 0 ? `${x.series} × ${x.reps}` : ""}{x.kg > 0 ? ` · ${x.kg} kg` : ""}
+                      {x.series > 0 && <span style={{ color: x.fini ? T.cyan : T.amber }}>  {x.faites}/{x.series}</span>}
+                    </div>
+                  </div>
+                  {x.note && <p className="text-xs mt-0.5" style={{ color: T.mute, fontFamily: mono }}>{x.note}</p>}
+                </li>
+              ))}
+            </ul>
+          )}
+          {planDuJour.seance?.tapis && (
+            <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>
+              tapis : {planDuJour.seance.tapis.min} min{planDuJour.seance.tapis.pente ? ` · pente ${planDuJour.seance.tapis.pente}` : ""}{planDuJour.seance.tapis.kmh ? ` · ${planDuJour.seance.tapis.kmh} km/h` : ""}
+            </p>
+          )}
+          {planDuJour.points.length > 0 && (
+            <ul className="text-xs space-y-1" style={{ color: T.amber, fontFamily: mono }}>
+              {planDuJour.points.map((x) => <li key={x}>▸ {x}</li>)}
+            </ul>
+          )}
+          <div className="flex justify-between items-baseline">
+            <span className="text-xs" style={{ color: T.mute, fontFamily: mono }}>{av.prevues > 0 ? `${av.faites} / ${av.prevues} séries` : ""}</span>
+            <Btn kind="quiet" small onClick={masquerPlan}>Masquer</Btn>
+          </div>
+        </Panel>
+      )}
       <Panel boot="boot-1" className="space-y-3">
         <div className="grid grid-cols-2 gap-3">
           <Field label="date"><input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="inp" /></Field>
@@ -734,7 +859,7 @@ function Seance({ data, update, notify, celebrate }) {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <Field label="rpe"><input type="number" inputMode="decimal" min="1" max="10" step="0.5" value={rpe} onChange={(e) => setRpe(e.target.value)} className="inp" /></Field>
+            <Field label={rpeTouche || num(rpe) !== RPE_DEFAUT ? "rpe" : "rpe (défaut)"}><input type="number" inputMode="decimal" min="1" max="10" step="0.5" value={rpe} onChange={(e) => { setRpeTouche(true); setRpe(e.target.value); }} className="inp" /></Field>
             <Field label="note"><input value={note} onChange={(e) => setNote(e.target.value)} className="inp" /></Field>
           </div>
         <Btn full onClick={save} pulse={pulse}>Enregistrer l'exercice</Btn>
@@ -819,7 +944,7 @@ function Seance({ data, update, notify, celebrate }) {
                   {g.rows.map((r, j) => (
                     <li key={`${r.id}-${r.setIdx}`} className="flex justify-between items-center gap-2">
                       <div className="text-xs" style={{ color: T.text, fontFamily: mono }}>
-                        <span style={{ color: T.cyan }}>{pad(j + 1)}</span>  {r.kg}×{r.reps}{r.rpe ? <span style={{ color: T.mute }}> · RPE {r.rpe}</span> : ""}
+                        <span style={{ color: T.cyan }}>{pad(j + 1)}</span>  {r.kg}×{r.reps}{r.rpe ? <span style={{ color: T.mute }}> · RPE {r.rpe}{r.rpeAuto ? "*" : ""}</span> : ""}
                         {r.pic ? <span style={{ color: T.danger }}> · FC ↑{r.pic}</span> : ""}
                         {r.note && <span className="italic" style={{ color: T.amber }}>  {r.note}</span>}
                       </div>
@@ -1320,10 +1445,10 @@ function Donnees({ data, setData, notify, sync, onToken, onTokenOff, onSync }) {
     const r = new FileReader(); r.onload = () => applyImport(r.result); r.readAsText(f);
   };
   const toCSV = () => {
-    const rows = [["type", "date", "groupe", "exercice", "serie", "kg", "reps", "rpe", "min", "km", "pente", "fc", "note"]];
-    data.sessions.forEach((s) => s.sets.forEach((x, i) => rows.push(["muscu", s.date, s.group || "", s.exercise, i + 1, x.kg, x.reps, s.rpe ?? "", "", "", "", "", s.note])));
-    data.treadmill.forEach((t) => rows.push(["tapis", t.date, "", "", "", "", "", "", t.min, t.km, t.slope, t.hr ?? "", t.note]));
-    data.weights.forEach((w) => rows.push(["poids", w.date, "", "", "", w.kg, "", "", "", "", "", "", ""]));
+    const rows = [["type", "date", "groupe", "exercice", "serie", "kg", "reps", "rpe", "rpe_auto", "min", "km", "pente", "fc", "note"]];
+    data.sessions.forEach((s) => s.sets.forEach((x, i) => rows.push(["muscu", s.date, s.group || "", s.exercise, i + 1, x.kg, x.reps, s.rpe ?? "", s.rpeAuto ? 1 : "", "", "", "", "", s.note])));
+    data.treadmill.forEach((t) => rows.push(["tapis", t.date, "", "", "", "", "", "", "", t.min, t.km, t.slope, t.hr ?? "", t.note]));
+    data.weights.forEach((w) => rows.push(["poids", w.date, "", "", "", w.kg, "", "", "", "", "", "", "", ""]));
     return rows.map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(";")).join("\n");
   };
   const importJSON = () => applyImport(imp);

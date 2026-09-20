@@ -29,6 +29,7 @@ surtout depuis un iPhone.
 | `tests/` | Tests `node:test` sur des copies figées de vrais fichiers (`tests/fixtures/`). |
 | `carnet-data.json` | Données de l'app, écrites par l'app elle-même. |
 | `daily/`, `fc/` | Fichiers déposés par les raccourcis iOS. |
+| `plan/` | Séance et décision du jour, écrites par le coach ; l'app ne fait que lire. |
 
 ## Données déposées par les raccourcis iOS
 
@@ -53,6 +54,22 @@ génération fiable), donc une évolution passe d'abord par l'app.
   décimale. Le fichier peut contenir un objet JSON dupliqué (`{…}{…}`) :
   `lireJson` lit le premier.
 - `daily-test/` : dépôts d'un raccourci en phase d'essai, non lus par l'app.
+
+## Le plan du jour, écrit par le coach
+
+`plan/AAAA-MM-JJ.json` est déposé par le coach (une session Claude distincte) :
+décision du matin, séance prescrite (exercices, séries, reps, charges, notes,
+échauffement, tapis), points d'attention. **Le coach en est le seul auteur :
+l'app ne doit jamais y écrire ni le supprimer**, pour qu'il n'y ait aucune
+course avec la synchro de `carnet-data.json` ni avec les raccourcis. Le fichier
+peut être réécrit plusieurs fois dans la journée ; l'app prend la dernière
+version, sans fusion. Tout est optionnel sauf `date`, un champ inconnu est
+ignoré, et un plan absent ou mal formé ne doit jamais empêcher la saisie à la
+main (`lirePlan`, `avancementPlan`, `seanceTerminee`, `planPrevuFait`).
+
+La décision venue du plan est écrite sur la ligne `daily` du jour avec
+`decision.par = "coach"` ; dès que Sylvain la saisit ou la modifie, elle passe à
+`"moi"` et une réécriture du plan ne l'écrase plus (`decisionAEcrire`).
 
 Chaque nuit est résumée une fois (`resumeNuit`) et le résumé est rangé dans
 `carnet-data.json` → `daily[]`, avec `v` (`NUIT_VERSION`) et `sha` (empreinte

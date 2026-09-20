@@ -1,0 +1,6237 @@
+{
+ "exercises": [
+  "Dev incliné",
+  "Poulie haut du pec",
+  "Dev couché",
+  "Chest press",
+  "Dips",
+  "PullDown",
+  "Tirage vertical serré",
+  "Row",
+  "Leg extension",
+  "Leg Curl",
+  "Leg press",
+  "Adducteurs",
+  "Tenseur du fascia lata",
+  "Haltères postérieur",
+  "Upper Back",
+  "Shoulder press",
+  "Poulies latérales",
+  "Poulies antérieures",
+  "Pulley",
+  "Poulie",
+  "Rotary Calf",
+  "Trapèzes",
+  "Incline chest press",
+  "Leg press 2",
+  "Haltères latérales",
+  "Hack squat"
+ ],
+ "sessions": [
+  {
+   "id": "cy34ncp1",
+   "date": "2025-03-18",
+   "exercise": "Dev incliné",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 5,
+     "kg": 90
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "w7abyv9b",
+   "date": "2025-03-18",
+   "exercise": "Poulie haut du pec",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 9,
+     "kg": 17.5
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "ym1pp75x",
+   "date": "2025-03-18",
+   "exercise": "Dev couché",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 3,
+     "kg": 100
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "l6ers0wu",
+   "date": "2025-03-18",
+   "exercise": "Chest press",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 3,
+     "kg": 85
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "pjt1hvfc",
+   "date": "2025-03-18",
+   "exercise": "Dips",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 5,
+     "kg": 180
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "gxf24uml",
+   "date": "2025-03-20",
+   "exercise": "PullDown",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 8,
+     "kg": 100
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "boaii2rk",
+   "date": "2025-03-20",
+   "exercise": "Tirage vertical serré",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 3,
+     "kg": 85
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "xgp0vcu7",
+   "date": "2025-03-20",
+   "exercise": "Row",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 7,
+     "kg": 160
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "b1cq4yvh",
+   "date": "2025-03-21",
+   "exercise": "Leg extension",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 55
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "7agoz8lv",
+   "date": "2025-03-21",
+   "exercise": "Leg Curl",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "n0cdg7z4",
+   "date": "2025-03-21",
+   "exercise": "Leg press",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 6,
+     "kg": 120
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "dpmksnrp",
+   "date": "2025-03-21",
+   "exercise": "Adducteurs",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 70
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "9fkxb3as",
+   "date": "2025-03-21",
+   "exercise": "Tenseur du fascia lata",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 70
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "juvj9yvy",
+   "date": "2025-03-25",
+   "exercise": "Haltères postérieur",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 22.5
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "4ylgikmy",
+   "date": "2025-03-25",
+   "exercise": "Upper Back",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 85
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "krxzx7h7",
+   "date": "2025-03-25",
+   "exercise": "Shoulder press",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 6,
+     "kg": 90
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "37la6hi3",
+   "date": "2025-03-25",
+   "exercise": "Poulies latérales",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 10
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "whor6xn0",
+   "date": "2025-03-25",
+   "exercise": "Poulies antérieures",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 12.5
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "kh7mz88o",
+   "date": "2025-03-30",
+   "exercise": "Dev incliné",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 2.5,
+     "kg": 100
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "cbh9uw73",
+   "date": "2025-03-30",
+   "exercise": "Poulie haut du pec",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 4,
+     "kg": 17.5
+    }
+   ],
+   "rpe": null,
+   "note": "mal au coude"
+  },
+  {
+   "id": "n0fe67ya",
+   "date": "2025-03-30",
+   "exercise": "Dev couché",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 2,
+     "kg": 100
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "dyb9yaoz",
+   "date": "2025-03-30",
+   "exercise": "Chest press",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 4,
+     "kg": 85
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "c9oxt8vb",
+   "date": "2025-03-30",
+   "exercise": "Dips",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 9,
+     "kg": 180
+    },
+    {
+     "reps": 4,
+     "kg": 190
+    },
+    {
+     "reps": 1.5,
+     "kg": 200
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "53t2hp33",
+   "date": "2025-03-31",
+   "exercise": "PullDown",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 100
+    },
+    {
+     "reps": 7.5,
+     "kg": 110
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "trucm7m8",
+   "date": "2025-03-31",
+   "exercise": "Tirage vertical serré",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 4,
+     "kg": 85
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "vxqfzjbj",
+   "date": "2025-03-31",
+   "exercise": "Row",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 9,
+     "kg": 180
+    },
+    {
+     "reps": 2.5,
+     "kg": 200
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "344pjkcu",
+   "date": "2025-03-31",
+   "exercise": "Pulley",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 55
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "u40zgtv2",
+   "date": "2025-03-31",
+   "exercise": "Poulie",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 27.5
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "fyhe9ai3",
+   "date": "2025-04-01",
+   "exercise": "Leg extension",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 9,
+     "kg": 70
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "svxdw5s3",
+   "date": "2025-04-01",
+   "exercise": "Leg Curl",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 55
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "4fxk4mri",
+   "date": "2025-04-01",
+   "exercise": "Leg press",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 7,
+     "kg": 120
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "90c7zlez",
+   "date": "2025-04-01",
+   "exercise": "Adducteurs",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 70
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "apxk3lp5",
+   "date": "2025-04-01",
+   "exercise": "Tenseur du fascia lata",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 70
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "6ks9htyx",
+   "date": "2025-04-01",
+   "exercise": "Rotary Calf",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 65
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "jyfk2c1a",
+   "date": "2025-04-03",
+   "exercise": "Haltères postérieur",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 25
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "u7n9xz3v",
+   "date": "2025-04-03",
+   "exercise": "Upper Back",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 9,
+     "kg": 90
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "urxj7so0",
+   "date": "2025-04-03",
+   "exercise": "Shoulder press",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 6,
+     "kg": 100
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "f7dtpwyy",
+   "date": "2025-04-03",
+   "exercise": "Poulies latérales",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 5,
+     "kg": 10
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "aayrf7da",
+   "date": "2025-04-03",
+   "exercise": "Poulies antérieures",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 15
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "71h8v5nm",
+   "date": "2025-04-04",
+   "exercise": "Dev incliné",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 6,
+     "kg": 90
+    },
+    {
+     "reps": 1.5,
+     "kg": 100
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "f88rxrh8",
+   "date": "2025-04-04",
+   "exercise": "Poulie haut du pec",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 10
+    }
+   ],
+   "rpe": null,
+   "note": "mal au coude"
+  },
+  {
+   "id": "udv7s3sh",
+   "date": "2025-04-04",
+   "exercise": "Dev couché",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 6,
+     "kg": 90
+    },
+    {
+     "reps": 2,
+     "kg": 100
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "7zbx5f39",
+   "date": "2025-04-04",
+   "exercise": "Chest press",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 3,
+     "kg": 85
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "z5yeedqx",
+   "date": "2025-04-04",
+   "exercise": "Dips",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 7,
+     "kg": 180
+    },
+    {
+     "reps": 4,
+     "kg": 190
+    },
+    {
+     "reps": 1.5,
+     "kg": 200
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "f2fusn7g",
+   "date": "2025-04-13",
+   "exercise": "Dev incliné",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 3,
+     "kg": 100
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "gdx50d3z",
+   "date": "2025-04-13",
+   "exercise": "Poulie haut du pec",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 15
+    }
+   ],
+   "rpe": null,
+   "note": "moins mal au coude"
+  },
+  {
+   "id": "pdjbfxrg",
+   "date": "2025-04-13",
+   "exercise": "Dev couché",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 3,
+     "kg": 100
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "6ff1bvw0",
+   "date": "2025-04-13",
+   "exercise": "Chest press",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 3,
+     "kg": 85
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "12j05yjh",
+   "date": "2025-04-15",
+   "exercise": "PullDown",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 100
+    },
+    {
+     "reps": 10,
+     "kg": 110
+    },
+    {
+     "reps": 5,
+     "kg": 120
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "brxcnk1n",
+   "date": "2025-04-15",
+   "exercise": "Tirage vertical serré",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 4,
+     "kg": 85
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "yvmml4te",
+   "date": "2025-04-15",
+   "exercise": "Row",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 9,
+     "kg": 180
+    },
+    {
+     "reps": 9,
+     "kg": 200
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "iv6urjsf",
+   "date": "2025-04-15",
+   "exercise": "Pulley",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 55
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "r2sjpljj",
+   "date": "2025-04-15",
+   "exercise": "Poulie",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 30
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "lba81wdk",
+   "date": "2025-04-15",
+   "exercise": "Trapèzes",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 17,
+     "kg": 50
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "k98pz1f6",
+   "date": "2025-04-16",
+   "exercise": "Leg extension",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 70
+    },
+    {
+     "reps": 10,
+     "kg": 72.5
+    },
+    {
+     "reps": 10,
+     "kg": 75
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "jn7ig9px",
+   "date": "2025-04-16",
+   "exercise": "Leg Curl",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 55
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "g77oq28f",
+   "date": "2025-04-16",
+   "exercise": "Leg press",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 160
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "w2f4udyw",
+   "date": "2025-04-16",
+   "exercise": "Adducteurs",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 70
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "7qnou2ex",
+   "date": "2025-04-16",
+   "exercise": "Rotary Calf",
+   "group": "Jambes",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 65
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "hn9gd4sw",
+   "date": "2025-04-19",
+   "exercise": "Haltères postérieur",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 25
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "c9gsujt9",
+   "date": "2025-04-19",
+   "exercise": "Upper Back",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 90
+    },
+    {
+     "reps": 7,
+     "kg": 95
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "09d5qdkz",
+   "date": "2025-04-19",
+   "exercise": "Shoulder press",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 7,
+     "kg": 100
+    },
+    {
+     "reps": 2,
+     "kg": 110
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "vbb21ht2",
+   "date": "2025-04-19",
+   "exercise": "Poulies latérales",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 10
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "r5wsywjo",
+   "date": "2025-04-19",
+   "exercise": "Poulies antérieures",
+   "group": "Épaules",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 15
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "af38t4oi",
+   "date": "2025-04-20",
+   "exercise": "Dev incliné",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 4,
+     "kg": 100
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "8ef6a7wa",
+   "date": "2025-04-20",
+   "exercise": "Poulie haut du pec",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 15
+    }
+   ],
+   "rpe": null,
+   "note": "moins mal au coude"
+  },
+  {
+   "id": "pqo5wbnp",
+   "date": "2025-04-20",
+   "exercise": "Dev couché",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 4.5,
+     "kg": 100
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "hidcerrp",
+   "date": "2025-04-20",
+   "exercise": "Chest press",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 3,
+     "kg": 90
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "s62jf3on",
+   "date": "2025-04-20",
+   "exercise": "Dips",
+   "group": "Pecs",
+   "sets": [
+    {
+     "reps": 9,
+     "kg": 180
+    },
+    {
+     "reps": 4,
+     "kg": 200
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "sm2oljp2",
+   "date": "2025-04-22",
+   "exercise": "PullDown",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 100
+    },
+    {
+     "reps": 10,
+     "kg": 110
+    },
+    {
+     "reps": 5,
+     "kg": 120
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "puw0x0il",
+   "date": "2025-04-22",
+   "exercise": "Tirage vertical serré",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 4,
+     "kg": 85
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "sj4dfy9u",
+   "date": "2025-04-22",
+   "exercise": "Row",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 9,
+     "kg": 180
+    },
+    {
+     "reps": 9,
+     "kg": 200
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "2xvtdog7",
+   "date": "2025-04-22",
+   "exercise": "Pulley",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 55
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "jz6nz118",
+   "date": "2025-04-22",
+   "exercise": "Poulie",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 30
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "o2fiyaxx",
+   "date": "2025-04-22",
+   "exercise": "Trapèzes",
+   "group": "Dos",
+   "sets": [
+    {
+     "reps": 17,
+     "kg": 50
+    }
+   ],
+   "rpe": null,
+   "note": ""
+  },
+  {
+   "id": "osal9gp4",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 40
+    }
+   ],
+   "rpe": 6,
+   "note": "Reprise"
+  },
+  {
+   "id": "biiqlbpi",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": ""
+  },
+  {
+   "id": "tzwkq4ye",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 60
+    }
+   ],
+   "rpe": 8,
+   "note": ""
+  },
+  {
+   "id": "5styby76",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 60
+    }
+   ],
+   "rpe": 9,
+   "note": ""
+  },
+  {
+   "id": "cta6l93y",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Incline chest press",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 40
+    }
+   ],
+   "rpe": 9,
+   "note": "Reprise"
+  },
+  {
+   "id": "kn797rdq",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Incline chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 40
+    }
+   ],
+   "rpe": 6,
+   "note": ""
+  },
+  {
+   "id": "quk0kfnc",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Incline chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 40
+    }
+   ],
+   "rpe": 7,
+   "note": ""
+  },
+  {
+   "id": "etwqcp4y",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "Reprise"
+  },
+  {
+   "id": "ayo2ldoh",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 6,
+   "note": ""
+  },
+  {
+   "id": "96mydsv4",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Chest press",
+   "sets": [
+    {
+     "reps": 11,
+     "kg": 50
+    }
+   ],
+   "rpe": 9,
+   "note": ""
+  },
+  {
+   "id": "vkiad08d",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 100
+    }
+   ],
+   "rpe": 8,
+   "note": ""
+  },
+  {
+   "id": "k2ur1k3c",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 100
+    }
+   ],
+   "rpe": 7,
+   "note": ""
+  },
+  {
+   "id": "7pmll2bh",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 120
+    }
+   ],
+   "rpe": 9,
+   "note": ""
+  },
+  {
+   "id": "s24t18vf",
+   "date": "2026-08-31",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 120
+    }
+   ],
+   "rpe": 9,
+   "note": ""
+  },
+  {
+   "id": "slp5ocju",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 30
+    }
+   ],
+   "rpe": 7,
+   "note": "Reprise",
+   "at": 1788249577277
+  },
+  {
+   "id": "tuumengg",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 40
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788249762508
+  },
+  {
+   "id": "3l16kz7d",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 50
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1788249982694
+  },
+  {
+   "id": "m4nh363w",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 60
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1788250260786
+  },
+  {
+   "id": "dqkno0i0",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "PullDown",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 40
+    }
+   ],
+   "rpe": 6,
+   "note": "Reprise",
+   "at": 1788250484543
+  },
+  {
+   "id": "rkb9pjgp",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "PullDown",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 50
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1788250689443
+  },
+  {
+   "id": "6f7y62lm",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "PullDown",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788250984611
+  },
+  {
+   "id": "yzh4oi86",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "PullDown",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 70
+    }
+   ],
+   "rpe": 9,
+   "note": "",
+   "at": 1788251285197
+  },
+  {
+   "id": "ul8ejm88",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 20
+    }
+   ],
+   "rpe": 6,
+   "note": "Reprise",
+   "at": 1788251441570
+  },
+  {
+   "id": "q3ym01ww",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 30
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1788251750907
+  },
+  {
+   "id": "of5ian2u",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 40
+    }
+   ],
+   "rpe": 10,
+   "note": "",
+   "at": 1788252005052
+  },
+  {
+   "id": "t38z1p6s",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 40
+    }
+   ],
+   "rpe": 10,
+   "note": "",
+   "at": 1788252341719
+  },
+  {
+   "id": "6y37m9g1",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 80
+    }
+   ],
+   "rpe": 6,
+   "note": "Reprise",
+   "at": 1788252560337
+  },
+  {
+   "id": "gwcn10ly",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 80
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1788252878820
+  },
+  {
+   "id": "bgph5lxh",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 80
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1788253247101
+  },
+  {
+   "id": "utxbsxuk",
+   "date": "2026-09-01",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 80
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788253777819
+  },
+  {
+   "id": "z3jk4086",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Leg extension",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 20
+    }
+   ],
+   "rpe": 5,
+   "note": "Reprise",
+   "at": 1788330766800
+  },
+  {
+   "id": "0oh8n1hn",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Leg extension",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 30
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1788330867690
+  },
+  {
+   "id": "8ygcczq2",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Leg extension",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 40
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788331041503
+  },
+  {
+   "id": "68ervucv",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Leg extension",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788331346383
+  },
+  {
+   "id": "904i8t7x",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Leg extension",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1788331550131
+  },
+  {
+   "id": "qj3lzyj7",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Leg Curl",
+   "sets": [
+    {
+     "reps": 30,
+     "kg": 20
+    }
+   ],
+   "rpe": 6,
+   "note": "Reprise",
+   "at": 1788331730754
+  },
+  {
+   "id": "4o97i7na",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Leg Curl",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 30
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788332034110
+  },
+  {
+   "id": "w4agtu5b",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Leg Curl",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 30
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788332296062
+  },
+  {
+   "id": "yb2m7no0",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Leg Curl",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 40
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788332648694
+  },
+  {
+   "id": "swntnntr",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Leg Curl",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 40
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1788332871094
+  },
+  {
+   "id": "7nr50x0v",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Leg press 2",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 40
+    }
+   ],
+   "rpe": 2,
+   "note": "",
+   "at": 1788333068664
+  },
+  {
+   "id": "0hhe4e1u",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Leg press 2",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 80
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1788333295253
+  },
+  {
+   "id": "omldudjw",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Leg press 2",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 80
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1788333575957
+  },
+  {
+   "id": "jpbdy9bg",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Leg press 2",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 100
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788333927505
+  },
+  {
+   "id": "i9xg0lmz",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Leg press 2",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 100
+    }
+   ],
+   "rpe": 4,
+   "note": "",
+   "at": 1788334146043
+  },
+  {
+   "id": "wr9uj97d",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Rotary Calf",
+   "sets": [
+    {
+     "reps": 30,
+     "kg": 25
+    }
+   ],
+   "rpe": 2,
+   "note": "Reprise",
+   "at": 1788334351132
+  },
+  {
+   "id": "xvaxlwgr",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Rotary Calf",
+   "sets": [
+    {
+     "reps": 30,
+     "kg": 35
+    }
+   ],
+   "rpe": 4,
+   "note": "",
+   "at": 1788334514536
+  },
+  {
+   "id": "8n07fsex",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Rotary Calf",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 45
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1788334700925
+  },
+  {
+   "id": "q12drbcb",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Rotary Calf",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 45
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1788335029528
+  },
+  {
+   "id": "bsyrbci6",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Rotary Calf",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 45
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1788335315864
+  },
+  {
+   "id": "pg95oe4c",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Adducteurs",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 35
+    }
+   ],
+   "rpe": 2,
+   "note": "",
+   "at": 1788335493558
+  },
+  {
+   "id": "s4mg80n6",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Adducteurs",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 35
+    }
+   ],
+   "rpe": 2,
+   "note": "",
+   "at": 1788335706017
+  },
+  {
+   "id": "rakr1go6",
+   "date": "2026-09-02",
+   "group": "Jambes",
+   "exercise": "Adducteurs",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 35
+    }
+   ],
+   "rpe": 2,
+   "note": "",
+   "at": 1788336001487
+  },
+  {
+   "id": "llvutckz",
+   "date": "2026-09-07",
+   "group": "Épaules",
+   "exercise": "Shoulder press",
+   "sets": [
+    {
+     "reps": 11,
+     "kg": 60
+    }
+   ],
+   "rpe": 10,
+   "note": "",
+   "at": 1788768421236
+  },
+  {
+   "id": "q1k47ay2",
+   "date": "2026-09-07",
+   "group": "Épaules",
+   "exercise": "Shoulder press",
+   "sets": [
+    {
+     "reps": 11,
+     "kg": 60
+    }
+   ],
+   "rpe": 10,
+   "note": "",
+   "at": 1788768643898
+  },
+  {
+   "id": "sqm8k76n",
+   "date": "2026-09-07",
+   "group": "Épaules",
+   "exercise": "Shoulder press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 60
+    }
+   ],
+   "rpe": 10,
+   "note": "",
+   "at": 1788768903796
+  },
+  {
+   "id": "70nduzor",
+   "date": "2026-09-07",
+   "group": "Épaules",
+   "exercise": "Upper Back",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788769425659
+  },
+  {
+   "id": "i6yttoeq",
+   "date": "2026-09-07",
+   "group": "Épaules",
+   "exercise": "Upper Back",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788769667082
+  },
+  {
+   "id": "iw4gcle5",
+   "date": "2026-09-07",
+   "group": "Épaules",
+   "exercise": "Upper Back",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788770018429
+  },
+  {
+   "id": "s6wmama8",
+   "date": "2026-09-07",
+   "group": "Épaules",
+   "exercise": "Poulies latérales",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 7.5
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1788770281325
+  },
+  {
+   "id": "89b8h58i",
+   "date": "2026-09-07",
+   "group": "Épaules",
+   "exercise": "Poulies latérales",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 7.5
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788770572038
+  },
+  {
+   "id": "l924inft",
+   "date": "2026-09-07",
+   "group": "Épaules",
+   "exercise": "Poulies latérales",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 7.5
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788770868389
+  },
+  {
+   "id": "o2tvsytq",
+   "date": "2026-09-07",
+   "group": "Épaules",
+   "exercise": "Haltères postérieur",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 15
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788771097662
+  },
+  {
+   "id": "4apdusg2",
+   "date": "2026-09-07",
+   "group": "Épaules",
+   "exercise": "Haltères postérieur",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 15
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788771329786
+  },
+  {
+   "id": "0zzq1n1x",
+   "date": "2026-09-07",
+   "group": "Épaules",
+   "exercise": "Haltères postérieur",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 15
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788771568423
+  },
+  {
+   "id": "rmkx9i7j",
+   "date": "2026-09-08",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788856059105
+  },
+  {
+   "id": "kvkj3bii",
+   "date": "2026-09-08",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788856436189
+  },
+  {
+   "id": "crcmuaiv",
+   "date": "2026-09-08",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788856842558
+  },
+  {
+   "id": "h77es52h",
+   "date": "2026-09-08",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 110
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788857311881
+  },
+  {
+   "id": "3uckbtqi",
+   "date": "2026-09-08",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 110
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788857637670
+  },
+  {
+   "id": "z4xer1j6",
+   "date": "2026-09-08",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 120
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1788858041653
+  },
+  {
+   "id": "d7fa4lmb",
+   "date": "2026-09-08",
+   "group": "Pecs",
+   "exercise": "Chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1788858371582
+  },
+  {
+   "id": "1l7mm6d9",
+   "date": "2026-09-08",
+   "group": "Pecs",
+   "exercise": "Chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1788858813222
+  },
+  {
+   "id": "3lzysz34",
+   "date": "2026-09-08",
+   "group": "Pecs",
+   "exercise": "Chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1788859177195
+  },
+  {
+   "id": "d8jxd3ax",
+   "date": "2026-09-08",
+   "group": "Pecs",
+   "exercise": "Incline chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 40
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788859517876
+  },
+  {
+   "id": "3t02cq4e",
+   "date": "2026-09-08",
+   "group": "Pecs",
+   "exercise": "Incline chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 40
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788860033503
+  },
+  {
+   "id": "3xhrcyex",
+   "date": "2026-09-08",
+   "group": "Pecs",
+   "exercise": "Incline chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 40
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1788860363734
+  },
+  {
+   "id": "zxyo3l5q",
+   "date": "2026-09-10",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 80
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789028561264
+  },
+  {
+   "id": "0e17s136",
+   "date": "2026-09-10",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 80
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789028771447
+  },
+  {
+   "id": "mymzxgbw",
+   "date": "2026-09-10",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 80
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789028978984
+  },
+  {
+   "id": "34dxfrvr",
+   "date": "2026-09-10",
+   "group": "Dos",
+   "exercise": "PullDown",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789029310220
+  },
+  {
+   "id": "ase03364",
+   "date": "2026-09-10",
+   "group": "Dos",
+   "exercise": "PullDown",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789029543182
+  },
+  {
+   "id": "w3xrgixj",
+   "date": "2026-09-10",
+   "group": "Dos",
+   "exercise": "PullDown",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789029725435
+  },
+  {
+   "id": "1oy0jzdk",
+   "date": "2026-09-10",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 35
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789030305718
+  },
+  {
+   "id": "3nqci3ug",
+   "date": "2026-09-10",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 35
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789030416256
+  },
+  {
+   "id": "ecper6in",
+   "date": "2026-09-10",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 35
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789030529172
+  },
+  {
+   "id": "ilgx82ws",
+   "date": "2026-09-10",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789030663679
+  },
+  {
+   "id": "gcj6i1hk",
+   "date": "2026-09-10",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789030953919
+  },
+  {
+   "id": "mvbvn35w",
+   "date": "2026-09-10",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789031186733
+  },
+  {
+   "id": "8cz7ij1n",
+   "date": "2026-09-12",
+   "group": "Jambes",
+   "exercise": "Leg press 2",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 110
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789197990923
+  },
+  {
+   "id": "3849v0mp",
+   "date": "2026-09-12",
+   "group": "Jambes",
+   "exercise": "Leg press 2",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 110
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789198189351
+  },
+  {
+   "id": "obac9k1a",
+   "date": "2026-09-12",
+   "group": "Jambes",
+   "exercise": "Leg press 2",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 110
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789198396142
+  },
+  {
+   "id": "863d15jg",
+   "date": "2026-09-12",
+   "group": "Jambes",
+   "exercise": "Leg extension",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789198902100
+  },
+  {
+   "id": "vc3byh1r",
+   "date": "2026-09-12",
+   "group": "Jambes",
+   "exercise": "Leg extension",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789199081275
+  },
+  {
+   "id": "f1qwoi8i",
+   "date": "2026-09-12",
+   "group": "Jambes",
+   "exercise": "Leg extension",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789199444833
+  },
+  {
+   "id": "4v9z8f33",
+   "date": "2026-09-12",
+   "group": "Jambes",
+   "exercise": "Leg Curl",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 40
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1789199743081
+  },
+  {
+   "id": "xow02n3o",
+   "date": "2026-09-12",
+   "group": "Jambes",
+   "exercise": "Leg Curl",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 45
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789199924609
+  },
+  {
+   "id": "o8mbm2by",
+   "date": "2026-09-12",
+   "group": "Jambes",
+   "exercise": "Leg Curl",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 45
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789200187421
+  },
+  {
+   "id": "ar7r0sv1",
+   "date": "2026-09-12",
+   "group": "Jambes",
+   "exercise": "Rotary Calf",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789200296552
+  },
+  {
+   "id": "gz6ijwwd",
+   "date": "2026-09-12",
+   "group": "Jambes",
+   "exercise": "Rotary Calf",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789200468607
+  },
+  {
+   "id": "4zjw5443",
+   "date": "2026-09-12",
+   "group": "Jambes",
+   "exercise": "Rotary Calf",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789200658218
+  },
+  {
+   "id": "a6n0tbc0",
+   "date": "2026-09-14",
+   "group": "Épaules",
+   "exercise": "Shoulder press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789374545234
+  },
+  {
+   "id": "dm9e3y0o",
+   "date": "2026-09-14",
+   "group": "Épaules",
+   "exercise": "Shoulder press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789374762889
+  },
+  {
+   "id": "nlxjotjf",
+   "date": "2026-09-14",
+   "group": "Épaules",
+   "exercise": "Shoulder press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789374932773
+  },
+  {
+   "id": "svqnk9qu",
+   "date": "2026-09-14",
+   "group": "Épaules",
+   "exercise": "Upper Back",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 65
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789375247717
+  },
+  {
+   "id": "29g9u82f",
+   "date": "2026-09-14",
+   "group": "Épaules",
+   "exercise": "Upper Back",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 65
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789375425636
+  },
+  {
+   "id": "isop9pc1",
+   "date": "2026-09-14",
+   "group": "Épaules",
+   "exercise": "Haltères latérales",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 10
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789375964761
+  },
+  {
+   "id": "n2szac5t",
+   "date": "2026-09-14",
+   "group": "Épaules",
+   "exercise": "Haltères latérales",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 10
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789376190129
+  },
+  {
+   "id": "6hd7uc73",
+   "date": "2026-09-14",
+   "group": "Épaules",
+   "exercise": "Haltères latérales",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 10
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789376385304
+  },
+  {
+   "id": "5rpzbyeo",
+   "date": "2026-09-14",
+   "group": "Épaules",
+   "exercise": "Haltères postérieur",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 17.5
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789376590465
+  },
+  {
+   "id": "w755atuu",
+   "date": "2026-09-14",
+   "group": "Épaules",
+   "exercise": "Haltères postérieur",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 17.5
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789376821058
+  },
+  {
+   "id": "8hco3aqw",
+   "date": "2026-09-14",
+   "group": "Épaules",
+   "exercise": "Haltères postérieur",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 17.5
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789377192905
+  },
+  {
+   "id": "daaorrca",
+   "date": "2026-09-14",
+   "group": "Épaules",
+   "exercise": "Upper Back",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 65
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789382390066
+  },
+  {
+   "id": "98lhe80c",
+   "date": "2026-09-15",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 65
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1789461274780
+  },
+  {
+   "id": "kfs4s420",
+   "date": "2026-09-15",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 65
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1789461502437
+  },
+  {
+   "id": "6vdi3evk",
+   "date": "2026-09-15",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 7,
+     "kg": 65
+    }
+   ],
+   "rpe": 10,
+   "note": "",
+   "at": 1789461823765
+  },
+  {
+   "id": "gp0ul96s",
+   "date": "2026-09-15",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 120
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1789462428956
+  },
+  {
+   "id": "rb2ss2ko",
+   "date": "2026-09-15",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 140
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1789462677767
+  },
+  {
+   "id": "049f3i77",
+   "date": "2026-09-15",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 140
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1789462976036
+  },
+  {
+   "id": "b2221vn0",
+   "date": "2026-09-15",
+   "group": "Pecs",
+   "exercise": "Incline chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 45
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789463239228
+  },
+  {
+   "id": "bx0m1xrx",
+   "date": "2026-09-15",
+   "group": "Pecs",
+   "exercise": "Incline chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 45
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789463457742
+  },
+  {
+   "id": "0sidkt58",
+   "date": "2026-09-15",
+   "group": "Pecs",
+   "exercise": "Incline chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 45
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789463712892
+  },
+  {
+   "id": "f2tp6wv9",
+   "date": "2026-09-15",
+   "group": "Pecs",
+   "exercise": "Chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789464141762
+  },
+  {
+   "id": "ulm3n9rt",
+   "date": "2026-09-15",
+   "group": "Pecs",
+   "exercise": "Chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789464389580
+  },
+  {
+   "id": "0lz0s2hy",
+   "date": "2026-09-15",
+   "group": "Pecs",
+   "exercise": "Chest press",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 50
+    }
+   ],
+   "rpe": 10,
+   "note": "",
+   "at": 1789464728715
+  },
+  {
+   "id": "88ft5u02",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 85
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1789631857420
+  },
+  {
+   "id": "igteecvp",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 85
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1789632001650
+  },
+  {
+   "id": "0zscos95",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 85
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1789632296008
+  },
+  {
+   "id": "di8l8wnr",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "PullDown",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1789632537129
+  },
+  {
+   "id": "ptu64uhv",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "PullDown",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1789632704162
+  },
+  {
+   "id": "siwz4emz",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "PullDown",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 65
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789632930425
+  },
+  {
+   "id": "w3jtizr2",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 55
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1789633209510
+  },
+  {
+   "id": "usa7olby",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789633449849
+  },
+  {
+   "id": "2z1rp38t",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789633718189
+  },
+  {
+   "id": "uec247ei",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 40
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789633995592
+  },
+  {
+   "id": "m6m8p5r9",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 40
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789634163466
+  },
+  {
+   "id": "ayyfbps7",
+   "date": "2026-09-17",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 40
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789634321396
+  },
+  {
+   "id": "vworhtcq",
+   "date": "2026-09-20",
+   "group": "Jambes",
+   "exercise": "Leg press 2",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 120
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789893329910
+  },
+  {
+   "id": "n7zpshro",
+   "date": "2026-09-20",
+   "group": "Jambes",
+   "exercise": "Leg press 2",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 120
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789893514160
+  },
+  {
+   "id": "0je10f8l",
+   "date": "2026-09-20",
+   "group": "Jambes",
+   "exercise": "Leg press 2",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 120
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789893702505
+  },
+  {
+   "id": "m9tbg03o",
+   "date": "2026-09-20",
+   "group": "Jambes",
+   "exercise": "Hack squat",
+   "sets": [
+    {
+     "reps": 5,
+     "kg": 40
+    }
+   ],
+   "rpe": 6,
+   "note": "Nouvelle machine",
+   "at": 1789894287539
+  },
+  {
+   "id": "iqol2sgm",
+   "date": "2026-09-20",
+   "group": "Jambes",
+   "exercise": "Hack squat",
+   "sets": [
+    {
+     "reps": 5,
+     "kg": 40
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1789894595744
+  },
+  {
+   "id": "l2ererf4",
+   "date": "2026-09-20",
+   "group": "Jambes",
+   "exercise": "Hack squat",
+   "sets": [
+    {
+     "reps": 5,
+     "kg": 40
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1789895051023
+  },
+  {
+   "id": "ogk3xvxi",
+   "date": "2026-09-20",
+   "group": "Jambes",
+   "exercise": "Leg extension",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 55
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789895276189
+  },
+  {
+   "id": "r3slhqgb",
+   "date": "2026-09-20",
+   "group": "Jambes",
+   "exercise": "Leg extension",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 55
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789895460869
+  },
+  {
+   "id": "20xyzofa",
+   "date": "2026-09-20",
+   "group": "Jambes",
+   "exercise": "Leg extension",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 55
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789895714477
+  },
+  {
+   "id": "yrfwo7hs",
+   "date": "2026-09-20",
+   "group": "Jambes",
+   "exercise": "Leg Curl",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789896045643
+  },
+  {
+   "id": "38s3asl7",
+   "date": "2026-09-20",
+   "group": "Jambes",
+   "exercise": "Leg Curl",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789896308403
+  },
+  {
+   "id": "3zl4eufc",
+   "date": "2026-09-20",
+   "group": "Jambes",
+   "exercise": "Leg Curl",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789896529571
+  }
+ ],
+ "treadmill": [
+  {
+   "id": "ads5w9v9",
+   "date": "2026-08-31",
+   "min": 15,
+   "km": 1.21,
+   "slope": 13,
+   "hr": 150,
+   "note": "Reprise"
+  },
+  {
+   "id": "yfykyghv",
+   "date": "2026-09-01",
+   "min": 15,
+   "km": 1.21,
+   "slope": 13,
+   "hr": 150,
+   "note": "Courbatures de la veille",
+   "at0": 1788254100000
+  },
+  {
+   "id": "8rmk2tlm",
+   "date": "2026-09-02",
+   "min": 17,
+   "km": 1.4,
+   "slope": 13,
+   "hr": 132,
+   "note": "",
+   "at0": 1788336186733
+  },
+  {
+   "id": "8rglmo6x",
+   "date": "2026-09-07",
+   "min": 15,
+   "km": 1.2,
+   "slope": 13,
+   "hr": 126,
+   "note": "",
+   "at0": 1788771709358
+  },
+  {
+   "id": "j2gcz33p",
+   "date": "2026-09-08",
+   "min": 15,
+   "km": 1.21,
+   "slope": 0,
+   "hr": 117,
+   "note": "",
+   "at0": 1788860527614
+  },
+  {
+   "id": "tm9vnbp6",
+   "date": "2026-09-10",
+   "min": 15,
+   "km": 1.26,
+   "slope": 13,
+   "hr": 125,
+   "note": "",
+   "at0": 1789031332277
+  },
+  {
+   "id": "jd35kgbq",
+   "date": "2026-09-12",
+   "min": 15,
+   "km": 1.36,
+   "slope": 13,
+   "hr": 126,
+   "note": "",
+   "at0": 1789200814565
+  },
+  {
+   "id": "l0pral0i",
+   "date": "2026-09-14",
+   "min": 15,
+   "km": 1.45,
+   "slope": 13,
+   "hr": 123,
+   "note": "",
+   "at0": 1789377359032
+  },
+  {
+   "id": "309cwkus",
+   "date": "2026-09-15",
+   "min": 15,
+   "km": 1.55,
+   "slope": 13,
+   "hr": 121,
+   "note": "",
+   "at0": 1789464885392
+  },
+  {
+   "id": "uwqrcxha",
+   "date": "2026-09-17",
+   "min": 15,
+   "km": 1.58,
+   "slope": 13,
+   "hr": 136,
+   "note": "",
+   "at0": 1789634429551
+  },
+  {
+   "id": "0fiurtjr",
+   "date": "2026-09-20",
+   "min": 15,
+   "km": 1.37,
+   "slope": 13,
+   "hr": 123,
+   "note": "",
+   "at0": 1789896718523
+  }
+ ],
+ "weights": [
+  {
+   "id": "rf6w4dc2",
+   "date": "2026-08-31",
+   "kg": 74.9
+  },
+  {
+   "id": "mx1kpe84",
+   "date": "2026-08-30",
+   "kg": 74.8
+  },
+  {
+   "id": "uhlo8exx",
+   "date": "2026-09-01",
+   "kg": 74.3
+  },
+  {
+   "id": "gclp3j6z",
+   "date": "2026-09-02",
+   "kg": 74.8
+  },
+  {
+   "id": "jpexzekb",
+   "date": "2026-09-07",
+   "kg": 75.2
+  },
+  {
+   "id": "oq5nax5b",
+   "date": "2026-09-11",
+   "kg": 74.3
+  },
+  {
+   "id": "j6tdxv83",
+   "date": "2026-09-15",
+   "kg": 75.1
+  },
+  {
+   "id": "wjijclvq",
+   "date": "2026-09-16",
+   "kg": 75
+  },
+  {
+   "id": "lygkz0it",
+   "date": "2026-09-17",
+   "kg": 74.4
+  },
+  {
+   "id": "43rp44zn",
+   "date": "2026-09-19",
+   "kg": 74.4
+  },
+  {
+   "id": "5j5qo7v4",
+   "date": "2026-09-20",
+   "kg": 74.4
+  }
+ ],
+ "durations": [
+  {
+   "date": "2026-08-31",
+   "min": 120
+  },
+  {
+   "date": "2026-09-01",
+   "hr": 108,
+   "hrMax": 151,
+   "ex": [
+    {
+     "n": "Tirage vertical serré",
+     "c": 149,
+     "hr": 97,
+     "hrMax": 118
+    },
+    {
+     "n": "PullDown",
+     "c": 190,
+     "hr": 100,
+     "hrMax": 124
+    },
+    {
+     "n": "Pulley",
+     "c": 212,
+     "hr": 99,
+     "hrMax": 129
+    },
+    {
+     "n": "Row",
+     "c": 277,
+     "hr": 103,
+     "hrMax": 148
+    }
+   ],
+   "pics": [
+    {
+     "id": "slp5ocju",
+     "pic": 110
+    },
+    {
+     "id": "tuumengg",
+     "pic": 118
+    },
+    {
+     "id": "3l16kz7d",
+     "pic": 113
+    },
+    {
+     "id": "m4nh363w",
+     "pic": 109
+    },
+    {
+     "id": "dqkno0i0",
+     "pic": 112
+    },
+    {
+     "id": "rkb9pjgp",
+     "pic": 113
+    },
+    {
+     "id": "6f7y62lm",
+     "pic": 113
+    },
+    {
+     "id": "yzh4oi86",
+     "pic": 124
+    },
+    {
+     "id": "ul8ejm88",
+     "pic": 129
+    },
+    {
+     "id": "q3ym01ww",
+     "pic": 128
+    },
+    {
+     "id": "of5ian2u",
+     "pic": 122
+    },
+    {
+     "id": "t38z1p6s",
+     "pic": 129
+    },
+    {
+     "id": "6y37m9g1",
+     "pic": 134
+    },
+    {
+     "id": "gwcn10ly",
+     "pic": 148
+    },
+    {
+     "id": "bgph5lxh",
+     "pic": 145
+    },
+    {
+     "id": "utxbsxuk",
+     "pic": 138
+    }
+   ],
+   "fc": {
+    "t0": 1788249450000,
+    "v": [
+     82,
+     97,
+     106,
+     103,
+     98,
+     99,
+     91,
+     94,
+     99,
+     114,
+     103,
+     99,
+     94,
+     93,
+     93,
+     90,
+     99,
+     109,
+     105,
+     99,
+     95,
+     91,
+     93,
+     92,
+     92,
+     93,
+     108,
+     108,
+     106,
+     96,
+     94,
+     95,
+     99,
+     110,
+     104,
+     99,
+     93,
+     93,
+     91,
+     93,
+     null,
+     112,
+     105,
+     102,
+     99,
+     100,
+     99,
+     96,
+     94,
+     96,
+     109,
+     116,
+     107,
+     102,
+     97,
+     95,
+     96,
+     95,
+     95,
+     90,
+     109,
+     119,
+     109,
+     99,
+     99,
+     123,
+     108,
+     101,
+     97,
+     94,
+     98,
+     93,
+     91,
+     90,
+     87,
+     102,
+     123,
+     109,
+     101,
+     96,
+     93,
+     95,
+     97,
+     91,
+     106,
+     110,
+     99,
+     91,
+     91,
+     92,
+     88,
+     88,
+     88,
+     90,
+     89,
+     106,
+     124,
+     114,
+     109,
+     104,
+     103,
+     106,
+     113,
+     128,
+     113,
+     96,
+     92,
+     94,
+     96,
+     92,
+     91,
+     91,
+     110,
+     139,
+     133,
+     110,
+     96,
+     95,
+     95,
+     93,
+     89,
+     89,
+     88,
+     90,
+     123,
+     139,
+     130,
+     117,
+     111,
+     101,
+     97,
+     97,
+     95,
+     97,
+     98,
+     92,
+     95,
+     94,
+     92,
+     93,
+     89,
+     93,
+     103,
+     129,
+     131,
+     117,
+     114,
+     113,
+     113,
+     106,
+     104,
+     109,
+     105,
+     111,
+     119,
+     125,
+     132,
+     136,
+     139,
+     141,
+     140,
+     144,
+     142,
+     143,
+     144,
+     144,
+     144,
+     141,
+     131,
+     123,
+     121,
+     128,
+     134,
+     140,
+     142,
+     141,
+     142,
+     144,
+     147,
+     148,
+     148,
+     149,
+     150,
+     149,
+     150
+    ]
+   }
+  },
+  {
+   "date": "2026-09-02",
+   "hr": 97,
+   "hrMax": 145,
+   "ex": [
+    {
+     "n": "Leg extension",
+     "c": 159,
+     "hr": 85,
+     "hrMax": 100
+    },
+    {
+     "n": "Leg Curl",
+     "c": 244,
+     "hr": 86,
+     "hrMax": 99
+    },
+    {
+     "n": "Leg press 2",
+     "c": 240,
+     "hr": 92,
+     "hrMax": 112
+    },
+    {
+     "n": "Rotary Calf",
+     "c": 231,
+     "hr": 92,
+     "hrMax": 115
+    },
+    {
+     "n": "Adducteurs",
+     "c": 131,
+     "hr": 90,
+     "hrMax": 109
+    }
+   ],
+   "pics": [
+    {
+     "id": "z3jk4086",
+     "pic": 96
+    },
+    {
+     "id": "0oh8n1hn",
+     "pic": 100
+    },
+    {
+     "id": "8ygcczq2",
+     "pic": 95
+    },
+    {
+     "id": "68ervucv",
+     "pic": 91
+    },
+    {
+     "id": "904i8t7x",
+     "pic": 99
+    },
+    {
+     "id": "qj3lzyj7",
+     "pic": 98
+    },
+    {
+     "id": "4o97i7na",
+     "pic": 95
+    },
+    {
+     "id": "w4agtu5b",
+     "pic": 97
+    },
+    {
+     "id": "yb2m7no0",
+     "pic": 99
+    },
+    {
+     "id": "swntnntr",
+     "pic": 99
+    },
+    {
+     "id": "7nr50x0v",
+     "pic": 98
+    },
+    {
+     "id": "0hhe4e1u",
+     "pic": 112
+    },
+    {
+     "id": "omldudjw",
+     "pic": 111
+    },
+    {
+     "id": "jpbdy9bg",
+     "pic": 109
+    },
+    {
+     "id": "i9xg0lmz",
+     "pic": 111
+    },
+    {
+     "id": "wr9uj97d",
+     "pic": 115
+    },
+    {
+     "id": "xvaxlwgr",
+     "pic": 101
+    },
+    {
+     "id": "8n07fsex",
+     "pic": 106
+    },
+    {
+     "id": "q12drbcb",
+     "pic": 108
+    },
+    {
+     "id": "bsyrbci6",
+     "pic": 105
+    },
+    {
+     "id": "pg95oe4c",
+     "pic": 109
+    },
+    {
+     "id": "s4mg80n6",
+     "pic": 98
+    },
+    {
+     "id": "rakr1go6",
+     "pic": 99
+    }
+   ],
+   "fc": {
+    "t0": 1788330600000,
+    "v": [
+     89,
+     90,
+     91,
+     91,
+     80,
+     77,
+     86,
+     83,
+     97,
+     86,
+     94,
+     83,
+     79,
+     84,
+     89,
+     88,
+     82,
+     82,
+     80,
+     81,
+     80,
+     83,
+     81,
+     82,
+     89,
+     91,
+     88,
+     80,
+     83,
+     81,
+     83,
+     96,
+     95,
+     95,
+     92,
+     94,
+     97,
+     88,
+     87,
+     83,
+     83,
+     81,
+     83,
+     81,
+     80,
+     89,
+     93,
+     85,
+     81,
+     88,
+     91,
+     86,
+     85,
+     85,
+     87,
+     91,
+     90,
+     86,
+     82,
+     82,
+     79,
+     81,
+     80,
+     79,
+     79,
+     74,
+     80,
+     92,
+     93,
+     86,
+     83,
+     88,
+     83,
+     78,
+     89,
+     96,
+     93,
+     93,
+     94,
+     93,
+     95,
+     97,
+     94,
+     98,
+     101,
+     95,
+     87,
+     84,
+     92,
+     106,
+     98,
+     92,
+     83,
+     83,
+     81,
+     78,
+     78,
+     98,
+     106,
+     99,
+     102,
+     101,
+     92,
+     91,
+     92,
+     92,
+     88,
+     86,
+     85,
+     92,
+     105,
+     100,
+     91,
+     87,
+     85,
+     86,
+     83,
+     98,
+     102,
+     110,
+     106,
+     112,
+     100,
+     100,
+     97,
+     90,
+     91,
+     83,
+     87,
+     97,
+     98,
+     98,
+     93,
+     86,
+     85,
+     88,
+     105,
+     103,
+     89,
+     86,
+     87,
+     86,
+     81,
+     86,
+     85,
+     80,
+     89,
+     106,
+     101,
+     93,
+     85,
+     81,
+     83,
+     86,
+     86,
+     80,
+     92,
+     null,
+     105,
+     97,
+     94,
+     96,
+     95,
+     87,
+     85,
+     87,
+     84,
+     85,
+     93,
+     96,
+     94,
+     92,
+     89,
+     85,
+     89,
+     85,
+     82,
+     82,
+     90,
+     96,
+     96,
+     107,
+     103,
+     97,
+     105,
+     115,
+     103,
+     99,
+     110,
+     117,
+     122,
+     126,
+     128,
+     133,
+     131,
+     134,
+     133,
+     131,
+     131,
+     133,
+     134,
+     137,
+     137,
+     135,
+     134,
+     135,
+     136,
+     136,
+     139,
+     137,
+     138,
+     138,
+     140,
+     139,
+     140,
+     141,
+     143,
+     142,
+     143,
+     142,
+     145
+    ]
+   }
+  },
+  {
+   "date": "2026-09-07",
+   "hr": 97,
+   "hrMax": 139,
+   "ex": [
+    {
+     "n": "Shoulder press",
+     "c": 128,
+     "hr": 83,
+     "hrMax": 103
+    },
+    {
+     "n": "Upper Back",
+     "c": 207,
+     "hr": 86,
+     "hrMax": 114
+    },
+    {
+     "n": "Poulies latérales",
+     "c": 130,
+     "hr": 92,
+     "hrMax": 110
+    },
+    {
+     "n": "Haltères postérieur",
+     "c": 127,
+     "hr": 95,
+     "hrMax": 124
+    }
+   ],
+   "pics": [
+    {
+     "id": "llvutckz",
+     "pic": 100
+    },
+    {
+     "id": "q1k47ay2",
+     "pic": 99
+    },
+    {
+     "id": "sqm8k76n",
+     "pic": 103
+    },
+    {
+     "id": "70nduzor",
+     "pic": 103
+    },
+    {
+     "id": "i6yttoeq",
+     "pic": 114
+    },
+    {
+     "id": "iw4gcle5",
+     "pic": 104
+    },
+    {
+     "id": "s6wmama8",
+     "pic": 108
+    },
+    {
+     "id": "89b8h58i",
+     "pic": 103
+    },
+    {
+     "id": "l924inft",
+     "pic": 110
+    },
+    {
+     "id": "o2tvsytq",
+     "pic": 105
+    },
+    {
+     "id": "4apdusg2",
+     "pic": 118
+    },
+    {
+     "id": "0zzq1n1x",
+     "pic": 124
+    }
+   ],
+   "fc": {
+    "t0": 1788768240000,
+    "v": [
+     91,
+     86,
+     86,
+     81,
+     77,
+     95,
+     93,
+     85,
+     84,
+     80,
+     76,
+     77,
+     82,
+     93,
+     86,
+     82,
+     80,
+     79,
+     76,
+     74,
+     78,
+     97,
+     90,
+     96,
+     94,
+     90,
+     84,
+     86,
+     90,
+     88,
+     89,
+     96,
+     85,
+     82,
+     77,
+     77,
+     79,
+     77,
+     79,
+     96,
+     96,
+     85,
+     83,
+     77,
+     79,
+     75,
+     78,
+     108,
+     96,
+     96,
+     95,
+     92,
+     87,
+     79,
+     81,
+     80,
+     79,
+     79,
+     90,
+     100,
+     98,
+     93,
+     94,
+     92,
+     84,
+     86,
+     95,
+     107,
+     100,
+     96,
+     91,
+     91,
+     91,
+     92,
+     94,
+     95,
+     null,
+     null,
+     null,
+     85,
+     85,
+     86,
+     87,
+     83,
+     84,
+     90,
+     null,
+     106,
+     98,
+     100,
+     99,
+     90,
+     86,
+     85,
+     89,
+     106,
+     103,
+     90,
+     87,
+     87,
+     87,
+     88,
+     111,
+     111,
+     102,
+     98,
+     91,
+     89,
+     89,
+     93,
+     119,
+     113,
+     104,
+     100,
+     93,
+     100,
+     95,
+     104,
+     113,
+     111,
+     116,
+     119,
+     124,
+     127,
+     127,
+     128,
+     130,
+     128,
+     126,
+     128,
+     127,
+     128,
+     129,
+     128,
+     130,
+     131,
+     132,
+     134,
+     135,
+     135,
+     134,
+     134,
+     135,
+     137,
+     138,
+     137
+    ]
+   }
+  },
+  {
+   "date": "2026-09-08",
+   "hr": 93,
+   "hrMax": 130,
+   "ex": [
+    {
+     "n": "Dev incliné",
+     "c": 183,
+     "hr": 83,
+     "hrMax": 110
+    },
+    {
+     "n": "Dips",
+     "c": 228,
+     "hr": 93,
+     "hrMax": 112
+    },
+    {
+     "n": "Chest press",
+     "c": 213,
+     "hr": 88,
+     "hrMax": 102
+    },
+    {
+     "n": "Incline chest press",
+     "c": 229,
+     "hr": 85,
+     "hrMax": 99
+    }
+   ],
+   "pics": [
+    {
+     "id": "rmkx9i7j",
+     "pic": 100
+    },
+    {
+     "id": "kvkj3bii",
+     "pic": 110
+    },
+    {
+     "id": "crcmuaiv",
+     "pic": 104
+    },
+    {
+     "id": "h77es52h",
+     "pic": 112
+    },
+    {
+     "id": "3uckbtqi",
+     "pic": 106
+    },
+    {
+     "id": "z4xer1j6",
+     "pic": 102
+    },
+    {
+     "id": "d7fa4lmb",
+     "pic": 100
+    },
+    {
+     "id": "1l7mm6d9",
+     "pic": 100
+    },
+    {
+     "id": "3lzysz34",
+     "pic": 102
+    },
+    {
+     "id": "d8jxd3ax",
+     "pic": 99
+    },
+    {
+     "id": "3t02cq4e",
+     "pic": 95
+    },
+    {
+     "id": "3xhrcyex",
+     "pic": 95
+    }
+   ],
+   "fc": {
+    "t0": 1788855870000,
+    "v": [
+     88,
+     88,
+     85,
+     85,
+     100,
+     96,
+     90,
+     90,
+     84,
+     85,
+     80,
+     80,
+     77,
+     79,
+     77,
+     77,
+     83,
+     83,
+     103,
+     92,
+     89,
+     85,
+     84,
+     83,
+     79,
+     80,
+     80,
+     78,
+     78,
+     79,
+     74,
+     82,
+     96,
+     102,
+     98,
+     99,
+     100,
+     94,
+     91,
+     87,
+     105,
+     107,
+     102,
+     99,
+     100,
+     89,
+     85,
+     99,
+     101,
+     100,
+     88,
+     89,
+     90,
+     92,
+     90,
+     88,
+     88,
+     87,
+     106,
+     101,
+     98,
+     93,
+     86,
+     88,
+     90,
+     91,
+     90,
+     91,
+     91,
+     90,
+     88,
+     84,
+     100,
+     98,
+     98,
+     94,
+     91,
+     91,
+     82,
+     82,
+     83,
+     83,
+     null,
+     98,
+     98,
+     91,
+     96,
+     93,
+     91,
+     91,
+     89,
+     88,
+     90,
+     90,
+     91,
+     91,
+     89,
+     87,
+     94,
+     91,
+     84,
+     83,
+     77,
+     78,
+     78,
+     80,
+     81,
+     86,
+     82,
+     80,
+     94,
+     93,
+     97,
+     97,
+     87,
+     86,
+     86,
+     83,
+     82,
+     79,
+     80,
+     90,
+     88,
+     88,
+     85,
+     84,
+     84,
+     81,
+     80,
+     81,
+     81,
+     82,
+     82,
+     81,
+     83,
+     87,
+     86,
+     85,
+     88,
+     92,
+     89,
+     84,
+     85,
+     84,
+     85,
+     85,
+     82,
+     82,
+     84,
+     92,
+     92,
+     93,
+     91,
+     92,
+     97,
+     92,
+     87,
+     100,
+     105,
+     110,
+     113,
+     112,
+     113,
+     113,
+     115,
+     117,
+     119,
+     118,
+     121,
+     117,
+     117,
+     119,
+     119,
+     123,
+     124,
+     124,
+     124,
+     124,
+     122,
+     124,
+     126,
+     126,
+     129,
+     130,
+     129,
+     128
+    ]
+   }
+  },
+  {
+   "date": "2026-09-10",
+   "hr": 99,
+   "hrMax": 136,
+   "ex": [
+    {
+     "n": "Row",
+     "c": 108,
+     "hr": 96,
+     "hrMax": 123
+    },
+    {
+     "n": "PullDown",
+     "c": 142,
+     "hr": 92,
+     "hrMax": 115
+    },
+    {
+     "n": "Pulley",
+     "c": 160,
+     "hr": 81,
+     "hrMax": 105
+    },
+    {
+     "n": "Tirage vertical serré",
+     "c": 106,
+     "hr": 93,
+     "hrMax": 115
+    }
+   ],
+   "pics": [
+    {
+     "id": "zxyo3l5q",
+     "pic": 115
+    },
+    {
+     "id": "0e17s136",
+     "pic": 123
+    },
+    {
+     "id": "mymzxgbw",
+     "pic": 121
+    },
+    {
+     "id": "34dxfrvr",
+     "pic": 115
+    },
+    {
+     "id": "ase03364",
+     "pic": 105
+    },
+    {
+     "id": "w3xrgixj",
+     "pic": 104
+    },
+    {
+     "id": "1oy0jzdk",
+     "pic": 105
+    },
+    {
+     "id": "3nqci3ug",
+     "pic": 101
+    },
+    {
+     "id": "ecper6in",
+     "pic": 97
+    },
+    {
+     "id": "ilgx82ws",
+     "pic": 115
+    },
+    {
+     "id": "gcj6i1hk",
+     "pic": 104
+    },
+    {
+     "id": "mvbvn35w",
+     "pic": 113
+    }
+   ],
+   "fc": {
+    "t0": 1789028370000,
+    "v": [
+     100,
+     96,
+     99,
+     94,
+     90,
+     99,
+     110,
+     102,
+     93,
+     90,
+     90,
+     94,
+     116,
+     112,
+     103,
+     95,
+     87,
+     84,
+     86,
+     99,
+     112,
+     103,
+     102,
+     92,
+     87,
+     92,
+     99,
+     92,
+     85,
+     84,
+     92,
+     98,
+     97,
+     92,
+     88,
+     87,
+     86,
+     85,
+     97,
+     99,
+     91,
+     88,
+     86,
+     87,
+     96,
+     99,
+     92,
+     83,
+     79,
+     77,
+     77,
+     78,
+     75,
+     74,
+     75,
+     72,
+     75,
+     71,
+     74,
+     77,
+     76,
+     77,
+     79,
+     84,
+     93,
+     87,
+     82,
+     87,
+     89,
+     87,
+     79,
+     88,
+     94,
+     94,
+     90,
+     100,
+     105,
+     100,
+     94,
+     88,
+     89,
+     81,
+     81,
+     85,
+     87,
+     102,
+     104,
+     101,
+     null,
+     null,
+     96,
+     93,
+     88,
+     107,
+     101,
+     95,
+     95,
+     95,
+     102,
+     97,
+     101,
+     108,
+     115,
+     125,
+     128,
+     129,
+     129,
+     130,
+     134,
+     136,
+     134,
+     133,
+     128,
+     131,
+     123,
+     113,
+     114,
+     122,
+     127,
+     126,
+     132,
+     131,
+     130,
+     129,
+     130,
+     132,
+     131,
+     133,
+     135
+    ]
+   }
+  },
+  {
+   "date": "2026-09-12",
+   "hr": 104,
+   "hrMax": 136,
+   "ex": [
+    {
+     "n": "Leg press 2",
+     "c": 112,
+     "hr": 93,
+     "hrMax": 125
+    },
+    {
+     "n": "Leg extension",
+     "c": 204,
+     "hr": 99,
+     "hrMax": 122
+    },
+    {
+     "n": "Leg Curl",
+     "c": 146,
+     "hr": 99,
+     "hrMax": 114
+    },
+    {
+     "n": "Rotary Calf",
+     "c": 94,
+     "hr": 95,
+     "hrMax": 115
+    }
+   ],
+   "pics": [
+    {
+     "id": "8cz7ij1n",
+     "pic": 107
+    },
+    {
+     "id": "3849v0mp",
+     "pic": 115
+    },
+    {
+     "id": "obac9k1a",
+     "pic": 125
+    },
+    {
+     "id": "863d15jg",
+     "pic": 122
+    },
+    {
+     "id": "vc3byh1r",
+     "pic": 115
+    },
+    {
+     "id": "f1qwoi8i",
+     "pic": 116
+    },
+    {
+     "id": "4v9z8f33",
+     "pic": 111
+    },
+    {
+     "id": "xow02n3o",
+     "pic": 105
+    },
+    {
+     "id": "o8mbm2by",
+     "pic": 114
+    },
+    {
+     "id": "ar7r0sv1",
+     "pic": 105
+    },
+    {
+     "id": "gz6ijwwd",
+     "pic": 115
+    },
+    {
+     "id": "4zjw5443",
+     "pic": 113
+    }
+   ],
+   "fc": {
+    "t0": 1789197810000,
+    "v": [
+     103,
+     106,
+     103,
+     96,
+     89,
+     95,
+     106,
+     88,
+     82,
+     81,
+     80,
+     107,
+     101,
+     94,
+     88,
+     83,
+     86,
+     86,
+     87,
+     114,
+     110,
+     113,
+     116,
+     117,
+     114,
+     105,
+     104,
+     104,
+     103,
+     98,
+     96,
+     106,
+     92,
+     85,
+     83,
+     89,
+     109,
+     101,
+     91,
+     85,
+     88,
+     95,
+     110,
+     104,
+     98,
+     94,
+     89,
+     92,
+     94,
+     93,
+     null,
+     92,
+     93,
+     92,
+     113,
+     111,
+     108,
+     99,
+     95,
+     89,
+     86,
+     89,
+     93,
+     103,
+     96,
+     95,
+     92,
+     89,
+     90,
+     93,
+     103,
+     104,
+     111,
+     112,
+     110,
+     97,
+     96,
+     98,
+     102,
+     104,
+     101,
+     100,
+     104,
+     99,
+     91,
+     86,
+     87,
+     88,
+     111,
+     96,
+     89,
+     86,
+     88,
+     87,
+     104,
+     105,
+     108,
+     107,
+     104,
+     113,
+     108,
+     107,
+     111,
+     117,
+     119,
+     124,
+     132,
+     133,
+     132,
+     130,
+     131,
+     133,
+     133,
+     133,
+     134,
+     127,
+     124,
+     115,
+     112,
+     116,
+     122,
+     127,
+     129,
+     133,
+     132,
+     130,
+     131,
+     134,
+     134,
+     133,
+     134
+    ]
+   }
+  },
+  {
+   "date": "2026-09-14",
+   "hr": 97,
+   "hrMax": 135,
+   "ex": [
+    {
+     "n": "Shoulder press",
+     "c": 109,
+     "hr": 81,
+     "hrMax": 103
+    },
+    {
+     "n": "Upper Back",
+     "c": 127,
+     "hr": 87,
+     "hrMax": 109
+    },
+    {
+     "n": "Haltères latérales",
+     "c": 124,
+     "hr": 89,
+     "hrMax": 108
+    },
+    {
+     "n": "Haltères postérieur",
+     "c": 154,
+     "hr": 92,
+     "hrMax": 123
+    }
+   ],
+   "pics": [
+    {
+     "id": "a6n0tbc0",
+     "pic": 103
+    },
+    {
+     "id": "dm9e3y0o",
+     "pic": 95
+    },
+    {
+     "id": "nlxjotjf",
+     "pic": 98
+    },
+    {
+     "id": "svqnk9qu",
+     "pic": 108
+    },
+    {
+     "id": "29g9u82f",
+     "pic": 103
+    },
+    {
+     "id": "jebgmf70",
+     "pic": 109
+    },
+    {
+     "id": "isop9pc1",
+     "pic": 108
+    },
+    {
+     "id": "n2szac5t",
+     "pic": 106
+    },
+    {
+     "id": "6hd7uc73",
+     "pic": 102
+    },
+    {
+     "id": "5rpzbyeo",
+     "pic": 123
+    },
+    {
+     "id": "w755atuu",
+     "pic": 123
+    },
+    {
+     "id": "8hco3aqw",
+     "pic": 117
+    }
+   ],
+   "fc": {
+    "t0": 1789374360000,
+    "v": [
+     89,
+     79,
+     77,
+     76,
+     75,
+     85,
+     88,
+     84,
+     77,
+     78,
+     80,
+     73,
+     76,
+     86,
+     90,
+     86,
+     85,
+     81,
+     87,
+     96,
+     98,
+     92,
+     90,
+     89,
+     100,
+     94,
+     89,
+     78,
+     81,
+     104,
+     99,
+     91,
+     84,
+     79,
+     80,
+     107,
+     99,
+     86,
+     82,
+     84,
+     80,
+     82,
+     80,
+     76,
+     84,
+     102,
+     96,
+     87,
+     84,
+     80,
+     79,
+     82,
+     101,
+     105,
+     104,
+     88,
+     81,
+     87,
+     85,
+     83,
+     96,
+     95,
+     92,
+     88,
+     79,
+     81,
+     86,
+     97,
+     91,
+     85,
+     80,
+     82,
+     90,
+     107,
+     120,
+     109,
+     94,
+     92,
+     87,
+     84,
+     89,
+     112,
+     111,
+     99,
+     89,
+     86,
+     87,
+     87,
+     88,
+     90,
+     91,
+     84,
+     87,
+     97,
+     114,
+     103,
+     99,
+     102,
+     103,
+     102,
+     101,
+     103,
+     112,
+     114,
+     118,
+     123,
+     124,
+     126,
+     125,
+     126,
+     127,
+     126,
+     125,
+     124,
+     125,
+     120,
+     111,
+     114,
+     115,
+     123,
+     127,
+     129,
+     128,
+     132,
+     132,
+     132,
+     131,
+     131,
+     133,
+     135
+    ]
+   }
+  },
+  {
+   "date": "2026-09-15",
+   "hr": 94,
+   "hrMax": 133,
+   "ex": [
+    {
+     "n": "Dev incliné",
+     "c": 137,
+     "hr": 82,
+     "hrMax": 105
+    },
+    {
+     "n": "Dips",
+     "c": 219,
+     "hr": 89,
+     "hrMax": 111
+    },
+    {
+     "n": "Incline chest press",
+     "c": 140,
+     "hr": 87,
+     "hrMax": 109
+    },
+    {
+     "n": "Chest press",
+     "c": 196,
+     "hr": 87,
+     "hrMax": 106
+    }
+   ],
+   "pics": [
+    {
+     "id": "98lhe80c",
+     "pic": 105
+    },
+    {
+     "id": "kfs4s420",
+     "pic": 100
+    },
+    {
+     "id": "6vdi3evk",
+     "pic": 102
+    },
+    {
+     "id": "gp0ul96s",
+     "pic": 107
+    },
+    {
+     "id": "rb2ss2ko",
+     "pic": 111
+    },
+    {
+     "id": "049f3i77",
+     "pic": 107
+    },
+    {
+     "id": "b2221vn0",
+     "pic": 109
+    },
+    {
+     "id": "bx0m1xrx",
+     "pic": 96
+    },
+    {
+     "id": "0sidkt58",
+     "pic": 94
+    },
+    {
+     "id": "f2tp6wv9",
+     "pic": 104
+    },
+    {
+     "id": "ulm3n9rt",
+     "pic": 101
+    },
+    {
+     "id": "0lz0s2hy",
+     "pic": 106
+    }
+   ],
+   "fc": {
+    "t0": 1789461090000,
+    "v": [
+     79,
+     78,
+     76,
+     77,
+     82,
+     104,
+     93,
+     86,
+     81,
+     84,
+     80,
+     78,
+     81,
+     98,
+     90,
+     85,
+     79,
+     76,
+     75,
+     72,
+     75,
+     80,
+     82,
+     90,
+     100,
+     100,
+     98,
+     103,
+     103,
+     98,
+     94,
+     85,
+     80,
+     80,
+     79,
+     82,
+     85,
+     88,
+     104,
+     98,
+     93,
+     89,
+     81,
+     81,
+     101,
+     101,
+     92,
+     84,
+     83,
+     80,
+     80,
+     81,
+     106,
+     102,
+     93,
+     86,
+     86,
+     87,
+     83,
+     87,
+     82,
+     83,
+     103,
+     105,
+     108,
+     100,
+     92,
+     97,
+     93,
+     82,
+     83,
+     93,
+     88,
+     81,
+     81,
+     83,
+     81,
+     80,
+     92,
+     91,
+     86,
+     82,
+     80,
+     81,
+     79,
+     75,
+     83,
+     91,
+     88,
+     94,
+     94,
+     86,
+     80,
+     81,
+     78,
+     76,
+     78,
+     80,
+     86,
+     85,
+     91,
+     100,
+     92,
+     91,
+     90,
+     89,
+     86,
+     83,
+     82,
+     90,
+     92,
+     100,
+     95,
+     87,
+     87,
+     86,
+     85,
+     86,
+     83,
+     85,
+     87,
+     100,
+     101,
+     101,
+     93,
+     97,
+     95,
+     98,
+     107,
+     115,
+     115,
+     114,
+     116,
+     117,
+     120,
+     123,
+     125,
+     126,
+     126,
+     125,
+     125,
+     123,
+     112,
+     108,
+     113,
+     121,
+     124,
+     126,
+     128,
+     127,
+     129,
+     129,
+     129,
+     131,
+     132,
+     130,
+     132
+    ]
+   }
+  },
+  {
+   "date": "2026-09-17",
+   "hr": 106,
+   "hrMax": 148,
+   "ex": [
+    {
+     "n": "Row",
+     "c": 115,
+     "hr": 95,
+     "hrMax": 123
+    },
+    {
+     "n": "PullDown",
+     "c": 118,
+     "hr": 96,
+     "hrMax": 115
+    },
+    {
+     "n": "Tirage vertical serré",
+     "c": 153,
+     "hr": 97,
+     "hrMax": 120
+    },
+    {
+     "n": "Pulley",
+     "c": 121,
+     "hr": 92,
+     "hrMax": 113
+    }
+   ],
+   "pics": [
+    {
+     "id": "88ft5u02",
+     "pic": 120
+    },
+    {
+     "id": "igteecvp",
+     "pic": 123
+    },
+    {
+     "id": "0zscos95",
+     "pic": 121
+    },
+    {
+     "id": "di8l8wnr",
+     "pic": 113
+    },
+    {
+     "id": "ptu64uhv",
+     "pic": 109
+    },
+    {
+     "id": "siwz4emz",
+     "pic": 115
+    },
+    {
+     "id": "w3jtizr2",
+     "pic": 114
+    },
+    {
+     "id": "usa7olby",
+     "pic": 120
+    },
+    {
+     "id": "2z1rp38t",
+     "pic": 118
+    },
+    {
+     "id": "uec247ei",
+     "pic": 113
+    },
+    {
+     "id": "m6m8p5r9",
+     "pic": 111
+    },
+    {
+     "id": "ayyfbps7",
+     "pic": 110
+    }
+   ],
+   "fc": {
+    "t0": 1789631670000,
+    "v": [
+     81,
+     78,
+     83,
+     100,
+     114,
+     100,
+     91,
+     87,
+     84,
+     104,
+     119,
+     111,
+     97,
+     98,
+     89,
+     89,
+     89,
+     84,
+     86,
+     104,
+     115,
+     105,
+     107,
+     109,
+     101,
+     91,
+     87,
+     94,
+     108,
+     102,
+     91,
+     88,
+     85,
+     94,
+     104,
+     97,
+     93,
+     91,
+     92,
+     89,
+     87,
+     107,
+     103,
+     102,
+     96,
+     98,
+     92,
+     88,
+     84,
+     93,
+     111,
+     111,
+     104,
+     96,
+     91,
+     90,
+     92,
+     90,
+     108,
+     110,
+     109,
+     96,
+     94,
+     95,
+     88,
+     89,
+     89,
+     110,
+     106,
+     104,
+     97,
+     92,
+     87,
+     88,
+     87,
+     82,
+     86,
+     104,
+     95,
+     89,
+     87,
+     83,
+     95,
+     105,
+     95,
+     87,
+     87,
+     90,
+     109,
+     111,
+     114,
+     108,
+     106,
+     119,
+     130,
+     131,
+     134,
+     136,
+     135,
+     133,
+     139,
+     133,
+     124,
+     127,
+     129,
+     134,
+     137,
+     140,
+     141,
+     142,
+     144,
+     144,
+     145,
+     137,
+     128,
+     135,
+     139,
+     142,
+     144,
+     147,
+     146,
+     147
+    ]
+   }
+  },
+  {
+   "date": "2026-09-20",
+   "hr": 97,
+   "hrMax": 132,
+   "ex": [
+    {
+     "n": "Leg press 2",
+     "c": 98,
+     "hr": 86,
+     "hrMax": 107
+    },
+    {
+     "n": "Hack squat",
+     "c": 255,
+     "hr": 92,
+     "hrMax": 116
+    },
+    {
+     "n": "Leg extension",
+     "c": 110,
+     "hr": 90,
+     "hrMax": 112
+    },
+    {
+     "n": "Leg Curl",
+     "c": 160,
+     "hr": 89,
+     "hrMax": 106
+    }
+   ],
+   "pics": [
+    {
+     "id": "vworhtcq",
+     "pic": 107
+    },
+    {
+     "id": "n7zpshro",
+     "pic": 103
+    },
+    {
+     "id": "0je10f8l",
+     "pic": 98
+    },
+    {
+     "id": "m9tbg03o",
+     "pic": 116
+    },
+    {
+     "id": "iqol2sgm",
+     "pic": 108
+    },
+    {
+     "id": "l2ererf4",
+     "pic": 110
+    },
+    {
+     "id": "ogk3xvxi",
+     "pic": 112
+    },
+    {
+     "id": "r3slhqgb",
+     "pic": 100
+    },
+    {
+     "id": "20xyzofa",
+     "pic": 101
+    },
+    {
+     "id": "yrfwo7hs",
+     "pic": 106
+    },
+    {
+     "id": "38s3asl7",
+     "pic": 95
+    },
+    {
+     "id": "3zl4eufc",
+     "pic": 102
+    }
+   ],
+   "fc": {
+    "t0": 1789893150000,
+    "v": [
+     94,
+     87,
+     84,
+     80,
+     91,
+     102,
+     98,
+     85,
+     80,
+     80,
+     75,
+     85,
+     97,
+     89,
+     79,
+     77,
+     79,
+     85,
+     97,
+     102,
+     104,
+     104,
+     96,
+     88,
+     88,
+     93,
+     114,
+     110,
+     107,
+     99,
+     92,
+     89,
+     90,
+     98,
+     85,
+     88,
+     106,
+     108,
+     97,
+     92,
+     86,
+     86,
+     87,
+     83,
+     83,
+     82,
+     81,
+     103,
+     109,
+     102,
+     99,
+     88,
+     84,
+     84,
+     86,
+     85,
+     84,
+     85,
+     86,
+     88,
+     85,
+     85,
+     91,
+     107,
+     106,
+     97,
+     89,
+     85,
+     82,
+     90,
+     99,
+     91,
+     85,
+     93,
+     91,
+     87,
+     95,
+     101,
+     93,
+     80,
+     81,
+     83,
+     85,
+     82,
+     79,
+     96,
+     104,
+     95,
+     90,
+     84,
+     85,
+     85,
+     91,
+     96,
+     86,
+     90,
+     92,
+     91,
+     89,
+     92,
+     85,
+     84,
+     83,
+     82,
+     88,
+     93,
+     92,
+     90,
+     85,
+     86,
+     85,
+     89,
+     94,
+     94,
+     92,
+     96,
+     97,
+     101,
+     97,
+     94,
+     102,
+     118,
+     120,
+     120,
+     120,
+     124,
+     123,
+     122,
+     123,
+     124,
+     124,
+     122,
+     122,
+     120,
+     120,
+     120,
+     121,
+     124,
+     125,
+     125,
+     125,
+     124,
+     124,
+     126,
+     128,
+     131,
+     130,
+     131,
+     131
+    ]
+   }
+  }
+ ],
+ "daily": [
+  {
+   "date": "2026-09-01",
+   "v": 6,
+   "n": 0,
+   "repos": 79,
+   "sha": "39ebfd31682813b5fc7737a9c169b5fd902012dd"
+  },
+  {
+   "date": "2026-09-02",
+   "v": 6,
+   "n": 0,
+   "vfc": 20.6,
+   "vfcN": 9,
+   "repos": 80,
+   "sha": "71d28c92de2bf5b53da37a378cdcfa275b0b5a32"
+  },
+  {
+   "date": "2026-09-04",
+   "v": 6,
+   "n": 0,
+   "sha": "e729a7e90c36dbaf1ff5c096c69e2947d7e25413"
+  },
+  {
+   "date": "2026-09-07",
+   "v": 6,
+   "n": 99,
+   "min": 48,
+   "moy": 62,
+   "hMin": "06:55",
+   "vfc": 72.5,
+   "vfcN": 5,
+   "sha": "f562917c66bdafd2262d6832ddf2971eb300c419"
+  },
+  {
+   "date": "2026-09-08",
+   "v": 6,
+   "n": 101,
+   "min": 52,
+   "moy": 62,
+   "hMin": "05:36",
+   "vfc": 64.8,
+   "vfcN": 5,
+   "sha": "3a4b1dc9db053ca0da6b7ef622101ec8a700f9d3"
+  },
+  {
+   "date": "2026-09-10",
+   "v": 6,
+   "n": 95,
+   "min": 52,
+   "moy": 62,
+   "hMin": "06:15",
+   "vfc": 65.6,
+   "vfcN": 5,
+   "sha": "379afe5b82a970400a17095cb125b6a6cae63ab5"
+  },
+  {
+   "date": "2026-09-11",
+   "v": 6,
+   "n": 97,
+   "min": 52,
+   "moy": 62,
+   "hMin": "05:05",
+   "vfc": 50,
+   "vfcN": 6,
+   "sha": "ee48ff08f5c961af21fc04d179d58fd8df0eab92"
+  },
+  {
+   "date": "2026-09-14",
+   "v": 6,
+   "n": 97,
+   "min": 48,
+   "moy": 58,
+   "hMin": "02:15",
+   "vfc": 49,
+   "vfcN": 5,
+   "sha": "e9904ecf7612a72c6366c53f25c024323ef7e7fc"
+  },
+  {
+   "date": "2026-09-15",
+   "v": 6,
+   "n": 114,
+   "min": 50,
+   "moy": 54,
+   "hMin": "08:15",
+   "vfc": 44.7,
+   "vfcN": 10,
+   "dodo": 478,
+   "coucher": 1789428588000,
+   "lever": 1789457757000,
+   "sha": "bb3ffa89279ed1740fe183412259418713cd73de",
+   "decision": {
+    "d": "maintenu",
+    "regle": "",
+    "motif": "séance faite"
+   }
+  },
+  {
+   "date": "2026-09-16",
+   "v": 6,
+   "n": 86,
+   "min": 51,
+   "moy": 55,
+   "hMin": "05:21",
+   "vfc": 50,
+   "vfcN": 4,
+   "dodo": 360,
+   "coucher": 1789512909000,
+   "lever": 1789535721000,
+   "sha": "b55726ec0820e4b180aff2a2ff080fb2208f7f87",
+   "repas": "19:25",
+   "decision": {
+    "d": "repos",
+    "regle": "R1",
+    "motif": "sommeil 6h00"
+   }
+  },
+  {
+   "date": "2026-09-17",
+   "v": 6,
+   "n": 75,
+   "min": 50,
+   "moy": 56,
+   "hMin": "08:29",
+   "vfc": 38.8,
+   "vfcN": 2,
+   "resp": 14,
+   "respN": 33,
+   "spo2": 95,
+   "spo2Min": 94,
+   "temp": 35.54,
+   "dodo": 320,
+   "coucher": 1789607390000,
+   "lever": 1789627309000,
+   "sha": "dd7d0b09f3c7c6cbc4459d913b524a283c2e1f91",
+   "repas": "19:35",
+   "decision": {
+    "d": "allege",
+    "regle": "R1",
+    "motif": "fait en maintenu,12 series"
+   }
+  },
+  {
+   "date": "2026-09-18",
+   "repas": "21:26"
+  },
+  {
+   "date": "2026-09-19",
+   "v": 6,
+   "n": 78,
+   "min": 52,
+   "moy": 56,
+   "hMin": "06:51",
+   "vfc": 58.2,
+   "vfcN": 3,
+   "resp": 14.5,
+   "respN": 33,
+   "spo2": 96,
+   "spo2Min": 93,
+   "temp": 35.11,
+   "dodo": 337,
+   "coucher": 1789784051000,
+   "lever": 1789804752000,
+   "sha": "6801103a4df4203f7b2f2e983ae89effbeba3cea",
+   "repas": "20:37",
+   "decision": {
+    "d": "repos",
+    "regle": "R1",
+    "motif": "dette de sommeil, jambes decalées à Dimanche"
+   }
+  },
+  {
+   "date": "2026-09-20",
+   "v": 6,
+   "n": 97,
+   "min": 51,
+   "moy": 56,
+   "hMin": "05:28",
+   "vfc": 49,
+   "vfcN": 4,
+   "resp": 14.5,
+   "respN": 41,
+   "spo2": 96,
+   "spo2Min": 94,
+   "temp": 35.4,
+   "dodo": 405,
+   "coucher": 1789865402000,
+   "lever": 1789890323000,
+   "sha": "c43c6dc92ce2ffdbbb2101aa5ba7f793daa6167c",
+   "repas": "18:49",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1",
+    "motif": "sommeil 6h45"
+   }
+  }
+ ],
+ "pas": {
+  "Shoulder press": 5,
+  "Haltères postérieur": 2.5,
+  "Leg press 2": 10
+ }
+}
