@@ -3314,6 +3314,21 @@
    "rpe": 7,
    "note": "",
    "at": 1789895460869
+  },
+  {
+   "id": "20xyzofa",
+   "date": "2026-09-20",
+   "group": "Jambes",
+   "exercise": "Leg extension",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 55
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1789895714477
   }
  ],
  "treadmill": [
