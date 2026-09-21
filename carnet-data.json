@@ -3406,6 +3406,21 @@
    "rpeAuto": true,
    "note": "",
    "at": 1789980290531
+  },
+  {
+   "id": "jbwh33xb",
+   "date": "2026-09-21",
+   "group": "Épaules",
+   "exercise": "Shoulder press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 65
+    }
+   ],
+   "rpe": 8,
+   "note": "Rpe confirmé sur les 3",
+   "at": 1789980530197
   }
  ],
  "treadmill": [
