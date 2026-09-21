@@ -3484,6 +3484,21 @@
    "rpe": 8,
    "note": "",
    "at": 1789981662886
+  },
+  {
+   "id": "ia903fh8",
+   "date": "2026-09-21",
+   "group": "Épaules",
+   "exercise": "Haltères latérales",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 12.5
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1789981885963
   }
  ],
  "treadmill": [
