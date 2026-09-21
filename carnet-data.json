@@ -3545,6 +3545,21 @@
    "rpe": 8,
    "note": "",
    "at": 1789982722244
+  },
+  {
+   "id": "hcd3nbnv",
+   "date": "2026-09-21",
+   "group": "Épaules",
+   "exercise": "Haltères postérieur",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 20
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1789983045301
   }
  ],
  "treadmill": [
@@ -6423,6 +6438,11 @@
     "regle": "R1 non déclenchée (7 h 54 > 6 h 30), R2 non déclenchée (plancher 52 < 58)",
     "motif": "Nuit pleine après la séance jambes, plancher au niveau habituel. Séance complète, charges du plan inchangées.",
     "par": "coach"
+   },
+   "plan": {
+    "prevues": 12,
+    "faites": 12,
+    "conforme": true
    }
   }
  ],
