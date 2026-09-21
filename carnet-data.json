@@ -3421,6 +3421,22 @@
    "rpe": 8,
    "note": "Rpe confirmé sur les 3",
    "at": 1789980530197
+  },
+  {
+   "id": "biqxzuqp",
+   "date": "2026-09-21",
+   "group": "Épaules",
+   "exercise": "Upper Back",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 70
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1789980760220
   }
  ],
  "treadmill": [
