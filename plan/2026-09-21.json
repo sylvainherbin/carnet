@@ -1,7 +1,13 @@
 {
   "date": "2026-09-21",
-  "v": 1,
-  "ecrit": "2026-09-20T20:05:00Z",
+  "v": 2,
+  "ecrit": "2026-09-21T08:05:00Z",
+  "nuit": "7 h 54 de sommeil, plancher 52, moyenne 57, VFC 54,2. Meilleure durée depuis six jours.",
+  "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée (7 h 54 > 6 h 30), R2 non déclenchée (plancher 52 < 58)",
+    "motif": "Nuit pleine après la séance jambes, plancher au niveau habituel. Séance complète, charges du plan inchangées."
+  },
   "seance": {
     "groupe": "Épaules",
     "titre": "Épaules — phase 2, jour 2",
@@ -47,8 +53,9 @@
     }
   },
   "points": [
-    "Premier enchaînement de deux jours depuis la reprise. Décision du matin à venir.",
+    "Premier enchaînement de deux jours depuis la reprise : la nuit a validé, on y va.",
     "Courbatures hack squat entre 24 et 48 h : échauffement assis, tapis à 5,5.",
-    "Poulie haut du pec : pas au programme."
+    "Poulie haut du pec : pas au programme.",
+    "RPE 9 autorisé sur la dernière série seulement, comme en phase 2."
   ]
 }
