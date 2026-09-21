@@ -6246,7 +6246,13 @@
    "coucher": 1789947409000,
    "lever": 1789976700000,
    "sha": "55e721a57bb07eeb6b7aad163b23da73cbcd0be0",
-   "repas": "19:22"
+   "repas": "19:22",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée (7 h 54 > 6 h 30), R2 non déclenchée (plancher 52 < 58)",
+    "motif": "Nuit pleine après la séance jambes, plancher au niveau habituel. Séance complète, charges du plan inchangées.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
