@@ -6700,7 +6700,13 @@
    "coucher": 1790036724000,
    "lever": 1790060711000,
    "sha": "ad8d14878e991ef21f887e6612f0070f93b3e813",
-   "repas": "19:44"
+   "repas": "19:44",
+   "decision": {
+    "d": "repos",
+    "regle": "Repos programmé (phase 2 : deux jours, un jour off). R1 non déclenchée (6 h 34 > 6 h 30, de justesse), R2 non déclenchée (plancher 52 < 58)",
+    "motif": "Premier 2-1 absorbé : le plancher n'a pas bougé. Le rythme de la phase 2 est validé.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
