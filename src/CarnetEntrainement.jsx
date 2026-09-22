@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile, pullPlanFile } from "./githubSync.js";
 import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, dailyAImporter, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp, repriseSeance, carnetValide, carnetVide, lirePlan, avancementPlan, seanceTerminee, planPrevuFait, poserPlanFait, decisionAEcrire, manquesDuPlan, RPE_DEFAUT } from "./calculs.js";
 import {
-  LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea,
+  LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea, ReferenceLine, Cell,
 } from "recharts";
 
 // ================= données / helpers (inchangés) =================
@@ -1134,6 +1134,10 @@ function Courbes({ data }) {
   // Les trente dernières nuits mesurées ; un relevé vide (montre non portée) ne
   // trace rien plutôt qu'un zéro.
   const nuits = useMemo(() => data.daily.filter((d) => d.n > 0 || d.vfc > 0).slice(-30).map((d) => ({ label: fmtDate(d.date).slice(0, 5), min: d.min ?? null, hMin: d.hMin ?? null, moy: d.moy ?? null, vfc: d.vfc ?? null, dodo: d.dodo ? +(d.dodo / 60).toFixed(1) : null, resp: d.resp ?? null, spo2: d.spo2 ?? null, spo2Min: d.spo2Min ?? null, temp: d.temp ?? null, tempEcart: ecartTemp(data.daily, d.date) })), [data.daily]);
+  // Seuil de la règle R1 du coach (nuit courte) ; il vit dans les règles du
+  // coach, pas dans l'app : à reporter ici s'il change.
+  const SEUIL_R1_H = 6.5;
+  const nuitsDodo = nuits.filter((d) => d.dodo !== null);
   const nuitsFc = nuits.filter((d) => d.min !== null), nuitsVfc = nuits.filter((d) => d.vfc !== null);
   const nuitsResp = nuits.filter((d) => d.resp !== null), nuitsSpo2 = nuits.filter((d) => d.spo2 !== null), nuitsTemp = nuits.filter((d) => d.tempEcart !== null);
   const trend = useMemo(() => {
@@ -1229,6 +1233,25 @@ function Courbes({ data }) {
                       <Line type="monotone" dataKey="moy" name="moyenne" stroke="rgba(255,59,92,.45)" strokeWidth={1.5} dot={{ r: 2, fill: T.danger, strokeWidth: 0 }} connectNulls />
                       <Line type="monotone" dataKey="min" name="minimum" stroke={T.danger} strokeWidth={2.5} dot={{ r: 3, fill: T.bg, stroke: T.danger, strokeWidth: 2 }} connectNulls />
                     </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            )}
+            {nuitsDodo.length > 1 && (
+              <>
+                <div className="text-xs mt-3 mb-1" style={{ color: T.mute, fontFamily: mono }}>Sommeil (h) · ligne : seuil R1 à 6 h 30</div>
+                <div style={{ height: 120 }}>
+                  <ResponsiveContainer>
+                    <BarChart data={nuitsDodo} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
+                      <CartesianGrid stroke="rgba(0,229,255,.10)" strokeDasharray="2 4" vertical={false} />
+                      <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
+                      <YAxis domain={[0, (max) => Math.max(9, Math.ceil(max))]} tick={axis} axisLine={false} tickLine={false} />
+                      <Tooltip {...tip} formatter={(v) => [`${Math.floor(v)} h ${pad(Math.round((v % 1) * 60))}`, "sommeil"]} />
+                      <ReferenceLine y={SEUIL_R1_H} stroke={T.amber} strokeDasharray="4 3" />
+                      <Bar dataKey="dodo" name="sommeil" radius={[3, 3, 0, 0]}>
+                        {nuitsDodo.map((d) => <Cell key={d.label} fill={d.dodo < SEUIL_R1_H ? T.amber : T.cyan} />)}
+                      </Bar>
+                    </BarChart>
                   </ResponsiveContainer>
                 </div>
               </>
