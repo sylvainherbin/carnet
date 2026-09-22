@@ -1,0 +1,23 @@
+{
+  "date": "2026-09-23",
+  "v": 1,
+  "ecrit": "2026-09-22T07:30:00Z",
+  "seance": {
+    "groupe": "Pecs",
+    "titre": "Pecs — phase 2, jour 1",
+    "notion": "https://app.notion.com/p/3e3f7b92e8f0812392c3f108f0b7376a",
+    "exercices": [
+      { "nom": "Dev incliné", "series": 3, "reps": 10, "kg": 65, "note": "le 15 : 12 / 12 / 7 à RPE 10 — reps ramenées à 10 pour finir les trois" },
+      { "nom": "Dips", "series": 3, "reps": 10, "kg": 140, "note": "RPE 9 toléré sur la dernière seulement" },
+      { "nom": "Incline chest press", "series": 3, "reps": 10, "kg": 50 },
+      { "nom": "Chest press", "series": 3, "reps": 10, "kg": 50, "note": "stop à 10, même s'il en reste" }
+    ],
+    "echauffement": ["Dev incliné 40 × 10", "Dev incliné 55 × 5", "Dips 100 × 8"],
+    "tapis": { "min": 15, "pente": 13, "kmh": 5.5 }
+  },
+  "points": [
+    "Décision du matin à venir, après la nuit.",
+    "Pas de RPE 10 : le plafond de la phase 2 est 9, dernière série seulement.",
+    "Poulie haut du pec : pas au programme."
+  ]
+}
