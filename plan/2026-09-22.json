@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-22",
+  "v": 1,
+  "ecrit": "2026-09-22T07:20:00Z",
+  "nuit": "6 h 34 de sommeil, plancher 52, moyenne 56, VFC 67,5. Plancher inchangé après deux jours enchaînés.",
+  "decision": {
+    "d": "repos",
+    "regle": "Repos programmé (phase 2 : deux jours, un jour off). R1 non déclenchée (6 h 34 > 6 h 30, de justesse), R2 non déclenchée (plancher 52 < 58)",
+    "motif": "Premier 2-1 absorbé : le plancher n'a pas bougé. Le rythme de la phase 2 est validé."
+  },
+  "points": [
+    "Demain : Pecs, décision après la nuit.",
+    "Coucher avant 01:30 si possible : 6 h 34, c'est quatre minutes au-dessus du seuil R1."
+  ]
+}
