@@ -1133,9 +1133,9 @@ function Courbes({ data }) {
   const yDomain = (vals) => { if (!vals.length) return [0, 1]; const mn = Math.min(...vals), mx = Math.max(...vals); const p = Math.max(1, (mx - mn) * 0.15); return [Math.floor(mn - p), Math.ceil(mx + p)]; };
   // Les trente dernières nuits mesurées ; un relevé vide (montre non portée) ne
   // trace rien plutôt qu'un zéro.
-  const nuits = useMemo(() => data.daily.filter((d) => d.n > 0 || d.vfc > 0).slice(-30).map((d) => ({ label: fmtDate(d.date).slice(0, 5), min: d.min ?? null, hMin: d.hMin ?? null, moy: d.moy ?? null, vfc: d.vfc ?? null, dodo: d.dodo ? +(d.dodo / 60).toFixed(1) : null, resp: d.resp ?? null, temp: d.temp ?? null, tempEcart: ecartTemp(data.daily, d.date) })), [data.daily]);
+  const nuits = useMemo(() => data.daily.filter((d) => d.n > 0 || d.vfc > 0).slice(-30).map((d) => ({ label: fmtDate(d.date).slice(0, 5), min: d.min ?? null, hMin: d.hMin ?? null, moy: d.moy ?? null, vfc: d.vfc ?? null, dodo: d.dodo ? +(d.dodo / 60).toFixed(1) : null, resp: d.resp ?? null, spo2: d.spo2 ?? null, spo2Min: d.spo2Min ?? null, temp: d.temp ?? null, tempEcart: ecartTemp(data.daily, d.date) })), [data.daily]);
   const nuitsFc = nuits.filter((d) => d.min !== null), nuitsVfc = nuits.filter((d) => d.vfc !== null);
-  const nuitsResp = nuits.filter((d) => d.resp !== null), nuitsTemp = nuits.filter((d) => d.tempEcart !== null);
+  const nuitsResp = nuits.filter((d) => d.resp !== null), nuitsSpo2 = nuits.filter((d) => d.spo2 !== null), nuitsTemp = nuits.filter((d) => d.tempEcart !== null);
   const trend = useMemo(() => {
     if (strength.length === 0) return null;
     const prVal = Math.max(...strength.map((r) => r.e1rm));
@@ -1260,6 +1260,23 @@ function Courbes({ data }) {
                       <YAxis domain={yDomain(nuitsResp.map((r) => r.resp))} tick={axis} axisLine={false} tickLine={false} />
                       <Tooltip {...tip} />
                       <Line type="monotone" dataKey="resp" name="respiration" stroke={T.cyan} strokeWidth={2} dot={{ r: 2.5, fill: T.bg, stroke: T.cyan, strokeWidth: 2 }} connectNulls />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            )}
+            {nuitsSpo2.length > 1 && (
+              <>
+                <div className="text-xs mt-3 mb-1" style={{ color: T.mute, fontFamily: mono }}>SpO2 (%) · moyenne et minimum de la nuit</div>
+                <div style={{ height: 100 }}>
+                  <ResponsiveContainer>
+                    <LineChart data={nuitsSpo2} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+                      <CartesianGrid stroke="rgba(0,229,255,.10)" strokeDasharray="2 4" />
+                      <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
+                      <YAxis domain={yDomain(nuitsSpo2.flatMap((r) => [r.spo2, r.spo2Min].filter((v) => v !== null))).map((v) => Math.min(v, 100))} tick={axis} axisLine={false} tickLine={false} />
+                      <Tooltip {...tip} />
+                      <Line type="monotone" dataKey="spo2" name="moyenne" stroke="rgba(122,92,255,.45)" strokeWidth={1.5} dot={{ r: 2, fill: T.violet, strokeWidth: 0 }} connectNulls />
+                      <Line type="monotone" dataKey="spo2Min" name="minimum" stroke={T.violet} strokeWidth={2.5} dot={{ r: 3, fill: T.bg, stroke: T.violet, strokeWidth: 2 }} connectNulls />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
