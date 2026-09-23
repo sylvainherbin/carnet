@@ -3638,6 +3638,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1790153883746
+  },
+  {
+   "id": "6p3zggs8",
+   "date": "2026-09-23",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 140
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1790154168669
   }
  ],
  "treadmill": [
