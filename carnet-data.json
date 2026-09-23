@@ -6731,7 +6731,13 @@
    "coucher": 1790122936000,
    "lever": 1790149213000,
    "sha": "3a2339a46127fc77654b3457fb54f915674eeb19",
-   "repas": "19:22"
+   "repas": "19:22",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée (7 h 13 > 6 h 30), R2 non déclenchée (plancher 53 < 58)",
+    "motif": "Nuit correcte, plancher stable. Séance complète, charges du plan inchangées.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
