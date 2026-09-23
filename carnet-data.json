@@ -3732,6 +3732,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1790155686056
+  },
+  {
+   "id": "t5fbgu9s",
+   "date": "2026-09-23",
+   "group": "Pecs",
+   "exercise": "Chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 55
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1790155931006
   }
  ],
  "treadmill": [
@@ -6909,6 +6925,11 @@
     "regle": "R1 non déclenchée (7 h 13 > 6 h 30), R2 non déclenchée (plancher 53 < 58)",
     "motif": "Nuit correcte, plancher stable. Séance complète, charges du plan inchangées.",
     "par": "coach"
+   },
+   "plan": {
+    "prevues": 12,
+    "faites": 12,
+    "conforme": true
    }
   }
  ],
