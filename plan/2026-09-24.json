@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-24",
+  "v": 1,
+  "ecrit": "2026-09-24T08:10:00Z",
+  "nuit": "5 h 54 de sommeil, plancher 53, moyenne 60, VFC 40,4. Nuit courte, moyenne la plus haute de la semaine.",
+  "decision": {
+    "d": "repos",
+    "regle": "R1 déclenchée (5 h 54 < 6 h 30). Repos posé par Sylvain, la nuit confirme le choix.",
+    "motif": "Sylvain a décidé le repos avant lecture de la nuit. La nuit courte et la moyenne FC élevée (60) vont dans le même sens."
+  },
+  "points": [
+    "Dos décalé à demain 25/09, second jour du bloc Pecs → Dos.",
+    "Décision du matin de demain à venir après la nuit."
+  ]
+}
