@@ -145,6 +145,7 @@ function Del({ onClick }) {
   return <button type="button" onClick={onClick} className="text-xs px-2 py-1 rounded" style={{ color: T.danger, fontFamily: mono }}>×</button>;
 }
 const tip = { contentStyle: { background: "#0A0E17", border: `1px solid ${T.lineStrong}`, borderRadius: 6, fontFamily: mono, fontSize: 12, color: T.text }, labelStyle: { color: T.mute }, cursor: { stroke: T.lineStrong } };
+const tipBar = { ...tip, cursor: { fill: "rgba(108,127,151,0.14)" } };
 const axis = { fontSize: 10, fill: T.mute, fontFamily: mono };
 
 // ================= APP =================
@@ -1127,7 +1128,7 @@ function Courbes({ data }) {
   }, [data.sessions, ex]);
   const weight = useMemo(() => {
     const w = [...data.weights].sort((a, b) => a.date.localeCompare(b.date));
-    return w.map((x, i) => { const win = w.slice(Math.max(0, i - 6), i + 1); return { label: fmtDate(x.date), kg: x.kg, moy7: +(win.reduce((a, y) => a + y.kg, 0) / win.length).toFixed(2) }; });
+    return w.map((x, i) => { const win = w.slice(Math.max(0, i - 6), i + 1); return { label: fmtDate(x.date).slice(0, 5), kg: x.kg, moy7: +(win.reduce((a, y) => a + y.kg, 0) / win.length).toFixed(2) }; });
   }, [data.weights]);
   const weeklyVol = useMemo(() => {
     const m = {}; data.sessions.forEach((s) => { const k = isoWeek(s.date); m[k] = (m[k] || 0) + s.sets.reduce((a, x) => a + x.reps * x.kg, 0); });
@@ -1195,7 +1196,7 @@ function Courbes({ data }) {
                   <CartesianGrid stroke={G.grille} vertical={false} />
                   <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                   <YAxis tick={axis} axisLine={false} tickLine={false} />
-                  <Tooltip {...tip} />
+                  <Tooltip {...tipBar} />
                   <Bar dataKey="vol" name="Volume" fill="rgba(2,165,184,.35)" stroke={G.cyan} radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
@@ -1215,7 +1216,7 @@ function Courbes({ data }) {
                 <YAxis domain={yDomain(weight.map((r) => r.kg))} tick={axis} axisLine={false} tickLine={false} />
                 <Tooltip {...tip} />
                 <Legend wrapperStyle={{ fontSize: 11, fontFamily: mono, color: T.mute }} />
-                <Line type="monotone" dataKey="kg" name="pesée" stroke="rgba(255,45,149,.35)" strokeWidth={1} dot={{ r: 4, fill: T.magenta, strokeWidth: 0 }} />
+                <Line type="monotone" dataKey="kg" name="pesée" stroke="rgba(255,45,149,.35)" strokeWidth={1} dot={{ r: 2, fill: T.magenta, strokeWidth: 0 }} />
                 <Line type="monotone" dataKey="moy7" name="moyenne 7 j" stroke={T.magenta} strokeWidth={2.5} dot={false} />
               </LineChart>
             </ResponsiveContainer>
@@ -1238,7 +1239,7 @@ function Courbes({ data }) {
                       <YAxis domain={yDomain(nuitsFc.flatMap((r) => [r.min, r.moy]))} tick={axis} axisLine={false} tickLine={false} />
                       <Tooltip {...tip} formatter={(v, name, item) => [name === "minimum" && item?.payload?.hMin ? `${v} à ${item.payload.hMin}` : v, name]} />
                       <Legend wrapperStyle={{ fontSize: 11, fontFamily: mono, color: T.mute }} />
-                      <Line type="monotone" dataKey="moy" name="moyenne" stroke="rgba(255,59,92,.45)" strokeWidth={1.5} dot={{ r: 4, fill: T.danger, strokeWidth: 0 }} connectNulls />
+                      <Line type="monotone" dataKey="moy" name="moyenne" stroke="rgba(255,59,92,.45)" strokeWidth={1.5} dot={{ r: 2, fill: T.danger, strokeWidth: 0 }} connectNulls />
                       <Line type="monotone" dataKey="min" name="minimum" stroke={T.danger} strokeWidth={2.5} dot={{ r: 4, fill: T.bg, stroke: T.danger, strokeWidth: 2 }} connectNulls />
                     </LineChart>
                   </ResponsiveContainer>
@@ -1254,7 +1255,7 @@ function Courbes({ data }) {
                       <CartesianGrid stroke={G.grille} vertical={false} />
                       <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                       <YAxis domain={[0, (max) => Math.max(9, Math.ceil(max))]} tick={axis} axisLine={false} tickLine={false} />
-                      <Tooltip {...tip} formatter={(v) => [`${Math.floor(v)} h ${pad(Math.round((v % 1) * 60))}`, "sommeil"]} />
+                      <Tooltip {...tipBar} formatter={(v) => [`${Math.floor(v)} h ${pad(Math.round((v % 1) * 60))}`, "sommeil"]} />
                       <ReferenceLine y={SEUIL_R1_H} stroke={G.amber} strokeDasharray="4 3" />
                       <Bar dataKey="dodo" name="sommeil" radius={[4, 4, 0, 0]}>
                         {nuitsDodo.map((d) => <Cell key={d.label} fill={d.dodo < SEUIL_R1_H ? G.amber : G.cyan} />)}
@@ -1273,7 +1274,7 @@ function Courbes({ data }) {
                       <CartesianGrid stroke={G.grille} vertical={false} />
                       <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                       <YAxis tick={axis} axisLine={false} tickLine={false} />
-                      <Tooltip {...tip} />
+                      <Tooltip {...tipBar} />
                       <Bar dataKey="vfc" name="VFC" fill={T.violet} radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
@@ -1307,7 +1308,7 @@ function Courbes({ data }) {
                       <YAxis domain={yDomain(nuitsSpo2.flatMap((r) => [r.spo2, r.spo2Min].filter((v) => v !== null))).map((v) => Math.min(v, 100))} tick={axis} axisLine={false} tickLine={false} />
                       <Tooltip {...tip} />
                       <Legend wrapperStyle={{ fontSize: 11, fontFamily: mono, color: T.mute }} />
-                      <Line type="monotone" dataKey="spo2" name="moyenne" stroke="rgba(122,92,255,.45)" strokeWidth={1.5} dot={{ r: 4, fill: T.violet, strokeWidth: 0 }} connectNulls />
+                      <Line type="monotone" dataKey="spo2" name="moyenne" stroke="rgba(122,92,255,.45)" strokeWidth={1.5} dot={{ r: 2, fill: T.violet, strokeWidth: 0 }} connectNulls />
                       <Line type="monotone" dataKey="spo2Min" name="minimum" stroke={T.violet} strokeWidth={2.5} dot={{ r: 4, fill: T.bg, stroke: T.violet, strokeWidth: 2 }} connectNulls />
                     </LineChart>
                   </ResponsiveContainer>
@@ -1323,9 +1324,9 @@ function Courbes({ data }) {
                       <CartesianGrid stroke={G.grille} vertical={false} />
                       <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                       <YAxis tick={axis} axisLine={false} tickLine={false} />
-                      <Tooltip {...tip} formatter={(v, name, item) => [`${v > 0 ? "+" : ""}${v} (${item?.payload?.temp} °C)`, name]} />
+                      <Tooltip {...tipBar} formatter={(v, name, item) => [`${v > 0 ? "+" : ""}${v} (${item?.payload?.temp} °C)`, name]} />
                       <ReferenceLine y={0} stroke={T.mute} />
-                      <Bar dataKey="tempEcart" name="écart" radius={[4, 4, 0, 0]}>
+                      <Bar dataKey="tempEcart" name="écart" radius={[4, 4, 0, 0]} maxBarSize={28}>
                         {nuitsTemp.map((d) => <Cell key={d.label} fill={d.tempEcart >= 0 ? G.chaud : G.froid} />)}
                       </Bar>
                     </BarChart>
@@ -1350,7 +1351,7 @@ function Courbes({ data }) {
                       <CartesianGrid stroke={G.grille} vertical={false} />
                       <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                       <YAxis tick={axis} axisLine={false} tickLine={false} />
-                      <Tooltip {...tip} />
+                      <Tooltip {...tipBar} />
                       <Bar dataKey="vol" name="Volume" fill={G.cyan} radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
@@ -1366,7 +1367,7 @@ function Courbes({ data }) {
                       <CartesianGrid stroke={G.grille} vertical={false} />
                       <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                       <YAxis tick={axis} axisLine={false} tickLine={false} />
-                      <Tooltip {...tip} />
+                      <Tooltip {...tipBar} />
                       <Bar dataKey="km" name="km" fill={T.violet} radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
