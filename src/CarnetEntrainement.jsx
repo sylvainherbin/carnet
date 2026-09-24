@@ -31,6 +31,13 @@ const T = {
   cyan: "#00E5FF", magenta: "#FF2D95", amber: "#FFB000", danger: "#FF3B5C", violet: "#7A5CFF",
   text: "#D8E6F2", mute: "#6C7F97", line: "rgba(0,229,255,0.18)", lineStrong: "rgba(0,229,255,0.45)",
 };
+// Palette des graphiques. Mêmes teintes que l'interface, mais ramenées dans
+// la bande de luminosité OKLCH 0.48–0.67 recommandée sur fond sombre : le
+// cyan et l'ambre de l'interface (L 0.84 et 0.81) halent sur du quasi-noir.
+// Palette validée pour le daltonisme, le chroma et le contraste. L'ambre ne
+// sert plus qu'au statut « nuit courte », la paire chaud/froid qu'à l'écart
+// de température.
+const G = { cyan: "#02A5B8", amber: "#B27900", chaud: T.danger, froid: "#02A5B8", grille: "rgba(108,127,151,0.20)" };
 const mono = "'SF Mono', ui-monospace, Menlo, Consolas, monospace";
 const display = "'Orbitron', 'SF Mono', ui-monospace, monospace";
 const sans = "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
@@ -914,13 +921,13 @@ function Seance({ data, update, notify, celebrate, plan }) {
               <ResponsiveContainer>
                 <AreaChart data={fcSerie} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
                   <defs><linearGradient id="gfc" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={T.danger} stopOpacity={0.4} /><stop offset="100%" stopColor={T.danger} stopOpacity={0} /></linearGradient></defs>
-                  <CartesianGrid stroke="rgba(255,59,92,.10)" strokeDasharray="2 4" />
+                  <CartesianGrid stroke={G.grille} />
                   <XAxis dataKey="i" type="number" domain={[0, fcSerie.length - 1]} ticks={fcTicks}
                     tickFormatter={(i) => fcSerie[i]?.h ?? ""} tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                   <YAxis domain={["dataMin - 6", "dataMax + 6"]} tick={axis} axisLine={false} tickLine={false} width={38} />
                   <Tooltip {...tip} labelFormatter={(i) => fcSerie[i]?.h ?? ""} />
                   {fcTapis.map((z, i) => <ReferenceArea key={i} x1={z.x1} x2={z.x2} fill={T.violet} fillOpacity={0.16} stroke={T.violet} strokeOpacity={0.35} />)}
-                  <Area type="monotone" dataKey="bpm" name="bpm" stroke={T.danger} strokeWidth={2} fill="url(#gfc)" dot={false} activeDot={{ r: 4, fill: T.danger }} connectNulls />
+                  <Area type="monotone" dataKey="bpm" name="bpm" stroke={T.danger} strokeWidth={2} fill="url(#gfc)" dot={false} activeDot={{ r: 5, fill: T.danger }} connectNulls />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -1172,12 +1179,12 @@ function Courbes({ data }) {
             <div style={{ height: 220 }} className="glow-cyan">
               <ResponsiveContainer>
                 <AreaChart data={strength} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
-                  <defs><linearGradient id="gc" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={T.cyan} stopOpacity={0.35} /><stop offset="100%" stopColor={T.cyan} stopOpacity={0} /></linearGradient></defs>
-                  <CartesianGrid stroke="rgba(0,229,255,.08)" strokeDasharray="2 4" />
+                  <defs><linearGradient id="gc" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={G.cyan} stopOpacity={0.35} /><stop offset="100%" stopColor={T.cyan} stopOpacity={0} /></linearGradient></defs>
+                  <CartesianGrid stroke={G.grille} />
                   <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                   <YAxis domain={yDomain(strength.map((r) => r.e1rm))} tick={axis} axisLine={false} tickLine={false} />
                   <Tooltip {...tip} />
-                  <Area type="monotone" dataKey="e1rm" name="e1RM (kg)" stroke={T.cyan} strokeWidth={2} fill="url(#gc)" dot={{ r: 3, fill: T.bg, stroke: T.cyan, strokeWidth: 2 }} activeDot={{ r: 5, fill: T.cyan }} />
+                  <Area type="monotone" dataKey="e1rm" name="e1RM (kg)" stroke={G.cyan} strokeWidth={2} fill="url(#gc)" dot={{ r: 4, fill: T.bg, stroke: G.cyan, strokeWidth: 2 }} activeDot={{ r: 6, fill: G.cyan }} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -1185,11 +1192,11 @@ function Courbes({ data }) {
             <div style={{ height: 140 }}>
               <ResponsiveContainer>
                 <BarChart data={strength} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
-                  <CartesianGrid stroke="rgba(0,229,255,.08)" strokeDasharray="2 4" vertical={false} />
+                  <CartesianGrid stroke={G.grille} vertical={false} />
                   <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                   <YAxis tick={axis} axisLine={false} tickLine={false} />
                   <Tooltip {...tip} />
-                  <Bar dataKey="vol" name="Volume" fill="rgba(0,229,255,.25)" stroke={T.cyan} radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="vol" name="Volume" fill="rgba(2,165,184,.35)" stroke={G.cyan} radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -1203,12 +1210,12 @@ function Courbes({ data }) {
           <div style={{ height: 220 }} className="glow-magenta">
             <ResponsiveContainer>
               <LineChart data={weight} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
-                <CartesianGrid stroke="rgba(255,45,149,.08)" strokeDasharray="2 4" />
+                <CartesianGrid stroke={G.grille} />
                 <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                 <YAxis domain={yDomain(weight.map((r) => r.kg))} tick={axis} axisLine={false} tickLine={false} />
                 <Tooltip {...tip} />
                 <Legend wrapperStyle={{ fontSize: 11, fontFamily: mono, color: T.mute }} />
-                <Line type="monotone" dataKey="kg" name="pesée" stroke="rgba(255,45,149,.35)" strokeWidth={1} dot={{ r: 2, fill: T.magenta, strokeWidth: 0 }} />
+                <Line type="monotone" dataKey="kg" name="pesée" stroke="rgba(255,45,149,.35)" strokeWidth={1} dot={{ r: 4, fill: T.magenta, strokeWidth: 0 }} />
                 <Line type="monotone" dataKey="moy7" name="moyenne 7 j" stroke={T.magenta} strokeWidth={2.5} dot={false} />
               </LineChart>
             </ResponsiveContainer>
@@ -1226,12 +1233,13 @@ function Courbes({ data }) {
                 <div style={{ height: 160 }}>
                   <ResponsiveContainer>
                     <LineChart data={nuitsFc} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
-                      <CartesianGrid stroke="rgba(255,59,92,.10)" strokeDasharray="2 4" />
+                      <CartesianGrid stroke={G.grille} />
                       <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                       <YAxis domain={yDomain(nuitsFc.flatMap((r) => [r.min, r.moy]))} tick={axis} axisLine={false} tickLine={false} />
                       <Tooltip {...tip} formatter={(v, name, item) => [name === "minimum" && item?.payload?.hMin ? `${v} à ${item.payload.hMin}` : v, name]} />
-                      <Line type="monotone" dataKey="moy" name="moyenne" stroke="rgba(255,59,92,.45)" strokeWidth={1.5} dot={{ r: 2, fill: T.danger, strokeWidth: 0 }} connectNulls />
-                      <Line type="monotone" dataKey="min" name="minimum" stroke={T.danger} strokeWidth={2.5} dot={{ r: 3, fill: T.bg, stroke: T.danger, strokeWidth: 2 }} connectNulls />
+                      <Legend wrapperStyle={{ fontSize: 11, fontFamily: mono, color: T.mute }} />
+                      <Line type="monotone" dataKey="moy" name="moyenne" stroke="rgba(255,59,92,.45)" strokeWidth={1.5} dot={{ r: 4, fill: T.danger, strokeWidth: 0 }} connectNulls />
+                      <Line type="monotone" dataKey="min" name="minimum" stroke={T.danger} strokeWidth={2.5} dot={{ r: 4, fill: T.bg, stroke: T.danger, strokeWidth: 2 }} connectNulls />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -1243,13 +1251,13 @@ function Courbes({ data }) {
                 <div style={{ height: 120 }}>
                   <ResponsiveContainer>
                     <BarChart data={nuitsDodo} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
-                      <CartesianGrid stroke="rgba(0,229,255,.10)" strokeDasharray="2 4" vertical={false} />
+                      <CartesianGrid stroke={G.grille} vertical={false} />
                       <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                       <YAxis domain={[0, (max) => Math.max(9, Math.ceil(max))]} tick={axis} axisLine={false} tickLine={false} />
                       <Tooltip {...tip} formatter={(v) => [`${Math.floor(v)} h ${pad(Math.round((v % 1) * 60))}`, "sommeil"]} />
-                      <ReferenceLine y={SEUIL_R1_H} stroke={T.amber} strokeDasharray="4 3" />
-                      <Bar dataKey="dodo" name="sommeil" radius={[3, 3, 0, 0]}>
-                        {nuitsDodo.map((d) => <Cell key={d.label} fill={d.dodo < SEUIL_R1_H ? T.amber : T.cyan} />)}
+                      <ReferenceLine y={SEUIL_R1_H} stroke={G.amber} strokeDasharray="4 3" />
+                      <Bar dataKey="dodo" name="sommeil" radius={[4, 4, 0, 0]}>
+                        {nuitsDodo.map((d) => <Cell key={d.label} fill={d.dodo < SEUIL_R1_H ? G.amber : G.cyan} />)}
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
@@ -1262,11 +1270,11 @@ function Courbes({ data }) {
                 <div style={{ height: 120 }} className="glow-violet">
                   <ResponsiveContainer>
                     <BarChart data={nuitsVfc} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
-                      <CartesianGrid stroke="rgba(122,92,255,.1)" strokeDasharray="2 4" vertical={false} />
+                      <CartesianGrid stroke={G.grille} vertical={false} />
                       <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                       <YAxis tick={axis} axisLine={false} tickLine={false} />
                       <Tooltip {...tip} />
-                      <Bar dataKey="vfc" name="VFC" fill={T.violet} radius={[3, 3, 0, 0]} />
+                      <Bar dataKey="vfc" name="VFC" fill={T.violet} radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -1278,11 +1286,11 @@ function Courbes({ data }) {
                 <div style={{ height: 100 }}>
                   <ResponsiveContainer>
                     <LineChart data={nuitsResp} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
-                      <CartesianGrid stroke="rgba(0,229,255,.10)" strokeDasharray="2 4" />
+                      <CartesianGrid stroke={G.grille} />
                       <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                       <YAxis domain={yDomain(nuitsResp.map((r) => r.resp))} tick={axis} axisLine={false} tickLine={false} />
                       <Tooltip {...tip} />
-                      <Line type="monotone" dataKey="resp" name="respiration" stroke={T.cyan} strokeWidth={2} dot={{ r: 2.5, fill: T.bg, stroke: T.cyan, strokeWidth: 2 }} connectNulls />
+                      <Line type="monotone" dataKey="resp" name="respiration" stroke={G.cyan} strokeWidth={2} dot={{ r: 4, fill: T.bg, stroke: G.cyan, strokeWidth: 2 }} connectNulls />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -1291,15 +1299,16 @@ function Courbes({ data }) {
             {nuitsSpo2.length > 1 && (
               <>
                 <div className="text-xs mt-3 mb-1" style={{ color: T.mute, fontFamily: mono }}>SpO2 (%) · moyenne et minimum de la nuit</div>
-                <div style={{ height: 100 }}>
+                <div style={{ height: 124 }}>
                   <ResponsiveContainer>
                     <LineChart data={nuitsSpo2} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
-                      <CartesianGrid stroke="rgba(0,229,255,.10)" strokeDasharray="2 4" />
+                      <CartesianGrid stroke={G.grille} />
                       <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                       <YAxis domain={yDomain(nuitsSpo2.flatMap((r) => [r.spo2, r.spo2Min].filter((v) => v !== null))).map((v) => Math.min(v, 100))} tick={axis} axisLine={false} tickLine={false} />
                       <Tooltip {...tip} />
-                      <Line type="monotone" dataKey="spo2" name="moyenne" stroke="rgba(122,92,255,.45)" strokeWidth={1.5} dot={{ r: 2, fill: T.violet, strokeWidth: 0 }} connectNulls />
-                      <Line type="monotone" dataKey="spo2Min" name="minimum" stroke={T.violet} strokeWidth={2.5} dot={{ r: 3, fill: T.bg, stroke: T.violet, strokeWidth: 2 }} connectNulls />
+                      <Legend wrapperStyle={{ fontSize: 11, fontFamily: mono, color: T.mute }} />
+                      <Line type="monotone" dataKey="spo2" name="moyenne" stroke="rgba(122,92,255,.45)" strokeWidth={1.5} dot={{ r: 4, fill: T.violet, strokeWidth: 0 }} connectNulls />
+                      <Line type="monotone" dataKey="spo2Min" name="minimum" stroke={T.violet} strokeWidth={2.5} dot={{ r: 4, fill: T.bg, stroke: T.violet, strokeWidth: 2 }} connectNulls />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -1311,11 +1320,14 @@ function Courbes({ data }) {
                 <div style={{ height: 100 }}>
                   <ResponsiveContainer>
                     <BarChart data={nuitsTemp} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
-                      <CartesianGrid stroke="rgba(255,176,0,.1)" strokeDasharray="2 4" vertical={false} />
+                      <CartesianGrid stroke={G.grille} vertical={false} />
                       <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                       <YAxis tick={axis} axisLine={false} tickLine={false} />
                       <Tooltip {...tip} formatter={(v, name, item) => [`${v > 0 ? "+" : ""}${v} (${item?.payload?.temp} °C)`, name]} />
-                      <Bar dataKey="tempEcart" name="écart" fill={T.amber} radius={[3, 3, 0, 0]} />
+                      <ReferenceLine y={0} stroke={T.mute} />
+                      <Bar dataKey="tempEcart" name="écart" radius={[4, 4, 0, 0]}>
+                        {nuitsTemp.map((d) => <Cell key={d.label} fill={d.tempEcart >= 0 ? G.chaud : G.froid} />)}
+                      </Bar>
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -1335,11 +1347,11 @@ function Courbes({ data }) {
                 <div style={{ height: 140 }} className="glow-cyan">
                   <ResponsiveContainer>
                     <BarChart data={weeklyVol} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
-                      <CartesianGrid stroke="rgba(0,229,255,.08)" strokeDasharray="2 4" vertical={false} />
+                      <CartesianGrid stroke={G.grille} vertical={false} />
                       <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                       <YAxis tick={axis} axisLine={false} tickLine={false} />
                       <Tooltip {...tip} />
-                      <Bar dataKey="vol" name="Volume" fill={T.cyan} radius={[3, 3, 0, 0]} />
+                      <Bar dataKey="vol" name="Volume" fill={G.cyan} radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -1351,11 +1363,11 @@ function Courbes({ data }) {
                 <div style={{ height: 140 }} className="glow-violet">
                   <ResponsiveContainer>
                     <BarChart data={weeklyKm} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
-                      <CartesianGrid stroke="rgba(122,92,255,.1)" strokeDasharray="2 4" vertical={false} />
+                      <CartesianGrid stroke={G.grille} vertical={false} />
                       <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
                       <YAxis tick={axis} axisLine={false} tickLine={false} />
                       <Tooltip {...tip} />
-                      <Bar dataKey="km" name="km" fill={T.violet} radius={[3, 3, 0, 0]} />
+                      <Bar dataKey="km" name="km" fill={T.violet} radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
