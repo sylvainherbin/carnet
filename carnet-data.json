@@ -7198,7 +7198,13 @@
    "coucher": 1790213288000,
    "lever": 1790235888000,
    "sha": "04af851be64df682bd917ff952c26495f8920af2",
-   "repas": "19:33"
+   "repas": "19:33",
+   "decision": {
+    "d": "repos",
+    "regle": "R1 déclenchée (5 h 54 < 6 h 30). Repos posé par Sylvain, la nuit confirme le choix.",
+    "motif": "Sylvain a décidé le repos avant lecture de la nuit. La nuit courte et la moyenne FC élevée (60) vont dans le même sens.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
