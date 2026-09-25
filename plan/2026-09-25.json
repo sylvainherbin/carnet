@@ -1,7 +1,7 @@
 {
   "date": "2026-09-25",
-  "v": 1,
-  "ecrit": "2026-09-25T08:10:00Z",
+  "v": 2,
+  "ecrit": "2026-09-25T10:15:00Z",
   "nuit": "7 h 10 de sommeil, plancher 52, moyenne 58, VFC 51,6. Nuit revenue à la normale après le repos.",
   "decision": {
     "d": "maintenu",
@@ -13,12 +13,41 @@
     "titre": "Dos — phase 2, jour 2",
     "notion": "https://app.notion.com/p/3e6f7b92e8f081059509c422b01c8dd5",
     "exercices": [
-      { "nom": "Row", "series": 3, "reps": 10, "kg": 95, "note": "85 × 12 × 3 à RPE 6/6/6 le 17, pas à 10" },
-      { "nom": "PullDown", "series": 3, "reps": 12, "kg": 65 },
-      { "nom": "Tirage vertical serré", "series": 3, "reps": 12, "kg": 55 },
-      { "nom": "Pulley", "series": 3, "reps": 10, "kg": 45 }
+      {
+        "nom": "Row",
+        "series": 3,
+        "reps": 10,
+        "kg": 95,
+        "note": "85 × 12 × 3 à RPE 6/6/6 le 17, pas à 10"
+      },
+      {
+        "nom": "PullDown",
+        "series": 3,
+        "reps": 12,
+        "kg": 65
+      },
+      {
+        "nom": "Tirage vertical serré",
+        "series": 3,
+        "reps": 12,
+        "kg": 55
+      },
+      {
+        "nom": "Pulley",
+        "series": 3,
+        "reps": 10,
+        "kg": 45
+      }
     ],
-    "echauffement": ["Row 60 × 10", "PullDown 40 × 15"]
+    "echauffement": [
+      "Row 60 × 10",
+      "PullDown 40 × 15"
+    ],
+    "tapis": {
+      "min": 15,
+      "pente": 13,
+      "kmh": 5.5
+    }
   },
   "points": [
     "Les quatre exercices montent en même temps, comme aux pecs mercredi.",
