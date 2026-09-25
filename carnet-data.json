@@ -3778,6 +3778,22 @@
    "rpe": 7,
    "note": "",
    "at": 1790325554266
+  },
+  {
+   "id": "w9nby1f1",
+   "date": "2026-09-25",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 100
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1790325906431
   }
  ],
  "treadmill": [
