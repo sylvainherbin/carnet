@@ -7209,16 +7209,21 @@
   {
    "date": "2026-09-25",
    "v": 6,
-   "n": 84,
-   "somAbsent": true,
-   "min": 55,
-   "moy": 64,
-   "hMin": "04:33",
-   "vfc": 47.2,
-   "vfcN": 3,
-   "spo2": 95,
+   "n": 98,
+   "min": 52,
+   "moy": 58,
+   "hMin": "08:19",
+   "vfc": 51.6,
+   "vfcN": 4,
+   "resp": 14.8,
+   "respN": 42,
+   "spo2": 96,
    "spo2Min": 94,
-   "sha": "9d7e3e99a46c858594cfd345f138d05a870cab3d"
+   "temp": 35.03,
+   "dodo": 430,
+   "coucher": 1790295228000,
+   "lever": 1790321987000,
+   "sha": "703299d82437b2a2dca36aa78fb70642a6c68a9d"
   }
  ],
  "pas": {
