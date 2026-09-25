@@ -3918,6 +3918,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1790328281943
+  },
+  {
+   "id": "mlmxf4s3",
+   "date": "2026-09-25",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 45
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1790328556529
   }
  ],
  "treadmill": [
@@ -7399,6 +7415,11 @@
     "regle": "R1 non déclenchée (7 h 10 > 6 h 30), R2 non déclenchée (plancher 52 < 58)",
     "motif": "Le repos d'hier a suffi. Séance complète, charges relevées selon les verdicts.",
     "par": "moi"
+   },
+   "plan": {
+    "prevues": 12,
+    "faites": 12,
+    "conforme": true
    }
   }
  ],
