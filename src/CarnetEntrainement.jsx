@@ -446,14 +446,17 @@ export default function CarnetEntrainement() {
     const w = [...data.weights].sort((a, b) => a.date.localeCompare(b.date));
     const lastW = w[w.length - 1];
     const ref = w.length >= 8 ? w[w.length - 8] : w[0];
+    // Écart entre la dernière pesée et la huitième avant elle : c'est un nombre
+    // de pesées, pas de jours — Sylvain se pèse tous les deux jours environ.
     const delta = lastW && ref && lastW !== ref ? lastW.kg - ref.kg : null;
+    const deltaN = Math.min(w.length, 8);
     // La dernière nuit résumée, si elle est récente : celle d'aujourd'hui ou d'hier.
     const dern = data.daily[data.daily.length - 1];
     const veille = new Date(Date.now() - 864e5);
     const nuit = dern && (dern.n > 0 || dern.vfc > 0 || dern.somAbsent) && dern.date >= `${veille.getFullYear()}-${pad(veille.getMonth() + 1)}-${pad(veille.getDate())}` ? dern : null;
     const tempEcart = nuit ? ecartTemp(data.daily, nuit.date) : null;
     const decision = data.daily.find((x) => x.date === todayISO())?.decision || null;
-    return { lastDate, lastGroup, weekSessions, lastW, delta, nuit, tempEcart, decision };
+    return { lastDate, lastGroup, weekSessions, lastW, delta, deltaN, nuit, tempEcart, decision };
   }, [data]);
 
   const tabs = [["seance", "Séance"], ["tapis", "Tapis"], ["poids", "Poids"], ["courbes", "Courbes"], ["records", "Records"], ["donnees", "Données"]];
@@ -476,7 +479,7 @@ export default function CarnetEntrainement() {
           <div className="mt-3 grid grid-cols-3 gap-2 text-xs" style={{ fontFamily: mono }}>
             <Hud label="dernière" value={hud.lastDate ? fmtDate(hud.lastDate) : "—"} sub={hud.lastGroup || ""} />
             <Hud label="semaine" value={`${hud.weekSessions} séance${hud.weekSessions > 1 ? "s" : ""}`} sub="" />
-            <Hud label="poids" value={hud.lastW ? `${hud.lastW.kg.toFixed(1)} kg` : "—"} sub={hud.delta !== null ? `${hud.delta > 0 ? "+" : ""}${hud.delta.toFixed(1)} / 7 j` : ""} color={T.magenta} />
+            <Hud label="poids" value={hud.lastW ? `${hud.lastW.kg.toFixed(1)} kg` : "—"} sub={hud.delta !== null ? `${hud.delta > 0 ? "+" : ""}${hud.delta.toFixed(1)} / ${hud.deltaN} pesées` : ""} color={T.magenta} />
           </div>
           {hud.decision?.d && (
             <div className="mt-2 text-xs" style={{ fontFamily: mono, color: T.mute }}>
@@ -1227,7 +1230,7 @@ function Courbes({ data }) {
       </Panel>
 
       <Panel boot="boot-2">
-        <H right={weight.length ? `moy. 7 j ${weight[weight.length - 1].moy7}` : ""}>Poids corporel</H>
+        <H right={weight.length ? `moy. ${Math.min(weight.length, 7)} pesées ${weight[weight.length - 1].moy7}` : ""}>Poids corporel</H>
         {weight.length < 2 ? <Empty text="Au moins deux pesées pour tracer une courbe." /> : (
           <div style={{ height: 220 }} className="glow-magenta">
             <ResponsiveContainer>
@@ -1238,7 +1241,7 @@ function Courbes({ data }) {
                 <Tooltip {...tip} />
                 <Legend wrapperStyle={{ fontSize: 11, fontFamily: mono, color: T.mute }} />
                 <Line type="monotone" dataKey="kg" name="pesée" stroke="rgba(255,45,149,.35)" strokeWidth={1} dot={{ r: 2, fill: T.magenta, strokeWidth: 0 }} />
-                <Line type="monotone" dataKey="moy7" name="moyenne 7 j" stroke={T.magenta} strokeWidth={2.5} dot={false} />
+                <Line type="monotone" dataKey="moy7" name="moyenne 7 pesées" stroke={T.magenta} strokeWidth={2.5} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>
