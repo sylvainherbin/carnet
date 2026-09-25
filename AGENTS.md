@@ -74,8 +74,9 @@ La décision venue du plan est écrite sur la ligne `daily` du jour avec
 Chaque nuit est résumée une fois (`resumeNuit`) et le résumé est rangé dans
 `carnet-data.json` → `daily[]`, avec `v` (`NUIT_VERSION`) et `sha` (empreinte
 git du fichier résumé). Une version plus ancienne ou un `sha` différent
-déclenche un nouveau résumé. Les champs saisis à la main (`repas`,
-`decision`) sont toujours conservés (`CHAMPS_MANUELS`).
+déclenche un nouveau résumé. Les champs qui ne viennent pas de la nuit sont
+toujours conservés (`CHAMPS_CONSERVES`) : ceux saisis à la main (`repas`,
+`decision`) et le bilan du plan (`plan`).
 
 ## Commandes
 

@@ -92,6 +92,18 @@ test("fusionNuit : les champs calculés viennent du frais, repas et decision de 
   assert.equal(fusionNuit({ date: "2026-09-15" }, frais).repas, undefined);
 });
 
+test("fusionNuit : le bilan du plan survit à un nouveau résumé de la même nuit", () => {
+  // Relevé du 21/09 redéposé après la séance : le résumé est refait, mais le
+  // bilan prévu contre fait a été écrit entre-temps et n'a rien à voir avec la nuit.
+  const existant = { date: "2026-09-21", v: 6, n: 114, sha: "aaa", repas: "19:22", decision: { d: "maintenu", par: "coach" }, plan: { prevues: 12, faites: 12, conforme: true } };
+  const frais = { date: "2026-09-21", v: 6, n: 118, sha: "bbb" };
+  const x = fusionNuit(existant, frais);
+  assert.deepEqual(x.plan, { prevues: 12, faites: 12, conforme: true });
+  assert.equal(x.n, 118);
+  assert.equal(x.sha, "bbb");
+  assert.equal(fusionNuit({ date: "2026-09-21" }, frais).plan, undefined);
+});
+
 test("nuitAJour : une version antérieure ou une souche sans relevé est à recalculer", () => {
   assert.equal(nuitAJour({ n: 10, v: NUIT_VERSION }), true);
   assert.equal(nuitAJour({ n: 10, v: NUIT_VERSION - 1 }), false);

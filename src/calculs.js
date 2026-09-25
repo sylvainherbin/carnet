@@ -169,9 +169,14 @@ export const resumeNuit = (raw, date) => {
 // repas : heure de fin du dernier repas ; decision : { d, regle, motif }, la
 // décision du matin telle que le coach l'a prise — l'app n'applique aucune règle.
 export const CHAMPS_MANUELS = ["repas", "decision"];
+// plan : le bilan prévu contre fait de la séance du jour, écrit par
+// poserPlanFait. Il ne vient pas du relevé de nuit, donc un nouveau résumé ne
+// doit pas l'emporter — le relevé du jour est réécrit à chaque exécution du
+// raccourci, y compris après la séance.
+export const CHAMPS_CONSERVES = [...CHAMPS_MANUELS, "plan"];
 export const fusionNuit = (existant, frais) => {
   const x = { ...frais };
-  CHAMPS_MANUELS.forEach((k) => { if (existant[k] !== undefined) x[k] = existant[k]; });
+  CHAMPS_CONSERVES.forEach((k) => { if (existant[k] !== undefined) x[k] = existant[k]; });
   return x;
 };
 export const nuitAJour = (existant) => existant.n !== undefined && (existant.v || 1) >= NUIT_VERSION;
