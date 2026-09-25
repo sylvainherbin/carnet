@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile, pullPlanFile } from "./githubSync.js";
 import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, dailyAImporter, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp, repriseSeance, carnetValide, carnetVide, lirePlan, avancementPlan, seanceTerminee, planPrevuFait, poserPlanFait, decisionAEcrire, manquesDuPlan, RPE_DEFAUT } from "./calculs.js";
 import {
-  LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea, ReferenceLine, Cell,
+  LineChart, Line, ComposedChart, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea, ReferenceLine, Cell,
 } from "recharts";
 
 // ================= données / helpers (inchangés) =================
@@ -1144,8 +1144,9 @@ function Courbes({ data }) {
   const strength = useMemo(() => {
     const byDate = {};
     data.sessions.filter((s) => s.exercise === ex).forEach((s) => {
-      const b = byDate[s.date] || { date: s.date, e1rm: 0, vol: 0 };
+      const b = byDate[s.date] || { date: s.date, e1rm: 0, kgMax: 0, vol: 0 };
       b.e1rm = Math.max(b.e1rm, ...s.sets.map((x) => e1rm(x.kg, x.reps)));
+      b.kgMax = Math.max(b.kgMax, ...s.sets.map((x) => x.kg));
       b.vol += s.sets.reduce((a, x) => a + x.reps * x.kg, 0); byDate[s.date] = b;
     });
     return Object.values(byDate).sort((a, b) => a.date.localeCompare(b.date)).map((r) => ({ ...r, e1rm: +r.e1rm.toFixed(1), label: fmtDate(r.date) }));
@@ -1203,14 +1204,16 @@ function Courbes({ data }) {
             )}
             <div style={{ height: 220 }} className="glow-cyan">
               <ResponsiveContainer>
-                <AreaChart data={strength} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+                <ComposedChart data={strength} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
                   <defs><linearGradient id="gc" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={G.cyan} stopOpacity={0.35} /><stop offset="100%" stopColor={T.cyan} stopOpacity={0} /></linearGradient></defs>
                   <CartesianGrid stroke={G.grille} />
                   <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
-                  <YAxis domain={yDomain(strength.map((r) => r.e1rm))} tick={axis} axisLine={false} tickLine={false} />
+                  <YAxis domain={yDomain(strength.flatMap((r) => [r.e1rm, r.kgMax]))} tick={axis} axisLine={false} tickLine={false} />
                   <Tooltip {...tip} />
+                  <Legend wrapperStyle={{ fontSize: 11, fontFamily: mono, color: T.mute }} />
                   <Area type="monotone" dataKey="e1rm" name="e1RM (kg)" stroke={G.cyan} strokeWidth={2} fill="url(#gc)" dot={{ r: 4, fill: T.bg, stroke: G.cyan, strokeWidth: 2 }} activeDot={{ r: 6, fill: G.cyan }} />
-                </AreaChart>
+                  <Line type="monotone" dataKey="kgMax" name="charge max (kg)" stroke={T.violet} strokeWidth={2} strokeDasharray="5 3" dot={{ r: 3, fill: T.violet, strokeWidth: 0 }} activeDot={{ r: 5, fill: T.violet }} />
+                </ComposedChart>
               </ResponsiveContainer>
             </div>
             <div className="text-xs mt-3 mb-1" style={{ color: T.mute, fontFamily: mono }}>volume par séance (kg)</div>
