@@ -344,9 +344,25 @@ export default function CarnetEntrainement() {
   };
 
   useEffect(() => { dataRef.current = data; }, [data]);
+  // Un carnet local mal formé — import raté, stockage abîmé — plantait le rendu
+  // à chaque ouverture, puisqu'il était rechargé tel quel. On le met de côté au
+  // lieu de le charger : rien n'est effacé, et la synchro GitHub peut reprendre
+  // la main. adopting évite de marquer « modifié » le carnet vide de départ, qui
+  // serait alors poussé par-dessus les données distantes.
   useEffect(() => {
-    try { const r = localStorage.getItem(STORAGE_KEY); if (r) { adopting.current = true; setData({ ...EMPTY, ...JSON.parse(r) }); } }
-    catch (e) { /* première utilisation */ }
+    try {
+      const r = localStorage.getItem(STORAGE_KEY);
+      if (r) {
+        const p = JSON.parse(r);
+        adopting.current = true;
+        if (carnetValide(p)) setData({ ...EMPTY, ...p });
+        else {
+          localStorage.setItem(`${STORAGE_KEY}-invalide`, r);
+          localStorage.removeItem(STORAGE_KEY);
+          notify("Carnet local illisible, mis de côté — reprise depuis GitHub");
+        }
+      }
+    } catch (e) { /* première utilisation */ }
     finally { setLoaded(true); }
   }, []);
   // Chaque relecture coûte plusieurs requêtes GitHub anonymes, plafonnées à 60
@@ -1489,8 +1505,12 @@ function Donnees({ data, setData, notify, sync, onToken, onTokenOff, onSync }) {
     download(name, content, type);
   };
   const applyImport = (text) => {
-    try { const p = JSON.parse(text); if (!p.sessions || !p.weights) throw new Error(); setData({ ...EMPTY, ...p }); setImp(""); notify("Données importées"); }
-    catch { notify("JSON invalide"); }
+    let p;
+    try { p = JSON.parse(text); } catch { notify("JSON invalide"); return; }
+    // Un JSON valide mais de forme fausse (« sessions » à {}) passait le
+    // contrôle, plantait le rendu, et était enregistré au passage.
+    if (!carnetValide(p)) { notify("Carnet mal formé — rien n'a été importé"); return; }
+    setData({ ...EMPTY, ...p }); setImp(""); notify("Données importées");
   };
   const onFile = (e) => {
     const f = e.target.files[0]; e.target.value = "";
