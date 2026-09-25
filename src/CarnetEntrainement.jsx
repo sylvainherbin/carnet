@@ -418,14 +418,19 @@ export default function CarnetEntrainement() {
     if (dern && dern.n === 0 && !dern.vfc && !dern.repos) out.push(`Relevé quotidien du ${fmtDate(dern.date)} vide — montre portée ?`);
     return out;
   }, [data.sessions, data.durations, data.daily, dailyLast]);
+  // L'enregistrement local attend 400 ms pour ne pas écrire à chaque frappe,
+  // mais le marqueur « modifié » est posé tout de suite : pendant ce délai,
+  // doPull voyait un carnet réputé non modifié et adoptait la version distante
+  // sans demander, ce qui effaçait la saisie en cours.
   useEffect(() => {
     if (!loaded) return;
     clearTimeout(saveTimer.current);
     const adopted = adopting.current; adopting.current = false;
+    if (!adopted) { try { localStorage.setItem(GH_DIRTY, "1"); } catch (e) { /* privé */ } }
     saveTimer.current = setTimeout(() => {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        if (!adopted) { localStorage.setItem(GH_DIRTY, "1"); schedulePush(); }
+        if (!adopted) schedulePush();
       } catch (e) { console.error(e); }
     }, 400);
     return () => clearTimeout(saveTimer.current);
