@@ -3871,6 +3871,22 @@
    "rpe": 7,
    "note": "",
    "at": 1790327675434
+  },
+  {
+   "id": "hmep90y7",
+   "date": "2026-09-25",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 55
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1790327891199
   }
  ],
  "treadmill": [
