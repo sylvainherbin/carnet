@@ -7223,7 +7223,13 @@
    "dodo": 430,
    "coucher": 1790295228000,
    "lever": 1790321987000,
-   "sha": "703299d82437b2a2dca36aa78fb70642a6c68a9d"
+   "sha": "703299d82437b2a2dca36aa78fb70642a6c68a9d",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée (7 h 10 > 6 h 30), R2 non déclenchée (plancher 52 < 58)",
+    "motif": "Le repos d'hier a suffi. Séance complète, charges relevées selon les verdicts.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
