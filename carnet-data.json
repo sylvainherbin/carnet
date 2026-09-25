@@ -7205,6 +7205,20 @@
     "motif": "Sylvain a décidé le repos avant lecture de la nuit. La nuit courte et la moyenne FC élevée (60) vont dans le même sens.",
     "par": "coach"
    }
+  },
+  {
+   "date": "2026-09-25",
+   "v": 6,
+   "n": 84,
+   "somAbsent": true,
+   "min": 55,
+   "moy": 64,
+   "hMin": "04:33",
+   "vfc": 47.2,
+   "vfcN": 3,
+   "spo2": 95,
+   "spo2Min": 94,
+   "sha": "9d7e3e99a46c858594cfd345f138d05a870cab3d"
   }
  ],
  "pas": {
