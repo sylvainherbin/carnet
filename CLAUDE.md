@@ -11,8 +11,8 @@ Dépôt public : aucun secret, aucune donnée personnelle ou de santé.
 - Le **coach** est une autre session Claude, distincte. Il lit
   `carnet-data.json`, `daily/` et `fc/`, et il écrit `plan/AAAA-MM-JJ.json` par
   l'API GitHub. Aucun canal direct avec lui : Sylvain fait le lien.
-- GitHub (`main`) fait foi. La copie locale de Sylvain peut être en retard,
-  et le clone cloud aussi : faire un `fetch` avant de conclure sur l'état des données.
+- GitHub (`main`) fait foi. La copie locale peut être en retard : faire un
+  `git pull` avant de conclure sur l'état des données.
 
 ## Contrat de données avec le coach
 
@@ -109,40 +109,44 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
 - `adopting` marque un `setData` venu du stockage ou de GitHub, pour qu'il
   ne compte pas comme une modification.
 
-## Commandes vérifiées dans le cloud (26/09/2026)
+## Environnement (machine de Sylvain, 27/09/2026)
 
-- Le conteneur tourne avec **Node 22.22**, pas 24, et le fuseau est **UTC**.
-- `npm install` : OK, mais npm 10 réécrit `package-lock.json` (78 lignes en
-  moins). Utiliser **`npm ci`**, qui laisse le fichier intact, et ne jamais
-  committer ce diff.
-- `npm test` : **60/62 en UTC**. Les deux tests de `tests/seance.test.js`
-  sur le 15/09 échouent. Il faut lancer
-  `TZ=Europe/Paris npm test` pour obtenir 62/62. Cause : `parseMs` lit les
-  horodatages `fc/` en heure locale, alors que les `at` des saisies sont
-  absolus. Les fixtures ont été enregistrées à l'heure de Paris.
-- `npm run lint` : 0 erreur, 15 avertissements
-  (`set-state-in-effect`, `exhaustive-deps`), tous dans
-  `CarnetEntrainement.jsx`.
+- **Node 24.20.0** et npm 11, installés par nvm et **absents du PATH par
+  défaut** : `export PATH=$HOME/.nvm/versions/node/v24.20.0/bin:$PATH`.
+- Le fuseau de la machine est celui de Paris, donc `npm test` donne **62/62**
+  sans rien régler. Les tests restent dépendants du fuseau : sous `TZ=UTC`,
+  les deux tests de `tests/seance.test.js` sur le 15/09 échouent, parce que
+  `parseMs` lit les horodatages `fc/` en heure locale alors que les `at` des
+  saisies sont absolus, et que les fixtures ont été enregistrées à Paris.
+- `npm ci` plutôt que `npm install`, qui peut réécrire `package-lock.json` :
+  ce diff ne se committe pas.
+- `npm run lint` : 0 erreur, 41 avertissements (`set-state-in-effect`,
+  `exhaustive-deps`), tous dans `CarnetEntrainement.jsx`. `npx oxlint src`
+  donne exactement le même compte : aujourd'hui, seul `src` produit des
+  avertissements.
 - `npm run build` : OK, avec un avertissement « chunk > 500 kB » (Recharts).
-- Une session peut démarrer sur un clone sans remote `origin`. Dans ce cas,
-  rattacher le dépôt GitHub à la session avec l'outil prévu, puis travailler
-  dans ce clone. Ni `rsync` ni `gh` ne sont installés.
+- `git`, `gh` et `rsync` sont installés, et le remote `origin` est en place.
+  `gh` sert aux corrections de `carnet-data.json` par l'API.
 
-## Branches et commits
+## Commits et déploiement
 
-- Travail sur une branche `claude/…`, puis PR vers `main`. Jamais de push
-  direct sur `main` ni sur `gh-pages`.
-- L'application GitHub de Claude est installée sur le dépôt : la branche se
-  pousse avec `git push -u origin <branche>`.
-- Avant tout commit, montrer le diff à Sylvain et attendre son accord.
+- Travail directement sur `main`. Pas de branche ni de PR : c'est la raison
+  du retour en local.
+- Le déploiement passe par `scripts/deploy.sh vNN "message"`, qui incrémente
+  `CACHE` dans `public/sw.js`, lance lint, tests et build, commit et pousse
+  `main`, recopie `dist/` dans `gh-pages` sans supprimer d'assets, puis
+  vérifie en ligne. Dernière version déployée : **v44**.
+- Jamais de `--force`, jamais de suppression d'assets sur `gh-pages`.
+- Rien n'est déployé sans l'accord de Sylvain. Lui décrire ce qui change
+  avant de committer, et lui rendre compte de ce qui est parti.
+- Terminer les messages de commit par les lignes d'attribution de la
+  session.
 
 ## Points ouverts
 
-- **Déploiement depuis le cloud : pas validé, à ne pas lancer.**
-  `scripts/deploy.sh` pousse `main` puis `gh-pages`, alors qu'une session
-  cloud ne pousse que sur sa branche de travail. Il lui faut aussi `rsync`,
-  absent ici, et il fait un `git add -A` sur tout le répertoire. Pour
-  l'instant, le déploiement se fait sur la machine de Sylvain.
+- `scripts/deploy.sh` fait un `git add -A` sur tout le répertoire : vérifier
+  l'état du dépôt avant de le lancer, pour ne pas emporter un fichier de
+  travail.
 - Les tests dépendent du fuseau : ils ne passent qu'à l'heure de Paris.
   Correctif retenu : fixer le fuseau dans `tests/aide.js`, **pas** dans
   `calculs.js`, dont le calcul est juste tant que l'app et les données
