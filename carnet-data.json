@@ -4104,6 +4104,21 @@
    "rpe": 5,
    "note": "",
    "at": 1790501857452
+  },
+  {
+   "id": "s7bi5ckc",
+   "date": "2026-09-27",
+   "group": "Jambes",
+   "exercise": "Adducteurs",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 60
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1790501984055
   }
  ],
  "treadmill": [
