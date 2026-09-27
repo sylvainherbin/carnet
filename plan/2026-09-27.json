@@ -1,0 +1,29 @@
+{
+  "date": "2026-09-27",
+  "v": 1,
+  "ecrit": "2026-09-27T10:20:00Z",
+  "nuit": "6 h 36 de sommeil, plancher 54, moyenne 61, VFC 31,3. Troisième nuit de suite avec moyenne élevée et VFC en baisse.",
+  "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée (6 h 36 > 6 h 30, de justesse), R2 non déclenchée (plancher 54 < 58)",
+    "motif": "Les deux règles laissent passer, mais la tendance sur trois nuits (moyenne 60/63/61, VFC en chute) demande de la prudence : pas d'extension à 16 séries aujourd'hui."
+  },
+  "seance": {
+    "groupe": "Jambes",
+    "titre": "Jambes — phase 2, jour 1",
+    "notion": "https://app.notion.com/p/3e8f7b92e8f081e0acfddd07a7f6bff6",
+    "exercices": [
+      { "nom": "Leg press 2", "series": 3, "reps": 10, "kg": 130, "note": "objectif 150 × 10 × 3 sous RPE 8 au 31/10, en avance sur le délai" },
+      { "nom": "Hack squat", "series": 3, "reps": 7, "kg": 40, "note": "charge tenue, l'app dit monte à 45 — je maintiens et je monte les reps vers 10" },
+      { "nom": "Leg extension", "series": 3, "reps": 10, "kg": 60 },
+      { "nom": "Leg Curl", "series": 3, "reps": 12, "kg": 55 }
+    ],
+    "echauffement": ["Leg press 60 × 10", "Leg press 90 × 6", "Hack squat chariot à vide × 8", "Hack squat 20 × 8"],
+    "tapis": { "min": 15, "pente": 13, "kmh": 5.5 }
+  },
+  "points": [
+    "Pas d'extension à 16 séries aujourd'hui : trois nuits de VFC en baisse et moyenne FC en hausse, on reste prudent.",
+    "Avoine-banane 1h30 avant, séance la plus coûteuse.",
+    "Poulie haut du pec : pas au programme."
+  ]
+}
