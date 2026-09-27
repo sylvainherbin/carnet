@@ -7706,7 +7706,13 @@
    "dodo": 396,
    "coucher": 1790470167000,
    "lever": 1790495088000,
-   "sha": "a2e03fbcc7429d59af652fe7d14c869abc1505c7"
+   "sha": "a2e03fbcc7429d59af652fe7d14c869abc1505c7",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée (6 h 36 > 6 h 30, de justesse), R2 non déclenchée (plancher 54 < 58)",
+    "motif": "Les deux règles laissent passer, mais la tendance sur trois nuits (moyenne 60/63/61, VFC en chute) demande de la prudence : pas d'extension à 16 séries aujourd'hui.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
