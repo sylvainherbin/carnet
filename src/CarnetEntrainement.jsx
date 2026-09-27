@@ -38,6 +38,13 @@ const T = {
 // sert plus qu'au statut « nuit courte », la paire chaud/froid qu'à l'écart
 // de température.
 const G = { cyan: "#02A5B8", amber: "#B27900", chaud: T.danger, froid: "#02A5B8", grille: "rgba(108,127,151,0.20)" };
+// Seuil de la règle R1 du coach (nuit courte) ; il vit dans les règles du
+// coach, pas dans l'app : à reporter ici s'il change.
+const SEUIL_R1_H = 6.5;
+// Domaine d'un axe numérique avec une marge de 15 %, pour qu'une petite
+// variation (poids, e1RM) ne s'écrase pas contre un zéro qui n'a pas de sens
+// physiologique.
+const yDomain = (vals) => { if (!vals.length) return [0, 1]; const mn = Math.min(...vals), mx = Math.max(...vals); const p = Math.max(1, (mx - mn) * 0.15); return [Math.floor(mn - p), Math.ceil(mx + p)]; };
 const mono = "'SF Mono', ui-monospace, Menlo, Consolas, monospace";
 const display = "'Orbitron', 'SF Mono', ui-monospace, monospace";
 const sans = "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
@@ -47,6 +54,8 @@ const CSS = `
 @keyframes rise { from { opacity:0; transform: translateX(-8px);} to { opacity:1; transform:none;} }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0,229,255,.55);} 100% { box-shadow: 0 0 0 18px rgba(0,229,255,0);} }
 @keyframes scan { 0% { transform: translateY(-100%);} 100% { transform: translateY(400%);} }
+@keyframes spin { to { transform: rotate(360deg); } }
+.pulse-ring { animation: spin 2.4s linear infinite; transform-origin: 30px 30px; }
 @keyframes blink { 0%,49% { opacity:1;} 50%,100% { opacity:0;} }
 @keyframes toastin { from { opacity:0; transform: translate(-50%, 8px);} to { opacity:1; transform: translate(-50%, 0);} }
 .boot { animation: boot .45s cubic-bezier(.2,.8,.2,1) both; }
@@ -104,7 +113,7 @@ select.inp { appearance:none; background-image: linear-gradient(45deg, transpare
 @keyframes prspark { 0% { transform: translate(0,0) scale(1); opacity:1; } 100% { transform: translate(var(--dx), var(--dy)) scale(.3); opacity:0; } }
 .pr-line { opacity:0; animation: rise .35s ease-out forwards; }
 @media (prefers-reduced-motion: reduce) {
-  .boot,.rise,.pulse,.scanline,.toast,.cursor::after,.pr-ring,.pr-spark,.pr-overlay { animation:none !important; }
+  .boot,.rise,.pulse,.scanline,.toast,.cursor::after,.pr-ring,.pr-spark,.pr-overlay,.pulse-ring { animation:none !important; }
   .pr-line { opacity:1 !important; animation:none !important; }
 }
 `;
@@ -470,34 +479,89 @@ export default function CarnetEntrainement() {
       <style>{CSS}</style>
       <div ref={scroller} className="flex-1 overflow-y-auto">
       <div className="max-w-md mx-auto pb-4">
-        <header className="relative px-4 pt-5 pb-4 overflow-hidden boot">
+        <header className="relative px-4 pt-5 pb-4 overflow-hidden boot space-y-3">
           <div className="scanline" />
           <div className="flex items-baseline justify-between">
             <h1 className="text-2xl font-bold tracking-tight cursor" style={{ color: T.cyan, textShadow: `0 0 14px rgba(0,229,255,.6)`, fontFamily: display, letterSpacing: '.08em' }}>CARNET</h1>
-            <span className="text-xs" style={{ color: T.mute, fontFamily: mono }}>{fmtDate(todayISO())}</span>
+            <span className="flex items-center gap-2 text-xs" style={{ color: T.mute, fontFamily: mono }}>
+              <span className="flex items-center gap-1.5"><span className="rounded-full" style={{ width: 7, height: 7, background: T.cyan, boxShadow: `0 0 8px ${T.cyan}` }} />synchro</span>
+              {fmtDate(todayISO())}
+            </span>
           </div>
-          <div className="mt-3 grid grid-cols-3 gap-2 text-xs" style={{ fontFamily: mono }}>
+          {(() => {
+            const [, decLabelBig, decColor] = hud.decision?.d ? libDecision(hud.decision.d) : [null, "—", T.mute];
+            const halo = hud.decision?.d ? `${decColor}44` : "rgba(108,127,151,.15)";
+            return (
+              <section aria-label="Feu du matin" className="rounded-2xl px-4 pt-4 pb-3.5" style={{
+                background: "linear-gradient(180deg, rgba(11,16,26,.96), rgba(8,12,20,.96))",
+                border: `1px solid ${hud.decision?.d ? decColor + "66" : T.line}`, boxShadow: `0 0 28px ${halo}, inset 0 1px 0 rgba(255,255,255,.04)` }}>
+                <div className="flex justify-between items-start gap-2">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[11px] tracking-widest uppercase" style={{ color: T.mute, fontFamily: mono }}>aujourd'hui</span>
+                    <span className="font-black text-2xl tracking-wide" style={{ fontFamily: display, color: decColor, textShadow: `0 0 16px ${halo}, 0 0 2px ${decColor}` }}>
+                      {hud.decision?.d ? decLabelBig.toUpperCase() : "—"}
+                    </span>
+                    <span className="text-xs" style={{ color: "#8FA3BA", fontFamily: mono }}>
+                      {hud.decision?.regle ? `${hud.decision.regle.split(" ")[0]} · ` : ""}{hud.decision?.par === "moi" ? "posée par toi" : hud.decision?.par === "coach" ? "posée par le coach" : "en attente"}
+                    </span>
+                  </div>
+                  <svg width="46" height="46" viewBox="0 0 52 52" aria-hidden="true" className="flex-shrink-0">
+                    <circle cx="26" cy="26" r="22" fill="none" stroke="rgba(108,127,151,.25)" strokeWidth="2" />
+                    <circle cx="26" cy="26" r="15" fill="none" stroke={decColor} strokeWidth="2" strokeDasharray="3 4" opacity=".7" />
+                    <circle cx="26" cy="26" r="6" fill={decColor} style={{ filter: `drop-shadow(0 0 6px ${decColor})` }} />
+                  </svg>
+                </div>
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  {hud.nuit?.somAbsent ? (
+                    <div className="rounded-lg px-3 py-2 flex flex-col gap-1" style={{ background: "rgba(255,176,0,.05)", border: "1px dashed rgba(255,176,0,.45)" }}>
+                      <span className="text-[11px]" style={{ color: T.mute, fontFamily: mono }}>sommeil</span>
+                      <span className="text-xl font-bold" style={{ fontFamily: display, color: T.mute }}>— h —</span>
+                      <span className="text-[11px]" style={{ color: T.amber, fontFamily: mono }}>sommeil non reçu</span>
+                      <span className="text-[10px]" style={{ color: T.mute, fontFamily: mono }}>R1 non applicable</span>
+                    </div>
+                  ) : hud.nuit?.dodo > 0 ? (
+                    <div className="rounded-lg px-3 py-2 flex flex-col gap-1.5" style={{ background: "rgba(0,229,255,.04)", border: "1px solid rgba(0,229,255,.14)" }}>
+                      <span className="text-[11px]" style={{ color: T.mute, fontFamily: mono }}>sommeil</span>
+                      <span className="text-xl font-bold" style={{ fontFamily: display, color: T.text }}>{Math.floor(hud.nuit.dodo / 60)}<span className="text-xs" style={{ color: T.mute }}> h </span>{pad(hud.nuit.dodo % 60)}</span>
+                      <div className="relative rounded-full" style={{ height: 4, background: "rgba(108,127,151,.2)" }}>
+                        <div className="rounded-full" style={{ height: 4, width: `${Math.min(100, (hud.nuit.dodo / 60 / 9) * 100)}%`, background: hud.nuit.dodo / 60 < SEUIL_R1_H ? G.amber : T.cyan, boxShadow: `0 0 8px ${hud.nuit.dodo / 60 < SEUIL_R1_H ? G.amber : T.cyan}` }} />
+                        <div className="absolute" style={{ left: `${(SEUIL_R1_H / 9) * 100}%`, top: -3, width: 1, height: 10, background: T.amber }} />
+                      </div>
+                      <span className="text-[10px]" style={{ color: T.mute, fontFamily: mono }}>seuil R1 · 6 h 30</span>
+                    </div>
+                  ) : (
+                    <div className="rounded-lg px-3 py-2 flex flex-col gap-1" style={{ background: "rgba(0,229,255,.04)", border: "1px solid rgba(0,229,255,.14)" }}>
+                      <span className="text-[11px]" style={{ color: T.mute, fontFamily: mono }}>sommeil</span>
+                      <span className="text-xl font-bold" style={{ fontFamily: display, color: T.mute }}>—</span>
+                      <span className="text-[10px]" style={{ color: T.mute, fontFamily: mono }}>seuil R1 · 6 h 30</span>
+                    </div>
+                  )}
+                  <div className="rounded-lg px-3 py-2 flex flex-col gap-1" style={{ background: "rgba(255,59,92,.04)", border: "1px solid rgba(255,59,92,.16)" }}>
+                    <span className="text-[11px]" style={{ color: T.mute, fontFamily: mono }}>FC nuit · min</span>
+                    <span className="text-xl font-bold" style={{ fontFamily: display, color: T.danger, textShadow: "0 0 10px rgba(255,59,92,.45)" }}>{hud.nuit?.n > 0 ? hud.nuit.min : "—"}<span className="text-xs" style={{ color: T.mute }}> bpm</span></span>
+                    <span className="text-[10px]" style={{ color: T.mute, fontFamily: mono }}>{hud.nuit?.n > 0 ? `${hud.nuit.hMin ? `à ${hud.nuit.hMin} · ` : ""}${hud.nuit.moy} moy` : "—"}</span>
+                  </div>
+                  <div className="rounded-lg px-3 py-2 flex flex-col gap-1" style={{ background: "rgba(122,92,255,.05)", border: "1px solid rgba(122,92,255,.2)" }}>
+                    <span className="text-[11px]" style={{ color: T.mute, fontFamily: mono }}>VFC</span>
+                    <span className="text-xl font-bold" style={{ fontFamily: display, color: T.violet, textShadow: "0 0 10px rgba(122,92,255,.5)" }}>{hud.nuit?.vfc > 0 ? hud.nuit.vfc : "—"}<span className="text-xs" style={{ color: T.mute }}> ms</span></span>
+                    <span className="text-[10px]" style={{ color: T.mute, fontFamily: mono }}>
+                      {hud.nuit?.resp > 0 ? `resp ${hud.nuit.resp}/min` : ""}{hud.nuit?.resp > 0 && hud.nuit?.spo2 > 0 ? " · " : ""}{hud.nuit?.spo2 > 0 ? `SpO2 ${hud.nuit.spo2} %` : ""}
+                    </span>
+                  </div>
+                  <div className="rounded-lg px-3 py-2 flex flex-col gap-1" style={{ background: "rgba(255,176,0,.04)", border: "1px solid rgba(255,176,0,.16)" }}>
+                    <span className="text-[11px]" style={{ color: T.mute, fontFamily: mono }}>temp. poignet</span>
+                    <span className="text-xl font-bold" style={{ fontFamily: display, color: T.amber, textShadow: "0 0 10px rgba(255,176,0,.4)" }}>{hud.nuit?.temp > 0 ? hud.nuit.temp.toFixed(1) : "—"}<span className="text-xs" style={{ color: T.mute }}> °C</span></span>
+                    <span className="text-[10px]" style={{ color: T.mute, fontFamily: mono }}>{hud.tempEcart !== null ? `${hud.tempEcart > 0 ? "+" : ""}${hud.tempEcart.toFixed(2)} sur ta médiane` : "—"}</span>
+                  </div>
+                </div>
+              </section>
+            );
+          })()}
+          <div className="grid grid-cols-3 gap-2 text-xs" style={{ fontFamily: mono }}>
             <Hud label="dernière" value={hud.lastDate ? fmtDate(hud.lastDate) : "—"} sub={hud.lastGroup || ""} />
             <Hud label="semaine" value={`${hud.weekSessions} séance${hud.weekSessions > 1 ? "s" : ""}`} sub="" />
             <Hud label="poids" value={hud.lastW ? `${hud.lastW.kg.toFixed(1)} kg` : "—"} sub={hud.delta !== null ? `${hud.delta > 0 ? "+" : ""}${hud.delta.toFixed(1)} / ${hud.deltaN} pesées` : ""} color={T.magenta} />
           </div>
-          {hud.decision?.d && (
-            <div className="mt-2 text-xs" style={{ fontFamily: mono, color: T.mute }}>
-              aujourd'hui : <span style={{ color: libDecision(hud.decision.d)[2] }}>{libDecision(hud.decision.d)[1]}</span>{hud.decision.regle ? ` · ${hud.decision.regle}` : ""}{hud.decision.par ? ` · ${hud.decision.par}` : ""}
-            </div>
-          )}
-          {hud.nuit && (
-            <div className="mt-2 text-xs" style={{ fontFamily: mono, color: T.mute }}>
-              nuit du {fmtDate(hud.nuit.date)}
-              {hud.nuit.n > 0 && <> · FC <span style={{ color: T.danger }}>{hud.nuit.min}</span> min{hud.nuit.hMin ? ` à ${hud.nuit.hMin}` : ""} · {hud.nuit.moy} moy</>}
-              {hud.nuit.vfc > 0 && <> · VFC <span style={{ color: T.violet }}>{hud.nuit.vfc}</span> ms</>}
-              {hud.nuit.somAbsent && <> · <span style={{ color: T.amber }}>sommeil non reçu</span> · R1 non applicable</>}
-              {hud.nuit.dodo > 0 && <> · {Math.floor(hud.nuit.dodo / 60)} h {pad(hud.nuit.dodo % 60)} dormies</>}
-              {hud.nuit.resp > 0 && <> · resp <span style={{ color: T.cyan }}>{hud.nuit.resp}</span>/min</>}
-              {hud.nuit.spo2 > 0 && <> · SpO2 <span style={{ color: T.cyan }}>{hud.nuit.spo2}</span> %</>}
-              {hud.nuit.temp > 0 && <> · <span style={{ color: T.amber }}>{hud.nuit.temp.toFixed(1)} °C</span>{hud.tempEcart !== null ? ` (${hud.tempEcart > 0 ? "+" : ""}${hud.tempEcart.toFixed(2)})` : ""}</>}
-            </div>
-          )}
         </header>
 
         {alertes.length > 0 && (
@@ -530,11 +594,13 @@ export default function CarnetEntrainement() {
         </div>
       )}
 
-      <nav className="shrink-0" style={{ background: "rgba(6,8,14,.92)", borderTop: `1px solid ${T.line}`, paddingBottom: "env(safe-area-inset-bottom)" }}>
+      <nav aria-label="Onglets" className="shrink-0" style={{ background: "rgba(6,8,14,.94)", borderTop: `1px solid ${T.line}`, paddingBottom: "env(safe-area-inset-bottom)" }}>
         <div className="max-w-md mx-auto grid grid-cols-6">
           {tabs.map(([k, label]) => (
-            <button key={k} type="button" onClick={() => setTab(k)} className={`tab py-3 text-xs ${tab === k ? "tab-active" : ""}`}
-              style={{ color: tab === k ? T.cyan : T.mute, fontFamily: mono, fontWeight: tab === k ? 700 : 400 }}>
+            <button key={k} type="button" aria-current={tab === k ? "page" : undefined} onClick={() => setTab(k)}
+              className={`tab py-2 flex flex-col items-center gap-1 text-[10px] ${tab === k ? "tab-active" : ""}`}
+              style={{ color: tab === k ? T.cyan : T.mute, fontFamily: mono, fontWeight: tab === k ? 700 : 400, minHeight: 52 }}>
+              <TabIcon tab={k} active={tab === k} />
               {label}
             </button>
           ))}
@@ -557,6 +623,46 @@ function Hud({ label, value, sub, color = T.cyan }) {
 // Les trois décisions du matin : clé stockée, libellé, couleur.
 const DECISIONS = [["maintenu", "maintenu", T.cyan], ["allege", "allégé", T.amber], ["repos", "repos", T.magenta]];
 const libDecision = (k) => DECISIONS.find((x) => x[0] === k) || [k, k, T.mute];
+
+// Tracés d'icônes de la barre d'onglets, un par onglet, dans l'ordre de `tabs`.
+const NAV_ICONS = {
+  seance: "M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12",
+  tapis: "M3 12h4l3-8 4 16 3-8h4",
+  poids: "M8.5 10a4.5 4.5 0 0 1 7 0M12 12.5l1.8-3",
+  courbes: "M4 4v16h16 M7 15l4-4 3 3 5-6",
+  records: "M8 4h8v5a4 4 0 0 1-8 0V4z M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 20h8",
+  donnees: "M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6",
+};
+function TabIcon({ tab, active }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+      style={{ filter: active ? "drop-shadow(0 0 5px rgba(0,229,255,.7))" : "none" }}>
+      {tab === "poids" && <rect x="4" y="4" width="16" height="16" rx="4" />}
+      {tab === "donnees" && <ellipse cx="12" cy="6" rx="7" ry="3" />}
+      <path d={NAV_ICONS[tab]} />
+    </svg>
+  );
+}
+
+// Anneau de progression du plan : séries faites sur séries prévues.
+function AnneauSeries({ faites, prevues }) {
+  const r = 25, c = 2 * Math.PI * r;
+  const frac = prevues > 0 ? Math.min(1, faites / prevues) : 0;
+  return (
+    <div className="relative flex-shrink-0" style={{ width: 60, height: 60 }}>
+      <svg width="60" height="60" viewBox="0 0 60 60" aria-hidden="true">
+        <circle cx="30" cy="30" r={r} fill="none" stroke="rgba(0,229,255,.12)" strokeWidth="5" />
+        <circle cx="30" cy="30" r={r} fill="none" stroke={T.cyan} strokeWidth="5" strokeLinecap="round"
+          strokeDasharray={c} strokeDashoffset={c * (1 - frac)} transform="rotate(-90 30 30)"
+          style={{ filter: "drop-shadow(0 0 5px rgba(0,229,255,.8))", transition: "stroke-dashoffset .3s" }} />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="font-bold text-sm leading-none" style={{ fontFamily: display, color: T.text }}>{faites}</span>
+        <span className="text-[9px]" style={{ fontFamily: mono, color: T.mute }}>/ {prevues}</span>
+      </div>
+    </div>
+  );
+}
 
 // Verdict de progression : le geste à faire, puis ce qui le justifie.
 function Verdict({ v, court }) {
@@ -778,41 +884,70 @@ function Seance({ data, update, notify, celebrate, plan }) {
     <>
       {planVisible && (
         <Panel boot="boot-1" className="space-y-2">
-          <H right={planDuJour.seance?.groupe || ""}>{planDuJour.seance?.titre || "Séance du jour"}</H>
+          <div className="flex items-center gap-3">
+            {av.prevues > 0 && <AnneauSeries faites={av.faites} prevues={av.prevues} />}
+            <div className="flex-1 min-w-0">
+              <H right={planDuJour.seance?.groupe || ""}>{planDuJour.seance?.titre || "Séance du jour"}</H>
+              <span className="inline-block px-2 py-0.5 rounded-full text-xs" style={{ background: "rgba(0,229,255,.1)", color: T.cyan, border: `1px solid ${T.line}`, fontFamily: mono }}>plan du coach</span>
+            </div>
+          </div>
           {planDuJour.nuit && <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>{planDuJour.nuit}</p>}
           {planDuJour.seance?.notion && (
             <a href={planDuJour.seance.notion} target="_blank" rel="noreferrer" className="block text-xs" style={{ color: T.cyan, fontFamily: mono }}>ouvrir dans Notion ↗</a>
           )}
           {planDuJour.seance?.echauffement?.length > 0 && (
-            <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>échauffement : {planDuJour.seance.echauffement.join(" · ")}</p>
+            <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs" style={{ background: "rgba(108,127,151,.08)", color: T.mute, fontFamily: mono }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={T.mute} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3c2 3 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-8z" /></svg>
+              échauffement · {planDuJour.seance.echauffement.join(" · ")}
+            </div>
           )}
           {av.lignes.length > 0 && (
-            <ul>
-              {av.lignes.map((x, i) => (
-                <li key={x.nom} className="row py-2 rise" style={{ animationDelay: `${i * 40}ms`, opacity: x.fini ? 0.55 : 1 }}>
-                  <div className="flex justify-between items-baseline gap-2">
-                    <div className="text-sm font-medium">
-                      <span style={{ color: x.fini ? T.cyan : T.mute, fontFamily: mono }}>{x.fini ? "✓" : "○"}</span> {x.nom}
+            <ul className="space-y-1.5">
+              {av.lignes.map((x, i) => {
+                const enCours = !x.fini && x.faites > 0;
+                return (
+                  <li key={x.nom} className="rounded-lg px-3 py-2 rise" style={{ animationDelay: `${i * 40}ms`, opacity: x.fini ? 0.55 : 1,
+                    background: enCours ? "rgba(0,229,255,.07)" : "transparent", border: `1px solid ${enCours ? "rgba(0,229,255,.35)" : "transparent"}`,
+                    boxShadow: enCours ? "0 0 18px rgba(0,229,255,.12)" : "none" }}>
+                    <div className="flex justify-between items-baseline gap-2">
+                      <div className="text-sm font-medium">
+                        <span style={{ color: x.fini ? T.cyan : T.mute, fontFamily: mono }}>{x.fini ? "✓" : "○"}</span> {x.nom}
+                        {enCours && <span className="ml-2 text-[10px] tracking-wide uppercase" style={{ color: T.cyan, fontFamily: mono }}>en cours</span>}
+                      </div>
+                      <div className="text-xs whitespace-nowrap flex items-center gap-2" style={{ color: T.mute, fontFamily: mono }}>
+                        <span>{x.series > 0 && x.reps > 0 ? `${x.series} × ${x.reps}` : ""}{x.kg > 0 ? ` · ${x.kg} kg` : ""}</span>
+                        {x.series > 0 && x.series <= 8 ? (
+                          <span className="flex gap-1">
+                            {Array.from({ length: x.series }, (_, j) => (
+                              <span key={j} className="rounded-full" style={{ width: 8, height: 8, background: j < x.faites ? (x.fini ? T.cyan : T.amber) : "transparent",
+                                border: j < x.faites ? "none" : `1.5px solid ${T.mute}88` }} />
+                            ))}
+                          </span>
+                        ) : x.series > 0 && <span style={{ color: x.fini ? T.cyan : T.amber }}>{x.faites}/{x.series}</span>}
+                      </div>
                     </div>
-                    <div className="text-xs whitespace-nowrap" style={{ color: T.mute, fontFamily: mono }}>
-                      {x.series > 0 && x.reps > 0 ? `${x.series} × ${x.reps}` : ""}{x.kg > 0 ? ` · ${x.kg} kg` : ""}
-                      {x.series > 0 && <span style={{ color: x.fini ? T.cyan : T.amber }}>  {x.faites}/{x.series}</span>}
-                    </div>
-                  </div>
-                  {x.note && <p className="text-xs mt-0.5" style={{ color: T.mute, fontFamily: mono }}>{x.note}</p>}
-                </li>
-              ))}
+                    {x.note && <p className="text-xs mt-0.5" style={{ color: T.mute, fontFamily: mono }}>{x.note}</p>}
+                  </li>
+                );
+              })}
             </ul>
           )}
           {planDuJour.seance?.tapis && (
-            <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>
-              tapis : {planDuJour.seance.tapis.min} min{planDuJour.seance.tapis.pente ? ` · pente ${planDuJour.seance.tapis.pente}` : ""}{planDuJour.seance.tapis.kmh ? ` · ${planDuJour.seance.tapis.kmh} km/h` : ""}
-            </p>
+            <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs" style={{ border: `1px dashed ${T.line}`, fontFamily: mono }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={T.cyan} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4" /></svg>
+              <span>tapis {planDuJour.seance.tapis.min} min</span>
+              <span style={{ color: T.mute }}>{planDuJour.seance.tapis.pente ? ` · pente ${planDuJour.seance.tapis.pente}` : ""}{planDuJour.seance.tapis.kmh ? ` · ${planDuJour.seance.tapis.kmh} km/h` : ""}</span>
+            </div>
           )}
           {planDuJour.points.length > 0 && (
-            <ul className="text-xs space-y-1" style={{ color: T.amber, fontFamily: mono }}>
-              {planDuJour.points.map((x) => <li key={x}>▸ {x}</li>)}
-            </ul>
+            <div className="space-y-1.5">
+              {planDuJour.points.map((x) => (
+                <div key={x} className="flex gap-2 px-2.5 py-2 rounded-lg text-xs" style={{ background: "rgba(255,176,0,.07)", border: `1px solid rgba(255,176,0,.3)`, color: "#FFD27A", fontFamily: mono, lineHeight: 1.45 }}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.amber} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0, marginTop: 1 }}><path d="M12 3l10 18H2L12 3z" /><path d="M12 10v5M12 18h.01" /></svg>
+                  <span>{x}</span>
+                </div>
+              ))}
+            </div>
           )}
           <div className="flex justify-between items-baseline">
             <span className="text-xs" style={{ color: T.mute, fontFamily: mono }}>{av.prevues > 0 ? `${av.faites} / ${av.prevues} séries` : ""}</span>
@@ -846,13 +981,24 @@ function Seance({ data, update, notify, celebrate, plan }) {
           </div>
         )}
         <div className="space-y-2">
-          <div className="flex items-center gap-4 text-xs" style={{ fontFamily: mono }}>
-            <span style={{ color: T.mute }}>décision du {fmtDate(todayISO())}</span>
-            {DECISIONS.map(([k, label, c]) => (
-              <label key={k} className="flex items-center gap-1" style={{ color: dec.d === k ? c : T.mute }}>
-                <input type="radio" name="decision" checked={dec.d === k} onChange={() => setDec({ ...dec, d: k })} style={{ accentColor: c }} />{label}
-              </label>
-            ))}
+          <div className="flex justify-between items-baseline">
+            <h2 className="font-semibold text-sm" style={{ color: T.text }}>Décision du {fmtDate(todayISO())}</h2>
+            <span className="text-xs" style={{ color: T.mute, fontFamily: mono }}>
+              {decisionSauvee.par === "moi" ? "posée par moi · le coach ne la change plus" : decisionSauvee.par === "coach" ? "posée par le coach" : ""}
+            </span>
+          </div>
+          <div role="radiogroup" aria-label="Décision du matin" className="grid grid-cols-3 gap-1.5 p-1 rounded-xl" style={{ background: T.panel2, border: `1px solid ${T.line}` }}>
+            {DECISIONS.map(([k, label, c]) => {
+              const on = dec.d === k;
+              return (
+                <button key={k} type="button" role="radio" aria-checked={on} onClick={() => setDec({ ...dec, d: k })}
+                  className="rounded-lg text-sm font-bold tracking-wide"
+                  style={{ minHeight: 44, border: `1px solid ${on ? c : "transparent"}`, background: on ? `${c}22` : "transparent",
+                    color: on ? c : T.mute, boxShadow: on ? `0 0 16px ${c}44, inset 0 0 12px ${c}33` : "none", fontFamily: mono }}>
+                  {label}
+                </button>
+              );
+            })}
           </div>
           <div className="grid grid-cols-3 gap-3">
             <Field label="règle"><input value={dec.regle} onChange={(e) => setDec({ ...dec, regle: e.target.value })} className="inp" placeholder="R1" /></Field>
@@ -1041,9 +1187,23 @@ function Tapis({ data, update, notify }) {
         </div>
         <Field label="note"><input value={f.note} onChange={set("note")} className="inp" /></Field>
         {at0 ? (
-          <div className="flex items-center justify-between gap-3 text-xs" style={{ fontFamily: mono, color: T.mute }}>
-            <span>départ <span style={{ color: T.violet }}>{hhmm(at0)}</span> · {ecoule} min écoulée{ecoule > 1 ? "s" : ""}</span>
-            <button onClick={annuler} className="underline" style={{ color: T.mute }}>annuler</button>
+          <div className="flex items-center gap-4 p-3 rounded-xl" style={{ background: "rgba(122,92,255,.07)", border: "1px solid rgba(122,92,255,.35)", boxShadow: "0 0 22px rgba(122,92,255,.15)" }}>
+            <div className="relative flex-shrink-0" style={{ width: 60, height: 60 }}>
+              <svg width="60" height="60" viewBox="0 0 60 60" aria-hidden="true" className="pulse-ring">
+                <circle cx="30" cy="30" r="25" fill="none" stroke="rgba(122,92,255,.18)" strokeWidth="5" />
+                <circle cx="30" cy="30" r="25" fill="none" stroke={T.violet} strokeWidth="5" strokeLinecap="round" strokeDasharray="30 127" style={{ filter: "drop-shadow(0 0 5px rgba(122,92,255,.8))" }} />
+              </svg>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="font-bold text-base leading-none" style={{ fontFamily: display, color: T.text }}>{ecoule}</span>
+                <span className="text-[9px]" style={{ fontFamily: mono, color: T.mute }}>min</span>
+              </div>
+            </div>
+            <div className="flex-1 flex flex-col gap-0.5">
+              <span className="text-xs uppercase tracking-wide" style={{ color: T.violet, fontFamily: mono }}>marche en cours</span>
+              <span className="text-sm" style={{ color: T.text, fontFamily: mono }}>départ <span style={{ color: T.violet }}>{hhmm(at0)}</span></span>
+              <span className="text-[11px]" style={{ color: T.mute, fontFamily: mono }}>durée vide = temps écoulé</span>
+            </div>
+            <button onClick={annuler} className="text-xs flex-shrink-0" style={{ color: T.mute, fontFamily: mono }}>Annuler</button>
           </div>
         ) : (
           <Btn full onClick={start}>Start · noter le départ</Btn>
@@ -1097,8 +1257,46 @@ function Poids({ data, update, notify }) {
   const finRepas = () => { const h = hhmm(Date.now()); setRepas(h); notify(`Fin du repas à ${h}`); };
   const list = [...data.weights].sort((a, b) => b.date.localeCompare(a.date));
   const first = list[list.length - 1]; const lastW = list[0];
+  // Trente dernières pesées, dans l'ordre chronologique, pour la mini-courbe.
+  const spark = useMemo(() => {
+    const asc = [...data.weights].sort((a, b) => a.date.localeCompare(b.date)).slice(-30);
+    return asc.map((w, i) => { const win = asc.slice(Math.max(0, i - 6), i + 1); return { kg: w.kg, moy7: +(win.reduce((a, y) => a + y.kg, 0) / win.length).toFixed(2) }; });
+  }, [data.weights]);
+  // Même mesure que le HUD du haut : écart entre la dernière pesée et la
+  // huitième avant elle, un nombre de pesées et non de jours.
+  const refW = list.length >= 8 ? list[7] : list[list.length - 1];
+  const deltaN = Math.min(list.length, 8);
+  const delta8 = lastW && refW && lastW.id !== refW.id ? lastW.kg - refW.kg : null;
   return (
     <>
+      {lastW && (
+        <Panel boot="boot-1" className="space-y-2">
+          <span className="text-xs uppercase tracking-wide" style={{ color: T.mute, fontFamily: mono }}>dernière pesée · {fmtDate(lastW.date)}</span>
+          <div className="flex items-baseline gap-2">
+            <span className="text-4xl font-black" style={{ fontFamily: display, color: T.magenta, textShadow: "0 0 18px rgba(255,45,149,.55)" }}>{lastW.kg.toFixed(1)}</span>
+            <span className="text-sm" style={{ color: T.mute, fontFamily: mono }}>kg</span>
+          </div>
+          <div className="flex flex-wrap gap-2 text-xs" style={{ fontFamily: mono }}>
+            {first && first.id !== lastW.id && (
+              <span className="px-2 py-0.5 rounded-full" style={{ background: "rgba(255,45,149,.12)", color: T.magenta }}>
+                depuis le {fmtDate(first.date)} : {(lastW.kg - first.kg > 0 ? "+" : "") + (lastW.kg - first.kg).toFixed(1)} kg
+              </span>
+            )}
+            {delta8 !== null && <span className="px-2 py-0.5 rounded-full" style={{ border: `1px solid ${T.line}`, color: "#8FA3BA" }}>{delta8 > 0 ? "+" : ""}{delta8.toFixed(1)} / {deltaN} pesées</span>}
+          </div>
+          {spark.length > 1 && (
+            <div style={{ height: 56 }}>
+              <ResponsiveContainer>
+                <LineChart data={spark} margin={{ top: 4, right: 4, left: 4, bottom: 0 }}>
+                  <YAxis hide domain={yDomain(spark.flatMap((r) => [r.kg, r.moy7]))} />
+                  <Line type="monotone" dataKey="kg" stroke="rgba(255,45,149,.35)" strokeWidth={1.5} dot={false} isAnimationActive={false} />
+                  <Line type="monotone" dataKey="moy7" stroke={T.magenta} strokeWidth={2.5} dot={false} isAnimationActive={false} style={{ filter: "drop-shadow(0 0 5px rgba(255,45,149,.7))" }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+        </Panel>
+      )}
       <Panel boot="boot-1" className="space-y-3">
         <div className="grid grid-cols-2 gap-3">
           <Field label="date"><input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="inp" /></Field>
@@ -1163,13 +1361,9 @@ function Courbes({ data }) {
     const m = {}; data.treadmill.forEach((t) => { const k = isoWeek(t.date); m[k] = m[k] || { km: 0 }; m[k].km += t.km; });
     return Object.entries(m).sort().slice(-12).map(([k, v]) => ({ label: k.slice(5), km: +v.km.toFixed(1) }));
   }, [data.treadmill]);
-  const yDomain = (vals) => { if (!vals.length) return [0, 1]; const mn = Math.min(...vals), mx = Math.max(...vals); const p = Math.max(1, (mx - mn) * 0.15); return [Math.floor(mn - p), Math.ceil(mx + p)]; };
   // Les trente dernières nuits mesurées ; un relevé vide (montre non portée) ne
   // trace rien plutôt qu'un zéro.
   const nuits = useMemo(() => data.daily.filter((d) => d.n > 0 || d.vfc > 0).slice(-30).map((d) => ({ label: fmtDate(d.date).slice(0, 5), min: d.min ?? null, hMin: d.hMin ?? null, moy: d.moy ?? null, vfc: d.vfc ?? null, dodo: d.dodo ? +(d.dodo / 60).toFixed(1) : null, resp: d.resp ?? null, spo2: d.spo2 ?? null, spo2Min: d.spo2Min ?? null, temp: d.temp ?? null, tempEcart: ecartTemp(data.daily, d.date) })), [data.daily]);
-  // Seuil de la règle R1 du coach (nuit courte) ; il vit dans les règles du
-  // coach, pas dans l'app : à reporter ici s'il change.
-  const SEUIL_R1_H = 6.5;
   const nuitsDodo = nuits.filter((d) => d.dodo !== null);
   const nuitsFc = nuits.filter((d) => d.min !== null), nuitsVfc = nuits.filter((d) => d.vfc !== null);
   const nuitsResp = nuits.filter((d) => d.resp !== null), nuitsSpo2 = nuits.filter((d) => d.spo2 !== null), nuitsTemp = nuits.filter((d) => d.tempEcart !== null);
@@ -1428,28 +1622,63 @@ function Records({ data }) {
     }).sort((a, b) => b.e1rm - a.e1rm);
   }, [data.sessions]);
   const lastPR = recs.length ? recs.map((r) => r.e1rmDate).sort().pop() : null;
+  const top = recs.slice(0, 3), reste = recs.slice(3);
+  const CardTrophee = ({ r, i }) => (
+    <div className="flex gap-3.5 items-center rounded-xl rise" style={{ animationDelay: `${i * 40}ms`,
+      padding: i === 0 ? 16 : 12,
+      background: `linear-gradient(135deg, rgba(255,176,0,${i === 0 ? ".14" : ".06"}), rgba(11,16,26,.2) 60%)`,
+      border: `1px solid rgba(255,176,0,${i === 0 ? ".55" : ".25"})`,
+      boxShadow: i === 0 ? "0 0 26px rgba(255,176,0,.18)" : "none" }}>
+      <div className="flex flex-col items-center gap-1 flex-shrink-0" style={{ width: 44 }}>
+        <svg width={i === 0 ? 26 : 20} height={i === 0 ? 26 : 20} viewBox="0 0 24 24" fill="none" stroke={T.amber} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ filter: "drop-shadow(0 0 6px rgba(255,176,0,.7))" }}>
+          <path d="M8 4h8v5a4 4 0 0 1-8 0V4z" /><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 20h8" />
+        </svg>
+        <span className="font-black text-xs" style={{ fontFamily: display, color: T.amber }}>{pad(i + 1)}</span>
+      </div>
+      <div className="flex-1 min-w-0 flex flex-col gap-0.5">
+        <div className="flex justify-between items-baseline gap-2">
+          <span className="font-semibold" style={{ fontSize: i === 0 ? 16 : 15 }}>{r.name}</span>
+          <span className="text-xs whitespace-nowrap" style={{ fontFamily: mono, color: T.mute }}>{r.count} séance{r.count > 1 ? "s" : ""}</span>
+        </div>
+        <div className="flex items-baseline gap-2">
+          <span className="font-black" style={{ fontFamily: display, fontSize: i === 0 ? 34 : 24, color: T.amber, textShadow: "0 0 14px rgba(255,176,0,.55)" }}>{r.e1rm.toFixed(1)}</span>
+          <span className="text-xs" style={{ fontFamily: mono, color: "#8FA3BA" }}>e1RM · {r.e1rmSet.kg}×{r.e1rmSet.reps} · {fmtDate(r.e1rmDate)}</span>
+        </div>
+        <div className="text-xs" style={{ fontFamily: mono, color: T.mute }}>
+          charge <span style={{ color: T.cyan }}>{r.kg} kg</span> ×{r.kgReps} ({fmtDate(r.kgDate)}) · volume <span style={{ color: T.violet }}>{r.vol}</span> ({fmtDate(r.volDate)})
+        </div>
+      </div>
+    </div>
+  );
   return (
-    <Panel boot="boot-1">
+    <Panel boot="boot-1" className="space-y-3">
       <H right={lastPR ? `dernier record ${fmtDate(lastPR)}` : ""}>Records personnels</H>
       {recs.length === 0 ? <Empty text="Enregistre une séance pour ouvrir le palmarès." /> : (
-        <ul>
-          {recs.map((r, i) => (
-            <li key={r.name} className="row py-3 rise" style={{ animationDelay: `${i * 35}ms` }}>
-              <div className="flex items-baseline gap-2">
-                <span className="text-xs" style={{ fontFamily: mono, color: i < 3 ? T.amber : T.mute }}>{pad(i + 1)}</span>
-                <span className="font-medium flex-1">{r.name}</span>
-                <span className="text-xs" style={{ fontFamily: mono, color: T.mute }}>{r.count} séance{r.count > 1 ? "s" : ""}</span>
-              </div>
-              <div className="text-xs mt-1 pl-6" style={{ fontFamily: mono }}>
-                <span style={{ color: T.amber, textShadow: `0 0 8px ${T.amber}44` }} className="font-bold text-sm">{r.e1rm.toFixed(1)}</span>
-                <span style={{ color: T.mute }}> e1RM · {r.e1rmSet.kg}×{r.e1rmSet.reps} · {fmtDate(r.e1rmDate)}</span>
-              </div>
-              <div className="text-xs mt-0.5 pl-6" style={{ fontFamily: mono, color: T.mute }}>
-                charge <span style={{ color: T.cyan }}>{r.kg} kg</span> ×{r.kgReps} ({fmtDate(r.kgDate)}) · volume <span style={{ color: T.violet }}>{r.vol}</span> ({fmtDate(r.volDate)})
-              </div>
-            </li>
-          ))}
-        </ul>
+        <>
+          <div className="space-y-2.5">{top.map((r, i) => <CardTrophee key={r.name} r={r} i={i} />)}</div>
+          {reste.length > 0 && (
+            <ul>
+              {reste.map((r, i) => (
+                <li key={r.name} className="row py-2.5 flex gap-3 rise" style={{ animationDelay: `${(i + 3) * 35}ms` }}>
+                  <span className="text-xs flex-shrink-0" style={{ fontFamily: mono, color: T.mute, width: 20, paddingTop: 2 }}>{pad(i + 4)}</span>
+                  <div className="flex-1 flex flex-col gap-0.5">
+                    <div className="flex justify-between items-baseline">
+                      <span className="font-medium text-sm">{r.name}</span>
+                      <span className="text-xs" style={{ fontFamily: mono, color: T.mute }}>{r.count} séance{r.count > 1 ? "s" : ""}</span>
+                    </div>
+                    <div className="text-xs" style={{ fontFamily: mono }}>
+                      <span style={{ color: T.amber }} className="font-bold">{r.e1rm.toFixed(1)}</span>
+                      <span style={{ color: T.mute }}> e1RM · {r.e1rmSet.kg}×{r.e1rmSet.reps} · {fmtDate(r.e1rmDate)}</span>
+                    </div>
+                    <div className="text-xs" style={{ fontFamily: mono, color: T.mute }}>
+                      charge <span style={{ color: T.cyan }}>{r.kg} kg</span> ×{r.kgReps} · volume <span style={{ color: T.violet }}>{r.vol}</span>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
       )}
     </Panel>
   );
