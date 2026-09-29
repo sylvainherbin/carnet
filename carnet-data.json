@@ -8210,7 +8210,13 @@
    "dodo": 379,
    "coucher": 1790644182000,
    "lever": 1790667325000,
-   "sha": "06691e6676d688910c9b1886e5c34f0d9e32ea57"
+   "sha": "06691e6676d688910c9b1886e5c34f0d9e32ea57",
+   "decision": {
+    "d": "allege",
+    "regle": "R1 déclenchée (6 h 19 < 6 h 30)",
+    "motif": "Sylvain a décalé Épaules d'hier à aujourd'hui malgré deux nuits courtes de suite. La séance a lieu, mais en version allégée : 8 séries, aucune charge ne monte.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
