@@ -4167,6 +4167,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1790672430110
+  },
+  {
+   "id": "90bvi1f1",
+   "date": "2026-09-29",
+   "group": "Épaules",
+   "exercise": "Upper Back",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 70
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1790672642460
   }
  ],
  "treadmill": [
