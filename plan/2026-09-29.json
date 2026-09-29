@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-29",
+  "v": 1,
+  "ecrit": "2026-09-29T08:10:00Z",
+  "nuit": "6 h 19 de sommeil, plancher 52, moyenne 61, VFC 50. Deuxième nuit courte de suite après celle du 27 au 28 (5 h 26, SpO2 minimum à 90).",
+  "decision": {
+    "d": "repos",
+    "regle": "R1 déclenchée (6 h 19 < 6 h 30). Repos déjà programmé par Sylvain le 27/09 pour arriver frais sur Pecs.",
+    "motif": "Aucune séance Épaules enregistrée le 28/09 — nuit du 27 au 28 très courte (5 h 26) et SpO2 minimum au plus bas de la série (90). Le repos d'aujourd'hui est justifié à la fois par le plan et par la nuit."
+  },
+  "points": [
+    "Pecs prévu demain 30/09, décision après lecture de la nuit.",
+    "À vérifier avec Sylvain : raison de la nuit courte du 27 au 28 et de l'absence de séance épaules."
+  ]
+}
