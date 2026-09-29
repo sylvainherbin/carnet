@@ -4151,6 +4151,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1790672288087
+  },
+  {
+   "id": "lkankbep",
+   "date": "2026-09-29",
+   "group": "Épaules",
+   "exercise": "Shoulder press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 65
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1790672430110
   }
  ],
  "treadmill": [
