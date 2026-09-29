@@ -4247,6 +4247,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1790673569271
+  },
+  {
+   "id": "0frtnbv7",
+   "date": "2026-09-29",
+   "group": "Épaules",
+   "exercise": "Haltères postérieur",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 20
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1790673696379
   }
  ],
  "treadmill": [
@@ -8328,6 +8344,11 @@
     "regle": "R1 déclenchée (6 h 19 < 6 h 30)",
     "motif": "Sylvain a décalé Épaules d'hier à aujourd'hui malgré deux nuits courtes de suite. La séance a lieu, mais en version allégée : 8 séries, aucune charge ne monte.",
     "par": "coach"
+   },
+   "plan": {
+    "prevues": 8,
+    "faites": 8,
+    "conforme": true
    }
   }
  ],
