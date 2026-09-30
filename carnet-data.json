@@ -8526,7 +8526,13 @@
    "coucher": 1790729729000,
    "lever": 1790749919000,
    "sha": "110a57c9577b36a0f3a5e087d2e8fb77e856b287",
-   "repas": "19:42"
+   "repas": "19:42",
+   "decision": {
+    "d": "allege",
+    "regle": "R1 déclenchée (5 h 35 < 6 h 30)",
+    "motif": "Sylvain se sent prêt et s'entraîne l'après-midi. La règle joue quand même : séance en version allégée, 8 séries, aucune charge ne monte, même là où les verdicts du 23/09 le permettraient (70 / 145-150 / 60 / 60).",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
