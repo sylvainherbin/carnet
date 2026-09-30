@@ -1,0 +1,28 @@
+{
+  "date": "2026-09-30",
+  "v": 1,
+  "ecrit": "2026-09-30T13:00:00Z",
+  "nuit": "5 h 35 de sommeil, plancher 54, moyenne 61, VFC 40,9, SpO2 minimum 91. Troisième nuit courte sur quatre (5 h 26, 6 h 19, 5 h 35).",
+  "decision": {
+    "d": "allege",
+    "regle": "R1 déclenchée (5 h 35 < 6 h 30)",
+    "motif": "Sylvain se sent prêt et s'entraîne l'après-midi. La règle joue quand même : séance en version allégée, 8 séries, aucune charge ne monte, même là où les verdicts du 23/09 le permettraient (70 / 145-150 / 60 / 60)."
+  },
+  "seance": {
+    "groupe": "Pecs",
+    "titre": "Pecs — allégée, après-midi",
+    "exercices": [
+      { "nom": "Dev incliné", "series": 2, "reps": 10, "kg": 65, "note": "verdict monte à 70, pas aujourd'hui" },
+      { "nom": "Dips", "series": 2, "reps": 10, "kg": 140, "note": "verdict monte, pas aujourd'hui" },
+      { "nom": "Incline chest press", "series": 2, "reps": 10, "kg": 55, "note": "verdict monte à 60, pas aujourd'hui" },
+      { "nom": "Chest press", "series": 2, "reps": 10, "kg": 55, "note": "verdict monte à 60, pas aujourd'hui" }
+    ],
+    "echauffement": ["Dev incliné 40 × 10", "Dips 100 × 8"],
+    "tapis": { "min": 10, "pente": 13, "kmh": 5.5 }
+  },
+  "points": [
+    "Deux séries par exercice au lieu de trois, tapis raccourci à 10 min.",
+    "Valide ton RPE à chaque série : les verdicts du 23/09 attendent ta séance de référence pour monter.",
+    "Poulie haut du pec : pas au programme. Coude : si ça tire, on baisse."
+  ]
+}
