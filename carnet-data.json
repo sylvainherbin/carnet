@@ -4339,6 +4339,21 @@
    "rpe": 7,
    "note": "",
    "at": 1790772237579
+  },
+  {
+   "id": "wrcwohzi",
+   "date": "2026-09-30",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 160
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1790772526726
   }
  ],
  "treadmill": [
