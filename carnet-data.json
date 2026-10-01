@@ -8946,7 +8946,13 @@
    "dodo": 400,
    "coucher": 1790814282000,
    "lever": 1790838600000,
-   "sha": "eca9ea5e8cb2e96812afa9de2579f6b5a5bc7850"
+   "sha": "eca9ea5e8cb2e96812afa9de2579f6b5a5bc7850",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée (6 h 40 > 6 h 30, de dix minutes), R2 non déclenchée (plancher 53 < 58)",
+    "motif": "Décision de repos du matin remplacée à la demande de Sylvain, qui se sent bien : Dos aujourd'hui, troisième jour d'affilée après Épaules (29/09, allégé) et Pecs (30/09, 12 séries). La nuit ne montre aucune facture et les deux règles passent. Plafond RPE 9, dernière série seulement.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
