@@ -4630,6 +4630,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1790847959324
+  },
+  {
+   "id": "4moks2n5",
+   "date": "2026-10-01",
+   "group": "Dos",
+   "exercise": "Tirage vertical serré",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1790848254563
   }
  ],
  "treadmill": [
@@ -9138,6 +9154,11 @@
     "regle": "R1 non déclenchée (6 h 40 > 6 h 30, de dix minutes), R2 non déclenchée (plancher 53 < 58)",
     "motif": "Décision de repos du matin remplacée à la demande de Sylvain, qui se sent bien : Dos aujourd'hui, troisième jour d'affilée après Épaules (29/09, allégé) et Pecs (30/09, 12 séries). La nuit ne montre aucune facture et les deux règles passent. Plafond RPE 9, dernière série seulement.",
     "par": "coach"
+   },
+   "plan": {
+    "prevues": 12,
+    "faites": 13,
+    "conforme": false
    }
   }
  ],
