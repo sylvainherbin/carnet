@@ -8923,6 +8923,25 @@
     "faites": 12,
     "conforme": false
    }
+  },
+  {
+   "date": "2026-10-01",
+   "v": 6,
+   "n": 92,
+   "min": 53,
+   "moy": 60,
+   "hMin": "05:53",
+   "vfc": 50.4,
+   "vfcN": 3,
+   "resp": 14,
+   "respN": 41,
+   "spo2": 95,
+   "spo2Min": 93,
+   "temp": 35.05,
+   "dodo": 400,
+   "coucher": 1790814282000,
+   "lever": 1790838600000,
+   "sha": "eca9ea5e8cb2e96812afa9de2579f6b5a5bc7850"
   }
  ],
  "pas": {
