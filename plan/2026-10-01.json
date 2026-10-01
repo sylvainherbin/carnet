@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-01",
+  "v": 1,
+  "ecrit": "2026-10-01T08:00:00Z",
+  "nuit": "6 h 40 de sommeil (coucher 02:24, lever 09:10), plancher 53, moyenne 60, VFC 50,4, SpO2 minimum 93. La VFC remonte nettement après 40,9 la nuit précédente.",
+  "decision": {
+    "d": "repos",
+    "regle": "R1 non déclenchée (6 h 40 > 6 h 30, de dix minutes), R2 non déclenchée (plancher 53 < 58)",
+    "motif": "Repos du rythme 2-1 après Épaules (29/09, allégé) et Pecs (30/09, 12 séries en maintenu). La nuit ne montre aucune facture de la séance du 30 : VFC en hausse, plancher stable."
+  },
+  "points": [
+    "Dos demain 02/10, décision après lecture de la nuit. Verdicts : Row 110, PullDown 70 (RPE auto, à confirmer), Tirage vertical serré 60, Pulley 50.",
+    "Poids 75,7 kg (74,6 le 22/09) : à lire avec la prudence d'un seul point, le lendemain d'un repas calorique et d'une séance.",
+    "Prochaines photos le 9 octobre, à jeun, mêmes conditions."
+  ]
+}
