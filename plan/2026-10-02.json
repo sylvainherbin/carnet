@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-02",
+  "v": 1,
+  "ecrit": "2026-10-02T08:00:00Z",
+  "nuit": "6 h 05 de sommeil (coucher 03:28, lever 09:38), plancher 53, moyenne 60, VFC 42,9, SpO2 minimum 91. VFC en baisse après 50,4 la nuit précédente, coucher très tard.",
+  "decision": {
+    "d": "repos",
+    "regle": "R1 déclenchée (6 h 05 < 6 h 30). R2 non déclenchée (plancher 53 < 58).",
+    "motif": "Trois jours d'entraînement d'affilée (Épaules 29/09, Pecs 30/09, Dos 01/10), puis une nuit courte au coucher tardif. Repos aujourd'hui, comme le rythme 2-1 le prévoyait."
+  },
+  "points": [
+    "Jambes samedi 03/10 (dernière séance le 27/09), décision après lecture de la nuit.",
+    "Verdicts Dos pour la prochaine séance : Row 130, PullDown 95, Tirage vertical serré 65, Pulley 55.",
+    "Prochaines photos le 9 octobre, à jeun, mêmes conditions."
+  ]
+}
