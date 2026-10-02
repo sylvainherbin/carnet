@@ -9426,7 +9426,13 @@
    "coucher": 1790904513000,
    "lever": 1790926722000,
    "sha": "065702a15448862214b2cd1c26bafd53a9da6cba",
-   "repas": "19:12"
+   "repas": "19:12",
+   "decision": {
+    "d": "repos",
+    "regle": "R1 déclenchée (6 h 05 < 6 h 30). R2 non déclenchée (plancher 53 < 58).",
+    "motif": "Trois jours d'entraînement d'affilée (Épaules 29/09, Pecs 30/09, Dos 01/10), puis une nuit courte au coucher tardif. Repos aujourd'hui, comme le rythme 2-1 le prévoyait.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
