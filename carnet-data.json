@@ -4721,6 +4721,21 @@
    "rpe": 7,
    "note": "",
    "at": 1791018672795
+  },
+  {
+   "id": "2ac1ev6c",
+   "date": "2026-10-03",
+   "group": "Jambes",
+   "exercise": "Hack squat",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 20
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1791019030697
   }
  ],
  "treadmill": [
