@@ -4856,6 +4856,21 @@
    "rpe": 7,
    "note": "",
    "at": 1791020964127
+  },
+  {
+   "id": "hytuwsjy",
+   "date": "2026-10-03",
+   "group": "Jambes",
+   "exercise": "Adducteurs",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 70
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1791021114113
   }
  ],
  "treadmill": [
