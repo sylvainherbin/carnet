@@ -1,7 +1,7 @@
 {
   "date": "2026-10-03",
-  "v": 1,
-  "ecrit": "2026-10-03T08:00:00Z",
+  "v": 2,
+  "ecrit": "2026-10-03T08:30:00Z",
   "nuit": "7 h 01 de sommeil (coucher 02:24, lever 09:35), plancher 51, moyenne 59, VFC 43,5, SpO2 minimum 93. Plancher le plus bas de la semaine.",
   "decision": {
     "d": "maintenu",
@@ -12,19 +12,62 @@
     "groupe": "Jambes",
     "titre": "Jambes — phase 2, 16 séries",
     "exercices": [
-      { "nom": "Leg press 2", "series": 3, "reps": 10, "kg": 140, "note": "pas 10 ; objectif 150 × 10 × 3 sous RPE 8 au 31/10" },
-      { "nom": "Hack squat", "series": 3, "reps": 10, "kg": 20, "note": "même saisie que le 27/09 ; RPE du 27 resté en défaut, à confirmer" },
-      { "nom": "Leg extension", "series": 3, "reps": 10, "kg": 65 },
-      { "nom": "Leg Curl", "series": 3, "reps": 12, "kg": 55, "note": "non fait le 27/09, dernier 50 × 12 le 20/09" },
-      { "nom": "Rotary Calf", "series": 2, "reps": 15, "kg": 55, "note": "dernier le 12/09 : 50 × 15" },
-      { "nom": "Adducteurs", "series": 2, "reps": 15, "kg": 70, "note": "le 27/09 : montée 40/50/60/70, RPE 4 à 7" }
+      {
+        "nom": "Leg press 2",
+        "series": 3,
+        "reps": 10,
+        "kg": 140,
+        "note": "pas 10 ; objectif 150 × 10 × 3 sous RPE 8 au 31/10"
+      },
+      {
+        "nom": "Hack squat",
+        "series": 3,
+        "reps": 10,
+        "kg": 20,
+        "note": "charge totale (confirmé) : 40 × 5 le 20/09, 20 × 10 le 27/09. Reste à 20 ; si la série 1 est à RPE 7 ou moins, monte à 25 pour les suivantes."
+      },
+      {
+        "nom": "Leg extension",
+        "series": 3,
+        "reps": 10,
+        "kg": 65
+      },
+      {
+        "nom": "Leg Curl",
+        "series": 3,
+        "reps": 12,
+        "kg": 55,
+        "note": "non fait le 27/09, dernier 50 × 12 le 20/09"
+      },
+      {
+        "nom": "Rotary Calf",
+        "series": 2,
+        "reps": 15,
+        "kg": 55,
+        "note": "dernier le 12/09 : 50 × 15"
+      },
+      {
+        "nom": "Adducteurs",
+        "series": 2,
+        "reps": 15,
+        "kg": 70,
+        "note": "le 27/09 : montée 40/50/60/70, RPE 4 à 7"
+      }
     ],
-    "echauffement": ["Leg press 60 × 10", "Leg press 100 × 6", "Hack squat 10 × 8"],
-    "tapis": { "min": 15, "pente": 13, "kmh": 5.5 }
+    "echauffement": [
+      "Leg press 60 × 10",
+      "Leg press 100 × 6",
+      "Hack squat 10 × 8"
+    ],
+    "tapis": {
+      "min": 15,
+      "pente": 13,
+      "kmh": 5.5
+    }
   },
   "points": [
     "Plafond RPE 9 sur la dernière série seulement, pas de test à RPE 10 en série de travail.",
-    "Hack squat : confirme si 20 kg est la saisie par côté ou le total, les deux valeurs 40 × 5 (20/09) et 20 × 10 (27/09) ne se comparent pas.",
+    "Hack squat : 20 kg est la charge totale. Le 27/09 était nettement plus léger que le 20/09 (e1RM 27 contre 47) : dis-moi ce qui a changé.",
     "Valide ton RPE à chaque série.",
     "Poulie haut du pec : abandonnée. Poulies triceps en isolation : OK."
   ]
