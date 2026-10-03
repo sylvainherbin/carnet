@@ -1,12 +1,12 @@
 {
   "date": "2026-10-03",
-  "v": 4,
-  "ecrit": "2026-10-03T19:00:00Z",
+  "v": 5,
+  "ecrit": "2026-10-03T19:30:00Z",
   "nuit": "7 h 01 de sommeil (coucher 02:24, lever 09:35), plancher 51, moyenne 59, VFC 43,5, SpO2 minimum 93. Plancher le plus bas de la semaine.",
   "decision": {
     "d": "maintenu",
     "regle": "R1 non déclenchée (7 h 01 > 6 h 30), R2 non déclenchée (plancher 51 < 58)",
-    "motif": "Repos hier, nuit de plus de sept heures, plancher bas. Séance Jambes complète à 16 séries (mollets et adducteurs reviennent). Fait : 16 séries sur 16, plan respecté à la lettre, tous les RPE saisis par Sylvain à 7 (Hack squat dernière série à 6). Tapis non fait, Sylvain rincé."
+    "motif": "Repos hier, nuit de plus de sept heures, plancher bas. Séance Jambes complète à 16 séries (mollets et adducteurs reviennent). Fait : 16 séries sur 16, plan respecté à la lettre, tous les RPE saisis par Sylvain à 7 (Hack squat dernière série à 6). Tapis non fait : Sylvain rincé juste après la séance, effet normal des Jambes, pas une fatigue accumulée."
   },
   "seance": {
     "groupe": "Jambes",
@@ -68,7 +68,7 @@
   "points": [
     "Verdicts pour la prochaine séance Jambes : Leg press 150 (charge de l'objectif 150 × 10 × 3 sous RPE 8 au 31/10, atteinte avec près de quatre semaines d'avance), Hack squat 25 si l'exécution reste parfaite, Leg extension 70, Leg Curl 60, Rotary Calf 60, Adducteurs 75.",
     "Épaules à venir : Shoulder press 70, Upper Back 75, Haltères latérales 15, Haltères postérieur 22,5.",
-    "Sylvain rincé en fin de séance : à lire dans la nuit du 03 au 04.",
+    "Calendrier voulu par Sylvain : Épaules en 16 séries le 04/10 si la nuit est bonne, repos le 05/10, Pecs le 06/10.",
     "Poulie haut du pec : abandonnée. Poulies triceps en isolation : OK."
   ]
 }
