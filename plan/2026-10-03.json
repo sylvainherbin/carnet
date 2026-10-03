@@ -1,7 +1,7 @@
 {
   "date": "2026-10-03",
-  "v": 2,
-  "ecrit": "2026-10-03T08:30:00Z",
+  "v": 3,
+  "ecrit": "2026-10-03T08:45:00Z",
   "nuit": "7 h 01 de sommeil (coucher 02:24, lever 09:35), plancher 51, moyenne 59, VFC 43,5, SpO2 minimum 93. Plancher le plus bas de la semaine.",
   "decision": {
     "d": "maintenu",
@@ -24,7 +24,7 @@
         "series": 3,
         "reps": 10,
         "kg": 20,
-        "note": "charge totale (confirmé) : 40 × 5 le 20/09, 20 × 10 le 27/09. Reste à 20 ; si la série 1 est à RPE 7 ou moins, monte à 25 pour les suivantes."
+        "note": "charge totale. Recul voulu le 27/09 (40 × 5 le 20/09, 20 × 10 le 27/09) : exécution d'abord, nouvelle machine, deux séances seulement. Reste à 20 ; 25 seulement si la technique reste parfaite et la série 1 à RPE 7 ou moins."
       },
       {
         "nom": "Leg extension",
@@ -67,7 +67,7 @@
   },
   "points": [
     "Plafond RPE 9 sur la dernière série seulement, pas de test à RPE 10 en série de travail.",
-    "Hack squat : 20 kg est la charge totale. Le 27/09 était nettement plus léger que le 20/09 (e1RM 27 contre 47) : dis-moi ce qui a changé.",
+    "Hack squat : exécution avant la charge, c'est un choix de Sylvain. Pas de pression pour monter.",
     "Valide ton RPE à chaque série.",
     "Poulie haut du pec : abandonnée. Poulies triceps en isolation : OK."
   ]
