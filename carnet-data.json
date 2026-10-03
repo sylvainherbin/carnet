@@ -9457,7 +9457,13 @@
    "coucher": 1790987056000,
    "lever": 1791012941000,
    "sha": "4237e52949945769d81212eaddc7386922d12552",
-   "repas": "19:15"
+   "repas": "19:15",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée (7 h 01 > 6 h 30), R2 non déclenchée (plancher 51 < 58)",
+    "motif": "Repos hier, nuit de plus de sept heures, plancher bas. Séance Jambes complète, avec l'extension à 16 séries repoussée le 27/09 : mollets et adducteurs reviennent.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
