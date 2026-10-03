@@ -4766,6 +4766,21 @@
    "rpe": 7,
    "note": "",
    "at": 1791019522199
+  },
+  {
+   "id": "iwdduohk",
+   "date": "2026-10-03",
+   "group": "Jambes",
+   "exercise": "Leg extension",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 65
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1791019939763
   }
  ],
  "treadmill": [
