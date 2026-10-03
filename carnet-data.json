@@ -4871,6 +4871,21 @@
    "rpe": 7,
    "note": "",
    "at": 1791021114113
+  },
+  {
+   "id": "8d9k1rpx",
+   "date": "2026-10-03",
+   "group": "Jambes",
+   "exercise": "Adducteurs",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 70
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1791021292320
   }
  ],
  "treadmill": [
@@ -9688,6 +9703,11 @@
     "regle": "R1 non déclenchée (7 h 01 > 6 h 30), R2 non déclenchée (plancher 51 < 58)",
     "motif": "Repos hier, nuit de plus de sept heures, plancher bas. Séance Jambes complète, avec l'extension à 16 séries repoussée le 27/09 : mollets et adducteurs reviennent.",
     "par": "coach"
+   },
+   "plan": {
+    "prevues": 16,
+    "faites": 16,
+    "conforme": true
    }
   }
  ],
