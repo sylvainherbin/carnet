@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-05",
+  "v": 1,
+  "ecrit": "2026-10-05T08:00:00Z",
+  "nuit": "6 h 54 de sommeil effectif (coucher 02:41, lever 09:39), plancher 50, moyenne 56,7, VFC 67,6 (trois mesures de nuit), SpO2 minimum 93, 61 min de sommeil profond. Meilleure nuit de la série : plancher le plus bas, moyenne sous le seuil pour la première fois, VFC au plus haut. Valeurs calculées depuis daily/2026-10-05.json, pas encore fusionné dans carnet-data.json. La nuit du 03 au 04 n'a aucun relevé.",
+  "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée (6 h 54 > 6 h 30), R2 non déclenchée (plancher 50 < 58)",
+    "motif": "Épaules reportée du 04 au 05 par Sylvain. Nuit très bonne, séance complète à 16 séries : quatre exercices en quatre séries, charges selon les verdicts du 29/09."
+  },
+  "seance": {
+    "groupe": "Épaules",
+    "titre": "Épaules — phase 2, 16 séries",
+    "exercices": [
+      { "nom": "Shoulder press", "series": 4, "reps": 10, "kg": 70, "note": "le 29/09 : 65 × 10 × 2 à RPE 7, confirmé" },
+      { "nom": "Upper Back", "series": 4, "reps": 12, "kg": 75, "note": "le 29/09 : 70 × 12 × 2 à RPE 7, confirmé" },
+      { "nom": "Haltères latérales", "series": 4, "reps": 10, "kg": 15, "note": "pas 2,5 ; le 29/09 : 12,5 × 10 × 2" },
+      { "nom": "Haltères postérieur", "series": 4, "reps": 15, "kg": 22.5, "note": "pas 2,5 ; le 29/09 : 20 × 15 × 2" }
+    ],
+    "echauffement": ["Shoulder press 40 × 10", "Shoulder press 55 × 5", "Upper Back 50 × 8"],
+    "tapis": { "min": 15, "pente": 13, "kmh": 5.5 }
+  },
+  "points": [
+    "Plafond RPE 9 sur la dernière série seulement, pas de test à RPE 10 en série de travail.",
+    "Première séance Épaules en 4 séries par exercice et la première après un allégé : si une charge passe à RPE 8 dès la série 1, tu la gardes sans monter.",
+    "Calendrier : Pecs mardi 06/10, repos mercredi 07/10.",
+    "Poids 76,1 kg le 03/10 (74,3 le 11/09) : à regarder avec les photos du 9 octobre.",
+    "Poulie haut du pec : abandonnée. Poulies triceps en isolation : OK."
+  ]
+}
