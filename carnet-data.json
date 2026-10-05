@@ -9965,7 +9965,29 @@
   },
   {
    "date": "2026-10-05",
-   "repas": "19:04"
+   "v": 6,
+   "n": 94,
+   "min": 50,
+   "moy": 57,
+   "hMin": "09:25",
+   "vfc": 58.5,
+   "vfcN": 3,
+   "resp": 14,
+   "respN": 41,
+   "spo2": 94,
+   "spo2Min": 93,
+   "temp": 35.61,
+   "dodo": 414,
+   "coucher": 1791160906000,
+   "lever": 1791185979000,
+   "sha": "c20835b57cd6f0d6d7d2c56a0c4d064a0530bd04",
+   "repas": "19:04",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée (6 h 54 > 6 h 30), R2 non déclenchée (plancher 50 < 58)",
+    "motif": "Épaules reportée du 04 au 05 par Sylvain. Nuit très bonne, séance complète à 16 séries : quatre exercices en quatre séries, charges selon les verdicts du 29/09.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
