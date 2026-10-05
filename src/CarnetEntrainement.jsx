@@ -968,12 +968,13 @@ function Seance({ data, update, notify, celebrate, plan }) {
         {Object.keys(parGroupe).length > 0 && (
           <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs" style={{ fontFamily: mono }}>
             {Object.entries(parGroupe).map(([g, n]) => {
-              const c = n > SERIES_MAX ? T.danger : n === SERIES_MAX ? T.amber : T.cyan;
+              const max = planDuJour?.seance?.groupe === g && av.prevues > 0 ? av.prevues : SERIES_MAX;
+              const c = n > max ? T.danger : n === max ? T.amber : T.cyan;
               return (
                 <div key={g}>
-                  <div className="flex justify-between"><span style={{ color: T.mute }}>{g}</span><span style={{ color: c }}>{n} / {SERIES_MAX} séries</span></div>
+                  <div className="flex justify-between"><span style={{ color: T.mute }}>{g}</span><span style={{ color: c }}>{n} / {max} séries</span></div>
                   <div className="mt-0.5 h-1 rounded" style={{ background: "rgba(0,229,255,.08)" }}>
-                    <div className="h-1 rounded" style={{ width: `${Math.min(100, (n / SERIES_MAX) * 100)}%`, background: c, boxShadow: `0 0 6px ${c}` }} />
+                    <div className="h-1 rounded" style={{ width: `${Math.min(100, (n / max) * 100)}%`, background: c, boxShadow: `0 0 6px ${c}` }} />
                   </div>
                 </div>
               );
