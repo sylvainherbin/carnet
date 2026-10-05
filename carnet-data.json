@@ -5111,6 +5111,21 @@
    "rpe": 7,
    "note": "",
    "at": 1791193287653
+  },
+  {
+   "id": "xexuotey",
+   "date": "2026-10-05",
+   "group": "Épaules",
+   "exercise": "Haltères postérieur",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 22.5
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1791193638897
   }
  ],
  "treadmill": [
@@ -10217,6 +10232,11 @@
     "regle": "R1 non déclenchée (6 h 54 > 6 h 30), R2 non déclenchée (plancher 50 < 58)",
     "motif": "Épaules reportée du 04 au 05 par Sylvain. Nuit très bonne, séance complète à 16 séries : quatre exercices en quatre séries, charges selon les verdicts du 29/09.",
     "par": "coach"
+   },
+   "plan": {
+    "prevues": 16,
+    "faites": 16,
+    "conforme": true
    }
   }
  ],
