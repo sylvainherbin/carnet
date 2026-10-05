@@ -1,12 +1,12 @@
 {
   "date": "2026-10-05",
-  "v": 2,
-  "ecrit": "2026-10-05T09:30:00Z",
+  "v": 3,
+  "ecrit": "2026-10-05T19:00:00Z",
   "nuit": "6 h 54 de sommeil (coucher 02:41, lever 09:39), plancher 50, moyenne 57, VFC 58,5 (médiane de trois mesures de nuit), SpO2 minimum 93. Plancher le plus bas de la série et moyenne sous le seuil de 58 pour la première fois ; VFC haute mais pas la plus haute (67,5 le 22/09). Valeurs de l'app, fusion faite. La nuit du 03 au 04 n'a aucun relevé.",
   "decision": {
     "d": "maintenu",
     "regle": "R1 non déclenchée (6 h 54 > 6 h 30), R2 non déclenchée (plancher 50 < 58)",
-    "motif": "Épaules reportée du 04 au 05 par Sylvain. Nuit très bonne, séance complète à 16 séries : quatre exercices en quatre séries, charges selon les verdicts du 29/09."
+    "motif": "Épaules reportée du 04 au 05 par Sylvain. Nuit très bonne, séance complète à 16 séries. Fait : 16 séries sur 16, plan respecté à la lettre, tous les RPE saisis par Sylvain à 7, y compris la quatrième série de chaque exercice. Tapis 15 min, 1,37 km, 13 %, FC 135. Séance jugée bonne par Sylvain."
   },
   "seance": {
     "groupe": "Épaules",
@@ -53,10 +53,10 @@
     }
   },
   "points": [
-    "Plafond RPE 9 sur la dernière série seulement, pas de test à RPE 10 en série de travail.",
-    "Première séance Épaules en 4 séries par exercice et la première après un allégé : si une charge passe à RPE 8 dès la série 1, tu la gardes sans monter.",
-    "Calendrier : Pecs mardi 06/10, repos mercredi 07/10.",
-    "Poids 76,1 kg le 03/10 (74,3 le 11/09) : à regarder avec les photos du 9 octobre.",
+    "Verdicts pour la prochaine séance Épaules : Shoulder press 75, Upper Back 80, Haltères latérales 17,5, Haltères postérieur 25.",
+    "RPE à 7 sur les 16 séries, la quatrième comme la première : la marge existe, les charges peuvent monter sans attendre.",
+    "Pecs demain 06/10, verdicts du 30/09 : Incline chest press 65, Dips 170, Chest press 75, Dev incliné 70. Repos le 07/10.",
+    "Photos de suivi le 9 octobre, à jeun, mêmes conditions.",
     "Poulie haut du pec : abandonnée. Poulies triceps en isolation : OK."
   ]
 }
