@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-06",
+  "v": 1,
+  "ecrit": "2026-10-06T08:00:00Z",
+  "nuit": "6 h 33 de sommeil (coucher 02:55, lever 09:35), plancher 54, moyenne 58, VFC 53,8, SpO2 minimum 90. Durée à trois minutes du seuil R1, SpO2 minimum au plus bas avec celle du 28/09.",
+  "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée (6 h 33 > 6 h 30, de trois minutes), R2 non déclenchée (plancher 54 < 58)",
+    "motif": "Les deux règles laissent passer, de justesse sur la durée. Épaules d'hier sans facture visible (RPE 7 sur 16 séries), VFC correcte. Séance Pecs complète à 16 séries, charges selon les verdicts du 30/09."
+  },
+  "seance": {
+    "groupe": "Pecs",
+    "titre": "Pecs — phase 2, 16 séries",
+    "exercices": [
+      { "nom": "Dev incliné", "series": 4, "reps": 10, "kg": 70, "note": "non fait le 30/09 ; dernier 65 × 10 × 3 à RPE 7 le 23/09" },
+      { "nom": "Dips", "series": 4, "reps": 10, "kg": 170, "note": "pas 10 ; le 30/09 : 160 × 10 × 3 à RPE 7" },
+      { "nom": "Incline chest press", "series": 4, "reps": 10, "kg": 65, "note": "le 30/09 : 60, 60, 65 × 10 à RPE 7/7/8" },
+      { "nom": "Chest press", "series": 4, "reps": 10, "kg": 75, "note": "le 30/09 : 60, 65, 70 × 10 à RPE 6/6/7" }
+    ],
+    "echauffement": ["Dev incliné 40 × 10", "Dev incliné 55 × 5", "Dips 100 × 8"],
+    "tapis": { "min": 15, "pente": 13, "kmh": 5.5 }
+  },
+  "points": [
+    "Plafond RPE 9 sur la dernière série seulement. Les tests à RPE 10 restent à part des séries de travail.",
+    "Si une charge passe à RPE 8 dès la série 1, tu la gardes sans monter.",
+    "Repos demain mercredi 07/10 ; photos de suivi vendredi 09/10, à jeun, mêmes conditions.",
+    "Poulie haut du pec : abandonnée. Poulies triceps en isolation : OK."
+  ]
+}
