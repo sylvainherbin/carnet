@@ -5186,6 +5186,21 @@
    "rpe": 7,
    "note": "",
    "at": 1791277505582
+  },
+  {
+   "id": "a2zt0syq",
+   "date": "2026-10-06",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 170
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1791278095965
   }
  ],
  "treadmill": [
