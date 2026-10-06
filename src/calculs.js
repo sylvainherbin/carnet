@@ -360,13 +360,7 @@ const chargeTravail = (sets) => {
   sets.forEach((x) => c.set(x.kg, (c.get(x.kg) || 0) + 1));
   return [...c].sort((u, v) => v[1] - u[1] || v[0] - u[0])[0][0];
 };
-export const verdictProgression = (sessions, exercise, avant, pas = PAS_DEFAUT) => {
-  const prev = sessions.filter((s) => s.exercise === exercise && s.date < avant);
-  if (prev.length === 0) return null;
-  const date = prev.map((s) => s.date).sort().pop();
-  const sets = prev.filter((s) => s.date === date).flatMap((s) => s.sets.map((x) => ({ ...x, rpe: s.rpe, rpeAuto: !!s.rpeAuto })));
-  const kg = chargeTravail(sets);
-  const notees = sets.filter((x) => x.kg === kg && x.rpe > 0);
+const verdictDe = (exercise, date, kg, notees, pas) => {
   const rpes = notees.map((x) => x.rpe);
   // Un RPE laissé à sa valeur par défaut n'est pas une mesure : le verdict est
   // calculé pareil, mais il est signalé, sinon une séance où le RPE n'a pas été
@@ -376,6 +370,31 @@ export const verdictProgression = (sessions, exercise, avant, pas = PAS_DEFAUT) 
   if (rpes.every((r) => r <= 7)) return { ...base, verdict: "monte", cible: kg + pas };
   if (rpes.every((r) => r >= 9)) return { ...base, verdict: "descend", cible: Math.max(0, kg - pas) };
   return { ...base, verdict: "reste", cible: kg };
+};
+export const verdictProgression = (sessions, exercise, avant, pas = PAS_DEFAUT) => {
+  const prev = sessions.filter((s) => s.exercise === exercise && s.date < avant);
+  if (prev.length === 0) return null;
+  const date = prev.map((s) => s.date).sort().pop();
+  // Une série « test » (ex. un essai de charge en fin de séance) ne mesure pas
+  // la fatigue de la charge de travail : elle compte pour le e1RM et le volume,
+  // mais le verdict de progression l'ignore.
+  const sets = prev.filter((s) => s.date === date && !s.test).flatMap((s) => s.sets.map((x) => ({ ...x, rpe: s.rpe, rpeAuto: !!s.rpeAuto })));
+  if (sets.length === 0) return { exercise, date, kg: 0, rpes: [], pas, rpeAuto: false, verdict: "?", cible: 0, motif: "RPE non saisi" };
+  const compte = new Map();
+  sets.forEach((x) => compte.set(x.kg, (compte.get(x.kg) || 0) + 1));
+  // Montée en charge : aucune charge répétée deux fois, donc pas de charge de
+  // travail au sens habituel. Le verdict se juge alors sur les deux séries les
+  // plus lourdes, qui disent si la marge existe encore en haut de la montée.
+  if ([...compte.values()].every((n) => n < 2)) {
+    const deux = [...sets].sort((a, b) => b.kg - a.kg).slice(0, 2);
+    if (deux.length === 1 && deux[0].rpe >= 9) {
+      const [x] = deux;
+      return { exercise, date, kg: x.kg, rpes: [x.rpe], pas, rpeAuto: !!x.rpeAuto, verdict: "descend", cible: Math.max(0, x.kg - pas) };
+    }
+    return verdictDe(exercise, date, deux[0].kg, deux.filter((x) => x.rpe > 0), pas);
+  }
+  const kg = chargeTravail(sets);
+  return verdictDe(exercise, date, kg, sets.filter((x) => x.kg === kg && x.rpe > 0), pas);
 };
 
 

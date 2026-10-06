@@ -688,6 +688,9 @@ function Seance({ data, update, notify, celebrate, plan }) {
   // valeur choisie est une mesure, la valeur par défaut n'en est pas une.
   const [rpeTouche, setRpeTouche] = useState(false);
   const [note, setNote] = useState("");
+  // Série « test » (ex. un essai de charge) : gardée pour le e1RM et le
+  // volume, écartée du verdict de progression (verdictProgression).
+  const [test, setTest] = useState(false);
   const [pulse, setPulse] = useState(false);
   const fire = () => { setPulse(true); setTimeout(() => setPulse(false), 700); };
   // Le formulaire reprend le groupe et l'exercice de la dernière série de la
@@ -796,11 +799,16 @@ function Seance({ data, update, notify, celebrate, plan }) {
     if (!exercise || clean.length === 0) { notify("Ajoute au moins une série valide"); return; }
     const candidate = { exercise, oldBest: bestFor(exercise), newBest: Math.max(...clean.map((x) => e1rm(x.kg, x.reps))) };
     const auto = !rpeTouche && num(rpe) === RPE_DEFAUT;
-    update((d) => { d.sessions.push({ id: uid(), date, group, exercise, sets: clean, rpe: rpe === "" ? null : num(rpe), ...(auto ? { rpeAuto: true } : {}), note: note.trim(), at: Date.now() }); return d; });
-    setSets([{ reps: "", kg: "" }]); setRpe(String(RPE_DEFAUT)); setRpeTouche(false); setNote(""); fire(); notify("Exercice enregistré"); firePR([candidate]);
+    update((d) => { d.sessions.push({ id: uid(), date, group, exercise, sets: clean, rpe: rpe === "" ? null : num(rpe), ...(auto ? { rpeAuto: true } : {}), ...(test ? { test: true } : {}), note: note.trim(), at: Date.now() }); return d; });
+    setSets([{ reps: "", kg: "" }]); setRpe(String(RPE_DEFAUT)); setRpeTouche(false); setNote(""); setTest(false); fire(); notify("Exercice enregistré"); firePR([candidate]);
   };
 
   const todays = data.sessions.filter((s) => s.date === date);
+  const rpeAConfirmer = todays.some((s) => s.rpeAuto);
+  const confirmerRpe = () => {
+    update((d) => { d.sessions.forEach((s) => { if (s.date === date) delete s.rpeAuto; }); return d; });
+    notify("RPE confirmés");
+  };
   const meta = data.durations.find((x) => x.date === date) || {};
   const setMeta = (field, v) => update((d) => {
     let m = d.durations.find((x) => x.date === date);
@@ -842,7 +850,7 @@ function Seance({ data, update, notify, celebrate, plan }) {
     todays.forEach((s) => {
       if (!map.has(s.exercise)) map.set(s.exercise, []);
       const pic = s.sets.length === 1 ? (meta.pics || []).find((q) => q.id === s.id)?.pic : null;
-      s.sets.forEach((x, setIdx) => map.get(s.exercise).push({ id: s.id, setIdx, kg: x.kg, reps: x.reps, rpe: s.rpe, rpeAuto: !!s.rpeAuto, pic, note: setIdx === 0 ? s.note : "" }));
+      s.sets.forEach((x, setIdx) => map.get(s.exercise).push({ id: s.id, setIdx, kg: x.kg, reps: x.reps, rpe: s.rpe, rpeAuto: !!s.rpeAuto, test: !!s.test, pic, note: setIdx === 0 ? s.note : "" }));
     });
     return [...map.entries()].map(([exercise, rows]) => ({
       exercise, rows,
@@ -1041,6 +1049,10 @@ function Seance({ data, update, notify, celebrate, plan }) {
             <Field label={rpeTouche || num(rpe) !== RPE_DEFAUT ? "rpe" : "rpe (défaut)"}><input type="number" inputMode="decimal" min="1" max="10" step="0.5" value={rpe} onChange={(e) => { setRpeTouche(true); setRpe(e.target.value); }} className="inp" /></Field>
             <Field label="note"><input value={note} onChange={(e) => setNote(e.target.value)} className="inp" /></Field>
           </div>
+          <label className="flex items-center gap-2 text-xs" style={{ color: T.mute, fontFamily: mono }}>
+            <input type="checkbox" checked={test} onChange={(e) => setTest(e.target.checked)} />
+            série test — hors verdict de progression
+          </label>
         <Btn full onClick={save} pulse={pulse}>Enregistrer l'exercice</Btn>
       </Panel>
 
@@ -1077,6 +1089,9 @@ function Seance({ data, update, notify, celebrate, plan }) {
 
       <Panel boot="boot-4">
         <H right={todays[0]?.group || ""}>Séance du {fmtDate(date)}</H>
+        {rpeAConfirmer && (
+          <div className="mb-2"><Btn kind="quiet" small onClick={confirmerRpe}>Confirmer les RPE de la séance</Btn></div>
+        )}
         {kcal && (
           <p className="text-xs mb-2" style={{ color: T.mute, fontFamily: mono }}>
             ≈ <span style={{ color: T.amber }}>{kcal.total} kcal</span> · muscu {kcal.muscu} ({kcal.mMin} min {kcal.mode}) + tapis {kcal.tapis} · base {kcal.kg} kg{kcal.hr ? ` · FC ${kcal.hr}${kcal.hrMax ? ` max ${kcal.hrMax}` : ""}` : ""}{kcal.watch ? ` · montre ${kcal.watch} kcal` : ""}
@@ -1123,7 +1138,7 @@ function Seance({ data, update, notify, celebrate, plan }) {
                   {g.rows.map((r, j) => (
                     <li key={`${r.id}-${r.setIdx}`} className="flex justify-between items-center gap-2">
                       <div className="text-xs" style={{ color: T.text, fontFamily: mono }}>
-                        <span style={{ color: T.cyan }}>{pad(j + 1)}</span>  {r.kg}×{r.reps}{r.rpe ? <span style={{ color: T.mute }}> · RPE {r.rpe}{r.rpeAuto ? "*" : ""}</span> : ""}
+                        <span style={{ color: T.cyan }}>{pad(j + 1)}</span>{r.test && <span style={{ color: T.violet }}> T</span>}  {r.kg}×{r.reps}{r.rpe ? <span style={{ color: T.mute }}> · RPE {r.rpe}{r.rpeAuto ? "*" : ""}</span> : ""}
                         {r.pic ? <span style={{ color: T.danger }}> · FC ↑{r.pic}</span> : ""}
                         {r.note && <span className="italic" style={{ color: T.amber }}>  {r.note}</span>}
                       </div>
