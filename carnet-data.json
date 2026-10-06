@@ -10541,7 +10541,13 @@
    "dodo": 393,
    "coucher": 1791248148000,
    "lever": 1791272135000,
-   "sha": "b3b09cb14c9e0a1c1564f919966263a4d37ae843"
+   "sha": "b3b09cb14c9e0a1c1564f919966263a4d37ae843",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée (6 h 33 > 6 h 30, de trois minutes), R2 non déclenchée (plancher 54 < 58)",
+    "motif": "Les deux règles laissent passer, de justesse sur la durée. Épaules d'hier sans facture visible (RPE 7 sur 16 séries), VFC correcte. Séance Pecs complète à 16 séries, charges selon les verdicts du 30/09.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
