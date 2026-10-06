@@ -5126,6 +5126,21 @@
    "rpe": 7,
    "note": "",
    "at": 1791193638897
+  },
+  {
+   "id": "rh0wmodo",
+   "date": "2026-10-06",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 65
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1791276708361
   }
  ],
  "treadmill": [
