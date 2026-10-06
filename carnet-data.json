@@ -5156,6 +5156,21 @@
    "rpe": 7,
    "note": "",
    "at": 1791276914194
+  },
+  {
+   "id": "mielt7sc",
+   "date": "2026-10-06",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 70
+    }
+   ],
+   "rpe": 7,
+   "note": "",
+   "at": 1791277196518
   }
  ],
  "treadmill": [
