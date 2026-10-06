@@ -5306,6 +5306,21 @@
    "rpe": 7,
    "note": "",
    "at": 1791280646295
+  },
+  {
+   "id": "ubgqzqs3",
+   "date": "2026-10-06",
+   "group": "Pecs",
+   "exercise": "Chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 75
+    }
+   ],
+   "rpe": 10,
+   "note": "",
+   "at": 1791280957475
   }
  ],
  "treadmill": [
@@ -10963,7 +10978,7 @@
    },
    "plan": {
     "prevues": 16,
-    "faites": 12,
+    "faites": 13,
     "conforme": false
    }
   }
