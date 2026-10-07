@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-07",
+  "v": 1,
+  "ecrit": "2026-10-07T08:00:00Z",
+  "nuit": "Relevé de la nuit du 06 au 07 pas encore arrivé dans le dépôt (aucun daily/2026-10-07.json). Dernière nuit connue, celle du 05 au 06 : 6 h 33, plancher 54, moyenne 58, VFC 53,8, SpO2 minimum 90.",
+  "decision": {
+    "d": "repos",
+    "regle": "Repos programmé par le rythme 2-1, après Épaules (05/10) et Pecs (06/10, 13 séries).",
+    "motif": "Le jour de repos ne dépend pas de la nuit. La lecture de la nuit complétera ce plan à l'arrivée du relevé."
+  },
+  "points": [
+    "Photos de suivi vendredi 09/10, à jeun, mêmes conditions que le 11/09 : face en relâché, profil, dos bras le long du corps.",
+    "Jambes ensuite, avec les verdicts du 03/10 : Leg press 150, Hack squat 25 si l'exécution reste parfaite, Leg extension 70, Leg Curl 60, Rotary Calf 60, Adducteurs 75.",
+    "Prochaine séance Pecs : Dev incliné 75, Dips 180, Incline chest press 75, Chest press 70."
+  ]
+}
