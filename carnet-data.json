@@ -10978,7 +10978,13 @@
   },
   {
    "date": "2026-10-07",
-   "repas": "19:27"
+   "repas": "19:27",
+   "decision": {
+    "d": "repos",
+    "regle": "Repos programmé par le rythme 2-1, après Épaules (05/10) et Pecs (06/10, 13 séries).",
+    "motif": "Le jour de repos ne dépend pas de la nuit. La lecture de la nuit complétera ce plan à l'arrivée du relevé.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
