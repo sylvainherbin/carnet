@@ -1,28 +1,60 @@
 {
   "date": "2026-10-08",
-  "v": 1,
-  "ecrit": "2026-10-08T08:00:00Z",
+  "v": 2,
+  "ecrit": "2026-10-08T19:00:00Z",
   "nuit": "7 h 32 de sommeil (coucher 02:01, lever 09:38), plancher 53, moyenne 59, VFC 49,1 (quatre mesures), SpO2 minimum 94. La nuit du 06 au 07 n'a aucun relevé dans le dépôt.",
   "decision": {
     "d": "maintenu",
     "regle": "R1 non déclenchée (7 h 32 > 6 h 30), R2 non déclenchée (plancher 53 < 58)",
-    "motif": "Repos hier, nuit de plus de sept heures. Séance Dos complète à 16 séries (quatre exercices en quatre séries), la plus ancienne des quatre séances en retard : dernier Dos le 01/10."
+    "motif": "Repos hier, nuit de plus de sept heures. Séance Dos à 16 séries. Fait : 16 séries sur 16, RPE saisis par Sylvain. Row 130 × 10 × 4 (RPE 7/7/7/7), PullDown 95 × 12 × 4 sans montée (RPE 7/7/7/8), Tirage vertical serré 65 × 12 × 4 (RPE 7/7/7/8), Pulley 45 × 10 × 4 (RPE 7, charge baissée de 50 à 45 par choix de Sylvain : exécution avant la charge). Tapis non fait."
   },
   "seance": {
     "groupe": "Dos",
     "titre": "Dos — phase 2, 16 séries",
     "exercices": [
-      { "nom": "Row", "series": 4, "reps": 10, "kg": 130, "note": "pas 10 ; le 01/10 : 120 × 10 × 3 à RPE 7" },
-      { "nom": "PullDown", "series": 4, "reps": 12, "kg": 95, "note": "le 01/10 : montée 70/80/85/90 × 12, RPE 5/6/7/7 ; montée libre vers 95, case « test » seulement pour un vrai test" },
-      { "nom": "Tirage vertical serré", "series": 4, "reps": 12, "kg": 65, "note": "le 01/10 : 60 × 12 × 3 à RPE 7, confirmé en conversation" },
-      { "nom": "Pulley", "series": 4, "reps": 10, "kg": 55, "note": "le 01/10 : 50 × 10 × 3 à RPE 7" }
+      {
+        "nom": "Row",
+        "series": 4,
+        "reps": 10,
+        "kg": 130,
+        "note": "pas 10 ; le 01/10 : 120 × 10 × 3 à RPE 7"
+      },
+      {
+        "nom": "PullDown",
+        "series": 4,
+        "reps": 12,
+        "kg": 95,
+        "note": "le 01/10 : montée 70/80/85/90 × 12, RPE 5/6/7/7 ; montée libre vers 95, case « test » seulement pour un vrai test"
+      },
+      {
+        "nom": "Tirage vertical serré",
+        "series": 4,
+        "reps": 12,
+        "kg": 65,
+        "note": "le 01/10 : 60 × 12 × 3 à RPE 7, confirmé en conversation"
+      },
+      {
+        "nom": "Pulley",
+        "series": 4,
+        "reps": 10,
+        "kg": 55,
+        "note": "le 01/10 : 50 × 10 × 3 à RPE 7"
+      }
     ],
-    "echauffement": ["Row 60 × 10", "Row 100 × 5", "PullDown 50 × 10"],
-    "tapis": { "min": 15, "pente": 13, "kmh": 5.5 }
+    "echauffement": [
+      "Row 60 × 10",
+      "Row 100 × 5",
+      "PullDown 50 × 10"
+    ],
+    "tapis": {
+      "min": 15,
+      "pente": 13,
+      "kmh": 5.5
+    }
   },
   "points": [
-    "Plafond RPE 9 sur la dernière série seulement. Un test à RPE 10 se coche « test » dans le formulaire.",
-    "Si une charge passe à RPE 8 dès la série 1, tu la gardes sans monter.",
+    "Verdicts pour la prochaine séance Dos : Row 140, PullDown 95 (reste, quatrième série à RPE 8), Tirage vertical serré 65 (reste, quatrième série à RPE 8), Pulley 50 (retour à la charge du 01/10).",
+    "Pulley : recul voulu à 45, exécution d'abord. Seul exercice à poulie du programme : à surveiller si le coude se manifeste.",
     "Photos de suivi demain vendredi 09/10, à jeun, mêmes conditions que le 11/09.",
     "Jambes ensuite : Leg press 150, Hack squat 25 si l'exécution reste parfaite, Leg extension 70, Leg Curl 60, Rotary Calf 60, Adducteurs 75.",
     "Poulie haut du pec : abandonnée. Poulies triceps en isolation : OK."
