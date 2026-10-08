@@ -11004,7 +11004,13 @@
    "coucher": 1791417672000,
    "lever": 1791445124000,
    "sha": "eb74fc25918cdbab0b530d256a1f9e329f215ccb",
-   "repas": "19:57"
+   "repas": "19:57",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée (7 h 32 > 6 h 30), R2 non déclenchée (plancher 53 < 58)",
+    "motif": "Repos hier, nuit de plus de sept heures. Séance Dos complète à 16 séries (quatre exercices en quatre séries), la plus ancienne des quatre séances en retard : dernier Dos le 01/10.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
