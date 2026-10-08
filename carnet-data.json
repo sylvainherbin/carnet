@@ -5346,6 +5346,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1791449691493
+  },
+  {
+   "id": "fxpfy5zv",
+   "date": "2026-10-08",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 130
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1791449922503
   }
  ],
  "treadmill": [
