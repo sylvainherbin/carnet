@@ -5510,6 +5510,22 @@
    "rpe": 7,
    "note": "J’ai préféré privilégier l’exécution",
    "at": 1791452956484
+  },
+  {
+   "id": "sj6fws10",
+   "date": "2026-10-08",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 45
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1791453164358
   }
  ],
  "treadmill": [
