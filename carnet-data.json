@@ -5542,6 +5542,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1791453331322
+  },
+  {
+   "id": "6un8irpc",
+   "date": "2026-10-08",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 45
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1791453563058
   }
  ],
  "treadmill": [
@@ -11237,6 +11253,11 @@
     "regle": "R1 non déclenchée (7 h 32 > 6 h 30), R2 non déclenchée (plancher 53 < 58)",
     "motif": "Repos hier, nuit de plus de sept heures. Séance Dos complète à 16 séries (quatre exercices en quatre séries), la plus ancienne des quatre séances en retard : dernier Dos le 01/10.",
     "par": "coach"
+   },
+   "plan": {
+    "prevues": 16,
+    "faites": 16,
+    "conforme": true
    }
   }
  ],
