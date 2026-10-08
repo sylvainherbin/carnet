@@ -5526,6 +5526,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1791453164358
+  },
+  {
+   "id": "r6o26l5x",
+   "date": "2026-10-08",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 45
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1791453331322
   }
  ],
  "treadmill": [
