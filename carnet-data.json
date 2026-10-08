@@ -5495,6 +5495,22 @@
    "rpe": 8,
    "note": "",
    "at": 1791452618498
+  },
+  {
+   "id": "wndplyne",
+   "date": "2026-10-08",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 45
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "J’ai préféré privilégier l’exécution",
+   "at": 1791452956484
   }
  ],
  "treadmill": [
