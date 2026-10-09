@@ -5748,7 +5748,6 @@
     }
    ],
    "rpe": 7,
-   "rpeAuto": true,
    "note": "",
    "at": 1791539693792
   },
@@ -5764,7 +5763,6 @@
     }
    ],
    "rpe": 7,
-   "rpeAuto": true,
    "note": "Max poids machine",
    "at": 1791539930782
   },
@@ -5780,7 +5778,6 @@
     }
    ],
    "rpe": 7,
-   "rpeAuto": true,
    "note": "Max poids machine",
    "at": 1791540041862
   },
