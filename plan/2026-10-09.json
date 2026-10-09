@@ -1,12 +1,12 @@
 {
   "date": "2026-10-09",
-  "v": 3,
-  "ecrit": "2026-10-09T09:30:00Z",
+  "v": 4,
+  "ecrit": "2026-10-09T19:00:00Z",
   "nuit": "6 h 29 de sommeil (coucher 03:05, lever 09:36), plancher 53, moyenne 59, VFC 56 (trois mesures), SpO2 minimum 87. Relevé arrivé. SpO2 minimum la plus basse mesurée depuis la reprise (90 auparavant).",
   "decision": {
     "d": "maintenu",
     "regle": "R1 à deux signaux : sommeil sous 6 h 30 (6 h 29, d'une minute), mais VFC 56 au-dessus de la médiane récente (47) et plancher 53 égal à la médiane : un seul signal, pas d'allégé. R2 non déclenchée (53 < 58).",
-    "motif": "Première application de la R1 à deux signaux. Séance Jambes complète à 16 séries, charges au double pas là où les deux dernières séances étaient toutes à RPE ≤ 7."
+    "motif": "Première application de la R1 à deux signaux. Séance Jambes à 16 séries, charges au double pas. Fait : 16 séries sur 16. Leg press 160 × 10 × 3 (RPE 7). Hack squat 30/40/50 × 10 + élastique (RPE 5/7/7), nouvelle référence. Leg extension 70 × 10 × 3 (RPE 8/9/8, pas simple au lieu de 75). Leg Curl 65, 65 puis 55 × 12 (RPE 8/9/7). Rotary Calf 65 × 15 puis × 20 et Adducteurs 70 × 15 puis × 20 : charge maximale des machines. Tapis non fait."
   },
   "seance": {
     "groupe": "Jambes",
@@ -67,10 +67,10 @@
     }
   },
   "points": [
-    "Photos à jeun faites (face, profil, bras) ; pesée 76,2 kg. Comparé au 11/09 : épaules, bras et haut des pecs plus pleins, taille visuellement inchangée. Décision : maintien strict, pas de déficit. Contrôle par tour de taille (ou ficelle repère) chaque vendredi à jeun ; +1 cm en deux semaines → déficit de 200 kcal.",
-    "Double pas : si une charge passe à RPE 8 dès la série 1, tu reviens au pas simple (Leg press 150, Leg extension 70, Leg Curl 60).",
-    "SpO2 minimum 87 : Sylvain a dormi sur le bras de la montre, artefact de mesure probable. Rien à suivre.",
-    "Repos demain samedi 10/10.",
-    "Poulie haut du pec : abandonnée. Poulies triceps en isolation : OK."
+    "Verdicts pour la prochaine séance Jambes : Leg press 180 (double pas, 140 puis 160 à RPE 7), Hack squat 55 + élastique, Leg extension 70 (reste), Leg Curl 60 × 12 × 3 (consolider, la troisième série à 65 n'a pas tenu), Rotary Calf 65 et Adducteurs 70 en progression par les reps (charge maximale des machines).",
+    "Double pas : réussi sur le Leg press, trop fort sur Leg extension et Leg Curl (RPE 8-9). Le garde-fou a joué.",
+    "Objectif Leg press 170 × 10 × 3 au 30/11 : atteignable à la prochaine séance, à remplacer.",
+    "Pesée 76,2 kg ; photos à jeun comparées au 11/09 ; maintien strict ; tour de taille ou ficelle chaque vendredi.",
+    "Repos demain samedi 10/10."
   ]
 }
