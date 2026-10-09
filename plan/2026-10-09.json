@@ -1,7 +1,7 @@
 {
   "date": "2026-10-09",
-  "v": 2,
-  "ecrit": "2026-10-09T08:30:00Z",
+  "v": 3,
+  "ecrit": "2026-10-09T09:30:00Z",
   "nuit": "6 h 29 de sommeil (coucher 03:05, lever 09:36), plancher 53, moyenne 59, VFC 56 (trois mesures), SpO2 minimum 87. Relevé arrivé. SpO2 minimum la plus basse mesurée depuis la reprise (90 auparavant).",
   "decision": {
     "d": "maintenu",
@@ -67,7 +67,7 @@
     }
   },
   "points": [
-    "Photos à jeun ce matin, avant de manger : face en relâché, profil, dos bras le long du corps. Pèse-toi aussi.",
+    "Photos à jeun faites (face, profil, bras) ; pesée 76,2 kg. Comparé au 11/09 : épaules, bras et haut des pecs plus pleins, taille visuellement inchangée. Décision : maintien strict, pas de déficit. Contrôle par tour de taille (ou ficelle repère) chaque vendredi à jeun ; +1 cm en deux semaines → déficit de 200 kcal.",
     "Double pas : si une charge passe à RPE 8 dès la série 1, tu reviens au pas simple (Leg press 150, Leg extension 70, Leg Curl 60).",
     "SpO2 minimum 87 : Sylvain a dormi sur le bras de la montre, artefact de mesure probable. Rien à suivre.",
     "Repos demain samedi 10/10.",
