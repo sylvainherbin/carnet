@@ -43,6 +43,15 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
   `temp`, `dodo`, `coucher`, `lever`, `somAbsent`), les résumés de séance
   (`durations[]` : `hr`, `hrMax`, `ex`, `pics`, `fc`), `sessions[].rpeAuto`,
   et les colonnes de `exportDerive`.
+- Récupération après série (v49) : `durations[].recup` (`id`, `pic`, `t`,
+  `f30`, `f60`, `ctx` = `meme_exercice` | `transition` | `fin_seance`) et
+  `durations[].recupV` (`RECUP_VERSION`). Seules les séries mesurables y
+  figurent ; les baisses (pic − f30/f60) se recalculent, elles peuvent être
+  négatives. Ce `pic` est le pic de fin d'effort : il diffère de `pics`
+  (maximum du bloc depuis la validation précédente, souvent la queue du pic
+  de la série d'avant), laissé inchangé. Ne pas agréger les contextes
+  ensemble : la baisse médiane vaut 18 en `meme_exercice`, 11 en
+  `transition`.
 - Renommer ou retirer l'un de ces champs, ou changer le sens d'un résumé
   (par exemple via `NUIT_VERSION`), modifie ce que le coach lit.
 - `decision.par = "moi"` bloque **définitivement** la décision du coach pour
@@ -84,6 +93,8 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
   `repriseSeance`.
 - Plan : `lirePlan`, `avancementPlan`, `seanceTerminee`, `planPrevuFait`,
   `poserPlanFait`, `decisionAEcrire`, `poserDecision`, `manquesDuPlan`.
+- Récupération : `recupSerie`, `recuperationSeance`, `recupDefinitive`
+  (`RECUP`, `RECUP_VERSION`), `fcSerieExport` (colonnes du CSV tableur).
 - Export : `ligneJour`, `exportDerive` (CSV `;`).
 
 `src/githubSync.js` :
@@ -135,7 +146,7 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
 - Le déploiement passe par `scripts/deploy.sh vNN "message"`, qui incrémente
   `CACHE` dans `public/sw.js`, lance lint, tests et build, commit et pousse
   `main`, recopie `dist/` dans `gh-pages` sans supprimer d'assets, puis
-  vérifie en ligne. Dernière version déployée : **v44**.
+  vérifie en ligne. Dernière version déployée : **v49**.
 - Jamais de `--force`, jamais de suppression d'assets sur `gh-pages`.
 - Rien n'est déployé sans l'accord de Sylvain. Lui décrire ce qui change
   avant de committer, et lui rendre compte de ce qui est parti.
@@ -184,11 +195,16 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
   - Chaque hausse de `NUIT_VERSION` relit **tous** les fichiers de `daily/`
     d'un coup (`Promise.all`), pas seulement ceux des 14 derniers jours.
   - Un relevé illisible est retenté à chaque relecture.
-- **Taille de `carnet-data.json`** : environ 102 ko fin septembre 2026, pour
-  une croissance d'environ 3,35 ko par jour. Au-delà de 1 Mo, l'API Contents
-  (média `object`) renvoie un `content` vide (limite documentée, à
+- **Taille de `carnet-data.json`** : 164 ko le 09/10/2026, pour une
+  croissance mesurée d'environ 4,3 ko par jour depuis le 20/09, plus la
+  récupération par série (~1,3 ko par séance). Au-delà de 1 Mo, l'API
+  Contents (média `object`) renvoie un `content` vide (limite documentée, à
   revérifier). `pullRemote` échouerait alors en « hors ligne » permanent,
-  vers début juillet 2027 au rythme actuel.
+  vers le printemps 2027 au rythme actuel.
+- **Rattrapage de la récupération** : `importFc` lit au plus
+  `FC_LECTURES_RECUP` fichiers `fc/` par passage pour les dates pas encore
+  définitives, sans limite d'âge. Une date sans FC, ou dont un fichier n'a
+  pas pu être lu, reste à faire : son seul coût est le listage de `fc/`.
 - **Dates limites** : `limit` et `nextDay` passent par `toISOString()`, qui
   donne une date UTC. Les dates saisies sont locales, d'où un décalage d'un
   jour possible autour de minuit. C'est sans effet pratique sur une fenêtre

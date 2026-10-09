@@ -294,6 +294,92 @@ export const resumeSeance = (samples, w, date) => {
   }).filter(Boolean);
   return rec;
 };
+
+// ---- Récupération après une série ------------------------------------------
+// Une saisie = une série, validée sitôt finie. `at` approche la fin d'effort,
+// sans la marquer : le pic suit parfois la validation (jusqu'à ~45 s sur les
+// jambes). Ce pic de fin d'effort n'est pas celui de `pics`, maximum de tout le
+// bloc depuis la validation précédente, qui attrape souvent la queue du pic de
+// la série d'avant ; `pics` reste tel quel, le coach le lit.
+// Paramètres fixés sur 294 séries réelles (01/09 → 09/10/2026) :
+// - pic cherché dans [at − 60 s, at + 45 s], sans remonter avant
+//   validation précédente + 45 s (queue de la série d'avant) ;
+// - FC à +30 et +60 s : moyenne des échantillons à ±5 s (cadence médiane
+//   5 s), jamais interpolée ;
+// - pas de trou de plus de 20 s de pic − 15 s à pic + 65 s ;
+// - la série suivante ne doit pas commencer dans la mesure : la FC remonte
+//   ~40 s avant sa validation, d'où pic + 60 s ≤ validation suivante − 60 s.
+// Un dépassement du pic dans les 30 s qui suivent veut dire que la FC
+// montait encore : pic non établi, null. Plus tard, c'est un rebond après une
+// vraie descente (déplacement, réglage) : la mesure est gardée, signée.
+// La validation suivante ne marque pas la fin du repos : on ne mesure rien
+// au-delà de +60 s.
+export const RECUP_VERSION = 1;
+export const RECUP = { avant: 60000, apres: 45000, queue: 45000, bord: 5000, tol: 5000, trou: 20000, marge: 60000, saillie: 15, etabli: 30000 };
+// Les fichiers fc/ redéposés se recouvrent : un échantillon par instant.
+const sansDoublon = (samples) => { const vus = new Set(); return samples.filter((x) => !vus.has(x.ms) && vus.add(x.ms)); };
+// Une série. `smp` : échantillons triés et dédoublonnés ; `taps` : [début, fin]
+// des marches. Rend { ctx, pic, t, f30, f60 } quand la mesure tient, sinon
+// { ctx, motif } (avec pic et t quand ils ont été trouvés).
+export const recupSerie = (smp, s, prev, next, taps = []) => {
+  const P = RECUP;
+  const ctx = !next ? "fin_seance" : next.exercise === s.exercise ? "meme_exercice" : "transition";
+  if (!s.at || s.sets.length !== 1) return { ctx, motif: "plusieurs séries ou sans heure" };
+  const entre = (a, b) => smp.filter((x) => x.ms >= a && x.ms <= b);
+  const moy = (t) => { const v = entre(t - P.tol, t + P.tol); return v.length ? Math.round(v.reduce((a, x) => a + x.bpm, 0) / v.length) : null; };
+  const debut = Math.max(s.at - P.avant, prev?.at ? prev.at + P.queue : -Infinity), fin = s.at + P.apres;
+  const fen = entre(debut, fin);
+  if (fen.length < 4) return { ctx, motif: "FC absente" };
+  const mx = Math.max(...fen.map((x) => x.bpm));
+  const pk = fen.filter((x) => x.bpm === mx).pop();
+  const r = { ctx, pic: Math.round(pk.bpm), t: Math.round((pk.ms - s.at) / 1000) };
+  if (pk.ms - debut < P.bord || fin - pk.ms < P.bord) return { ...r, motif: "pic au bord de la fenêtre" };
+  const k = smp.indexOf(pk), vois = [smp[k - 1], smp[k + 1]].filter(Boolean).map((x) => x.bpm);
+  if (vois.length === 2 && pk.bpm - Math.max(...vois) >= P.saillie) return { ...r, motif: "pic isolé (artefact)" };
+  const suite = entre(pk.ms - 15000, pk.ms + 60000 + P.tol);
+  if (suite.slice(1).some((x, j) => x.ms - suite[j].ms > P.trou)) return { ...r, motif: "trou de mesure" };
+  if (taps.some(([a, b]) => a < pk.ms + 60000 + P.tol && b > debut)) return { ...r, motif: "tapis" };
+  if (next?.at && pk.ms + 60000 > next.at - P.marge) return { ...r, motif: "série suivante trop proche" };
+  if (entre(pk.ms + 1, pk.ms + P.etabli).some((x) => x.bpm > pk.bpm)) return { ...r, motif: "pic non établi" };
+  const f60 = moy(pk.ms + 60000);
+  if (f60 === null) return { ...r, motif: "pas de mesure à +60 s" };
+  return { ...r, f30: moy(pk.ms + 30000), f60 };
+};
+// Toutes les séries horodatées d'une date. null si aucune saisie horodatée ou
+// aucune FC dans la séance : rien n'est alors calculé, ni marqué. `complet` :
+// la FC couvre la récupération de la dernière série. `lignes` garde le motif
+// de chaque null.
+export const recuperationSeance = (samples, sessions, treadmill, date) => {
+  const ss = sessions.filter((s) => s.date === date && s.at).sort((a, b) => a.at - b.at);
+  if (ss.length === 0) return null;
+  const smp = sansDoublon(samples);
+  const fin = ss[ss.length - 1].at;
+  if (!smp.some((x) => x.ms >= ss[0].at - RECUP.avant && x.ms <= fin)) return null;
+  const taps = treadmill.filter((t) => t.date === date && t.at0 > 0 && t.min > 0).map((t) => [t.at0, t.at0 + t.min * 60000]);
+  const lignes = ss.map((s, i) => ({ id: s.id, ...recupSerie(smp, s, ss[i - 1], ss[i + 1], taps) }));
+  const recup = lignes.filter((l) => l.f60 != null).map(({ id, pic, t, f30, f60, ctx }) => ({ id, pic, t, f30, f60, ctx }));
+  const complet = smp.some((x) => x.ms >= fin + RECUP.apres + 60000 + RECUP.tol);
+  return { recup, lignes, complet };
+};
+// Calcul définitif (recupV posé) : FC trouvée, aucune lecture de fichier en
+// échec, et soit la FC couvre la dernière récupération, soit plus aucun fichier
+// ne peut l'apporter (le lendemain, dont un fichier peut déborder sur la veille,
+// est terminé). FC absente ou indisponible : rien de définitif, on retentera.
+export const recupDefinitive = (res, date, aujourdhui, echec) =>
+  !!res && !echec && (res.complet || lendemain(lendemain(date)) <= aujourdhui);
+// Colonnes FC d'une saisie pour l'export par série : pic de bloc (ancien
+// calcul), pic de fin d'effort et son délai, FC à +30/+60 s, baisses
+// (pic − FC, négatives quand la FC est remontée) et contexte. Vides quand
+// rien n'est mesuré, jamais zéro.
+export const COLONNES_FC_SERIE = ["fc_pic_bloc", "fc_pic_fin", "fc_tpic_fin_s", "fc30_fin", "fc60_fin", "drop30", "drop60", "fc_contexte"];
+export const fcSerieExport = (durations, s) => {
+  const m = (durations || []).find((x) => x.date === s.date) || {};
+  const solo = s.sets.length === 1;
+  const bloc = solo ? (m.pics || []).find((p) => p.id === s.id)?.pic : null;
+  const r = solo ? (m.recup || []).find((p) => p.id === s.id) : null;
+  const v = (x) => (x == null ? "" : x);
+  return [v(bloc), v(r?.pic), v(r?.t), v(r?.f30), v(r?.f60), r && r.f30 != null ? r.pic - r.f30 : "", r ? r.pic - r.f60 : "", v(r?.ctx)];
+};
 export const weightFor = (weights, date) => {
   const w = [...weights].sort((a, b) => a.date.localeCompare(b.date));
   const past = w.filter((x) => x.date <= date);

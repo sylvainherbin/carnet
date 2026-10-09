@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile, pullPlanFile } from "./githubSync.js";
-import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, dailyAImporter, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp, repriseSeance, carnetValide, carnetVide, lirePlan, avancementPlan, seanceTerminee, planPrevuFait, poserPlanFait, decisionAEcrire, manquesDuPlan, RPE_DEFAUT } from "./calculs.js";
+import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, dailyAImporter, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp, repriseSeance, carnetValide, carnetVide, lirePlan, avancementPlan, seanceTerminee, planPrevuFait, poserPlanFait, decisionAEcrire, manquesDuPlan, RPE_DEFAUT, RECUP_VERSION, recuperationSeance, recupDefinitive, COLONNES_FC_SERIE, fcSerieExport } from "./calculs.js";
 import {
   LineChart, Line, ComposedChart, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea, ReferenceLine, Cell,
 } from "recharts";
@@ -21,6 +21,12 @@ const DEFAULT_EXERCISES = ["Dev incliné", "Dev couché", "Chest press", "Dips",
 const PLAN_CACHE = "carnet-plan";
 // Date pour laquelle le bloc « Séance du jour » a été masqué à la main.
 const PLAN_MASQUE = "carnet-plan-masque";
+// Fichiers fc/ lus au plus par passage pour le rattrapage de la récupération.
+const FC_LECTURES_RECUP = 6;
+// Une saisie ajoutée ou retirée change la série suivante de ses voisines : la
+// récupération de la date redevient à calculer.
+const relancerRecup = (d, date) => { const m = d.durations.find((x) => x.date === date); if (m) delete m.recupV; };
+const fmtEcart = (d) => (d > 0 ? `+${d}` : d < 0 ? `−${-d}` : "0");
 // Délai minimal entre deux relectures automatiques des relevés.
 const RELECTURE_MS = 2 * 60000;
 const EMPTY = { exercises: DEFAULT_EXERCISES, sessions: [], treadmill: [], weights: [], taille: [], durations: [], daily: [], pas: {} };
@@ -182,6 +188,10 @@ export default function CarnetEntrainement() {
   // --- synchronisation GitHub ---
   const GH_TOKEN = "carnet-gh-token", GH_SHA = "carnet-gh-sha", GH_DIRTY = "carnet-gh-dirty", GH_AT = "carnet-gh-at";
   const dataRef = useRef(data);
+  // Récupération déjà calculée dans cette ouverture de l'app, par date : la
+  // liste des fichiers fc/ utilisés. Tant qu'elle ne change pas, une date non
+  // définitive n'est pas relue à chaque passage.
+  const recupVus = useRef(new Map());
   const adopting = useRef(false);   // vrai quand setData vient du chargement ou de GitHub : ne pas marquer "modifié"
   const pulledOnce = useRef(false);
   const pushTimer = useRef(null);
@@ -276,15 +286,38 @@ export default function CarnetEntrainement() {
         if (m0.hr > 0 && m0.ex && m0.fc && m0.pics && !tapAFaire) return;
         windows.set(dt, fenetreSeance(d.sessions, d.treadmill, dt));
       });
-      if (windows.size === 0) return;
+      // Récupération après série : toute date horodatée dont le calcul n'est pas
+      // définitif, quel que soit son âge (rattrapage de l'historique).
+      const recupAFaire = [...new Set(d.sessions.filter((s) => s.at).map((s) => s.date))]
+        .filter((dt) => (d.durations.find((x) => x.date === dt) || {}).recupV !== RECUP_VERSION)
+        .sort().reverse();
+      if (windows.size === 0 && recupAFaire.length === 0) return;
       const nextDay = (iso) => new Date(new Date(`${iso}T12:00:00`).getTime() + 864e5).toISOString().slice(0, 10);
       const days = new Set([...windows.keys()].flatMap((dt) => [dt, nextDay(dt)]));
-      const names = (await listFcFiles()).filter((n) => days.has(n.slice(0, 10)));
-      if (names.length === 0) return;
+      const tous = await listFcFiles();
+      const fichiersDe = (dt) => tous.filter((n) => n.slice(0, 10) === dt || n.slice(0, 10) === nextDay(dt));
+      // Mêmes fichiers et mêmes saisies : même résultat, inutile de relire.
+      const cleRecup = (dt) => fichiersDe(dt).join("|") + "#" + d.sessions.filter((s) => s.date === dt && s.at).map((s) => `${s.id}:${s.at}:${s.exercise}`).join(",");
+      const names = new Set(tous.filter((n) => days.has(n.slice(0, 10))));
+      // Les dates de la fenêtre courante ne coûtent rien de plus ; pour le
+      // rattrapage, au plus FC_LECTURES_RECUP fichiers nouveaux par passage
+      // (quota de 60 requêtes par heure sans jeton). Une date sans fichier
+      // n'est ni lue ni marquée.
+      const recupDates = [];
+      let budget = FC_LECTURES_RECUP;
+      recupAFaire.forEach((dt) => {
+        const fs = fichiersDe(dt);
+        if (fs.length === 0 || recupVus.current.get(dt) === cleRecup(dt)) return;
+        const neufs = fs.filter((n) => !names.has(n));
+        if (neufs.length > budget) return;
+        neufs.forEach((n) => names.add(n)); budget -= neufs.length; recupDates.push(dt);
+      });
+      if (names.size === 0) return;
       // Un fichier vide ou malformé — raccourci iOS à moitié réglé, dépôt interrompu —
       // ne doit pas faire échouer l'import des autres : on l'écarte et on continue.
-      const samples = (await Promise.all(names.map((n) =>
-        pullFcFile(n).then(parseFcFile).catch((e) => { console.error("FC illisible", n, e); return []; })
+      const echecs = new Set();
+      const samples = (await Promise.all([...names].map((n) =>
+        pullFcFile(n).then(parseFcFile).catch((e) => { console.error("FC illisible", n, e); echecs.add(n); return []; })
       ))).flat()
         .filter((s) => s.ms > 0 && s.bpm > 20 && s.bpm < 250)
         .sort((a, b) => a.ms - b.ms);
@@ -293,8 +326,25 @@ export default function CarnetEntrainement() {
         const rec = resumeSeance(samples, w, date);
         if (rec) found.push(rec);
       });
-      if (found.length === 0) return;
+      const auj = todayISO();
+      const recups = recupDates.map((dt) => {
+        const r = recuperationSeance(samples, d.sessions, d.treadmill, dt);
+        const echec = fichiersDe(dt).some((n) => echecs.has(n));
+        if (!echec) recupVus.current.set(dt, cleRecup(dt));
+        if (!r) return null;
+        const m0 = d.durations.find((x) => x.date === dt) || {};
+        const def = recupDefinitive(r, dt, auj, echec);
+        if (JSON.stringify(m0.recup || []) === JSON.stringify(r.recup) && (!def || m0.recupV === RECUP_VERSION)) return null;
+        return { date: dt, recup: r.recup, def };
+      }).filter(Boolean);
+      if (found.length === 0 && recups.length === 0) return;
       update((dd) => {
+        recups.forEach(({ date, recup, def }) => {
+          let m = dd.durations.find((x) => x.date === date);
+          if (!m) { m = { date }; dd.durations.push(m); }
+          m.recup = recup;
+          if (def) m.recupV = RECUP_VERSION;
+        });
         found.forEach(({ date, hr, hrMax, ex, pics, fc, tap }) => {
           let m = dd.durations.find((x) => x.date === date);
           if (!m) { m = { date }; dd.durations.push(m); }
@@ -311,7 +361,7 @@ export default function CarnetEntrainement() {
         return dd;
       });
       const f = found[found.length - 1];
-      notify(`FC importée : ${f.hr} bpm moy · ${f.hrMax} max (${f.n} mesures)`);
+      if (f) notify(`FC importée : ${f.hr} bpm moy · ${f.hrMax} max (${f.n} mesures)`);
     } catch (e) { console.error("import FC", e); }
   };
 
@@ -807,7 +857,7 @@ function Seance({ data, update, notify, celebrate, plan }) {
     if (!exercise || clean.length === 0) { notify("Ajoute au moins une série valide"); return; }
     const candidate = { exercise, oldBest: bestFor(exercise, elastique), newBest: Math.max(...clean.map((x) => e1rm(x.kg, x.reps))) };
     const auto = !rpeTouche && num(rpe) === RPE_DEFAUT;
-    update((d) => { d.sessions.push({ id: uid(), date, group, exercise, sets: clean, rpe: rpe === "" ? null : num(rpe), ...(auto ? { rpeAuto: true } : {}), ...(test ? { test: true } : {}), ...(elastique ? { elastique: true } : {}), note: note.trim(), at: Date.now() }); return d; });
+    update((d) => { d.sessions.push({ id: uid(), date, group, exercise, sets: clean, rpe: rpe === "" ? null : num(rpe), ...(auto ? { rpeAuto: true } : {}), ...(test ? { test: true } : {}), ...(elastique ? { elastique: true } : {}), note: note.trim(), at: Date.now() }); relancerRecup(d, date); return d; });
     setSets([{ reps: "", kg: "" }]); setRpe(String(RPE_DEFAUT)); setRpeTouche(false); setNote(""); setTest(false); fire(); notify("Exercice enregistré"); firePR([candidate]);
   };
 
@@ -822,7 +872,7 @@ function Seance({ data, update, notify, celebrate, plan }) {
     let m = d.durations.find((x) => x.date === date);
     if (!m) { m = { date }; d.durations.push(m); }
     if (num(v) > 0) m[field] = num(v); else delete m[field];
-    if (!(m.min > 0 || m.hr > 0 || m.watch > 0 || m.hrMax > 0 || m.ex?.length || m.pics?.length || m.fc)) d.durations = d.durations.filter((x) => x !== m);
+    if (!(m.min > 0 || m.hr > 0 || m.watch > 0 || m.hrMax > 0 || m.ex?.length || m.pics?.length || m.fc || m.recup?.length || m.recupV)) d.durations = d.durations.filter((x) => x !== m);
     return d;
   });
   const kcal = kcalSeance(data, date);
@@ -858,7 +908,8 @@ function Seance({ data, update, notify, celebrate, plan }) {
     todays.forEach((s) => {
       if (!map.has(s.exercise)) map.set(s.exercise, []);
       const pic = s.sets.length === 1 ? (meta.pics || []).find((q) => q.id === s.id)?.pic : null;
-      s.sets.forEach((x, setIdx) => map.get(s.exercise).push({ id: s.id, setIdx, kg: x.kg, reps: x.reps, rpe: s.rpe, rpeAuto: !!s.rpeAuto, test: !!s.test, elastique: !!s.elastique, pic, note: setIdx === 0 ? s.note : "" }));
+      const rec = s.sets.length === 1 ? (meta.recup || []).find((q) => q.id === s.id) || null : null;
+      s.sets.forEach((x, setIdx) => map.get(s.exercise).push({ id: s.id, setIdx, kg: x.kg, reps: x.reps, rpe: s.rpe, rpeAuto: !!s.rpeAuto, test: !!s.test, elastique: !!s.elastique, pic, rec, note: setIdx === 0 ? s.note : "" }));
     });
     return [...map.entries()].map(([exercise, rows]) => ({
       exercise, rows,
@@ -893,6 +944,7 @@ function Seance({ data, update, notify, celebrate, plan }) {
 
   const delSet = (id, setIdx) => update((d) => {
     d.sessions = d.sessions.map((s) => s.id === id ? { ...s, sets: s.sets.filter((_, j) => j !== setIdx) } : s).filter((s) => s.sets.length > 0);
+    relancerRecup(d, date);
     return d;
   });
 
@@ -1134,6 +1186,11 @@ function Seance({ data, update, notify, celebrate, plan }) {
             </div>
           </div>
         )}
+        {grouped.some((g) => g.rows.some((r) => r.rec || r.pic)) && (
+          <p className="text-xs mb-1" style={{ color: T.mute, fontFamily: mono }}>
+            <span style={{ color: T.danger }}>fin ↑</span> pic de fin d'effort, puis écart de FC 60 s après · <span style={{ color: T.danger }}>bloc ↑</span> pic de tout le bloc depuis la série précédente (ancien calcul)
+          </p>
+        )}
         {todays.length === 0 ? <Empty text="Rien d'enregistré pour cette date." /> : (
           <ul>
             {grouped.map((g, i) => (
@@ -1153,7 +1210,9 @@ function Seance({ data, update, notify, celebrate, plan }) {
                     <li key={`${r.id}-${r.setIdx}`} className="flex justify-between items-center gap-2">
                       <div className="text-xs" style={{ color: T.text, fontFamily: mono }}>
                         <span style={{ color: T.cyan }}>{pad(j + 1)}</span>{r.test && <span style={{ color: T.violet }}> T</span>}{r.elastique && <span style={{ color: T.magenta }}> E</span>}  {r.kg}×{r.reps}{r.rpe ? <span style={{ color: T.mute }}> · RPE {r.rpe}{r.rpeAuto ? "*" : ""}</span> : ""}
-                        {r.pic ? <span style={{ color: T.danger }}> · FC ↑{r.pic}</span> : ""}
+                        {r.rec
+                          ? <span style={{ color: T.danger }}> · fin ↑{r.rec.pic} <span style={{ color: T.cyan }}>{fmtEcart(r.rec.f60 - r.rec.pic)}/60 s</span>{r.rec.ctx !== "meme_exercice" && <span style={{ color: T.mute }}> · {r.rec.ctx === "transition" ? "transition" : "fin de séance"}</span>}</span>
+                          : r.pic ? <span style={{ color: T.danger }}> · bloc ↑{r.pic}</span> : ""}
                         {r.note && <span className="italic" style={{ color: T.amber }}>  {r.note}</span>}
                       </div>
                       <Del onClick={() => delSet(r.id, r.setIdx)} />
@@ -1854,11 +1913,12 @@ function Donnees({ data, setData, notify, sync, onToken, onTokenOff, onSync }) {
     const r = new FileReader(); r.onload = () => applyImport(r.result); r.readAsText(f);
   };
   const toCSV = () => {
-    const rows = [["type", "date", "groupe", "exercice", "serie", "kg", "reps", "rpe", "rpe_auto", "min", "km", "pente", "fc", "note"]];
-    data.sessions.forEach((s) => s.sets.forEach((x, i) => rows.push(["muscu", s.date, s.group || "", s.exercise, i + 1, x.kg, x.reps, s.rpe ?? "", s.rpeAuto ? 1 : "", "", "", "", "", s.note])));
-    data.treadmill.forEach((t) => rows.push(["tapis", t.date, "", "", "", "", "", "", "", t.min, t.km, t.slope, t.hr ?? "", t.note]));
-    data.weights.forEach((w) => rows.push(["poids", w.date, "", "", "", w.kg, "", "", "", "", "", "", "", ""]));
-    (data.taille || []).forEach((w) => rows.push(["taille", w.date, "", "", "", w.cm, "", "", "", "", "", "", "", ""]));
+    const vide = Array(1 + COLONNES_FC_SERIE.length).fill("");
+    const rows = [["type", "date", "groupe", "exercice", "serie", "kg", "reps", "rpe", "rpe_auto", "min", "km", "pente", "fc", "note", "id", ...COLONNES_FC_SERIE]];
+    data.sessions.forEach((s) => s.sets.forEach((x, i) => rows.push(["muscu", s.date, s.group || "", s.exercise, i + 1, x.kg, x.reps, s.rpe ?? "", s.rpeAuto ? 1 : "", "", "", "", "", s.note, s.id ?? "", ...fcSerieExport(data.durations, s)])));
+    data.treadmill.forEach((t) => rows.push(["tapis", t.date, "", "", "", "", "", "", "", t.min, t.km, t.slope, t.hr ?? "", t.note, ...vide]));
+    data.weights.forEach((w) => rows.push(["poids", w.date, "", "", "", w.kg, "", "", "", "", "", "", "", "", ...vide]));
+    (data.taille || []).forEach((w) => rows.push(["taille", w.date, "", "", "", w.cm, "", "", "", "", "", "", "", "", ...vide]));
     return rows.map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(";")).join("\n");
   };
   const importJSON = () => applyImport(imp);
