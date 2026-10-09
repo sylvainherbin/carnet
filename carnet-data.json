@@ -5628,7 +5628,6 @@
     }
    ],
    "rpe": 7,
-   "rpeAuto": true,
    "note": "+ élastique",
    "at": 1791537594270
   },
@@ -5644,7 +5643,6 @@
     }
    ],
    "rpe": 7,
-   "rpeAuto": true,
    "note": "+ élastique",
    "at": 1791537819764
   },
@@ -5735,7 +5733,6 @@
     }
    ],
    "rpe": 7,
-   "rpeAuto": true,
    "note": "",
    "at": 1791539565640
   }
