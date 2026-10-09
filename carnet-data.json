@@ -5767,6 +5767,22 @@
    "rpeAuto": true,
    "note": "Max poids machine",
    "at": 1791539930782
+  },
+  {
+   "id": "20xk0asv",
+   "date": "2026-10-09",
+   "group": "Jambes",
+   "exercise": "Adducteurs",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 70
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "Max poids machine",
+   "at": 1791540041862
   }
  ],
  "treadmill": [
