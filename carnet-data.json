@@ -11516,10 +11516,11 @@
    "respN": 39,
    "spo2": 95,
    "spo2Min": 87,
+   "temp": 35.55,
    "dodo": 389,
    "coucher": 1791507938000,
    "lever": 1791531413000,
-   "sha": "629536872adbcacb3dfb8d4eef7c82da91f64422",
+   "sha": "8210549a0f42c5bff0c8d071ce098695d99fb7f4",
    "repas": "19:36"
   }
  ],
