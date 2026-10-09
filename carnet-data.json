@@ -5647,6 +5647,21 @@
    "rpeAuto": true,
    "note": "+ élastique",
    "at": 1791537819764
+  },
+  {
+   "id": "oh4gf9ue",
+   "date": "2026-10-09",
+   "group": "Jambes",
+   "exercise": "Leg extension",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 70
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1791538083362
   }
  ],
  "treadmill": [
