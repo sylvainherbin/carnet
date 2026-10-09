@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-09",
+  "v": 1,
+  "ecrit": "2026-10-09T08:00:00Z",
+  "nuit": "6 h 29 de sommeil (coucher 03:05, lever 09:36), plancher 53, moyenne 59, VFC 56 (trois mesures), SpO2 minimum 87. Relevé arrivé. SpO2 minimum la plus basse mesurée depuis la reprise (90 auparavant).",
+  "decision": {
+    "d": "maintenu",
+    "regle": "R1 à deux signaux : sommeil sous 6 h 30 (6 h 29, d'une minute), mais VFC 56 au-dessus de la médiane récente (47) et plancher 53 égal à la médiane : un seul signal, pas d'allégé. R2 non déclenchée (53 < 58).",
+    "motif": "Première application de la R1 à deux signaux. Séance Jambes complète à 16 séries, charges au double pas là où les deux dernières séances étaient toutes à RPE ≤ 7."
+  },
+  "seance": {
+    "groupe": "Jambes",
+    "titre": "Jambes — 16 séries, double pas",
+    "exercices": [
+      { "nom": "Leg press 2", "series": 3, "reps": 10, "kg": 160, "note": "double pas (140 et 130 à RPE 7) ; objectif 170 × 10 × 3 au 30/11" },
+      { "nom": "Hack squat", "series": 3, "reps": 10, "kg": 20, "note": "charge totale ; 25 seulement si l'exécution reste parfaite et la série 1 à RPE ≤ 7" },
+      { "nom": "Leg extension", "series": 3, "reps": 10, "kg": 75, "note": "double pas (65 et 60 à RPE 7)" },
+      { "nom": "Leg Curl", "series": 3, "reps": 12, "kg": 65, "note": "double pas (55 et 50 à RPE 7)" },
+      { "nom": "Rotary Calf", "series": 2, "reps": 15, "kg": 65, "note": "double pas (55 et 50 à RPE 7)" },
+      { "nom": "Adducteurs", "series": 2, "reps": 15, "kg": 80, "note": "double pas (70 à RPE 7 deux fois)" }
+    ],
+    "echauffement": ["Leg press 80 × 10", "Leg press 120 × 6", "Hack squat 10 × 8"],
+    "tapis": { "min": 15, "pente": 13, "kmh": 5.5 }
+  },
+  "points": [
+    "Photos à jeun ce matin, avant de manger : face en relâché, profil, dos bras le long du corps. Pèse-toi aussi.",
+    "Double pas : si une charge passe à RPE 8 dès la série 1, tu reviens au pas simple (Leg press 150, Leg extension 70, Leg Curl 60).",
+    "SpO2 minimum 87 cette nuit : une seule valeur de montre, à surveiller ; si elle se répète, à montrer à ton médecin.",
+    "Repos demain samedi 10/10.",
+    "Poulie haut du pec : abandonnée. Poulies triceps en isolation : OK."
+  ]
+}
