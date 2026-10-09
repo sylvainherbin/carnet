@@ -5613,7 +5613,7 @@
     }
    ],
    "rpe": 5,
-    "elastique": true,
+   "elastique": true,
    "note": "+ élastique",
    "at": 1791537334896
   },
@@ -5629,7 +5629,7 @@
     }
    ],
    "rpe": 7,
-    "elastique": true,
+   "elastique": true,
    "note": "+ élastique",
    "at": 1791537594270
   },
@@ -5645,7 +5645,7 @@
     }
    ],
    "rpe": 7,
-    "elastique": true,
+   "elastique": true,
    "note": "+ élastique",
    "at": 1791537819764
   },
@@ -12026,7 +12026,7 @@
    "decision": {
     "d": "maintenu",
     "regle": "R1 à deux signaux : sommeil sous 6 h 30 (6 h 29, d'une minute), mais VFC 56 au-dessus de la médiane récente (47) et plancher 53 égal à la médiane : un seul signal, pas d'allégé. R2 non déclenchée (53 < 58).",
-    "motif": "Première application de la R1 à deux signaux. Séance Jambes complète à 16 séries, charges au double pas là où les deux dernières séances étaient toutes à RPE ≤ 7.",
+    "motif": "Première application de la R1 à deux signaux. Séance Jambes à 16 séries, charges au double pas. Fait : 16 séries sur 16. Leg press 160 × 10 × 3 (RPE 7). Hack squat 30/40/50 × 10 + élastique (RPE 5/7/7), nouvelle référence. Leg extension 70 × 10 × 3 (RPE 8/9/8, pas simple au lieu de 75). Leg Curl 65, 65 puis 55 × 12 (RPE 8/9/7). Rotary Calf 65 × 15 puis × 20 et Adducteurs 70 × 15 puis × 20 : charge maximale des machines. Tapis non fait.",
     "par": "coach"
    },
    "plan": {
