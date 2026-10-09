@@ -5783,6 +5783,21 @@
    "rpeAuto": true,
    "note": "Max poids machine",
    "at": 1791540041862
+  },
+  {
+   "id": "gszej396",
+   "date": "2026-10-09",
+   "group": "Jambes",
+   "exercise": "Adducteurs",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 70
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1791540216530
   }
  ],
  "treadmill": [
@@ -11760,6 +11775,11 @@
     "regle": "R1 à deux signaux : sommeil sous 6 h 30 (6 h 29, d'une minute), mais VFC 56 au-dessus de la médiane récente (47) et plancher 53 égal à la médiane : un seul signal, pas d'allégé. R2 non déclenchée (53 < 58).",
     "motif": "Première application de la R1 à deux signaux. Séance Jambes complète à 16 séries, charges au double pas là où les deux dernières séances étaient toutes à RPE ≤ 7.",
     "par": "coach"
+   },
+   "plan": {
+    "prevues": 16,
+    "faites": 16,
+    "conforme": true
    }
   }
  ],
