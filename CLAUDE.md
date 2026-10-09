@@ -197,7 +197,7 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
   - Un relevé illisible est retenté à chaque relecture.
 - **Taille de `carnet-data.json`** : 164 ko le 09/10/2026, pour une
   croissance mesurée d'environ 4,3 ko par jour depuis le 20/09, plus la
-  récupération par série (~1,3 ko par séance). Au-delà de 1 Mo, l'API
+  récupération par série (~1,5 ko par séance ; +32,6 ko pour le rattrapage de 22 séances). Au-delà de 1 Mo, l'API
   Contents (média `object`) renvoie un `content` vide (limite documentée, à
   revérifier). `pullRemote` échouerait alors en « hors ligne » permanent,
   vers le printemps 2027 au rythme actuel.
