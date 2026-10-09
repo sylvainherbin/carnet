@@ -7226,7 +7226,106 @@
      129,
      128
     ]
-   }
+   },
+   "recup": [
+    {
+     "id": "rmkx9i7j",
+     "pic": 98,
+     "t": -39,
+     "f30": 92,
+     "f60": 93,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "kvkj3bii",
+     "pic": 110,
+     "t": -5,
+     "f30": 92,
+     "f60": 87,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "crcmuaiv",
+     "pic": 105,
+     "t": 28,
+     "f30": 100,
+     "f60": 99,
+     "ctx": "transition"
+    },
+    {
+     "id": "h77es52h",
+     "pic": 108,
+     "t": -14,
+     "f30": 99,
+     "f60": 99,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "3uckbtqi",
+     "pic": 106,
+     "t": -7,
+     "f30": 102,
+     "f60": 97,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "z4xer1j6",
+     "pic": 102,
+     "t": -1,
+     "f30": 99,
+     "f60": 99,
+     "ctx": "transition"
+    },
+    {
+     "id": "d7fa4lmb",
+     "pic": 100,
+     "t": 15,
+     "f30": 95,
+     "f60": 92,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "1l7mm6d9",
+     "pic": 96,
+     "t": 3,
+     "f30": 92,
+     "f60": 85,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "3lzysz34",
+     "pic": 102,
+     "t": -5,
+     "f30": 94,
+     "f60": 94,
+     "ctx": "transition"
+    },
+    {
+     "id": "d8jxd3ax",
+     "pic": 96,
+     "t": -11,
+     "f30": 88,
+     "f60": 89,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "3t02cq4e",
+     "pic": 95,
+     "t": -21,
+     "f30": 90,
+     "f60": 92,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "3xhrcyex",
+     "pic": 95,
+     "t": 36,
+     "f30": 94,
+     "f60": 90,
+     "ctx": "fin_seance"
+    }
+   ],
+   "recupV": 1
   },
   {
    "date": "2026-09-10",
@@ -7441,7 +7540,90 @@
      133,
      135
     ]
-   }
+   },
+   "recup": [
+    {
+     "id": "zxyo3l5q",
+     "pic": 115,
+     "t": -3,
+     "f30": 105,
+     "f60": 94,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "0e17s136",
+     "pic": 123,
+     "t": -17,
+     "f30": 110,
+     "f60": 101,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "mymzxgbw",
+     "pic": 121,
+     "t": -5,
+     "f30": 105,
+     "f60": 103,
+     "ctx": "transition"
+    },
+    {
+     "id": "34dxfrvr",
+     "pic": 103,
+     "t": -20,
+     "f30": 98,
+     "f60": 95,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "ase03364",
+     "pic": 105,
+     "t": -18,
+     "f30": 99,
+     "f60": 90,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "w3xrgixj",
+     "pic": 104,
+     "t": -1,
+     "f30": 96,
+     "f60": 83,
+     "ctx": "transition"
+    },
+    {
+     "id": "1oy0jzdk",
+     "pic": 105,
+     "t": -16,
+     "f30": 89,
+     "f60": 84,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "3nqci3ug",
+     "pic": 101,
+     "t": -9,
+     "f30": 90,
+     "f60": 80,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "ilgx82ws",
+     "pic": 115,
+     "t": -12,
+     "f30": 100,
+     "f60": 96,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "mvbvn35w",
+     "pic": 113,
+     "t": -9,
+     "f30": 101,
+     "f60": 94,
+     "ctx": "fin_seance"
+    }
+   ],
+   "recupV": 1
   },
   {
    "date": "2026-09-12",
@@ -7658,7 +7840,90 @@
      133,
      134
     ]
-   }
+   },
+   "recup": [
+    {
+     "id": "8cz7ij1n",
+     "pic": 109,
+     "t": 5,
+     "f30": 92,
+     "f60": 83,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "3849v0mp",
+     "pic": 115,
+     "t": -24,
+     "f30": 99,
+     "f60": 91,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "obac9k1a",
+     "pic": 125,
+     "t": -7,
+     "f30": 111,
+     "f60": 114,
+     "ctx": "transition"
+    },
+    {
+     "id": "863d15jg",
+     "pic": 114,
+     "t": 2,
+     "f30": 101,
+     "f60": 92,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "vc3byh1r",
+     "pic": 115,
+     "t": -11,
+     "f30": 110,
+     "f60": 99,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "f1qwoi8i",
+     "pic": 116,
+     "t": -12,
+     "f30": 111,
+     "f60": 111,
+     "ctx": "transition"
+    },
+    {
+     "id": "4v9z8f33",
+     "pic": 105,
+     "t": -27,
+     "f30": 96,
+     "f60": 93,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "ar7r0sv1",
+     "pic": 105,
+     "t": -5,
+     "f30": 96,
+     "f60": 89,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "gz6ijwwd",
+     "pic": 115,
+     "t": -15,
+     "f30": 100,
+     "f60": 90,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "4zjw5443",
+     "pic": 113,
+     "t": -5,
+     "f30": 106,
+     "f60": 109,
+     "ctx": "fin_seance"
+    }
+   ],
+   "recupV": 1
   },
   {
    "date": "2026-09-14",
@@ -7874,7 +8139,82 @@
      133,
      135
     ]
-   }
+   },
+   "recup": [
+    {
+     "id": "a6n0tbc0",
+     "pic": 103,
+     "t": -8,
+     "f30": 85,
+     "f60": 80,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "dm9e3y0o",
+     "pic": 95,
+     "t": -6,
+     "f30": 85,
+     "f60": 88,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "29g9u82f",
+     "pic": 109,
+     "t": 0,
+     "f30": 96,
+     "f60": 84,
+     "ctx": "transition"
+    },
+    {
+     "id": "isop9pc1",
+     "pic": 108,
+     "t": -4,
+     "f30": 106,
+     "f60": 89,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "n2szac5t",
+     "pic": 101,
+     "t": 1,
+     "f30": 92,
+     "f60": 90,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "6hd7uc73",
+     "pic": 102,
+     "t": -13,
+     "f30": 92,
+     "f60": 88,
+     "ctx": "transition"
+    },
+    {
+     "id": "5rpzbyeo",
+     "pic": 123,
+     "t": 9,
+     "f30": 108,
+     "f60": 92,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "w755atuu",
+     "pic": 115,
+     "t": 10,
+     "f30": 100,
+     "f60": 90,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "8hco3aqw",
+     "pic": 117,
+     "t": -3,
+     "f30": 104,
+     "f60": 98,
+     "ctx": "transition"
+    }
+   ],
+   "recupV": 1
   },
   {
    "date": "2026-09-15",
@@ -8117,7 +8457,90 @@
      130,
      132
     ]
-   }
+   },
+   "recup": [
+    {
+     "id": "98lhe80c",
+     "pic": 105,
+     "t": -12,
+     "f30": 91,
+     "f60": 88,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "kfs4s420",
+     "pic": 100,
+     "t": -4,
+     "f30": 88,
+     "f60": 84,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "6vdi3evk",
+     "pic": 105,
+     "t": 20,
+     "f30": 96,
+     "f60": 101,
+     "ctx": "transition"
+    },
+    {
+     "id": "gp0ul96s",
+     "pic": 107,
+     "t": -12,
+     "f30": 101,
+     "f60": 97,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "rb2ss2ko",
+     "pic": 111,
+     "t": -10,
+     "f30": 101,
+     "f60": 91,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "b2221vn0",
+     "pic": 101,
+     "t": -5,
+     "f30": 91,
+     "f60": 81,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "bx0m1xrx",
+     "pic": 96,
+     "t": -4,
+     "f30": 90,
+     "f60": 85,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "0sidkt58",
+     "pic": 96,
+     "t": 1,
+     "f30": 91,
+     "f60": 97,
+     "ctx": "transition"
+    },
+    {
+     "id": "f2tp6wv9",
+     "pic": 104,
+     "t": -26,
+     "f30": 100,
+     "f60": 91,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "0lz0s2hy",
+     "pic": 106,
+     "t": -5,
+     "f30": 101,
+     "f60": 102,
+     "ctx": "fin_seance"
+    }
+   ],
+   "recupV": 1
   },
   {
    "date": "2026-09-17",
@@ -8325,7 +8748,82 @@
      146,
      147
     ]
-   }
+   },
+   "recup": [
+    {
+     "id": "igteecvp",
+     "pic": 123,
+     "t": -17,
+     "f30": 111,
+     "f60": 96,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "di8l8wnr",
+     "pic": 113,
+     "t": -18,
+     "f30": 103,
+     "f60": 90,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "ptu64uhv",
+     "pic": 109,
+     "t": -14,
+     "f30": 103,
+     "f60": 93,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "siwz4emz",
+     "pic": 115,
+     "t": -8,
+     "f30": 103,
+     "f60": 100,
+     "ctx": "transition"
+    },
+    {
+     "id": "w3jtizr2",
+     "pic": 114,
+     "t": -6,
+     "f30": 107,
+     "f60": 98,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "usa7olby",
+     "pic": 120,
+     "t": -11,
+     "f30": 111,
+     "f60": 99,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "2z1rp38t",
+     "pic": 118,
+     "t": -24,
+     "f30": 106,
+     "f60": 103,
+     "ctx": "transition"
+    },
+    {
+     "id": "uec247ei",
+     "pic": 113,
+     "t": -15,
+     "f30": 98,
+     "f60": 92,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "m6m8p5r9",
+     "pic": 111,
+     "t": -5,
+     "f30": 98,
+     "f60": 93,
+     "ctx": "meme_exercice"
+    }
+   ],
+   "recupV": 1
   },
   {
    "date": "2026-09-20",
@@ -8560,7 +9058,98 @@
      131,
      131
     ]
-   }
+   },
+   "recup": [
+    {
+     "id": "vworhtcq",
+     "pic": 107,
+     "t": -14,
+     "f30": 97,
+     "f60": 84,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "n7zpshro",
+     "pic": 103,
+     "t": -3,
+     "f30": 91,
+     "f60": 80,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "m9tbg03o",
+     "pic": 110,
+     "t": -30,
+     "f30": 103,
+     "f60": 94,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "iqol2sgm",
+     "pic": 110,
+     "t": 11,
+     "f30": 101,
+     "f60": 100,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "l2ererf4",
+     "pic": 112,
+     "t": 31,
+     "f30": 98,
+     "f60": 88,
+     "ctx": "transition"
+    },
+    {
+     "id": "ogk3xvxi",
+     "pic": 103,
+     "t": -15,
+     "f30": 92,
+     "f60": 85,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "r3slhqgb",
+     "pic": 101,
+     "t": 16,
+     "f30": 91,
+     "f60": 81,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "20xyzofa",
+     "pic": 106,
+     "t": 22,
+     "f30": 99,
+     "f60": 90,
+     "ctx": "transition"
+    },
+    {
+     "id": "yrfwo7hs",
+     "pic": 95,
+     "t": 23,
+     "f30": 89,
+     "f60": 94,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "38s3asl7",
+     "pic": 97,
+     "t": 1,
+     "f30": 87,
+     "f60": 93,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "3zl4eufc",
+     "pic": 96,
+     "t": -7,
+     "f30": 95,
+     "f60": 92,
+     "ctx": "fin_seance"
+    }
+   ],
+   "recupV": 1
   },
   {
    "date": "2026-09-21",
@@ -8787,7 +9376,98 @@
      139,
      138
     ]
-   }
+   },
+   "recup": [
+    {
+     "id": "wyp46dxw",
+     "pic": 101,
+     "t": -1,
+     "f30": 99,
+     "f60": 97,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "p70xq6lc",
+     "pic": 105,
+     "t": -3,
+     "f30": 94,
+     "f60": 85,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "jbwh33xb",
+     "pic": 104,
+     "t": -31,
+     "f30": 95,
+     "f60": 99,
+     "ctx": "transition"
+    },
+    {
+     "id": "2wou8qap",
+     "pic": 116,
+     "t": 33,
+     "f30": 94,
+     "f60": 89,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "hw75ykqw",
+     "pic": 114,
+     "t": 23,
+     "f30": 102,
+     "f60": 99,
+     "ctx": "transition"
+    },
+    {
+     "id": "citektv9",
+     "pic": 121,
+     "t": -24,
+     "f30": 108,
+     "f60": 103,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "ia903fh8",
+     "pic": 123,
+     "t": -27,
+     "f30": 109,
+     "f60": 101,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "j6vjjtei",
+     "pic": 117,
+     "t": -18,
+     "f30": 103,
+     "f60": 95,
+     "ctx": "transition"
+    },
+    {
+     "id": "gwjadxe6",
+     "pic": 128,
+     "t": -1,
+     "f30": 113,
+     "f60": 103,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "bhron1n8",
+     "pic": 121,
+     "t": -8,
+     "f30": 110,
+     "f60": 103,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "hcd3nbnv",
+     "pic": 124,
+     "t": 4,
+     "f30": 115,
+     "f60": 101,
+     "ctx": "fin_seance"
+    }
+   ],
+   "recupV": 1
   },
   {
    "date": "2026-09-23",
@@ -9025,7 +9705,90 @@
      133,
      133
     ]
-   }
+   },
+   "recup": [
+    {
+     "id": "3cjwuqrv",
+     "pic": 107,
+     "t": -5,
+     "f30": 95,
+     "f60": 88,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "pnew2jfu",
+     "pic": 109,
+     "t": -4,
+     "f30": 92,
+     "f60": 87,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "9bpyjmq4",
+     "pic": 120,
+     "t": -7,
+     "f30": 114,
+     "f60": 108,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "9xu1rb55",
+     "pic": 120,
+     "t": -5,
+     "f30": 114,
+     "f60": 104,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "6p3zggs8",
+     "pic": 115,
+     "t": -5,
+     "f30": 109,
+     "f60": 108,
+     "ctx": "transition"
+    },
+    {
+     "id": "3hv5mrz2",
+     "pic": 105,
+     "t": -15,
+     "f30": 92,
+     "f60": 88,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "9nda6xt9",
+     "pic": 109,
+     "t": -10,
+     "f30": 99,
+     "f60": 101,
+     "ctx": "transition"
+    },
+    {
+     "id": "801063fa",
+     "pic": 112,
+     "t": -10,
+     "f30": 105,
+     "f60": 109,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "rk93juh7",
+     "pic": 115,
+     "t": -8,
+     "f30": 108,
+     "f60": 100,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "t5fbgu9s",
+     "pic": 105,
+     "t": 22,
+     "f30": 98,
+     "f60": 102,
+     "ctx": "fin_seance"
+    }
+   ],
+   "recupV": 1
   },
   {
    "date": "2026-09-25",
@@ -9262,7 +10025,106 @@
      142,
      142
     ]
-   }
+   },
+   "recup": [
+    {
+     "id": "9ubmwyd1",
+     "pic": 133,
+     "t": -4,
+     "f30": 117,
+     "f60": 107,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "3pkyammq",
+     "pic": 137,
+     "t": -9,
+     "f30": 121,
+     "f60": 112,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "w9nby1f1",
+     "pic": 136,
+     "t": -11,
+     "f30": 131,
+     "f60": 123,
+     "ctx": "transition"
+    },
+    {
+     "id": "xa3emznu",
+     "pic": 124,
+     "t": -5,
+     "f30": 113,
+     "f60": 105,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "mchxwb5i",
+     "pic": 123,
+     "t": -5,
+     "f30": 116,
+     "f60": 105,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "xnm7z5gh",
+     "pic": 124,
+     "t": -13,
+     "f30": 119,
+     "f60": 107,
+     "ctx": "transition"
+    },
+    {
+     "id": "r1x82v6d",
+     "pic": 126,
+     "t": -4,
+     "f30": 114,
+     "f60": 106,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "n704oknw",
+     "pic": 134,
+     "t": -16,
+     "f30": 121,
+     "f60": 115,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "hmep90y7",
+     "pic": 127,
+     "t": -10,
+     "f30": 122,
+     "f60": 113,
+     "ctx": "transition"
+    },
+    {
+     "id": "60r12729",
+     "pic": 126,
+     "t": -12,
+     "f30": 114,
+     "f60": 101,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "mkw6llyx",
+     "pic": 130,
+     "t": -3,
+     "f30": 113,
+     "f60": 100,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "mlmxf4s3",
+     "pic": 122,
+     "t": -10,
+     "f30": 114,
+     "f60": 113,
+     "ctx": "fin_seance"
+    }
+   ],
+   "recupV": 1
   },
   {
    "date": "2026-09-27",
