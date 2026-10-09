@@ -5631,6 +5631,22 @@
    "rpeAuto": true,
    "note": "+ élastique",
    "at": 1791537594270
+  },
+  {
+   "id": "dcvn693y",
+   "date": "2026-10-09",
+   "group": "Jambes",
+   "exercise": "Hack squat",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "+ élastique",
+   "at": 1791537819764
   }
  ],
  "treadmill": [
