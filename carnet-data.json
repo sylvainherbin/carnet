@@ -5615,6 +5615,22 @@
    "rpe": 5,
    "note": "+ élastique",
    "at": 1791537334896
+  },
+  {
+   "id": "vrm2zhkp",
+   "date": "2026-10-09",
+   "group": "Jambes",
+   "exercise": "Hack squat",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 40
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "+ élastique",
+   "at": 1791537594270
   }
  ],
  "treadmill": [
