@@ -5751,6 +5751,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1791539693792
+  },
+  {
+   "id": "2zi9g398",
+   "date": "2026-10-09",
+   "group": "Jambes",
+   "exercise": "Rotary Calf",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 65
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "Max poids machine",
+   "at": 1791539930782
   }
  ],
  "treadmill": [
