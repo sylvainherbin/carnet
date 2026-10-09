@@ -371,8 +371,13 @@ const verdictDe = (exercise, date, kg, notees, pas) => {
   if (rpes.every((r) => r >= 9)) return { ...base, verdict: "descend", cible: Math.max(0, kg - pas) };
   return { ...base, verdict: "reste", cible: kg };
 };
-export const verdictProgression = (sessions, exercise, avant, pas = PAS_DEFAUT) => {
-  const prev = sessions.filter((s) => s.exercise === exercise && s.date < avant);
+// L'élastique accroché au bâti aide la remontée : la charge saisie (les
+// disques réels) ne se compare pas entre une séance aidée et une séance sans.
+// Le verdict ne regarde donc que l'historique dans le même état ; si l'état a
+// changé depuis la dernière séance de l'autre état, cette séance n'existe pas
+// pour ce calcul.
+export const verdictProgression = (sessions, exercise, avant, pas = PAS_DEFAUT, elastique = false) => {
+  const prev = sessions.filter((s) => s.exercise === exercise && s.date < avant && !!s.elastique === elastique);
   if (prev.length === 0) return null;
   const date = prev.map((s) => s.date).sort().pop();
   // Une série « test » (ex. un essai de charge en fin de séance) ne mesure pas
@@ -544,9 +549,11 @@ export const seriesParGroupe = (sessions, date) => {
   return m;
 };
 
-// Meilleur e1RM jamais atteint sur l'exercice (jusqu'à une date incluse si donnée).
-export const recordE1rm = (sessions, exercise, jusqua) =>
-  Math.max(0, ...sessions.filter((s) => s.exercise === exercise && (!jusqua || s.date <= jusqua)).flatMap((s) => s.sets.map((x) => e1rm(x.kg, x.reps))));
+// Meilleur e1RM jamais atteint sur l'exercice (jusqu'à une date incluse si
+// donnée), dans un état d'élastique donné : un 40 kg aidé ne doit pas battre
+// un record pris sans aide.
+export const recordE1rm = (sessions, exercise, jusqua, elastique = false) =>
+  Math.max(0, ...sessions.filter((s) => s.exercise === exercise && (!jusqua || s.date <= jusqua) && !!s.elastique === elastique).flatMap((s) => s.sets.map((x) => e1rm(x.kg, x.reps))));
 
 // ---- Export dérivé : une ligne par jour ----------------------------------
 // Le tableau que lit le coach : tonnage et séries par groupe, RPE, FC de séance,

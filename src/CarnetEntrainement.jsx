@@ -691,6 +691,10 @@ function Seance({ data, update, notify, celebrate, plan }) {
   // Série « test » (ex. un essai de charge) : gardée pour le e1RM et le
   // volume, écartée du verdict de progression (verdictProgression).
   const [test, setTest] = useState(false);
+  // Élastique accroché au bâti (aide à la remontée) : la charge saisie n'est
+  // alors pas comparable à une série sans. Case pré-cochée sur le dernier état
+  // utilisé pour l'exercice (voir l'effet plus bas).
+  const [elastique, setElastique] = useState(false);
   const [pulse, setPulse] = useState(false);
   const fire = () => { setPulse(true); setTimeout(() => setPulse(false), 700); };
   // Le formulaire reprend le groupe et l'exercice de la dernière série de la
@@ -707,12 +711,16 @@ function Seance({ data, update, notify, celebrate, plan }) {
   const lastFor = (name) => data.sessions.filter((x) => x.exercise === name).sort((a, b) => b.date.localeCompare(a.date))[0] || null;
   const last = useMemo(() => lastFor(exercise), [data.sessions, exercise]);
 
-  const bestFor = (name) => recordE1rm(data.sessions, name);
+  const bestFor = (name, elas = false) => recordE1rm(data.sessions, name, undefined, elas);
   // Cran de charge propre à l'exercice (les machines n'ont pas toutes le même) ;
   // le bouton fait tourner 2,5 → 5 → 10.
   const pasDe = (name) => data.pas?.[name] || PAS_DEFAUT;
   const cyclePas = () => update((d) => { const suite = { 2.5: 5, 5: 10, 10: 2.5 }; (d.pas ||= {})[exercise] = suite[pasDe(exercise)] || PAS_DEFAUT; return d; });
-  const verdict = useMemo(() => verdictProgression(data.sessions, exercise, date, pasDe(exercise)), [data.sessions, data.pas, exercise, date]);
+  // La case reprend l'état d'élastique de la dernière série de cet exercice
+  // (Hack squat se pré-coche dès qu'il l'a été une fois) : pas de mémoire à
+  // part, l'historique des séances en tient déjà lieu.
+  useEffect(() => { setElastique(!!last?.elastique); }, [last]);
+  const verdict = useMemo(() => verdictProgression(data.sessions, exercise, date, pasDe(exercise), elastique), [data.sessions, data.pas, exercise, date, elastique]);
   const parGroupe = useMemo(() => seriesParGroupe(data.sessions, date), [data.sessions, date]);
   // --- plan du jour -------------------------------------------------------
   // Le plan ne vaut que pour sa date : si le formulaire est sur un autre jour,
@@ -797,9 +805,9 @@ function Seance({ data, update, notify, celebrate, plan }) {
   const save = () => {
     const clean = sets.filter((s) => num(s.reps) > 0).map((s) => ({ reps: num(s.reps), kg: num(s.kg) }));
     if (!exercise || clean.length === 0) { notify("Ajoute au moins une série valide"); return; }
-    const candidate = { exercise, oldBest: bestFor(exercise), newBest: Math.max(...clean.map((x) => e1rm(x.kg, x.reps))) };
+    const candidate = { exercise, oldBest: bestFor(exercise, elastique), newBest: Math.max(...clean.map((x) => e1rm(x.kg, x.reps))) };
     const auto = !rpeTouche && num(rpe) === RPE_DEFAUT;
-    update((d) => { d.sessions.push({ id: uid(), date, group, exercise, sets: clean, rpe: rpe === "" ? null : num(rpe), ...(auto ? { rpeAuto: true } : {}), ...(test ? { test: true } : {}), note: note.trim(), at: Date.now() }); return d; });
+    update((d) => { d.sessions.push({ id: uid(), date, group, exercise, sets: clean, rpe: rpe === "" ? null : num(rpe), ...(auto ? { rpeAuto: true } : {}), ...(test ? { test: true } : {}), ...(elastique ? { elastique: true } : {}), note: note.trim(), at: Date.now() }); return d; });
     setSets([{ reps: "", kg: "" }]); setRpe(String(RPE_DEFAUT)); setRpeTouche(false); setNote(""); setTest(false); fire(); notify("Exercice enregistré"); firePR([candidate]);
   };
 
@@ -850,13 +858,13 @@ function Seance({ data, update, notify, celebrate, plan }) {
     todays.forEach((s) => {
       if (!map.has(s.exercise)) map.set(s.exercise, []);
       const pic = s.sets.length === 1 ? (meta.pics || []).find((q) => q.id === s.id)?.pic : null;
-      s.sets.forEach((x, setIdx) => map.get(s.exercise).push({ id: s.id, setIdx, kg: x.kg, reps: x.reps, rpe: s.rpe, rpeAuto: !!s.rpeAuto, test: !!s.test, pic, note: setIdx === 0 ? s.note : "" }));
+      s.sets.forEach((x, setIdx) => map.get(s.exercise).push({ id: s.id, setIdx, kg: x.kg, reps: x.reps, rpe: s.rpe, rpeAuto: !!s.rpeAuto, test: !!s.test, elastique: !!s.elastique, pic, note: setIdx === 0 ? s.note : "" }));
     });
     return [...map.entries()].map(([exercise, rows]) => ({
       exercise, rows,
       vol: rows.reduce((a, r) => a + r.reps * r.kg, 0),
       best: Math.max(...rows.map((r) => e1rm(r.kg, r.reps))),
-      record: recordE1rm(data.sessions, exercise),
+      record: recordE1rm(data.sessions, exercise, undefined, !!rows[0]?.elastique),
       fc: (meta.ex || []).find((e) => e.n === exercise) || null,
     }));
   })();
@@ -878,7 +886,7 @@ function Seance({ data, update, notify, celebrate, plan }) {
       const best = Math.max(...sets.map((x) => e1rm(x.kg, x.reps)));
       return { exercise, sets, best, vol: sets.reduce((a, x) => a + x.kg * x.reps, 0),
         done: bestToday.has(exercise), delta: bestToday.has(exercise) ? bestToday.get(exercise) - best : null,
-        verdict: verdictProgression(data.sessions, exercise, date, pasDe(exercise)) };
+        verdict: verdictProgression(data.sessions, exercise, date, pasDe(exercise), !!lastFor(exercise)?.elastique) };
     });
     return { date: prevDate, items, vol: items.reduce((a, x) => a + x.vol, 0), reste: items.filter((x) => !x.done).length };
   }, [data.sessions, data.pas, group, date, todays]);
@@ -1049,10 +1057,16 @@ function Seance({ data, update, notify, celebrate, plan }) {
             <Field label={rpeTouche || num(rpe) !== RPE_DEFAUT ? "rpe" : "rpe (défaut)"}><input type="number" inputMode="decimal" min="1" max="10" step="0.5" value={rpe} onChange={(e) => { setRpeTouche(true); setRpe(e.target.value); }} className="inp" /></Field>
             <Field label="note"><input value={note} onChange={(e) => setNote(e.target.value)} className="inp" /></Field>
           </div>
-          <label className="flex items-center gap-2 text-xs" style={{ color: T.mute, fontFamily: mono }}>
-            <input type="checkbox" checked={test} onChange={(e) => setTest(e.target.checked)} />
-            série test — hors verdict de progression
-          </label>
+          <div className="flex flex-col gap-1.5">
+            <label className="flex items-center gap-2 text-xs" style={{ color: T.mute, fontFamily: mono }}>
+              <input type="checkbox" checked={test} onChange={(e) => setTest(e.target.checked)} />
+              série test — hors verdict de progression
+            </label>
+            <label className="flex items-center gap-2 text-xs" style={{ color: T.mute, fontFamily: mono }}>
+              <input type="checkbox" checked={elastique} onChange={(e) => setElastique(e.target.checked)} />
+              élastique — charge non comparable à une série sans
+            </label>
+          </div>
         <Btn full onClick={save} pulse={pulse}>Enregistrer l'exercice</Btn>
       </Panel>
 
@@ -1138,7 +1152,7 @@ function Seance({ data, update, notify, celebrate, plan }) {
                   {g.rows.map((r, j) => (
                     <li key={`${r.id}-${r.setIdx}`} className="flex justify-between items-center gap-2">
                       <div className="text-xs" style={{ color: T.text, fontFamily: mono }}>
-                        <span style={{ color: T.cyan }}>{pad(j + 1)}</span>{r.test && <span style={{ color: T.violet }}> T</span>}  {r.kg}×{r.reps}{r.rpe ? <span style={{ color: T.mute }}> · RPE {r.rpe}{r.rpeAuto ? "*" : ""}</span> : ""}
+                        <span style={{ color: T.cyan }}>{pad(j + 1)}</span>{r.test && <span style={{ color: T.violet }}> T</span>}{r.elastique && <span style={{ color: T.magenta }}> E</span>}  {r.kg}×{r.reps}{r.rpe ? <span style={{ color: T.mute }}> · RPE {r.rpe}{r.rpeAuto ? "*" : ""}</span> : ""}
                         {r.pic ? <span style={{ color: T.danger }}> · FC ↑{r.pic}</span> : ""}
                         {r.note && <span className="italic" style={{ color: T.amber }}>  {r.note}</span>}
                       </div>
@@ -1623,7 +1637,10 @@ function Records({ data }) {
   const recs = useMemo(() => {
     const m = {};
     data.sessions.forEach((sess) => {
-      const r = m[sess.exercise] || (m[sess.exercise] = { e1rm: 0, e1rmDate: "", e1rmSet: null, kg: 0, kgReps: 0, kgDate: "", volByDate: {}, count: 0 });
+      // Un 40 kg aidé par un élastique ne se compare pas à une charge réelle :
+      // le palmarès sépare les deux états au lieu de les mélanger.
+      const key = sess.elastique ? `${sess.exercise}__elastique` : sess.exercise;
+      const r = m[key] || (m[key] = { name: sess.exercise + (sess.elastique ? " (élastique)" : ""), e1rm: 0, e1rmDate: "", e1rmSet: null, kg: 0, kgReps: 0, kgDate: "", volByDate: {}, count: 0 });
       r.count += 1;
       sess.sets.forEach((x) => {
         const v = e1rm(x.kg, x.reps);
@@ -1632,9 +1649,9 @@ function Records({ data }) {
       });
       r.volByDate[sess.date] = (r.volByDate[sess.date] || 0) + sess.sets.reduce((a, x) => a + x.reps * x.kg, 0);
     });
-    return Object.entries(m).map(([name, r]) => {
+    return Object.values(m).map((r) => {
       const [volDate, vol] = Object.entries(r.volByDate).sort((a, b) => b[1] - a[1])[0];
-      return { name, ...r, vol: Math.round(vol), volDate };
+      return { ...r, vol: Math.round(vol), volDate };
     }).sort((a, b) => b.e1rm - a.e1rm);
   }, [data.sessions]);
   const lastPR = recs.length ? recs.map((r) => r.e1rmDate).sort().pop() : null;

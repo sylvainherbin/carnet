@@ -91,6 +91,37 @@ test("séries test et montées en charge", () => {
   ], "Chest press 3"), e1rm(85, 5));
 });
 
+test("élastique : séances comparées seulement dans le même état", () => {
+  const s = (kg, reps, rpe, { date, exercise = "Hack squat", elastique = false } = {}) =>
+    ({ date, exercise, group: "Jambes", sets: [{ kg, reps }], rpe, ...(elastique ? { elastique: true } : {}) });
+  // 20/09 : 40×5 sans élastique, deux séries notées à RPE 6 ; 09/10 : 30/40/50×10 avec (RPE 5/7/7)
+  const sessions = [
+    s(40, 5, 6, { date: "2026-09-20" }),
+    s(40, 5, 6, { date: "2026-09-20" }),
+    s(30, 10, 5, { date: "2026-10-09", elastique: true }),
+    s(40, 10, 7, { date: "2026-10-09", elastique: true }),
+    s(50, 10, 7, { date: "2026-10-09", elastique: true }),
+  ];
+
+  // le 09/10, en élastique, aucune séance élastique antérieure : pas de verdict,
+  // le 20/09 (autre état) n'est pas pris en compte
+  assert.equal(verdictProgression(sessions, "Hack squat", "2026-10-09", PAS_DEFAUT, true), null);
+  // le 09/10, sans élastique, l'historique sans élastique (20/09) reste valable
+  assert.equal(verdictProgression(sessions, "Hack squat", "2026-10-09", PAS_DEFAUT, false).verdict, "monte");
+
+  // après le 09/10 : en élastique, le verdict repart de la séance du 09/10 (montée 30/40/50)
+  let v = verdictProgression(sessions, "Hack squat", "2026-10-10", PAS_DEFAUT, true);
+  assert.deepEqual([v.verdict, v.cible], ["monte", 55]);
+  // sans élastique, le 09/10 (autre état) ne compte pas : on reste sur le 20/09
+  v = verdictProgression(sessions, "Hack squat", "2026-10-10", PAS_DEFAUT, false);
+  assert.deepEqual([v.date, v.verdict], ["2026-09-20", "monte"]);
+
+  // le record ne se croise pas entre les deux états : un 40 kg aidé ne bat pas
+  // le record sans aide
+  assert.equal(recordE1rm(sessions, "Hack squat", undefined, false), e1rm(40, 5));
+  assert.equal(recordE1rm(sessions, "Hack squat", undefined, true), e1rm(50, 10));
+});
+
 test("séries par groupe et plafond", () => {
   const { sessions } = carnet();
   assert.deepEqual(seriesParGroupe(sessions, "2026-09-15"), { Pecs: 12 });
