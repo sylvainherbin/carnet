@@ -5555,6 +5555,22 @@
    "rpe": 7,
    "note": "",
    "at": 1791453563058
+  },
+  {
+   "id": "ftz2neul",
+   "date": "2026-10-09",
+   "group": "Jambes",
+   "exercise": "Leg press 2",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 160
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1791536271131
   }
  ],
  "treadmill": [
