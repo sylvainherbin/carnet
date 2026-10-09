@@ -203,8 +203,11 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
   vers le printemps 2027 au rythme actuel.
 - **Rattrapage de la récupération** : `importFc` lit au plus
   `FC_LECTURES_RECUP` fichiers `fc/` par passage pour les dates pas encore
-  définitives, sans limite d'âge. Une date sans FC, ou dont un fichier n'a
-  pas pu être lu, reste à faire : son seul coût est le listage de `fc/`.
+  définitives, sans limite d'âge. Une date sans aucun fichier ne coûte que
+  le listage de `fc/`. Une date dont la FC ne couvre pas la dernière
+  récupération (cas fréquent : le raccourci dépose vers midi) relit ses 1 à
+  2 fichiers à chaque ouverture de l'app jusqu'à J+2, où elle devient
+  définitive. Un fichier illisible : rien de définitif, on retente.
 - **Dates limites** : `limit` et `nextDay` passent par `toISOString()`, qui
   donne une date UTC. Les dates saisies sont locales, d'où un décalage d'un
   jour possible autour de minuit. C'est sans effet pratique sur une fenêtre
