@@ -9505,7 +9505,74 @@
      138,
      136
     ]
-   }
+   },
+   "recup": [
+    {
+     "id": "dlece6kf",
+     "pic": 109,
+     "t": -19,
+     "f30": 104,
+     "f60": 103,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "6r7czvb4",
+     "pic": 119,
+     "t": 39,
+     "f30": 104,
+     "f60": 99,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "qk7tu037",
+     "pic": 124,
+     "t": 17,
+     "f30": 118,
+     "f60": 108,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "9untw47g",
+     "pic": 126,
+     "t": -2,
+     "f30": 105,
+     "f60": 93,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "98h8ba99",
+     "pic": 124,
+     "t": -7,
+     "f30": 107,
+     "f60": 101,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "iuz61xl9",
+     "pic": 109,
+     "t": -18,
+     "f30": 99,
+     "f60": 98,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "fgzxdfsb",
+     "pic": 112,
+     "t": -28,
+     "f30": 98,
+     "f60": 98,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "s7bi5ckc",
+     "pic": 109,
+     "t": -7,
+     "f30": 102,
+     "f60": 98,
+     "ctx": "meme_exercice"
+    }
+   ],
+   "recupV": 1
   },
   {
    "date": "2026-09-29",
@@ -10093,7 +10160,98 @@
      149,
      150
     ]
-   }
+   },
+   "recup": [
+    {
+     "id": "wx15icp0",
+     "pic": 131,
+     "t": -4,
+     "f30": 116,
+     "f60": 111,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "q5vbizgk",
+     "pic": 113,
+     "t": -3,
+     "f30": 100,
+     "f60": 92,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "m3ecn4fi",
+     "pic": 119,
+     "t": -3,
+     "f30": 106,
+     "f60": 96,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "shucx7kh",
+     "pic": 120,
+     "t": -3,
+     "f30": 110,
+     "f60": 107,
+     "ctx": "transition"
+    },
+    {
+     "id": "5rm85g3r",
+     "pic": 116,
+     "t": 7,
+     "f30": 102,
+     "f60": 105,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "ge9jh8zi",
+     "pic": 124,
+     "t": -7,
+     "f30": 114,
+     "f60": 109,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "nh904glw",
+     "pic": 120,
+     "t": 6,
+     "f30": 115,
+     "f60": 109,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "lhydb7a1",
+     "pic": 123,
+     "t": 17,
+     "f30": 114,
+     "f60": 106,
+     "ctx": "transition"
+    },
+    {
+     "id": "cp1vmf02",
+     "pic": 122,
+     "t": -30,
+     "f30": 113,
+     "f60": 103,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "wywfkoyf",
+     "pic": 125,
+     "t": -5,
+     "f30": 116,
+     "f60": 108,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "4moks2n5",
+     "pic": 124,
+     "t": -30,
+     "f30": 121,
+     "f60": 118,
+     "ctx": "fin_seance"
+    }
+   ],
+   "recupV": 1
   },
   {
    "date": "2026-10-03",
@@ -10346,7 +10504,114 @@
      101,
      113
     ]
-   }
+   },
+   "recup": [
+    {
+     "id": "gqlpn9xj",
+     "pic": 120,
+     "t": 15,
+     "f30": 103,
+     "f60": 97,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "op5gd7hg",
+     "pic": 109,
+     "t": 31,
+     "f30": 96,
+     "f60": 93,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "b4kav66g",
+     "pic": 127,
+     "t": 25,
+     "f30": 112,
+     "f60": 111,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "m36x37tl",
+     "pic": 125,
+     "t": 32,
+     "f30": 110,
+     "f60": 106,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "2ac1ev6c",
+     "pic": 123,
+     "t": -11,
+     "f30": 116,
+     "f60": 114,
+     "ctx": "transition"
+    },
+    {
+     "id": "niy36sj1",
+     "pic": 123,
+     "t": -21,
+     "f30": 117,
+     "f60": 110,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "19of2gzn",
+     "pic": 123,
+     "t": 19,
+     "f30": 118,
+     "f60": 113,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "iwdduohk",
+     "pic": 114,
+     "t": -14,
+     "f30": 111,
+     "f60": 111,
+     "ctx": "transition"
+    },
+    {
+     "id": "h7gwk5wf",
+     "pic": 114,
+     "t": -22,
+     "f30": 109,
+     "f60": 105,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "q0xse8bq",
+     "pic": 117,
+     "t": 6,
+     "f30": 108,
+     "f60": 111,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "0warza6a",
+     "pic": 121,
+     "t": -6,
+     "f30": 105,
+     "f60": 99,
+     "ctx": "meme_exercice"
+    },
+    {
+     "id": "uhdy8fjx",
+     "pic": 117,
+     "t": 1,
+     "f30": 114,
+     "f60": 114,
+     "ctx": "transition"
+    },
+    {
+     "id": "hytuwsjy",
+     "pic": 120,
+     "t": -19,
+     "f30": 105,
+     "f60": 103,
+     "ctx": "meme_exercice"
+    }
+   ],
+   "recupV": 1
   },
   {
    "date": "2026-10-05",
