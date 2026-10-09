@@ -11526,7 +11526,13 @@
    "coucher": 1791507938000,
    "lever": 1791531413000,
    "sha": "8210549a0f42c5bff0c8d071ce098695d99fb7f4",
-   "repas": "19:36"
+   "repas": "19:36",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 à deux signaux : sommeil sous 6 h 30 (6 h 29, d'une minute), mais VFC 56 au-dessus de la médiane récente (47) et plancher 53 égal à la médiane : un seul signal, pas d'allégé. R2 non déclenchée (53 < 58).",
+    "motif": "Première application de la R1 à deux signaux. Séance Jambes complète à 16 séries, charges au double pas là où les deux dernières séances étaient toutes à RPE ≤ 7.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
