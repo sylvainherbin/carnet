@@ -23,7 +23,7 @@ const PLAN_CACHE = "carnet-plan";
 const PLAN_MASQUE = "carnet-plan-masque";
 // Délai minimal entre deux relectures automatiques des relevés.
 const RELECTURE_MS = 2 * 60000;
-const EMPTY = { exercises: DEFAULT_EXERCISES, sessions: [], treadmill: [], weights: [], durations: [], daily: [], pas: {} };
+const EMPTY = { exercises: DEFAULT_EXERCISES, sessions: [], treadmill: [], weights: [], taille: [], durations: [], daily: [], pas: {} };
 
 // ================= thème =================
 const T = {
@@ -1270,6 +1270,14 @@ function Poids({ data, update, notify }) {
     update((d) => { d.weights = d.weights.filter((w) => w.date !== date); d.weights.push({ id: uid(), date, kg: num(kg) }); return d; });
     setKg(""); setPulse(true); setTimeout(() => setPulse(false), 700); notify("Poids enregistré");
   };
+  const [tailleDate, setTailleDate] = useState(todayISO());
+  const [cm, setCm] = useState("");
+  const [taillePulse, setTaillePulse] = useState(false);
+  const saveTaille = () => {
+    if (num(cm) <= 0) { notify("Tour de taille invalide"); return; }
+    update((d) => { d.taille = (d.taille || []).filter((w) => w.date !== tailleDate); d.taille.push({ id: uid(), date: tailleDate, cm: num(cm) }); return d; });
+    setCm(""); setTaillePulse(true); setTimeout(() => setTaillePulse(false), 700); notify("Tour de taille enregistré");
+  };
   // Fin du dernier repas : un bouton horodaté, pressé en se levant de table.
   // L'heure précède la nuit qui suit : elle est rangée dans l'entrée daily de
   // cette nuit, à côté de son résumé, pour que repas et minimum de FC se lisent
@@ -1297,6 +1305,13 @@ function Poids({ data, update, notify }) {
   const refW = list.length >= 8 ? list[7] : list[list.length - 1];
   const deltaN = Math.min(list.length, 8);
   const delta8 = lastW && refW && lastW.id !== refW.id ? lastW.kg - refW.kg : null;
+  const listT = [...(data.taille || [])].sort((a, b) => b.date.localeCompare(a.date));
+  const firstT = listT[listT.length - 1]; const lastT = listT[0];
+  // Même logique que la mini-courbe du poids, sur le tour de taille.
+  const sparkT = useMemo(() => {
+    const asc = [...(data.taille || [])].sort((a, b) => a.date.localeCompare(b.date)).slice(-30);
+    return asc.map((w, i) => { const win = asc.slice(Math.max(0, i - 6), i + 1); return { cm: w.cm, moy7: +(win.reduce((a, y) => a + y.cm, 0) / win.length).toFixed(2) }; });
+  }, [data.taille]);
   return (
     <>
       {lastW && (
@@ -1354,6 +1369,54 @@ function Poids({ data, update, notify }) {
                 <span style={{ color: T.mute }}>{fmtDate(w.date)}</span>
                 <span className="flex gap-3 items-center"><span style={{ color: T.magenta }}>{w.kg.toFixed(1)} kg</span>
                   <Del onClick={() => update((d) => { d.weights = d.weights.filter((x) => x.id !== w.id); return d; })} /></span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Panel>
+
+      {lastT && (
+        <Panel boot="boot-1" className="space-y-2">
+          <span className="text-xs uppercase tracking-wide" style={{ color: T.mute, fontFamily: mono }}>dernier tour de taille · {fmtDate(lastT.date)}</span>
+          <div className="flex items-baseline gap-2">
+            <span className="text-4xl font-black" style={{ fontFamily: display, color: T.cyan, textShadow: "0 0 18px rgba(0,229,255,.55)" }}>{lastT.cm.toFixed(1)}</span>
+            <span className="text-sm" style={{ color: T.mute, fontFamily: mono }}>cm</span>
+          </div>
+          {firstT && firstT.id !== lastT.id && (
+            <span className="inline-block px-2 py-0.5 rounded-full text-xs" style={{ background: "rgba(0,229,255,.12)", color: T.cyan, fontFamily: mono }}>
+              depuis le {fmtDate(firstT.date)} : {(lastT.cm - firstT.cm > 0 ? "+" : "") + (lastT.cm - firstT.cm).toFixed(1)} cm
+            </span>
+          )}
+          {sparkT.length > 1 && (
+            <div style={{ height: 56 }}>
+              <ResponsiveContainer>
+                <LineChart data={sparkT} margin={{ top: 4, right: 4, left: 4, bottom: 0 }}>
+                  <YAxis hide domain={yDomain(sparkT.flatMap((r) => [r.cm, r.moy7]))} />
+                  <Line type="monotone" dataKey="cm" stroke="rgba(0,229,255,.35)" strokeWidth={1.5} dot={false} isAnimationActive={false} />
+                  <Line type="monotone" dataKey="moy7" stroke={T.cyan} strokeWidth={2.5} dot={false} isAnimationActive={false} style={{ filter: "drop-shadow(0 0 5px rgba(0,229,255,.7))" }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+        </Panel>
+      )}
+      <Panel boot="boot-1" className="space-y-3">
+        <H>Tour de taille</H>
+        <div className="grid grid-cols-2 gap-3">
+          <Field label="date"><input type="date" value={tailleDate} onChange={(e) => setTailleDate(e.target.value)} className="inp" /></Field>
+          <Field label="tour de taille (cm)"><input type="number" inputMode="decimal" step="0.1" value={cm} onChange={(e) => setCm(e.target.value)} className="inp" /></Field>
+        </div>
+        <Btn full onClick={saveTaille} pulse={taillePulse}>Enregistrer le tour de taille</Btn>
+      </Panel>
+      <Panel boot="boot-2">
+        <H>Relevés</H>
+        {listT.length === 0 ? <Empty text="Aucun relevé. Une mesure par jour, la dernière saisie remplace la précédente." /> : (
+          <ul>
+            {listT.slice(0, 30).map((w, i) => (
+              <li key={w.id} className="row py-2 flex justify-between text-sm rise" style={{ animationDelay: `${i * 25}ms`, fontFamily: mono }}>
+                <span style={{ color: T.mute }}>{fmtDate(w.date)}</span>
+                <span className="flex gap-3 items-center"><span style={{ color: T.cyan }}>{w.cm.toFixed(1)} cm</span>
+                  <Del onClick={() => update((d) => { d.taille = (d.taille || []).filter((x) => x.id !== w.id); return d; })} /></span>
               </li>
             ))}
           </ul>
@@ -1795,13 +1858,14 @@ function Donnees({ data, setData, notify, sync, onToken, onTokenOff, onSync }) {
     data.sessions.forEach((s) => s.sets.forEach((x, i) => rows.push(["muscu", s.date, s.group || "", s.exercise, i + 1, x.kg, x.reps, s.rpe ?? "", s.rpeAuto ? 1 : "", "", "", "", "", s.note])));
     data.treadmill.forEach((t) => rows.push(["tapis", t.date, "", "", "", "", "", "", "", t.min, t.km, t.slope, t.hr ?? "", t.note]));
     data.weights.forEach((w) => rows.push(["poids", w.date, "", "", "", w.kg, "", "", "", "", "", "", "", ""]));
+    (data.taille || []).forEach((w) => rows.push(["taille", w.date, "", "", "", w.cm, "", "", "", "", "", "", "", ""]));
     return rows.map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(";")).join("\n");
   };
   const importJSON = () => applyImport(imp);
   return (
     <>
       <Panel boot="boot-1" className="space-y-3">
-        <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>{data.sessions.length} exercices · {data.treadmill.length} marches · {data.weights.length} pesées</p>
+        <p className="text-xs" style={{ color: T.mute, fontFamily: mono }}>{data.sessions.length} exercices · {data.treadmill.length} marches · {data.weights.length} pesées · {(data.taille || []).length} tours de taille</p>
         <Btn full kind="ghost" onClick={() => exportFile("carnet.json", JSON.stringify(data, null, 2), "application/json")}>Exporter en JSON (sauvegarde)</Btn>
         <Btn full kind="ghost" onClick={() => exportFile("carnet.csv", toCSV(), "text/csv")}>Exporter en CSV (tableur)</Btn>
         <Btn full kind="ghost" onClick={() => exportFile("carnet-jours.csv", exportDerive(data), "text/csv")}>Exporter le tableau journalier (CSV)</Btn>

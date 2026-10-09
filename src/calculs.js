@@ -184,7 +184,7 @@ export const nuitAJour = (existant) => existant.n !== undefined && (existant.v |
 // champs tableaux en sont bien, `pas` est un objet. Un JSON valide mais de
 // forme fausse (« sessions » à {}, par exemple) plantait le rendu, et comme il
 // était aussitôt enregistré, il plantait aussi à la réouverture.
-export const CHAMPS_LISTES = ["exercises", "sessions", "treadmill", "weights", "durations", "daily"];
+export const CHAMPS_LISTES = ["exercises", "sessions", "treadmill", "weights", "taille", "durations", "daily"];
 export const carnetValide = (p) => !!p && typeof p === "object" && !Array.isArray(p)
   && Array.isArray(p.sessions) && Array.isArray(p.weights)
   && CHAMPS_LISTES.every((k) => p[k] === undefined || Array.isArray(p[k]))
@@ -195,7 +195,7 @@ export const carnetValide = (p) => !!p && typeof p === "object" && !Array.isArra
 // repas ou un exercice ajouté comptent, eux : ils vivent dans daily, durations
 // et exercises, et non dans les seules séances.
 export const carnetVide = (d, exercicesDefaut = []) =>
-  ["sessions", "treadmill", "weights", "durations", "daily"].every((k) => !d?.[k]?.length)
+  ["sessions", "treadmill", "weights", "taille", "durations", "daily"].every((k) => !d?.[k]?.length)
   && !Object.keys(d?.pas || {}).length
   && (d?.exercises || []).every((x) => exercicesDefaut.includes(x));
 
@@ -587,11 +587,12 @@ export const ligneJour = (data, date) => {
   const pl = (data.daily || []).find((d) => d.date === date)?.plan || {};
   l.plan_prevues = pl.prevues ?? ""; l.plan_faites = pl.faites ?? ""; l.plan_conforme = pl.conforme === undefined ? "" : pl.conforme;
   l.poids = data.weights.find((w) => w.date === date)?.kg ?? "";
+  l.taille = (data.taille || []).find((w) => w.date === date)?.cm ?? "";
   l.notes = ss.map((s) => s.note).filter(Boolean).join(" / ");
   return l;
 };
 export const exportDerive = (data) => {
-  const dates = [...new Set([...data.sessions, ...data.treadmill, ...data.weights, ...(data.daily || [])].map((x) => x.date))].sort();
+  const dates = [...new Set([...data.sessions, ...data.treadmill, ...data.weights, ...(data.taille || []), ...(data.daily || [])].map((x) => x.date))].sort();
   const rows = dates.map((d) => ligneJour(data, d));
   if (rows.length === 0) return "";
   const cols = Object.keys(rows[0]);
