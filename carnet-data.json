@@ -10935,12 +10935,16 @@
      "t": -19,
      "f30": 104,
      "f60": 103,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 86,
+     "t0": -45
     },
     {
      "id": "oryi1xba",
      "ctx": "transition",
-     "motif": "pic au bord de la fenêtre"
+     "motif": "pic au bord de la fenêtre",
+     "f0": 89,
+     "t0": -41
     },
     {
      "id": "6r7czvb4",
@@ -10956,12 +10960,16 @@
      "t": 17,
      "f30": 118,
      "f60": 108,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 96,
+     "t0": -44
     },
     {
      "id": "xs7lpeo9",
      "ctx": "transition",
-     "motif": "pic au bord de la fenêtre"
+     "motif": "pic au bord de la fenêtre",
+     "f0": 98,
+     "t0": -100
     },
     {
      "id": "9untw47g",
@@ -10977,14 +10985,18 @@
      "t": -7,
      "f30": 107,
      "f60": 101,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 90,
+     "t0": -139
     },
     {
      "id": "4ibp2egv",
      "pic": 115,
      "t": 24,
      "ctx": "transition",
-     "motif": "série suivante trop proche"
+     "motif": "série suivante trop proche",
+     "f0": 88,
+     "t0": -73
     },
     {
      "id": "iuz61xl9",
@@ -10992,7 +11004,9 @@
      "t": -18,
      "f30": 99,
      "f60": 98,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 99,
+     "t0": -53
     },
     {
      "id": "fgzxdfsb",
@@ -11008,15 +11022,19 @@
      "t": -7,
      "f30": 102,
      "f60": 98,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 87,
+     "t0": -49
     },
     {
      "id": "bmh95s42",
      "ctx": "fin_seance",
-     "motif": "pic au bord de la fenêtre"
+     "motif": "pic au bord de la fenêtre",
+     "f0": 91,
+     "t0": -107
     }
    ],
-   "recupV": 2
+   "recupV": 3
   },
   {
    "date": "2026-09-29",
@@ -13231,7 +13249,9 @@
      "t": -16,
      "f30": 116,
      "f60": 109,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 92,
+     "t0": -78
     },
     {
      "id": "zll0w9ku",
@@ -13268,7 +13288,9 @@
      "t": -7,
      "f30": 123,
      "f60": 113,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 98,
+     "t0": -61
     },
     {
      "id": "oxsxvunj",
@@ -13276,7 +13298,9 @@
      "t": 19,
      "f30": 116,
      "f60": 106,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 99,
+     "t0": -48
     },
     {
      "id": "ew04ss89",
@@ -13284,7 +13308,9 @@
      "t": -14,
      "f30": 125,
      "f60": 120,
-     "ctx": "transition"
+     "ctx": "transition",
+     "f0": 100,
+     "t0": -41
     },
     {
      "id": "xf63m13z",
@@ -13292,7 +13318,9 @@
      "t": 27,
      "f30": 121,
      "f60": 115,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 99,
+     "t0": -92
     },
     {
      "id": "yl5u680k",
@@ -13300,7 +13328,9 @@
      "t": -7,
      "f30": 123,
      "f60": 121,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 105,
+     "t0": -47
     },
     {
      "id": "k64pey1w",
@@ -13324,7 +13354,9 @@
      "t": -7,
      "f30": 109,
      "f60": 103,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 99,
+     "t0": -64
     },
     {
      "id": "sj6fws10",
@@ -13332,7 +13364,9 @@
      "t": -5,
      "f30": 110,
      "f60": 103,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 95,
+     "t0": -47
     },
     {
      "id": "r6o26l5x",
@@ -13340,17 +13374,21 @@
      "t": 12,
      "f30": 106,
      "f60": 105,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 94,
+     "t0": -44
     },
     {
      "id": "6un8irpc",
      "pic": 129,
      "t": -10,
      "ctx": "fin_seance",
-     "motif": "pas de mesure à +60 s"
+     "motif": "pas de mesure à +60 s",
+     "f0": 95,
+     "t0": -87
     }
    ],
-   "recupV": 2
+   "recupV": 3
   },
   {
    "date": "2026-10-09",
@@ -13611,7 +13649,9 @@
      "t": 24,
      "f30": 112,
      "f60": 99,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 89,
+     "t0": -70
     },
     {
      "id": "z08teda0",
@@ -13619,7 +13659,9 @@
      "t": -6,
      "f30": 110,
      "f60": 95,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 88,
+     "t0": -39
     },
     {
      "id": "sgh37ugk",
@@ -13627,12 +13669,16 @@
      "t": 21,
      "f30": 116,
      "f60": 123,
-     "ctx": "transition"
+     "ctx": "transition",
+     "f0": 88,
+     "t0": -92
     },
     {
      "id": "0jmvdt75",
      "ctx": "meme_exercice",
-     "motif": "trou de mesure"
+     "motif": "trou de mesure",
+     "f0": 105,
+     "t0": -76
     },
     {
      "id": "vrm2zhkp",
@@ -13640,7 +13686,9 @@
      "t": 18,
      "f30": null,
      "f60": 109,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 101,
+     "t0": -71
     },
     {
      "id": "dcvn693y",
@@ -13648,7 +13696,9 @@
      "t": 25,
      "f30": 124,
      "f60": 120,
-     "ctx": "transition"
+     "ctx": "transition",
+     "f0": 101,
+     "t0": -68
     },
     {
      "id": "oh4gf9ue",
@@ -13656,7 +13706,9 @@
      "t": 1,
      "f30": 110,
      "f60": 109,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 94,
+     "t0": -67
     },
     {
      "id": "2lmtvsf3",
@@ -13664,7 +13716,9 @@
      "t": -8,
      "f30": 123,
      "f60": 107,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 92,
+     "t0": -97
     },
     {
      "id": "087e789a",
@@ -13672,7 +13726,9 @@
      "t": -8,
      "f30": 126,
      "f60": 115,
-     "ctx": "transition"
+     "ctx": "transition",
+     "f0": 97,
+     "t0": -139
     },
     {
      "id": "egbh19ji",
@@ -13688,7 +13744,9 @@
      "t": -18,
      "f30": 116,
      "f60": 112,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 97,
+     "t0": -71
     },
     {
      "id": "m81ik4t1",
@@ -13704,7 +13762,9 @@
      "t": 6,
      "f30": 113,
      "f60": 104,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 106,
+     "t0": -47
     },
     {
      "id": "2zi9g398",
@@ -13712,7 +13772,9 @@
      "t": -16,
      "f30": 112,
      "f60": 119,
-     "ctx": "transition"
+     "ctx": "transition",
+     "f0": 96,
+     "t0": -111
     },
     {
      "id": "20xk0asv",
@@ -13727,10 +13789,12 @@
      "pic": 120,
      "t": 7,
      "ctx": "fin_seance",
-     "motif": "pas de mesure à +60 s"
+     "motif": "pas de mesure à +60 s",
+     "f0": 98,
+     "t0": -68
     }
    ],
-   "recupV": 2
+   "recupV": 3
   },
   {
    "date": "2026-10-11",
@@ -13740,7 +13804,9 @@
      "pic": 111,
      "t": 30,
      "ctx": "meme_exercice",
-     "motif": "pas de mesure à +60 s"
+     "motif": "pas de mesure à +60 s",
+     "f0": 88,
+     "t0": -57
     },
     {
      "id": "c5vlui1m",
@@ -13748,7 +13814,9 @@
      "t": 29,
      "f30": 103,
      "f60": 93,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 90,
+     "t0": -61
     },
     {
      "id": "fqnvvd7e",
@@ -13764,7 +13832,9 @@
      "t": -20,
      "f30": 114,
      "f60": 103,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 91,
+     "t0": -67
     },
     {
      "id": "8h0x8d17",
@@ -13772,7 +13842,9 @@
      "t": -2,
      "f30": 114,
      "f60": 103,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 85,
+     "t0": -37
     },
     {
      "id": "8f6ma8yi",
@@ -13780,7 +13852,9 @@
      "t": 1,
      "f30": 120,
      "f60": 109,
-     "ctx": "transition"
+     "ctx": "transition",
+     "f0": 93,
+     "t0": -47
     },
     {
      "id": "ricd6mb9",
@@ -13788,7 +13862,9 @@
      "t": -14,
      "f30": 109,
      "f60": 107,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 103,
+     "t0": -51
     },
     {
      "id": "jslsppsy",
@@ -13796,7 +13872,9 @@
      "t": -16,
      "f30": 114,
      "f60": 107,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 102,
+     "t0": -61
     },
     {
      "id": "xsff7fw6",
@@ -13804,7 +13882,9 @@
      "t": -20,
      "f30": 115,
      "f60": 102,
-     "ctx": "transition"
+     "ctx": "transition",
+     "f0": 101,
+     "t0": -60
     },
     {
      "id": "sbk0i4ur",
@@ -13812,7 +13892,9 @@
      "t": -4,
      "f30": 119,
      "f60": 109,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 98,
+     "t0": -83
     },
     {
      "id": "nhfo8n91",
@@ -13820,7 +13902,9 @@
      "t": -4,
      "f30": 116,
      "f60": 112,
-     "ctx": "meme_exercice"
+     "ctx": "meme_exercice",
+     "f0": 99,
+     "t0": -38
     },
     {
      "id": "gxpp3wtz",
@@ -13831,7 +13915,7 @@
      "ctx": "fin_seance"
     }
    ],
-   "recupV": 2,
+   "recupV": 3,
    "hr": 113,
    "hrMax": 153,
    "ex": [
