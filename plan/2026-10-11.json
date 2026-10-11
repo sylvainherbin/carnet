@@ -1,28 +1,57 @@
 {
   "date": "2026-10-11",
-  "v": 1,
-  "ecrit": "2026-10-11T08:00:00Z",
+  "v": 2,
+  "ecrit": "2026-10-11T19:00:00Z",
   "nuit": "5 h 44 de sommeil (coucher 02:59, lever 08:50), plancher 53, moyenne 59, VFC 37,7 (trois mesures), SpO2 minimum 93. Deuxième nuit courte de suite après 5 h 26 (03:30 → 09:01) et la même VFC à 37,7. Médiane de VFC sur deux semaines : 47.",
   "decision": {
     "d": "allege",
     "regle": "R1 à deux signaux : sommeil sous 6 h 30 (5 h 44) ET VFC nettement sous la médiane récente (37,7 contre 47, soit −19 %). R2 non déclenchée (plancher 53 < 58).",
-    "motif": "Deux nuits courtes d'affilée, VFC basse les deux fois, après un bloc Dos + Jambes. Épaules en version allégée : 8 séries, aucune charge ne monte. Le plancher reste à 53 : pas d'alerte, une séance utile sans pousser."
+    "motif": "Deux nuits courtes d'affilée (5 h 26 puis 5 h 44), VFC basse les deux fois, après un bloc Dos + Jambes : allégé décidé (8 séries, aucune charge ne monte). Fait : 12 séries, plan dépassé par Sylvain. Deux séries de travail par exercice aux charges des verdicts (Shoulder press 80, Upper Back 80, latérales 15, postérieur 25, RPE 7), puis une série test cochée par exercice : Shoulder press 100 × 4 (RPE 10), Upper Back 95 × 10 (RPE 9), latérales 17,5 × 10 (RPE 9), postérieur 30 × 10 (RPE 9). Tapis 20 min, 1,82 km, 13 %, FC 140. Quatrième cas décidé/fait écarté (30/09, 01/10, 09/10, 11/10) : à relire avec la nuit du 11 au 12."
   },
   "seance": {
     "groupe": "Épaules",
     "titre": "Épaules — allégée",
     "exercices": [
-      { "nom": "Shoulder press", "series": 2, "reps": 10, "kg": 70, "note": "charge tenue, verdict monte à 80, pas aujourd'hui" },
-      { "nom": "Upper Back", "series": 2, "reps": 12, "kg": 75, "note": "charge tenue, verdict monte à 85, pas aujourd'hui" },
-      { "nom": "Haltères latérales", "series": 2, "reps": 10, "kg": 15 },
-      { "nom": "Haltères postérieur", "series": 2, "reps": 15, "kg": 22.5 }
+      {
+        "nom": "Shoulder press",
+        "series": 2,
+        "reps": 10,
+        "kg": 70,
+        "note": "charge tenue, verdict monte à 80, pas aujourd'hui"
+      },
+      {
+        "nom": "Upper Back",
+        "series": 2,
+        "reps": 12,
+        "kg": 75,
+        "note": "charge tenue, verdict monte à 85, pas aujourd'hui"
+      },
+      {
+        "nom": "Haltères latérales",
+        "series": 2,
+        "reps": 10,
+        "kg": 15
+      },
+      {
+        "nom": "Haltères postérieur",
+        "series": 2,
+        "reps": 15,
+        "kg": 22.5
+      }
     ],
-    "echauffement": ["Shoulder press 40 × 10", "Upper Back 50 × 8"],
-    "tapis": { "min": 10, "pente": 13, "kmh": 5.5 }
+    "echauffement": [
+      "Shoulder press 40 × 10",
+      "Upper Back 50 × 8"
+    ],
+    "tapis": {
+      "min": 10,
+      "pente": 13,
+      "kmh": 5.5
+    }
   },
   "points": [
-    "Deux séries par exercice, tapis raccourci à 10 min, aucune charge ne monte.",
-    "Verdicts pour la prochaine séance Épaules complète : Shoulder press 80 et Upper Back 85 (double pas, deux séances de suite à RPE 7), Haltères latérales 17,5 et Haltères postérieur 25 (pas simple, isolation).",
+    "Verdicts pour la prochaine séance Épaules complète : Shoulder press 85 (pas simple : 70 → 80 était déjà un double pas), Upper Back 85 (test à 95 × 10 : marge pour 90 ensuite), Haltères latérales 17,5, Haltères postérieur 27,5.",
+    "Records : Upper Back test 95 × 10 (e1RM 127, au-dessus du pic 2025 de 120) ; Haltères postérieur 30 × 10 (e1RM 40 contre 33) ; Shoulder press 100 × 4 (e1RM 113, 92 % du pic).",
     "Pecs demain lundi 12/10, décision après lecture de la nuit. Repos mardi 13/10.",
     "Prochain tour de taille vendredi 16/10, à jeun. Maintien strict jusqu'au 23/10 (97 cm ou plus → déficit de 200 kcal).",
     "Poulie haut du pec : abandonnée. Poulies triceps en isolation : OK."
