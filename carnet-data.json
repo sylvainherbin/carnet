@@ -14145,7 +14145,13 @@
    "dodo": 344,
    "coucher": 1791680355000,
    "lever": 1791701419000,
-   "sha": "8c90bf3756828f18cac80eb29932053ceab18703"
+   "sha": "8c90bf3756828f18cac80eb29932053ceab18703",
+   "decision": {
+    "d": "allege",
+    "regle": "R1 à deux signaux : sommeil sous 6 h 30 (5 h 44) ET VFC nettement sous la médiane récente (37,7 contre 47, soit −19 %). R2 non déclenchée (plancher 53 < 58).",
+    "motif": "Deux nuits courtes d'affilée, VFC basse les deux fois, après un bloc Dos + Jambes. Épaules en version allégée : 8 séries, aucune charge ne monte. Le plancher reste à 53 : pas d'alerte, une séance utile sans pousser.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
