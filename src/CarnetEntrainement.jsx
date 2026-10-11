@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile, pullPlanFile } from "./githubSync.js";
-import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, dailyAImporter, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp, repriseSeance, carnetValide, carnetVide, lirePlan, avancementPlan, seanceTerminee, planPrevuFait, poserPlanFait, decisionAEcrire, manquesDuPlan, RPE_DEFAUT, RECUP_VERSION, recuperationSeance, recupDefinitive, COLONNES_FC_SERIE, fcSerieExport } from "./calculs.js";
+import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, dailyAImporter, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp, repriseSeance, carnetValide, carnetVide, lirePlan, avancementPlan, seanceTerminee, planPrevuFait, poserPlanFait, decisionAEcrire, manquesDuPlan, RPE_DEFAUT, RECUP_VERSION, recuperationSeance, recupDefinitive, COLONNES_FC_SERIE, fcSerieExport, tableJours, tableExercices, couverture, nuitContreSeance, syntheseAnalyse, exportAnalyseJours, VARIABLES_NUIT, RESULTATS_SEANCE, ANALYSE_AVERTISSEMENTS, EFFECTIF_UTILE } from "./calculs.js";
 import {
-  LineChart, Line, ComposedChart, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea, ReferenceLine, Cell,
+  LineChart, Line, ComposedChart, ScatterChart, Scatter, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea, ReferenceLine, Cell,
 } from "recharts";
 
 // ================= données / helpers (inchangés) =================
@@ -726,6 +726,23 @@ function Verdict({ v, court }) {
   );
 }
 
+// FC d'une série : « fin avant→pic écart/60 s » quand tout est mesuré, le motif
+// quand la récupération ne l'est pas, « bloc ↑ » (ancien pic) tant que la date
+// n'a pas été recalculée.
+function LigneFc({ r }) {
+  const c = r.rec;
+  if (!c) return r.pic ? <span style={{ color: T.danger }}> · bloc ↑{r.pic}</span> : null;
+  const fin = c.pic != null || c.f60 != null || c.motif;
+  return (
+    <>
+      {fin && (
+        <span style={{ color: T.danger }}> · fin{c.pic != null && (c.f0 != null ? <> {c.f0}→{c.pic}</> : <> ↑{c.pic}</>)} {c.f60 != null ? <span style={{ color: T.cyan }}>{fmtEcart(c.f60 - c.pic)}/60 s</span> : <span style={{ color: T.mute }}>{c.motif}</span>}{c.ctx !== "meme_exercice" && <span style={{ color: T.mute }}> · {c.ctx === "transition" ? "transition" : "fin de séance"}</span>}</span>
+      )}
+      {c.f0 != null && c.pic == null && <span style={{ color: T.mute }}> · avant {c.f0}</span>}
+    </>
+  );
+}
+
 // ================= Séance =================
 function Seance({ data, update, notify, celebrate, plan }) {
   const [date, setDate] = useState(todayISO());
@@ -1188,7 +1205,7 @@ function Seance({ data, update, notify, celebrate, plan }) {
         )}
         {grouped.some((g) => g.rows.some((r) => r.rec || r.pic)) && (
           <p className="text-xs mb-1" style={{ color: T.mute, fontFamily: mono }}>
-            <span style={{ color: T.danger }}>fin ↑</span> pic de fin d'effort, puis écart de FC 60 s après · <span style={{ color: T.danger }}>bloc ↑</span> pic de tout le bloc depuis la série précédente (ancien calcul)
+            <span style={{ color: T.danger }}>fin 97→129</span> FC avant (creux de repos) → pic de fin d'effort, puis écart de FC 60 s après · <span style={{ color: T.danger }}>bloc ↑</span> pic de tout le bloc depuis la série précédente (ancien calcul)
           </p>
         )}
         {todays.length === 0 ? <Empty text="Rien d'enregistré pour cette date." /> : (
@@ -1210,9 +1227,7 @@ function Seance({ data, update, notify, celebrate, plan }) {
                     <li key={`${r.id}-${r.setIdx}`} className="flex justify-between items-center gap-2">
                       <div className="text-xs" style={{ color: T.text, fontFamily: mono }}>
                         <span style={{ color: T.cyan }}>{pad(j + 1)}</span>{r.test && <span style={{ color: T.violet }}> T</span>}{r.elastique && <span style={{ color: T.magenta }}> E</span>}  {r.kg}×{r.reps}{r.rpe ? <span style={{ color: T.mute }}> · RPE {r.rpe}{r.rpeAuto ? "*" : ""}</span> : ""}
-                        {r.rec
-                          ? <span style={{ color: T.danger }}> · fin{r.rec.pic != null && <> ↑{r.rec.pic}</>} {r.rec.f60 != null ? <span style={{ color: T.cyan }}>{fmtEcart(r.rec.f60 - r.rec.pic)}/60 s</span> : <span style={{ color: T.mute }}>{r.rec.motif}</span>}{r.rec.ctx !== "meme_exercice" && <span style={{ color: T.mute }}> · {r.rec.ctx === "transition" ? "transition" : "fin de séance"}</span>}</span>
-                          : r.pic ? <span style={{ color: T.danger }}> · bloc ↑{r.pic}</span> : ""}
+                        <LigneFc r={r} />
                         {r.note && <span className="italic" style={{ color: T.amber }}>  {r.note}</span>}
                       </div>
                       <Del onClick={() => delSet(r.id, r.setIdx)} />
@@ -1486,7 +1501,24 @@ function Poids({ data, update, notify }) {
 }
 
 // ================= Courbes =================
+// Onglet Courbes : les graphes habituels, ou l'analyse longitudinale. Le choix
+// est retenu sur l'appareil.
 function Courbes({ data }) {
+  const [vue, setVue] = useState(() => { try { return localStorage.getItem("carnet-courbes-vue") === "analyse" ? "analyse" : "graphes"; } catch { return "graphes"; } });
+  const choisir = (v) => { setVue(v); try { localStorage.setItem("carnet-courbes-vue", v); } catch { /* stockage indisponible */ } };
+  return (
+    <>
+      <div role="radiogroup" aria-label="Vue" className="grid grid-cols-2 gap-1 p-1 rounded-xl" style={{ border: `1px solid ${T.line}`, background: "rgba(0,229,255,.04)" }}>
+        {[["graphes", "Graphes"], ["analyse", "Analyse"]].map(([k, l]) => (
+          <button key={k} type="button" role="radio" aria-checked={vue === k} onClick={() => choisir(k)} className="py-2 rounded-lg text-sm font-semibold"
+            style={{ fontFamily: mono, color: vue === k ? T.cyan : T.mute, background: vue === k ? "rgba(0,229,255,.10)" : "transparent", border: `1px solid ${vue === k ? T.lineStrong : "transparent"}`, boxShadow: vue === k ? "0 0 12px rgba(0,229,255,.25)" : "none" }}>{l}</button>
+        ))}
+      </div>
+      {vue === "analyse" ? <Analyse data={data} /> : <CourbesGraphes data={data} />}
+    </>
+  );
+}
+function CourbesGraphes({ data }) {
   const used = useMemo(() => [...new Set(data.sessions.map((s) => s.exercise))], [data.sessions]);
   const [ex, setEx] = useState(used[0] || "");
   useEffect(() => { if (!used.includes(ex) && used[0]) setEx(used[0]); }, [used]);
@@ -1754,6 +1786,163 @@ function Courbes({ data }) {
   );
 }
 
+// ================= Analyse longitudinale (V1 descriptive) =================
+// Des tables et des associations avec leur effectif ; ni score, ni verdict, ni
+// recommandation. Tout est recalculé à l'ouverture depuis les données du carnet.
+const fnum = (x, d = 1) => (x == null ? "—" : x.toFixed(d).replace(".", ",").replace("-", "−"));
+const DEC_COURT = { maintenu: "maint.", allege: "allégé", repos: "repos" };
+function Pills({ options, value, onChange, label }) {
+  return (
+    <div role="radiogroup" aria-label={label} className="flex flex-wrap gap-1.5">
+      {Object.entries(options).map(([k, l]) => (
+        <button key={k} type="button" role="radio" aria-checked={value === k} onClick={() => onChange(k)} className="px-2.5 py-1 rounded-full text-xs"
+          style={{ fontFamily: mono, color: value === k ? T.cyan : T.mute, border: `1px solid ${value === k ? T.lineStrong : T.line}`, background: value === k ? "rgba(0,229,255,.10)" : "transparent" }}>{l}</button>
+      ))}
+    </div>
+  );
+}
+function Barre({ n, d, couleur = T.cyan }) {
+  return (
+    <div className="mt-0.5 h-1 rounded" style={{ background: "rgba(0,229,255,.08)" }}>
+      <div className="h-1 rounded" style={{ width: `${d ? Math.min(100, (n / d) * 100) : 0}%`, background: couleur, boxShadow: `0 0 6px ${couleur}` }} />
+    </div>
+  );
+}
+function Analyse({ data }) {
+  const jours = useMemo(() => tableJours(data), [data]);
+  const exos = useMemo(() => tableExercices(data), [data]);
+  const cov = useMemo(() => couverture(data), [data]);
+  const [exSel, setExSel] = useState(0);
+  const [vn, setVn] = useState("sommeilH");
+  const [res, setRes] = useState("recupEcart");
+  const assoc = useMemo(() => nuitContreSeance(jours, vn, res), [jours, vn, res]);
+  const e = exos[Math.min(exSel, exos.length - 1)];
+  const graphe = e ? e.seances.map((x) => ({ label: fmtDate(x.date).slice(0, 5), recup: x.recupMed })) : [];
+  const recalc = cov.recalcul;
+  const jr = [...jours].reverse().slice(0, 14);
+  if (jours.length === 0) return <Panel boot="boot-1"><Empty text="Pas encore de séance horodatée à analyser." /></Panel>;
+  return (
+    <>
+      <Panel boot="boot-1" className="space-y-3">
+        <H right={`${cov.jours} jours`}>Ce que les données permettent</H>
+        {[
+          ["nuits complètes (sommeil + VFC) les jours de séance", cov.nuits.complete, cov.nuits.jours],
+          ["récupération à 60 s mesurée", cov.series.mesurees, cov.series.horodatees],
+          ["FC avant la série mesurée", cov.series.fcAvantMesuree, cov.series.horodatees],
+        ].map(([l, n, d]) => (
+          <div key={l} className="text-xs" style={{ fontFamily: mono }}>
+            <div className="flex justify-between gap-2"><span style={{ color: T.mute }}>{l}</span><span style={{ color: T.cyan }}>{n} / {d}</span></div>
+            <Barre n={n} d={d} />
+          </div>
+        ))}
+        {recalc.aJour < recalc.dates && (
+          <p className="text-xs" style={{ color: T.amber, fontFamily: mono }}>recalcul de l'historique en cours : {recalc.aJour} / {recalc.dates} séances à jour (6 fichiers de FC par ouverture de l'app)</p>
+        )}
+        <details className="text-xs" style={{ color: T.mute, fontFamily: mono }}>
+          <summary>séries non mesurables · contextes</summary>
+          <div className="mt-1 space-y-0.5">
+            {Object.entries(cov.series.nonMesurees).sort((a, b) => b[1] - a[1]).map(([k, v]) => <div key={k} className="flex justify-between"><span>{k}</span><span>{v}</span></div>)}
+            <div className="pt-1" style={{ color: T.text }}>mesurées : {Object.entries(cov.series.mesureesParContexte).map(([k, v]) => `${k.replace("_", " ")} ${v}`).join(" · ")}</div>
+          </div>
+        </details>
+      </Panel>
+
+      {e && (
+        <Panel boot="boot-2" className="space-y-2">
+          <H>Par exercice</H>
+          <select value={Math.min(exSel, exos.length - 1)} onChange={(ev) => setExSel(Number(ev.target.value))} className="inp">
+            {exos.map((x, i) => <option key={i} value={i}>{x.exercise}{x.elastique ? " (élastique)" : ""} · {x.seances.length} séance{x.seances.length > 1 ? "s" : ""}</option>)}
+          </select>
+          <div className="text-xs" style={{ color: T.mute, fontFamily: mono }}>récup : baisse de FC 60 s après le pic, médiane de la séance (bpm), entre parenthèses le nombre de séries · avant : FC avant la série (creux de repos) · séries test écartées</div>
+          {graphe.filter((g) => g.recup !== null).length > 1 ? (
+            <div style={{ height: 130 }}>
+              <ResponsiveContainer>
+                <LineChart data={graphe} margin={{ top: 6, right: 8, left: -16, bottom: 0 }}>
+                  <CartesianGrid stroke={G.grille} />
+                  <XAxis dataKey="label" tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
+                  <YAxis domain={yDomain(graphe.map((g) => g.recup).filter((v) => v !== null))} tick={axis} axisLine={false} tickLine={false} />
+                  <Tooltip {...tip} />
+                  <Line type="monotone" dataKey="recup" name="baisse à 60 s" stroke={G.cyan} strokeWidth={2} dot={{ r: 3.5, fill: T.bg, stroke: G.cyan, strokeWidth: 2 }} connectNulls={false} isAnimationActive={false} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          ) : <p className="text-xs italic" style={{ color: T.mute }}>Moins de deux séances avec une récupération mesurée.</p>}
+          <div className="text-[11px]" style={{ fontFamily: mono }}>
+            <div className="grid gap-x-2 py-1" style={{ gridTemplateColumns: "3.2rem 4.6rem 2rem 2.6rem 3rem 1fr", color: T.mute, borderBottom: `1px solid ${T.line}` }}>
+              <span>date</span><span>charge</span><span>RPE</span><span>e1RM</span><span>récup</span><span>avant</span>
+            </div>
+            {[...e.seances].reverse().slice(0, 8).map((x) => (
+              <div key={x.date} className="grid gap-x-2 py-1" style={{ gridTemplateColumns: "3.2rem 4.6rem 2rem 2.6rem 3rem 1fr", borderBottom: `1px solid ${T.line}` }}>
+                <span style={{ color: T.mute }}>{fmtDate(x.date).slice(0, 5)}</span>
+                <span>{x.kg}×{x.reps}</span>
+                <span>{fnum(x.rpeMoy, 1)}</span>
+                <span style={{ color: T.cyan }}>{fnum(x.e1rm, 0)}</span>
+                <span style={{ color: T.amber }}>{x.recupMed === null ? "—" : `${fnum(x.recupMed, 0)} (${x.mesures})`}</span>
+                <span>{fnum(x.fcAvantMed, 0)}</span>
+              </div>
+            ))}
+          </div>
+          {e.paires.length > 0 && (
+            <p className="text-[11px]" style={{ color: T.mute, fontFamily: mono }}>
+              à charge égale ({e.paires.length} paire{e.paires.length > 1 ? "s" : ""}) : {e.paires.map((p) => `${fmtDate(p.date).slice(0, 5)} ${p.kg} kg ${p.dReps > 0 ? "+" : ""}${p.dReps} rép.${p.dRpe !== null ? ` · RPE ${p.dRpe > 0 ? "+" : ""}${fnum(p.dRpe, 1)}` : ""}`).join(" ; ")}
+            </p>
+          )}
+        </Panel>
+      )}
+
+      <Panel boot="boot-3" className="space-y-2">
+        <H right={`n = ${assoc.n}`}>Nuit et séance du jour</H>
+        <Pills label="Variable de la nuit" options={VARIABLES_NUIT} value={vn} onChange={setVn} />
+        <Pills label="Résultat de la séance" options={RESULTATS_SEANCE} value={res} onChange={setRes} />
+        {assoc.n >= 3 ? (
+          <div style={{ height: 190 }}>
+            <ResponsiveContainer>
+              <ScatterChart margin={{ top: 8, right: 10, left: -10, bottom: 0 }}>
+                <CartesianGrid stroke={G.grille} />
+                <XAxis type="number" dataKey="x" name={VARIABLES_NUIT[vn]} domain={yDomain(assoc.points.map((p) => p.x))} tick={axis} axisLine={{ stroke: T.line }} tickLine={false} />
+                <YAxis type="number" dataKey="y" name={RESULTATS_SEANCE[res]} domain={yDomain(assoc.points.map((p) => p.y))} tick={axis} axisLine={false} tickLine={false} />
+                <Tooltip {...tip} cursor={{ strokeDasharray: "3 3", stroke: T.lineStrong }} formatter={(v, n) => [fnum(v, 2), n]} labelFormatter={() => ""} />
+                <Scatter data={assoc.points} fill={G.cyan} isAnimationActive={false} />
+              </ScatterChart>
+            </ResponsiveContainer>
+          </div>
+        ) : <p className="text-xs italic" style={{ color: T.mute }}>Moins de trois jours jumelés.</p>}
+        <div className="text-xs space-y-0.5" style={{ fontFamily: mono }}>
+          <div><span style={{ color: T.mute }}>ρ de Spearman </span><span style={{ color: T.text }}>{fnum(assoc.rho, 2)}</span>{assoc.ic && <span style={{ color: T.mute }}> · IC 95 % [{fnum(assoc.ic[0], 2)} ; {fnum(assoc.ic[1], 2)}]</span>}</div>
+          <div style={{ color: T.mute }}>corrélation détectable à n = {assoc.n} : |ρ| ≥ {fnum(assoc.rhoMin, 2)}</div>
+          {!assoc.suffisant && <div style={{ color: T.amber }}>effectif insuffisant ({assoc.n} &lt; {EFFECTIF_UTILE} jours) : ne rien en conclure</div>}
+          <div style={{ color: T.mute }}>association descriptive : la décision du coach dépend elle-même de la nuit</div>
+        </div>
+      </Panel>
+
+      <Panel boot="boot-4">
+        <H right="14 derniers">Jours</H>
+        <div className="text-[11px]" style={{ fontFamily: mono }}>
+          <div className="grid gap-x-1.5 py-1" style={{ gridTemplateColumns: "2.9rem 2.7rem 2.5rem 2.2rem 2rem 2rem 1fr", color: T.mute, borderBottom: `1px solid ${T.line}` }}>
+            <span>date</span><span>coach</span><span>plan</span><span>h</span><span>VFC</span><span>RPE</span><span>récup</span>
+          </div>
+          {jr.map((j) => (
+            <div key={j.date} className="grid gap-x-1.5 py-1" style={{ gridTemplateColumns: "2.9rem 2.7rem 2.5rem 2.2rem 2rem 2rem 1fr", borderBottom: `1px solid ${T.line}` }}>
+              <span style={{ color: T.mute }}>{fmtDate(j.date).slice(0, 5)}</span>
+              <span style={{ color: j.decision === "allege" ? T.amber : T.text }}>{DEC_COURT[j.decision] || "—"}</span>
+              <span style={{ color: j.planConforme === false ? T.amber : T.text }}>{j.planFaites ?? j.series}/{j.planPrevues ?? "—"}</span>
+              <span>{fnum(j.nuit.sommeilH, 1)}</span>
+              <span>{fnum(j.nuit.vfc, 0)}</span>
+              <span>{fnum(j.rpeMoy, 1)}</span>
+              <span style={{ color: T.cyan }}>{j.recupEcart === null ? "—" : fnum(j.recupEcart, 1)}</span>
+            </div>
+          ))}
+        </div>
+        <p className="text-[11px] mt-2" style={{ color: T.mute, fontFamily: mono }}>plan : séries faites / prévues. récup : écart moyen de la séance à la médiane de chaque exercice (bpm, ≥ 2 séries). « — » : donnée absente, jamais zéro.</p>
+        <details className="text-[11px] mt-2" style={{ color: T.mute, fontFamily: mono }}>
+          <summary>limites de lecture</summary>
+          <ul className="mt-1 space-y-1 list-disc pl-4">{ANALYSE_AVERTISSEMENTS.map((a) => <li key={a}>{a}</li>)}</ul>
+        </details>
+      </Panel>
+    </>
+  );
+}
+
 // ================= Records =================
 function Records({ data }) {
   const recs = useMemo(() => {
@@ -1929,6 +2118,8 @@ function Donnees({ data, setData, notify, sync, onToken, onTokenOff, onSync }) {
         <Btn full kind="ghost" onClick={() => exportFile("carnet.json", JSON.stringify(data, null, 2), "application/json")}>Exporter en JSON (sauvegarde)</Btn>
         <Btn full kind="ghost" onClick={() => exportFile("carnet.csv", toCSV(), "text/csv")}>Exporter en CSV (tableur)</Btn>
         <Btn full kind="ghost" onClick={() => exportFile("carnet-jours.csv", exportDerive(data), "text/csv")}>Exporter le tableau journalier (CSV)</Btn>
+        <Btn full kind="ghost" onClick={() => exportFile("carnet-analyse.json", JSON.stringify(syntheseAnalyse(data, new Date().toISOString().slice(0, 10)), null, 1), "application/json")}>Exporter l'analyse (JSON, pour le coach)</Btn>
+        <Btn full kind="ghost" onClick={() => exportFile("carnet-analyse-jours.csv", exportAnalyseJours(data), "text/csv")}>Exporter l'analyse journalière (CSV)</Btn>
       </Panel>
       <Panel boot="boot-2" className="space-y-3">
         <H>Importer une sauvegarde JSON</H>

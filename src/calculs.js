@@ -316,10 +316,38 @@ export const resumeSeance = (samples, w, date) => {
 // gardée, signée.
 // v2 : plateau d'1 bpm toléré (v1 : tout dépassement annulait la mesure) ;
 // les séries non mesurables sont conservées avec leur motif.
+// v3 : FC avant la série (f0, t0), voir fcAvantSerie.
 // La validation suivante ne marque pas la fin du repos : on ne mesure rien
 // au-delà de +60 s.
-export const RECUP_VERSION = 2;
+export const RECUP_VERSION = 3;
 export const RECUP = { avant: 60000, apres: 45000, queue: 45000, bord: 5000, tol: 5000, trou: 20000, marge: 60000, saillie: 15, etabli: 30000, plateau: 1 };
+// FC avant la série : le creux de repos. Le départ de l'effort ne se lit pas
+// sur l'horloge : le creux précède la validation de 66 s en médiane (41 à 120 s)
+// sans lien avec le nombre de répétitions, donc pas de fenêtre fixe. On prend le
+// minimum de la moyenne glissante sur 3 échantillons entre la fin de la
+// récupération précédente (validation précédente + 60 s) et la validation − 15 s,
+// au plus 150 s en arrière. C'est la FC la plus basse atteinte avant l'effort,
+// pas la FC exacte à son début : l'écart avec le vrai départ n'est pas mesuré.
+// Null si le repos est trop court (< 45 s), s'il y a moins de 8 échantillons ou un
+// trou de plus de 20 s (le creux pourrait s'y cacher), si le creux touche le début
+// de la fenêtre (10 s : deux espacements d'échantillons plus la demi-largeur du
+// lissage) ou les 10 dernières secondes (FC encore en baisse : le creux n'est
+// pas atteint). t0 : délai du creux avant la validation, en secondes (< 0).
+export const REPOS = { max: 150000, queue: 60000, fin: 15000, minFen: 45000, minN: 8, trou: 20000, bordFin: 10000, bordDeb: 10000 };
+export const fcAvantSerie = (smp, s, prev) => {
+  const P = REPOS;
+  if (!s.at || s.sets.length !== 1) return { motif0: "plusieurs séries ou sans heure" };
+  const lo = Math.max(s.at - P.max, prev?.at ? prev.at + P.queue : -Infinity), hi = s.at - P.fin;
+  if (hi - lo < P.minFen) return { motif0: "repos trop court" };
+  const w = smp.filter((x) => x.ms >= lo && x.ms <= hi);
+  if (w.length < P.minN) return { motif0: "FC absente" };
+  if (w.slice(1).some((x, j) => x.ms - w[j].ms > P.trou) || w[0].ms - lo > P.trou || hi - w[w.length - 1].ms > P.trou) return { motif0: "trou de mesure" };
+  let best = null;
+  for (let k = 1; k < w.length - 1; k++) { const m = (w[k - 1].bpm + w[k].bpm + w[k + 1].bpm) / 3; if (!best || m < best.m) best = { m, ms: w[k].ms }; }
+  if (best.ms - lo < P.bordDeb) return { motif0: "creux au début de la fenêtre" };
+  if (hi - best.ms < P.bordFin) return { motif0: "pas de creux (FC encore en baisse)" };
+  return { f0: Math.round(best.m), t0: Math.round((best.ms - s.at) / 1000) };
+};
 // Les fichiers fc/ redéposés se recouvrent : un échantillon par instant.
 const sansDoublon = (samples) => { const vus = new Set(); return samples.filter((x) => !vus.has(x.ms) && vus.add(x.ms)); };
 // Une série. `smp` : échantillons triés et dédoublonnés ; `taps` : [début, fin]
@@ -370,13 +398,16 @@ export const recuperationSeance = (samples, sessions, treadmill, date) => {
   const fin = ss[ss.length - 1].at;
   if (!smp.some((x) => x.ms >= ss[0].at - RECUP.avant && x.ms <= fin)) return null;
   const taps = treadmill.filter((t) => t.date === date && t.at0 > 0 && t.min > 0).map((t) => [t.at0, t.at0 + t.min * 60000]);
-  const lignes = ss.map((s, i) => ({ id: s.id, ...recupSerie(smp, s, ss[i - 1], ss[i + 1], taps) }));
+  const lignes = ss.map((s, i) => ({ id: s.id, ...recupSerie(smp, s, ss[i - 1], ss[i + 1], taps), ...fcAvantSerie(smp, s, ss[i - 1]) }));
   // Mesurées : { id, pic, t, f30, f60, ctx }. Non mesurables : { id, ctx, motif },
   // avec pic et t quand le motif n'en remet pas le sommet en cause (un pic au
   // bord de la fenêtre, isolé, non établi, près d'un trou ou d'une marche n'est
-  // pas fiable). Ni plusieurs séries, ni FC absente : rien à dire.
-  const recup = lignes.filter((l) => l.f60 != null || (l.motif && !MOTIFS_MUETS.includes(l.motif))).map(({ id, pic, t, f30, f60, ctx, motif }) =>
-    f60 != null ? { id, pic, t, f30, f60, ctx } : MOTIFS_PIC_FIABLE.includes(motif) ? { id, pic, t, ctx, motif } : { id, ctx, motif });
+  // pas fiable). Ni plusieurs séries, ni FC absente : rien à dire. f0 et t0
+  // (FC avant la série) s'ajoutent quand ils sont mesurés, même sans récupération.
+  const recup = lignes.filter((l) => l.f60 != null || l.f0 != null || (l.motif && !MOTIFS_MUETS.includes(l.motif))).map(({ id, pic, t, f30, f60, ctx, motif, f0, t0 }) => {
+    const e = f60 != null ? { id, pic, t, f30, f60, ctx } : motif && !MOTIFS_MUETS.includes(motif) ? (MOTIFS_PIC_FIABLE.includes(motif) ? { id, pic, t, ctx, motif } : { id, ctx, motif }) : { id, ctx };
+    return f0 != null ? { ...e, f0, t0 } : e;
+  });
   const complet = smp.some((x) => x.ms >= fin + RECUP.apres + 60000 + RECUP.tol);
   return { recup, lignes, complet };
 };
@@ -388,16 +419,16 @@ export const recupDefinitive = (res, date, aujourdhui, echec) =>
   !!res && !echec && (res.complet || lendemain(lendemain(date)) <= aujourdhui);
 // Colonnes FC d'une saisie pour l'export par série : pic de bloc (ancien
 // calcul), pic de fin d'effort et son délai, FC à +30/+60 s, baisses
-// (pic − FC, négatives quand la FC est remontée) et contexte. Vides quand
-// rien n'est mesuré, jamais zéro.
-export const COLONNES_FC_SERIE = ["fc_pic_bloc", "fc_pic_fin", "fc_tpic_fin_s", "fc30_fin", "fc60_fin", "drop30", "drop60", "fc_contexte"];
+// (pic − FC, négatives quand la FC est remontée), contexte, FC avant la série
+// (creux de repos) et son délai. Vides quand rien n'est mesuré, jamais zéro.
+export const COLONNES_FC_SERIE = ["fc_pic_bloc", "fc_pic_fin", "fc_tpic_fin_s", "fc30_fin", "fc60_fin", "drop30", "drop60", "fc_contexte", "fc_avant", "fc_avant_t_s"];
 export const fcSerieExport = (durations, s) => {
   const m = (durations || []).find((x) => x.date === s.date) || {};
   const solo = s.sets.length === 1;
   const bloc = solo ? (m.pics || []).find((p) => p.id === s.id)?.pic : null;
   const r = solo ? (m.recup || []).find((p) => p.id === s.id) : null;
   const v = (x) => (x == null ? "" : x);
-  return [v(bloc), v(r?.pic), v(r?.t), v(r?.f30), v(r?.f60), r && r.f30 != null ? r.pic - r.f30 : "", r && r.f60 != null ? r.pic - r.f60 : "", v(r?.ctx)];
+  return [v(bloc), v(r?.pic), v(r?.t), v(r?.f30), v(r?.f60), r && r.f30 != null ? r.pic - r.f30 : "", r && r.f60 != null ? r.pic - r.f60 : "", v(r?.ctx), v(r?.f0), v(r?.t0)];
 };
 export const weightFor = (weights, date) => {
   const w = [...weights].sort((a, b) => a.date.localeCompare(b.date));
@@ -703,4 +734,189 @@ export const exportDerive = (data) => {
   const cols = Object.keys(rows[0]);
   const cell = (v) => { const t = String(v ?? ""); return /[;"\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t; };
   return [cols.join(";"), ...rows.map((r) => cols.map((c) => cell(r[c])).join(";"))].join("\n");
+};
+
+// ---- Analyse longitudinale, V1 descriptive ----------------------------------
+// Rien ici ne prédit, ne note ni ne recommande : des tables jointes (série, jour,
+// exercice) et des associations avec leur effectif et leur incertitude. Aucune
+// valeur absente n'est imputée : une mesure manquante reste null. Les nuits se
+// joignent par la date (le relevé du matin décrit la nuit qui vient de finir) ;
+// un exercice avec élastique est une série d'observations à part ; les séries
+// « test » sont écartées des résumés de performance et de récupération.
+export const ANALYSE_VERSION = 1;
+export const EFFECTIF_UTILE = 40; // nuits jumelées à des séances avant de juger une association
+export const ANALYSE_AVERTISSEMENTS = [
+  "Associations descriptives : ni causalité, ni recommandation.",
+  "Les charges et les décisions sont fixées par le coach à partir des RPE et de la nuit : la performance n'est pas indépendante de la nuit.",
+  "La récupération n'est mesurée que sur les séries mesurables ; le contexte (même exercice, transition, fin de séance) ne s'agrège pas.",
+  "FC avant la série = creux de repos, pas la FC exacte au début de l'effort.",
+  "Six associations sont calculées en parallèle : avec un risque de 5 % chacune, l'une d'elles peut ressortir par hasard (environ 26 %). En dessous de 40 jours jumelés, ne rien en conclure.",
+];
+const r1 = (x, n = 1) => (x == null || !Number.isFinite(x) ? null : Math.round(x * 10 ** n) / 10 ** n);
+const moy = (v) => (v.length ? v.reduce((a, b) => a + b, 0) / v.length : null);
+const med = (v) => (v.length ? mediane(v) : null);
+const num_ = (x) => (typeof x === "number" && Number.isFinite(x) ? x : null);
+
+// Nuit du matin d'une date : statut et mesures. `complète` : sommeil et VFC.
+export const nuitJour = (daily, date) => {
+  const n = (daily || []).find((d) => d.date === date);
+  if (!n) return { statut: "absente" };
+  if (n.n === undefined) return { statut: "souche" }; // repas ou décision seuls, pas de relevé résumé
+  const sommeil = n.dodo > 0, vfc = n.vfc > 0;
+  const statut = sommeil && vfc ? "complète" : sommeil ? "sans VFC" : vfc ? "sans sommeil" : n.n > 0 ? "partielle" : "vide";
+  return { statut, sommeilH: sommeil ? r1(n.dodo / 60, 2) : null, vfc: vfc ? n.vfc : null, vfcN: n.vfcN ?? null, fcMin: n.min > 0 ? n.min : null, fcMoy: n.moy > 0 ? n.moy : null, tempEcart: ecartTemp(daily, date) };
+};
+
+// Une ligne par saisie horodatée à une série. La récupération vient de
+// durations[].recup (jamais recalculée ici) : drop = pic − FC à +30/+60 s,
+// amplitude = pic − FC avant, retour60 = FC à +60 s − FC avant.
+export const tableSeries = (data) => {
+  const dur = new Map((data.durations || []).map((d) => [d.date, d]));
+  const rangs = {};
+  return data.sessions.filter((s) => s.at && s.sets.length === 1).sort((a, b) => a.at - b.at).map((s) => {
+    const m = dur.get(s.date) || {};
+    const r = (m.recup || []).find((x) => x.id === s.id) || null;
+    const k = `${s.date}|${s.exercise}|${s.elastique ? 1 : 0}`;
+    rangs[k] = (rangs[k] || 0) + 1;
+    const pic = num_(r?.pic), f30 = num_(r?.f30), f60 = num_(r?.f60), f0 = num_(r?.f0);
+    return {
+      id: s.id, date: s.date, exercise: s.exercise, elastique: !!s.elastique, test: !!s.test, kg: s.sets[0].kg, reps: s.sets[0].reps,
+      rpe: s.rpe > 0 ? s.rpe : null, rpeAuto: !!s.rpeAuto, rang: rangs[k], ctx: r?.ctx ?? null, mesuree: f60 !== null, motif: r?.motif ?? null,
+      pic, t: num_(r?.t), f30, f60, f0, t0: num_(r?.t0),
+      drop30: pic !== null && f30 !== null ? pic - f30 : null, drop60: pic !== null && f60 !== null ? pic - f60 : null,
+      amplitude: pic !== null && f0 !== null ? pic - f0 : null, retour60: f60 !== null && f0 !== null ? f60 - f0 : null,
+      versionRecup: m.recupV ?? null,
+    };
+  });
+};
+const exKey = (x) => `${x.exercise}|${x.elastique ? 1 : 0}`;
+// Écart de chaque série mesurée (même exercice, hors test) à la médiane de son
+// propre exercice et de son état d'élastique : la comparaison se fait avec
+// soi-même, pas entre exercices (la baisse médiane va de 11 à 25 bpm selon l'exercice).
+const ecartsPropres = (series) => {
+  const g = {};
+  series.filter((x) => x.drop60 !== null && x.ctx === "meme_exercice" && !x.test).forEach((x) => (g[exKey(x)] ||= []).push(x.drop60));
+  const m = Object.fromEntries(Object.entries(g).map(([k, v]) => [k, mediane(v)]));
+  return (x) => (x.drop60 !== null && x.ctx === "meme_exercice" && !x.test && m[exKey(x)] !== undefined ? x.drop60 - m[exKey(x)] : null);
+};
+const datesAnalysees = (data) => [...new Set(data.sessions.filter((s) => s.at || s.rpe > 0).map((s) => s.date))].sort();
+
+// Une ligne par jour de séance.
+export const tableJours = (data) => {
+  const series = tableSeries(data), ecart = ecartsPropres(series);
+  return datesAnalysees(data).map((date) => {
+    const ss = data.sessions.filter((s) => s.date === date);
+    const dd = (data.daily || []).find((d) => d.date === date) || {};
+    const sj = series.filter((x) => x.date === date && !x.test);
+    const mes = sj.filter((x) => x.drop60 !== null && x.ctx === "meme_exercice");
+    const ec = sj.map(ecart).filter((x) => x !== null);
+    const rpes = ss.filter((s) => s.rpe > 0 && !s.rpeAuto && !s.test).map((s) => s.rpe);
+    return {
+      date, groupes: [...new Set(ss.map((s) => s.group).filter(Boolean))].join("+"),
+      decision: dd.decision?.d || null, decisionPar: dd.decision?.par || null,
+      planPrevues: dd.plan?.prevues ?? null, planFaites: dd.plan?.faites ?? null, planConforme: dd.plan?.conforme ?? null,
+      nuit: nuitJour(data.daily, date),
+      series: ss.reduce((a, s) => a + s.sets.length, 0), seriesHorodatees: series.filter((x) => x.date === date).length, seriesMesurees: sj.filter((x) => x.mesuree).length,
+      rpeMoy: r1(moy(rpes), 2), rpeAuto: ss.filter((s) => s.rpeAuto).length,
+      tonnage: Math.round(ss.reduce((a, s) => a + s.sets.reduce((b, x) => b + x.kg * x.reps, 0), 0)),
+      recupMed: med(mes.map((x) => x.drop60)), recupNb: mes.length,
+      recupEcart: ec.length >= 2 ? r1(moy(ec), 2) : null,
+      fcAvantMed: med(sj.map((x) => x.f0).filter((x) => x !== null)),
+      versionRecup: series.filter((x) => x.date === date).every((x) => x.versionRecup === RECUP_VERSION) && series.some((x) => x.date === date),
+    };
+  });
+};
+
+// Une entrée par exercice (et état d'élastique) : séances, puis paires de
+// séances consécutives à charge médiane égale (le seul cas où répétitions et RPE
+// se comparent sans passer par l'e1RM). Les séries test sont écartées.
+export const tableExercices = (data) => {
+  const series = tableSeries(data), ecart = ecartsPropres(series);
+  const dates = new Set(datesAnalysees(data));
+  const g = {};
+  data.sessions.filter((s) => dates.has(s.date) && !s.test).forEach((s) => ((g[`${s.exercise}|${s.elastique ? 1 : 0}`] ||= { exercise: s.exercise, elastique: !!s.elastique, j: {} }).j[s.date] ||= []).push(s));
+  return Object.values(g).map(({ exercise, elastique, j }) => {
+    const seances = Object.keys(j).sort().map((date) => {
+      const ss = j[date], sets = ss.flatMap((s) => s.sets);
+      const sx = series.filter((x) => x.date === date && x.exercise === exercise && x.elastique === elastique && !x.test);
+      const dr = sx.filter((x) => x.drop60 !== null && x.ctx === "meme_exercice");
+      const rp = ss.filter((s) => s.rpe > 0 && !s.rpeAuto).map((s) => s.rpe);
+      return {
+        date, kg: med(sets.map((x) => x.kg)), reps: med(sets.map((x) => x.reps)), e1rm: r1(Math.max(...sets.map((x) => e1rm(x.kg, x.reps)))),
+        rpeMoy: r1(moy(rp), 2), series: sets.length, mesures: dr.length, recupMed: med(dr.map((x) => x.drop60)),
+        recupEcart: dr.length ? r1(moy(dr.map(ecart)), 2) : null, fcAvantMed: med(sx.map((x) => x.f0).filter((x) => x !== null)),
+      };
+    });
+    const paires = seances.map((s, i) => (i && s.kg === seances[i - 1].kg ? { date: s.date, kg: s.kg, dReps: s.reps - seances[i - 1].reps, dRpe: s.rpeMoy !== null && seances[i - 1].rpeMoy !== null ? r1(s.rpeMoy - seances[i - 1].rpeMoy, 2) : null } : null)).filter(Boolean);
+    return { exercise, elastique, seances, paires };
+  }).sort((a, b) => b.seances.length - a.seances.length || a.exercise.localeCompare(b.exercise));
+};
+
+// ---- Statistiques : Spearman, intervalle par rééchantillonnage, puissance ----
+const rangsMoyens = (v) => {
+  const o = v.map((x, i) => [x, i]).sort((a, b) => a[0] - b[0]), r = Array(v.length);
+  for (let i = 0; i < o.length;) { let j = i; while (j + 1 < o.length && o[j + 1][0] === o[i][0]) j++; for (let k = i; k <= j; k++) r[o[k][1]] = (i + j) / 2 + 1; i = j + 1; }
+  return r;
+};
+const pearson = (a, b) => {
+  const ma = moy(a), mb = moy(b); let sab = 0, saa = 0, sbb = 0;
+  a.forEach((x, i) => { sab += (x - ma) * (b[i] - mb); saa += (x - ma) ** 2; sbb += (b[i] - mb) ** 2; });
+  return saa > 0 && sbb > 0 ? sab / Math.sqrt(saa * sbb) : null;
+};
+export const spearman = (a, b) => (a.length < 3 || a.length !== b.length ? null : pearson(rangsMoyens(a), rangsMoyens(b)));
+// Plus petite corrélation détectable à 80 % de puissance, seuil de 5 % (Fisher).
+export const rhoMin = (n) => (n > 3 ? Math.tanh(2.8 / Math.sqrt(n - 3)) : null);
+// Générateur à graine (mulberry32) : mêmes données, même intervalle.
+const alea = (graine) => () => { graine = (graine + 0x6d2b79f5) | 0; let t = Math.imul(graine ^ (graine >>> 15), 1 | graine); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+export const icSpearman = (a, b, { graine = 1, B = 2000 } = {}) => {
+  if (a.length < 5) return null;
+  const rnd = alea(graine), n = a.length, rs = [];
+  for (let k = 0; k < B; k++) { const ix = Array.from({ length: n }, () => Math.floor(rnd() * n)); const r = spearman(ix.map((i) => a[i]), ix.map((i) => b[i])); if (r !== null) rs.push(r); }
+  if (rs.length < B / 2) return null;
+  rs.sort((x, y) => x - y);
+  return [rs[Math.floor(0.025 * rs.length)], rs[Math.min(rs.length - 1, Math.floor(0.975 * rs.length))]];
+};
+export const VARIABLES_NUIT = { sommeilH: "sommeil (h)", vfc: "VFC (ms)", fcMin: "FC min de nuit (bpm)" };
+export const RESULTATS_SEANCE = { recupEcart: "récupération à 60 s (écart à l'exercice)", rpeMoy: "RPE moyen" };
+// Une variable de la nuit contre un résultat de la séance du même jour.
+export const nuitContreSeance = (jours, vn, res, opts) => {
+  const pts = jours.filter((j) => j.nuit?.[vn] != null && j[res] != null).map((j) => ({ date: j.date, x: j.nuit[vn], y: j[res] }));
+  const x = pts.map((p) => p.x), y = pts.map((p) => p.y);
+  return { variable: vn, resultat: res, n: pts.length, rho: r1(spearman(x, y), 2), ic: (() => { const c = icSpearman(x, y, opts); return c ? c.map((v) => r1(v, 2)) : null; })(), rhoMin: r1(rhoMin(pts.length), 2), suffisant: pts.length >= EFFECTIF_UTILE, points: pts };
+};
+
+// Ce que les données permettent aujourd'hui.
+export const couverture = (data) => {
+  const series = tableSeries(data), jours = tableJours(data);
+  const parMotif = {}, parCtx = {};
+  series.filter((x) => !x.mesuree).forEach((x) => { const k = x.motif || (x.f60 === null && x.ctx === null ? "FC absente" : "?"); parMotif[k] = (parMotif[k] || 0) + 1; });
+  series.filter((x) => x.mesuree).forEach((x) => (parCtx[x.ctx] = (parCtx[x.ctx] || 0) + 1));
+  const dh = [...new Set(series.map((x) => x.date))];
+  return {
+    jours: jours.length,
+    nuits: { complete: jours.filter((j) => j.nuit.statut === "complète").length, jours: jours.length, parStatut: jours.reduce((m, j) => ((m[j.nuit.statut] = (m[j.nuit.statut] || 0) + 1), m), {}) },
+    series: { horodatees: series.length, mesurees: series.filter((x) => x.mesuree).length, nonMesurees: parMotif, mesureesParContexte: parCtx, fcAvantMesuree: series.filter((x) => x.f0 !== null).length, tests: series.filter((x) => x.test).length },
+    recalcul: { dates: dh.length, aJour: dh.filter((d) => series.filter((x) => x.date === d).every((x) => x.versionRecup === RECUP_VERSION)).length },
+    decisions: jours.filter((j) => j.decision).length,
+    exercicesAuMoins5Seances: tableExercices(data).filter((e) => e.seances.length >= 5).length,
+  };
+};
+const COMBOS = Object.keys(VARIABLES_NUIT).flatMap((v) => Object.keys(RESULTATS_SEANCE).map((r) => [v, r]));
+// Synthèse à remettre au coach : couverture, jours, exercices, associations (sans les points).
+export const syntheseAnalyse = (data, genere = null) => {
+  const jours = tableJours(data);
+  return {
+    version: ANALYSE_VERSION, recupVersion: RECUP_VERSION, genere, avertissements: ANALYSE_AVERTISSEMENTS,
+    couverture: couverture(data), jours,
+    exercices: tableExercices(data).map((e) => ({ exercise: e.exercise, elastique: e.elastique, seances: e.seances, pairesChargeEgale: e.paires })),
+    nuitContreSeance: COMBOS.map(([v, r]) => { const c = nuitContreSeance(jours, v, r); delete c.points; return c; }),
+  };
+};
+export const COLONNES_ANALYSE_JOURS = ["date", "groupes", "decision", "decision_par", "plan_prevues", "plan_faites", "plan_conforme", "nuit_statut", "sommeil_h", "vfc", "vfc_n", "fc_min_nuit", "series", "series_horodatees", "series_mesurees", "rpe_moy", "rpe_auto", "tonnage", "recup60_mediane", "recup60_nb", "recup60_ecart_exercice", "fc_avant_mediane", "recalcul_a_jour"];
+// CSV « ; » d'un jour par ligne, séparé du tableau journalier du coach (exportDerive).
+export const exportAnalyseJours = (data) => {
+  const v = (x) => (x == null ? "" : x);
+  const cell = (x) => { const t = String(x ?? ""); return /[;"\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t; };
+  const rows = tableJours(data).map((j) => [j.date, j.groupes, v(j.decision), v(j.decisionPar), v(j.planPrevues), v(j.planFaites), j.planConforme === null ? "" : j.planConforme ? 1 : 0, j.nuit.statut, v(j.nuit.sommeilH), v(j.nuit.vfc), v(j.nuit.vfcN), v(j.nuit.fcMin), j.series, j.seriesHorodatees, j.seriesMesurees, v(j.rpeMoy), j.rpeAuto, j.tonnage, v(j.recupMed), j.recupNb, v(j.recupEcart), v(j.fcAvantMed), j.versionRecup ? 1 : 0]);
+  return [COLONNES_ANALYSE_JOURS.join(";"), ...rows.map((r) => r.map(cell).join(";"))].join("\n");
 };

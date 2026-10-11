@@ -44,8 +44,12 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
   (`durations[]` : `hr`, `hrMax`, `ex`, `pics`, `fc`), `sessions[].rpeAuto`,
   et les colonnes de `exportDerive`.
 - Récupération après série (v49) : `durations[].recup` (`id`, `pic`, `t`,
-  `f30`, `f60`, `ctx` = `meme_exercice` | `transition` | `fin_seance`) et
-  `durations[].recupV` (`RECUP_VERSION`, 2). Une série non mesurable y est
+  `f30`, `f60`, `ctx` = `meme_exercice` | `transition` | `fin_seance`, et
+  depuis la version 3 `f0`/`t0` : FC avant la série, creux de repos, et son
+  délai avant la validation) et `durations[].recupV` (`RECUP_VERSION`, 3).
+  `f0` est la FC la plus basse (moyenne glissante sur 3 échantillons) avant
+  l'effort, pas la FC exacte à son début ; elle peut figurer sans mesure de
+  récupération. Une série non mesurable y est
   aussi, sans `f60`, avec son `motif` (et `pic`/`t` seulement quand le
   motif n'en met pas le sommet en cause) ; une entrée sans `f60` n'est pas
   une mesure. Les baisses (pic − f30/f60) se recalculent, elles peuvent être
@@ -97,6 +101,12 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
   `poserPlanFait`, `decisionAEcrire`, `poserDecision`, `manquesDuPlan`.
 - Récupération : `recupSerie`, `recuperationSeance`, `recupDefinitive`
   (`RECUP`, `RECUP_VERSION`), `fcSerieExport` (colonnes du CSV tableur).
+- Analyse longitudinale (V1 descriptive, onglet Courbes → Analyse) :
+  `fcAvantSerie`, `nuitJour`, `tableSeries`, `tableJours`, `tableExercices`,
+  `couverture`, `spearman`, `icSpearman` (graine fixe), `rhoMin`,
+  `nuitContreSeance`, `syntheseAnalyse`, `exportAnalyseJours`. Rien n'y est
+  stocké : tout se recalcule depuis `sessions[]`, `daily[]`, `durations[]`.
+  Aucune valeur absente n'est imputée, aucun score, aucune recommandation.
 - Export : `ligneJour`, `exportDerive` (CSV `;`).
 
 `src/githubSync.js` :
