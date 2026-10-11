@@ -5890,6 +5890,22 @@
    "test": true,
    "note": "",
    "at": 1791708368651
+  },
+  {
+   "id": "ricd6mb9",
+   "date": "2026-10-11",
+   "group": "Épaules",
+   "exercise": "Haltères latérales",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 15
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1791708775744
   }
  ],
  "treadmill": [
