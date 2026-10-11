@@ -5952,6 +5952,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1791709543881
+  },
+  {
+   "id": "nhfo8n91",
+   "date": "2026-10-11",
+   "group": "Épaules",
+   "exercise": "Haltères postérieur",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 25
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1791709831304
   }
  ],
  "treadmill": [
@@ -14310,6 +14326,11 @@
     "regle": "R1 à deux signaux : sommeil sous 6 h 30 (5 h 44) ET VFC nettement sous la médiane récente (37,7 contre 47, soit −19 %). R2 non déclenchée (plancher 53 < 58).",
     "motif": "Deux nuits courtes d'affilée, VFC basse les deux fois, après un bloc Dos + Jambes. Épaules en version allégée : 8 séries, aucune charge ne monte. Le plancher reste à 53 : pas d'alerte, une séance utile sans pousser.",
     "par": "coach"
+   },
+   "plan": {
+    "prevues": 8,
+    "faites": 11,
+    "conforme": false
    }
   }
  ],
