@@ -10269,6 +10269,11 @@
      "ctx": "meme_exercice"
     },
     {
+     "id": "as8era8d",
+     "ctx": "transition",
+     "motif": "pic non établi"
+    },
+    {
      "id": "9bpyjmq4",
      "pic": 120,
      "t": -7,
@@ -10291,6 +10296,11 @@
      "f30": 109,
      "f60": 108,
      "ctx": "transition"
+    },
+    {
+     "id": "ublztv30",
+     "ctx": "meme_exercice",
+     "motif": "pic au bord de la fenêtre"
     },
     {
      "id": "3hv5mrz2",
@@ -10333,7 +10343,7 @@
      "ctx": "fin_seance"
     }
    ],
-   "recupV": 1
+   "recupV": 2
   },
   {
    "date": "2026-09-25",
@@ -11220,7 +11230,7 @@
      "ctx": "fin_seance"
     }
    ],
-   "recupV": 1
+   "recupV": 2
   },
   {
    "date": "2026-09-30",
@@ -11513,9 +11523,16 @@
      "f30": 113,
      "f60": 100,
      "ctx": "meme_exercice"
+    },
+    {
+     "id": "sh9sz3d6",
+     "pic": 127,
+     "t": -4,
+     "ctx": "fin_seance",
+     "motif": "pas de mesure à +60 s"
     }
    ],
-   "recupV": 1
+   "recupV": 2
   },
   {
    "date": "2026-10-01",
@@ -11755,12 +11772,24 @@
    },
    "recup": [
     {
+     "id": "zpaf4j44",
+     "ctx": "meme_exercice",
+     "motif": "trou de mesure"
+    },
+    {
      "id": "wx15icp0",
      "pic": 131,
      "t": -4,
      "f30": 116,
      "f60": 111,
      "ctx": "meme_exercice"
+    },
+    {
+     "id": "u79xvwm0",
+     "pic": 102,
+     "t": -41,
+     "ctx": "transition",
+     "motif": "pas de mesure à +60 s"
     },
     {
      "id": "q5vbizgk",
@@ -11843,7 +11872,7 @@
      "ctx": "fin_seance"
     }
    ],
-   "recupV": 1
+   "recupV": 2
   },
   {
    "date": "2026-10-03",
