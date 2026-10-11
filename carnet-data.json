@@ -5968,6 +5968,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1791709831304
+  },
+  {
+   "id": "gxpp3wtz",
+   "date": "2026-10-11",
+   "group": "Épaules",
+   "exercise": "Haltères postérieur",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 30
+    }
+   ],
+   "rpe": 9,
+   "test": true,
+   "note": "",
+   "at": 1791710156011
   }
  ],
  "treadmill": [
@@ -14329,7 +14345,7 @@
    },
    "plan": {
     "prevues": 8,
-    "faites": 11,
+    "faites": 12,
     "conforme": false
    }
   }
