@@ -45,8 +45,10 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
   et les colonnes de `exportDerive`.
 - Récupération après série (v49) : `durations[].recup` (`id`, `pic`, `t`,
   `f30`, `f60`, `ctx` = `meme_exercice` | `transition` | `fin_seance`) et
-  `durations[].recupV` (`RECUP_VERSION`). Seules les séries mesurables y
-  figurent ; les baisses (pic − f30/f60) se recalculent, elles peuvent être
+  `durations[].recupV` (`RECUP_VERSION`, 2). Une série non mesurable y est
+  aussi, sans `f60`, avec son `motif` (et `pic`/`t` seulement quand le
+  motif n'en met pas le sommet en cause) ; une entrée sans `f60` n'est pas
+  une mesure. Les baisses (pic − f30/f60) se recalculent, elles peuvent être
   négatives. Ce `pic` est le pic de fin d'effort : il diffère de `pics`
   (maximum du bloc depuis la validation précédente, souvent la queue du pic
   de la série d'avant), laissé inchangé. Ne pas agréger les contextes

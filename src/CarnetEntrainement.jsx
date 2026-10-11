@@ -1211,7 +1211,7 @@ function Seance({ data, update, notify, celebrate, plan }) {
                       <div className="text-xs" style={{ color: T.text, fontFamily: mono }}>
                         <span style={{ color: T.cyan }}>{pad(j + 1)}</span>{r.test && <span style={{ color: T.violet }}> T</span>}{r.elastique && <span style={{ color: T.magenta }}> E</span>}  {r.kg}×{r.reps}{r.rpe ? <span style={{ color: T.mute }}> · RPE {r.rpe}{r.rpeAuto ? "*" : ""}</span> : ""}
                         {r.rec
-                          ? <span style={{ color: T.danger }}> · fin ↑{r.rec.pic} <span style={{ color: T.cyan }}>{fmtEcart(r.rec.f60 - r.rec.pic)}/60 s</span>{r.rec.ctx !== "meme_exercice" && <span style={{ color: T.mute }}> · {r.rec.ctx === "transition" ? "transition" : "fin de séance"}</span>}</span>
+                          ? <span style={{ color: T.danger }}> · fin{r.rec.pic != null && <> ↑{r.rec.pic}</>} {r.rec.f60 != null ? <span style={{ color: T.cyan }}>{fmtEcart(r.rec.f60 - r.rec.pic)}/60 s</span> : <span style={{ color: T.mute }}>{r.rec.motif}</span>}{r.rec.ctx !== "meme_exercice" && <span style={{ color: T.mute }}> · {r.rec.ctx === "transition" ? "transition" : "fin de séance"}</span>}</span>
                           : r.pic ? <span style={{ color: T.danger }}> · bloc ↑{r.pic}</span> : ""}
                         {r.note && <span className="italic" style={{ color: T.amber }}>  {r.note}</span>}
                       </div>

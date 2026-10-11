@@ -13,6 +13,12 @@ const reel = () => {
   return { data, samples, r: recuperationSeance(samples, data.sessions, data.treadmill, "2026-10-09") };
 };
 const ligne = (r, id) => r.lignes.find((l) => l.id === id);
+// 11/10/2026 : deux fichiers fc/ qui se recouvrent (1085 échantillons uniques).
+const reel11 = () => {
+  const data = lire("carnet-data-2026-10-11.json");
+  const samples = [...echantillons(lire("fc/2026-10-11-1141.json")), ...echantillons(lire("fc/2026-10-11-1142.json"))].sort((a, b) => a.ms - b.ms);
+  return recuperationSeance(samples, data.sessions, data.treadmill, "2026-10-11");
+};
 
 test("récup réelle : pic après la validation (Leg press, +24 s), distinct du pic de bloc", () => {
   const { data, r } = reel();
@@ -37,8 +43,10 @@ test("récup réelle : transition d'exercice gardée avec son contexte, mesure s
 test("récup réelle : trou de mesure → null, avec son motif", () => {
   const { r } = reel();
   // Hack squat 30×10 : pic 125 à 11:15:27, puis aucun échantillon de 11:15:36 à 11:16:12 (36 s)
-  assert.equal(r.recup.find((x) => x.id === "0jmvdt75"), undefined);
+  assert.equal(r.recup.find((x) => x.id === "0jmvdt75").f60, undefined);
   assert.deepEqual(ligne(r, "0jmvdt75"), { id: "0jmvdt75", ctx: "meme_exercice", pic: 125, t: -8, motif: "trou de mesure" });
+  // conservée avec son motif, sans pic : un trou peut cacher le sommet
+  assert.deepEqual(r.recup.find((x) => x.id === "0jmvdt75"), { id: "0jmvdt75", ctx: "meme_exercice", motif: "trou de mesure" });
 });
 
 test("récup réelle : dernière série sans FC après elle → null, séance non complète", () => {
@@ -47,6 +55,22 @@ test("récup réelle : dernière série sans FC après elle → null, séance no
   assert.equal(ligne(r, "gszej396").motif, "pas de mesure à +60 s");
   assert.equal(ligne(r, "gszej396").ctx, "fin_seance");
   assert.equal(r.complet, false);
+});
+
+test("récup réelle 11/10 : trou de 27 s autour de +90 s → null expliqué, pic conservé", () => {
+  const r = reel11();
+  // Shoulder press 80×10 (10:22:03.347) : 111 bpm à 10:22:33 (+30 s) ; la FC à pic + 60 s
+  // (+90 s) n'existe pas : aucun échantillon entre +76,7 s et +103,7 s
+  assert.deepEqual(ligne(r, "oslqavsj"), { id: "oslqavsj", ctx: "meme_exercice", pic: 111, t: 30, motif: "pas de mesure à +60 s" });
+  assert.deepEqual(r.recup.find((x) => x.id === "oslqavsj"), { id: "oslqavsj", pic: 111, t: 30, ctx: "meme_exercice", motif: "pas de mesure à +60 s" });
+});
+
+test("récup réelle 11/10 : plateau de 1 bpm après le pic, mesure gardée (série test)", () => {
+  const r = reel11();
+  // Shoulder press 100×4 (10:31:01.994) : 112 à +34 s, 113 à +46 s (+1 bpm, hors fenêtre de pic) ;
+  // pic prolongé à 113 ; +30 s = +76 s : 105 (+72 s) et 106 (+78 s) → 105,5 arrondi à 106 ;
+  // +60 s = +106 s : 97 (+105 s) et 95 (+109 s) → 96 ; suivante : Upper Back
+  assert.deepEqual(r.recup.find((x) => x.id === "fqnvvd7e"), { id: "fqnvvd7e", pic: 113, t: 46, f30: 106, f60: 96, ctx: "transition" });
 });
 
 test("récup réelle : les pics de bloc existants ne changent pas", () => {
@@ -93,6 +117,14 @@ test("synthèse : pics multiples", () => {
   assert.deepEqual(recupSerie(rebond, serie("a", AT), null, null), { ctx: "fin_seance", pic: 130, t: -10, f30: 118, f60: 131 });
 });
 
+test("synthèse : plateau d'1 bpm après le pic prolonge le pic ; plus haut, pic non établi", () => {
+  // pic 130 à +20 s ; 131 à +50 s (hors fenêtre de pic, +1 bpm) → pic 131 à +50 s ;
+  // +80 s : 108, 106, 104 → 106 ; +110 s : 96, 95, 95 → 95
+  assert.deepEqual(recupSerie(avec(profil(20), 50, 131), serie("a", AT), null, null), { ctx: "fin_seance", pic: 131, t: 50, f30: 106, f60: 95 });
+  // 132 (+2 bpm) : la FC montait encore
+  assert.deepEqual(recupSerie(avec(profil(20), 50, 132), serie("a", AT), null, null), { ctx: "fin_seance", pic: 130, t: 20, motif: "pic non établi" });
+});
+
 test("synthèse : série suivante trop proche", () => {
   // pic à −10 s, +60 s = at+50 s ; la suivante validée à +100 s commence vers +40 s
   assert.equal(recupSerie(profil(-10), serie("a", AT), null, serie("b", AT + 100000)).motif, "série suivante trop proche");
@@ -130,6 +162,8 @@ test("synthèse : séance — dernière série, doublons, entrées anciennes", (
   const smp = [...profil(-10), ...profil(-10, AT + 300000)].sort((a, b) => a.ms - b.ms);
   const r = recuperationSeance(smp, sessions, [], D);
   assert.deepEqual(r.recup.map((x) => [x.id, x.ctx]), [["a", "meme_exercice"], ["b", "fin_seance"]]);
+  // FC absente de la séance entière : null ; FC absente d'une série : rien de conservé
+  assert.deepEqual(recuperationSeance(smp, [serie("z", AT + 9_000_000)], [], D), null);
   assert.equal(r.complet, true); // FC jusqu'à +150 s après la dernière validation
   assert.equal(r.lignes.length, 2); // l'entrée sans heure n'a pas de ligne
   // fichiers redéposés : chaque échantillon en double, même résultat
@@ -162,4 +196,8 @@ test("export par série : colonnes FC distinctes, vides plutôt que zéro", () =
   assert.deepEqual(fcSerieExport(durations, serie("b", AT)), [110, "", "", "", "", "", "", ""]);
   assert.deepEqual(fcSerieExport(durations, serie("c", AT)), ["", 123, 21, "", 125, "", -2, "transition"]);
   assert.deepEqual(fcSerieExport(durations, serie("a", AT, "X", [{ kg: 1, reps: 1 }, { kg: 1, reps: 1 }])), ["", "", "", "", "", "", "", ""]);
+  // série non mesurable : pic et délai si fiables, jamais de baisse
+  const nulle = [{ date: D, recup: [{ id: "n", pic: 111, t: 30, ctx: "meme_exercice", motif: "pas de mesure à +60 s" }, { id: "m", ctx: "transition", motif: "trou de mesure" }] }];
+  assert.deepEqual(fcSerieExport(nulle, serie("n", AT)), ["", 111, 30, "", "", "", "", "meme_exercice"]);
+  assert.deepEqual(fcSerieExport(nulle, serie("m", AT)), ["", "", "", "", "", "", "", "transition"]);
 });

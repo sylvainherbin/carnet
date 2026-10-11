@@ -309,13 +309,17 @@ export const resumeSeance = (samples, w, date) => {
 // - pas de trou de plus de 20 s de pic − 15 s à pic + 65 s ;
 // - la série suivante ne doit pas commencer dans la mesure : la FC remonte
 //   ~40 s avant sa validation, d'où pic + 60 s ≤ validation suivante − 60 s.
-// Un dépassement du pic dans les 30 s qui suivent veut dire que la FC
-// montait encore : pic non établi, null. Plus tard, c'est un rebond après une
-// vraie descente (déplacement, réglage) : la mesure est gardée, signée.
+// Un échantillon plus haut dans les 30 s qui suivent prolonge le pic s'il le
+// dépasse d'1 bpm au plus (plateau, résolution entière de la montre) ; de
+// plus, la FC montait encore : pic non établi, null. Plus tard, c'est un
+// rebond après une vraie descente (déplacement, réglage) : la mesure est
+// gardée, signée.
+// v2 : plateau d'1 bpm toléré (v1 : tout dépassement annulait la mesure) ;
+// les séries non mesurables sont conservées avec leur motif.
 // La validation suivante ne marque pas la fin du repos : on ne mesure rien
 // au-delà de +60 s.
-export const RECUP_VERSION = 1;
-export const RECUP = { avant: 60000, apres: 45000, queue: 45000, bord: 5000, tol: 5000, trou: 20000, marge: 60000, saillie: 15, etabli: 30000 };
+export const RECUP_VERSION = 2;
+export const RECUP = { avant: 60000, apres: 45000, queue: 45000, bord: 5000, tol: 5000, trou: 20000, marge: 60000, saillie: 15, etabli: 30000, plateau: 1 };
 // Les fichiers fc/ redéposés se recouvrent : un échantillon par instant.
 const sansDoublon = (samples) => { const vus = new Set(); return samples.filter((x) => !vus.has(x.ms) && vus.add(x.ms)); };
 // Une série. `smp` : échantillons triés et dédoublonnés ; `taps` : [début, fin]
@@ -331,20 +335,30 @@ export const recupSerie = (smp, s, prev, next, taps = []) => {
   const fen = entre(debut, fin);
   if (fen.length < 4) return { ctx, motif: "FC absente" };
   const mx = Math.max(...fen.map((x) => x.bpm));
-  const pk = fen.filter((x) => x.bpm === mx).pop();
+  let pk = fen.filter((x) => x.bpm === mx).pop();
+  if (pk.ms - debut < P.bord || fin - pk.ms < P.bord) return { ctx, pic: Math.round(pk.bpm), t: Math.round((pk.ms - s.at) / 1000), motif: "pic au bord de la fenêtre" };
+  // Plateau : un échantillon plus haut dans les 30 s qui suivent, de P.plateau
+  // bpm au plus, prolonge le pic ; plus haut que ça, la FC montait encore.
+  for (;;) {
+    const plus = entre(pk.ms + 1, pk.ms + P.etabli).filter((x) => x.bpm > pk.bpm);
+    if (!plus.length) break;
+    const m2 = Math.max(...plus.map((x) => x.bpm));
+    if (m2 - pk.bpm > P.plateau) return { ctx, pic: Math.round(pk.bpm), t: Math.round((pk.ms - s.at) / 1000), motif: "pic non établi" };
+    pk = plus.filter((x) => x.bpm === m2).pop();
+  }
   const r = { ctx, pic: Math.round(pk.bpm), t: Math.round((pk.ms - s.at) / 1000) };
-  if (pk.ms - debut < P.bord || fin - pk.ms < P.bord) return { ...r, motif: "pic au bord de la fenêtre" };
   const k = smp.indexOf(pk), vois = [smp[k - 1], smp[k + 1]].filter(Boolean).map((x) => x.bpm);
   if (vois.length === 2 && pk.bpm - Math.max(...vois) >= P.saillie) return { ...r, motif: "pic isolé (artefact)" };
   const suite = entre(pk.ms - 15000, pk.ms + 60000 + P.tol);
   if (suite.slice(1).some((x, j) => x.ms - suite[j].ms > P.trou)) return { ...r, motif: "trou de mesure" };
   if (taps.some(([a, b]) => a < pk.ms + 60000 + P.tol && b > debut)) return { ...r, motif: "tapis" };
   if (next?.at && pk.ms + 60000 > next.at - P.marge) return { ...r, motif: "série suivante trop proche" };
-  if (entre(pk.ms + 1, pk.ms + P.etabli).some((x) => x.bpm > pk.bpm)) return { ...r, motif: "pic non établi" };
   const f60 = moy(pk.ms + 60000);
   if (f60 === null) return { ...r, motif: "pas de mesure à +60 s" };
   return { ...r, f30: moy(pk.ms + 30000), f60 };
 };
+const MOTIFS_MUETS = ["plusieurs séries ou sans heure", "FC absente"];
+const MOTIFS_PIC_FIABLE = ["pas de mesure à +60 s", "série suivante trop proche"];
 // Toutes les séries horodatées d'une date. null si aucune saisie horodatée ou
 // aucune FC dans la séance : rien n'est alors calculé, ni marqué. `complet` :
 // la FC couvre la récupération de la dernière série. `lignes` garde le motif
@@ -357,7 +371,12 @@ export const recuperationSeance = (samples, sessions, treadmill, date) => {
   if (!smp.some((x) => x.ms >= ss[0].at - RECUP.avant && x.ms <= fin)) return null;
   const taps = treadmill.filter((t) => t.date === date && t.at0 > 0 && t.min > 0).map((t) => [t.at0, t.at0 + t.min * 60000]);
   const lignes = ss.map((s, i) => ({ id: s.id, ...recupSerie(smp, s, ss[i - 1], ss[i + 1], taps) }));
-  const recup = lignes.filter((l) => l.f60 != null).map(({ id, pic, t, f30, f60, ctx }) => ({ id, pic, t, f30, f60, ctx }));
+  // Mesurées : { id, pic, t, f30, f60, ctx }. Non mesurables : { id, ctx, motif },
+  // avec pic et t quand le motif n'en remet pas le sommet en cause (un pic au
+  // bord de la fenêtre, isolé, non établi, près d'un trou ou d'une marche n'est
+  // pas fiable). Ni plusieurs séries, ni FC absente : rien à dire.
+  const recup = lignes.filter((l) => l.f60 != null || (l.motif && !MOTIFS_MUETS.includes(l.motif))).map(({ id, pic, t, f30, f60, ctx, motif }) =>
+    f60 != null ? { id, pic, t, f30, f60, ctx } : MOTIFS_PIC_FIABLE.includes(motif) ? { id, pic, t, ctx, motif } : { id, ctx, motif });
   const complet = smp.some((x) => x.ms >= fin + RECUP.apres + 60000 + RECUP.tol);
   return { recup, lignes, complet };
 };
@@ -378,7 +397,7 @@ export const fcSerieExport = (durations, s) => {
   const bloc = solo ? (m.pics || []).find((p) => p.id === s.id)?.pic : null;
   const r = solo ? (m.recup || []).find((p) => p.id === s.id) : null;
   const v = (x) => (x == null ? "" : x);
-  return [v(bloc), v(r?.pic), v(r?.t), v(r?.f30), v(r?.f60), r && r.f30 != null ? r.pic - r.f30 : "", r ? r.pic - r.f60 : "", v(r?.ctx)];
+  return [v(bloc), v(r?.pic), v(r?.t), v(r?.f30), v(r?.f60), r && r.f30 != null ? r.pic - r.f30 : "", r && r.f60 != null ? r.pic - r.f60 : "", v(r?.ctx)];
 };
 export const weightFor = (weights, date) => {
   const w = [...weights].sort((a, b) => a.date.localeCompare(b.date));
