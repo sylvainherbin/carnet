@@ -13413,7 +13413,8 @@
      "f60": 104,
      "ctx": "meme_exercice"
     }
-   ]
+   ],
+   "recupV": 1
   }
  ],
  "daily": [
@@ -14120,11 +14121,31 @@
    "respN": 34,
    "spo2": 95,
    "spo2Min": 93,
+   "temp": 35.12,
    "dodo": 326,
    "coucher": 1791595825000,
    "lever": 1791615713000,
-   "sha": "0f45cf6177a49faac823906036eeb584e7033aa5",
+   "sha": "31bddae5aa7fc5afa348e0d9f88d51cd068ed4dd",
    "repas": "19:57"
+  },
+  {
+   "date": "2026-10-11",
+   "v": 6,
+   "n": 80,
+   "min": 53,
+   "moy": 59,
+   "hMin": "07:28",
+   "vfc": 37.7,
+   "vfcN": 3,
+   "resp": 14.5,
+   "respN": 35,
+   "spo2": 95,
+   "spo2Min": 93,
+   "temp": 35.45,
+   "dodo": 344,
+   "coucher": 1791680355000,
+   "lever": 1791701419000,
+   "sha": "8c90bf3756828f18cac80eb29932053ceab18703"
   }
  ],
  "pas": {
