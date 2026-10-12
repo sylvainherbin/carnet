@@ -158,7 +158,7 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
 - Le déploiement passe par `scripts/deploy.sh vNN "message"`, qui incrémente
   `CACHE` dans `public/sw.js`, lance lint, tests et build, commit et pousse
   `main`, recopie `dist/` dans `gh-pages` sans supprimer d'assets, puis
-  vérifie en ligne. Dernière version déployée : **v51**.
+  vérifie en ligne. Dernière version déployée : **v52**.
 - Jamais de `--force`, jamais de suppression d'assets sur `gh-pages`.
 - Rien n'est déployé sans l'accord de Sylvain. Lui décrire ce qui change
   avant de committer, et lui rendre compte de ce qui est parti.
