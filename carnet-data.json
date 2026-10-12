@@ -6043,6 +6043,21 @@
    "rpe": 8,
    "note": "",
    "at": 1791796235270
+  },
+  {
+   "id": "hke48syo",
+   "date": "2026-10-12",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 8,
+     "kg": 180
+    }
+   ],
+   "rpe": 10,
+   "note": "",
+   "at": 1791796609030
   }
  ],
  "treadmill": [
