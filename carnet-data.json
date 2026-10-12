@@ -6134,6 +6134,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1791798063738
+  },
+  {
+   "id": "l9jjml8g",
+   "date": "2026-10-12",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 70
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1791798402076
   }
  ],
  "treadmill": [
