@@ -15440,7 +15440,13 @@
    "dodo": 432,
    "coucher": 1791764577000,
    "lever": 1791790765000,
-   "sha": "7dea608ae5cc57a429620667e8806b7f35559324"
+   "sha": "7dea608ae5cc57a429620667e8806b7f35559324",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée (7 h 12 > 6 h 30), R2 non déclenchée (plancher 55 < 58). VFC 13 % sous la médiane de 47 : sous le seuil de 15 %.",
+    "motif": "Nuit de plus de sept heures après deux nuits courtes. Les signaux FC sont un peu moins bons (plancher 55, moyenne 62), sans franchir de seuil. Séance Pecs complète à 16 séries plus deux séries de triceps à la poulie.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
