@@ -196,12 +196,18 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
   synthétiques, mais jamais arrivé : le relevé n'est déposé que le matin, et
   aucun segment de sommeil ne tombe l'après-midi dans `daily/`. On ne sait
   pas si Santé transmet les siestes. À surveiller si l'heure de dépôt change.
+- **Quota de lecture** : 60 requêtes par heure et par adresse IP sans jeton,
+  5 000 avec. Depuis la v52, `lecture()` (`githubSync.js`) envoie le jeton
+  enregistré sur l'appareil quand il existe, et retente sans jeton sur un 401.
+  Un réseau mobile partage son adresse entre abonnés : sans jeton, la synchro
+  y tombait en « hors ligne » (en fait un 403, désormais « limite de lectures
+  GitHub atteinte »). Appareil sans jeton : les chiffres ci-dessous valent
+  encore.
 - **Quota anonyme de 60 requêtes par heure** :
   - Une relecture coûte au moins 3 requêtes (plan, carnet, liste `daily/`).
   - Elle en coûte 4 dès qu'une séance des 14 derniers jours attend encore
     son résumé FC : il faut alors lister `fc/`, puis lire les fichiers.
-  - Au pire, cela fait environ 120 requêtes par heure. Le jeton n'est
-    utilisé que pour écrire.
+  - Au pire, cela fait environ 120 requêtes par heure.
   - Un dépassement dégrade la synchro, mais l'app continue sur ses données
     locales.
   - Chaque hausse de `NUIT_VERSION` relit **tous** les fichiers de `daily/`

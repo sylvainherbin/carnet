@@ -1,9 +1,26 @@
 // Synchronisation via l'API GitHub Contents.
 // Le fichier carnet-data.json (même format que l'export JSON) vit sur la
-// branche main du dépôt : lecture publique sans jeton, écriture avec un
-// jeton fine-grained limité à ce dépôt. Le sha sert de verrou optimiste —
+// branche main du dépôt : lecture publique, écriture avec un jeton
+// fine-grained limité à ce dépôt. Les lectures utilisent aussi ce jeton quand
+// il existe : sans lui, la limite est de 60 requêtes par heure et par adresse
+// IP, et un réseau mobile partage son adresse entre ses abonnés. Le sha sert de verrou optimiste —
 // GitHub refuse d'écraser une version que l'on n'a pas lue.
 const API = "https://api.github.com/repos/sylvainherbin/carnet/contents/carnet-data.json";
+
+// Lecture GET. Avec jeton : 5 000 requêtes par heure, propres au compte. Un
+// jeton refusé (401, expiré) ne doit pas empêcher de lire un dépôt public : on
+// retente alors sans jeton.
+const JETON = "carnet-gh-token";
+export const lireJeton = () => { try { return localStorage.getItem(JETON) || ""; } catch { return ""; } };
+export async function lecture(url) {
+  const base = { Accept: "application/vnd.github+json" };
+  const jeton = lireJeton();
+  if (jeton) {
+    const r = await fetch(url, { headers: { ...base, Authorization: `Bearer ${jeton}` }, cache: "no-store" });
+    if (r.status !== 401) return r;
+  }
+  return fetch(url, { headers: base, cache: "no-store" });
+}
 
 const b64encode = (str) => {
   const bytes = new TextEncoder().encode(str);
@@ -31,7 +48,7 @@ const DAILY_DIR = "https://api.github.com/repos/sylvainherbin/carnet/contents/da
 const PLAN_DIR = "https://api.github.com/repos/sylvainherbin/carnet/contents/plan";
 // Absent : 404 sans erreur, c'est le cas normal tant que le coach n'a pas écrit.
 export async function pullPlanFile(date) {
-  const r = await fetch(`${PLAN_DIR}/${encodeURIComponent(date)}.json?ref=main&t=${Date.now()}`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
+  const r = await lecture(`${PLAN_DIR}/${encodeURIComponent(date)}.json?ref=main&t=${Date.now()}`);
   if (r.status === 404) return null;
   if (!r.ok) throw new Error(`GitHub ${r.status}`);
   const j = await r.json();
@@ -39,7 +56,7 @@ export async function pullPlanFile(date) {
 }
 
 async function listJson(dir) {
-  const r = await fetch(`${dir}?ref=main`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
+  const r = await lecture(`${dir}?ref=main`);
   if (r.status === 404) return []; // dossier pas encore créé
   if (!r.ok) throw new Error(`GitHub ${r.status}`);
   const j = await r.json();
@@ -50,7 +67,7 @@ export const listFcFiles = () => listJson(FC_DIR).then((fs) => fs.map((f) => f.n
 export const listDailyFiles = () => listJson(DAILY_DIR);
 
 async function pullJsonFile(dir, name) {
-  const r = await fetch(`${dir}/${encodeURIComponent(name)}?ref=main`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
+  const r = await lecture(`${dir}/${encodeURIComponent(name)}?ref=main`);
   if (!r.ok) throw new Error(`GitHub ${r.status}`);
   const j = await r.json();
   return lireJson(b64decode(j.content));
@@ -87,7 +104,7 @@ function matchEnd(txt) {
 }
 
 export async function pullRemote() {
-  const r = await fetch(`${API}?ref=main`, { headers: { Accept: "application/vnd.github+json" }, cache: "no-store" });
+  const r = await lecture(`${API}?ref=main`);
   if (r.status === 404) return null; // pas encore de fichier distant
   if (!r.ok) throw new Error(`GitHub ${r.status}`);
   const j = await r.json();

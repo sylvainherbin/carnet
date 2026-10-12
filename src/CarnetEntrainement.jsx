@@ -249,7 +249,7 @@ export default function CarnetEntrainement() {
         try { localStorage.setItem(GH_SHA, rem.sha); localStorage.setItem(GH_DIRTY, "1"); } catch (e) { /* privé */ }
         schedulePush();
       }
-    } catch (e) { setGhSync((g) => ({ ...g, status: "hors ligne" })); }
+    } catch (e) { setGhSync((g) => ({ ...g, status: /GitHub (403|429)/.test(e.message) ? "limite de lectures GitHub atteinte — réessaie plus tard" : "hors ligne" })); }
   };
 
   // --- plan du jour -------------------------------------------------------
