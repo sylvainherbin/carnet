@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-12",
+  "v": 1,
+  "ecrit": "2026-10-12T08:00:00Z",
+  "nuit": "7 h 12 de sommeil (coucher 02:22, lever 09:39), plancher 55, moyenne 62, VFC 40,6 (trois mesures), SpO2 minimum 92. Sommeil revenu au-dessus du seuil ; moyenne FC la plus haute de la période, plancher en légère hausse après les 12 séries et les 20 min de tapis d'hier sur une nuit de 5 h 44.",
+  "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée (7 h 12 > 6 h 30), R2 non déclenchée (plancher 55 < 58). VFC 13 % sous la médiane de 47 : sous le seuil de 15 %.",
+    "motif": "Nuit de plus de sept heures après deux nuits courtes. Les signaux FC sont un peu moins bons (plancher 55, moyenne 62), sans franchir de seuil. Séance Pecs complète à 16 séries plus deux séries de triceps à la poulie."
+  },
+  "seance": {
+    "groupe": "Pecs",
+    "titre": "Pecs — 16 séries + triceps poulie",
+    "exercices": [
+      { "nom": "Dev incliné", "series": 4, "reps": 10, "kg": 75, "note": "le 06/10 : 65 puis 70 × 10 × 3, RPE 6/7/7/7" },
+      { "nom": "Dips", "series": 4, "reps": 10, "kg": 180, "note": "pas 10 ; le 06/10 : 170 × 10 × 4 à RPE 7" },
+      { "nom": "Incline chest press", "series": 4, "reps": 10, "kg": 75, "note": "le 06/10 : 65 puis 70 × 10 × 3, RPE 6/7/7/7" },
+      { "nom": "Chest press", "series": 4, "reps": 10, "kg": 70, "note": "75 × 10 était à RPE 10 le 06/10 : retour à 70, pas de montée" },
+      { "nom": "Triceps poulie", "series": 2, "reps": 15, "note": "nouvel exercice à la corde, en fin de séance : charge d'apprentissage à RPE 7 sur 15 répétitions propres, coudes collés. Cette charge sera la référence." }
+    ],
+    "echauffement": ["Dev incliné 40 × 10", "Dev incliné 55 × 5", "Dips 100 × 8"],
+    "tapis": { "min": 15, "pente": 13, "kmh": 5.5 }
+  },
+  "points": [
+    "Plafond RPE 9 sur la dernière série seulement. Un test à RPE 10 se coche « test » dans le formulaire.",
+    "Si une charge passe à RPE 8 dès la série 1, tu la gardes sans monter.",
+    "Repos demain mardi 13/10. Tour de taille vendredi 16/10, à jeun ; maintien strict jusqu'au 23/10.",
+    "Poulie haut du pec : abandonnée. Poulies triceps en isolation : OK."
+  ]
+}
