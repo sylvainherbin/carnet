@@ -6118,6 +6118,22 @@
    "rpe": 5,
    "note": "",
    "at": 1791797831641
+  },
+  {
+   "id": "vfi5cx47",
+   "date": "2026-10-12",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 70
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1791798063738
   }
  ],
  "treadmill": [
