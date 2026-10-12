@@ -6103,6 +6103,21 @@
    "rpe": 7,
    "note": "",
    "at": 1791797499217
+  },
+  {
+   "id": "tfgvv7dj",
+   "date": "2026-10-12",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 60
+    }
+   ],
+   "rpe": 5,
+   "note": "",
+   "at": 1791797831641
   }
  ],
  "treadmill": [
