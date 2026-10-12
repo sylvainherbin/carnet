@@ -6013,6 +6013,21 @@
    "rpe": 8,
    "note": "",
    "at": 1791795552985
+  },
+  {
+   "id": "e1urd7re",
+   "date": "2026-10-12",
+   "group": "Pecs",
+   "exercise": "Incline chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 80
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1791795936693
   }
  ],
  "treadmill": [
