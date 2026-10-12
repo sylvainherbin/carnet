@@ -6223,6 +6223,21 @@
    "rpe": 7,
    "note": "",
    "at": 1791799595918
+  },
+  {
+   "id": "3spp1ev4",
+   "date": "2026-10-12",
+   "group": "Pecs",
+   "exercise": "Triceps poulie",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 15
+    }
+   ],
+   "rpe": 5,
+   "note": "",
+   "at": 1791799755512
   }
  ],
  "treadmill": [
