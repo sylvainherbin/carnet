@@ -6073,6 +6073,21 @@
    "rpe": 6,
    "note": "",
    "at": 1791796891789
+  },
+  {
+   "id": "tppgmdwp",
+   "date": "2026-10-12",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 170
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1791797192586
   }
  ],
  "treadmill": [
