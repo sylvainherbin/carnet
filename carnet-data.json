@@ -16225,7 +16225,13 @@
    "coucher": 1791851851000,
    "lever": 1791874332000,
    "sha": "9fb3b0d4a625ca314a8f710659cabb8ce736137a",
-   "repas": "19:28"
+   "repas": "19:28",
+   "decision": {
+    "d": "repos",
+    "regle": "Repos programmé par le rythme 2-1, après Épaules (11/10) et Pecs (12/10). R1 un seul signal sur deux : sommeil 6 h 13 sous 6 h 30, mais VFC 46,1 contre une médiane de 46,3 (−0,4 %) et plancher 52 sous la médiane de 53. R2 non déclenchée (52 < 58).",
+    "motif": "Le jour de repos ne dépend pas de la nuit. La nuit est correcte, sans alerte de récupération ; le sommeil court seul se note et ne change rien. Les signaux FC de la veille (plancher 55, moyenne 62) se sont corrigés.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
