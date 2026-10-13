@@ -135,7 +135,7 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
 ## Environnement (machine de Sylvain, 27/09/2026)
 
 - **Node 24.20.0** et npm 11, installés par nvm et **absents du PATH par
-  défaut** : `export PATH=$HOME/.nvm/versions/node/v24.20.0/bin:$PATH`.
+  défaut** : `export PATH=$HOME/.nvm/current/bin:$PATH`.
 - Le fuseau de la machine est celui de Paris, donc `npm test` donne **62/62**
   sans rien régler. Les tests restent dépendants du fuseau : sous `TZ=UTC`,
   les deux tests de `tests/seance.test.js` sur le 15/09 échouent, parce que

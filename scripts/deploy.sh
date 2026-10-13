@@ -14,7 +14,7 @@
 #      référencé par l'index servi répond 200.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-export PATH="$HOME/.nvm/versions/node/v24.20.0/bin:$PATH"
+export PATH="$HOME/.nvm/current/bin:$PATH"
 
 VERSION="${1:-}"; MSG="${2:-}"
 [[ "$VERSION" =~ ^v[0-9]+$ ]] || { echo "usage : $0 vNN \"message\"" >&2; exit 2; }
