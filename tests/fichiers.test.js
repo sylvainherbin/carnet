@@ -12,10 +12,9 @@ test("lireJson : fichier normal, fichier déposé deux fois de suite, fichier ca
   assert.throws(() => lireJson(""));
 });
 
-test("parseMs : heure locale de la montre, ISO avec fuseau, rebut", () => {
-  const local = parseMs("2026-09-15 08:15:51");
-  const d = new Date(local);
-  assert.deepEqual([d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds()], [2026, 8, 15, 8, 15, 51]);
+test("parseMs : heure de Paris de la montre, ISO avec fuseau, rebut", () => {
+  // Heure de Paris, quel que soit le fuseau du processus (CEST en septembre).
+  assert.equal(parseMs("2026-09-15 08:15:51"), Date.UTC(2026, 8, 15, 6, 15, 51));
   assert.equal(parseMs("2026-09-15T08:15:51Z"), Date.UTC(2026, 8, 15, 8, 15, 51));
   assert.equal(parseMs("2026-09-15T08:15:51+02:00"), Date.UTC(2026, 8, 15, 6, 15, 51));
   assert.ok(Number.isNaN(parseMs("bidon")));

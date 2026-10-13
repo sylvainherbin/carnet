@@ -86,7 +86,7 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
 ## Carte du code
 
 `src/calculs.js` (pur, testé) :
-- FC de séance : `parseMs` (heure **locale** sans fuseau), `parseFcFile`
+- FC de séance : `parseMs` (heure **de Paris** sans fuseau), `parseFcFile`
   (formats tableau et compact), `courbeFc`, `denseRun`, `fenetreSeance`,
   `resumeSeance`.
 - Nuit : `NUIT_VERSION`, `parseSommeil`, `derniereNuit` (dernier bloc,
@@ -136,11 +136,10 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
 
 - **Node 24.20.0** et npm 11, installés par nvm et **absents du PATH par
   défaut** : `export PATH=$HOME/.nvm/current/bin:$PATH`.
-- Le fuseau de la machine est celui de Paris, donc `npm test` donne **62/62**
-  sans rien régler. Les tests restent dépendants du fuseau : sous `TZ=UTC`,
-  les deux tests de `tests/seance.test.js` sur le 15/09 échouent, parce que
-  `parseMs` lit les horodatages `fc/` en heure locale alors que les `at` des
-  saisies sont absolus, et que les fixtures ont été enregistrées à Paris.
+- Toute date de jour, de semaine et d'heure s'affiche et se calcule en heure
+  de Paris explicite (`parisMs`, `jourParis`, `hhmmParis`, `ajouteJours`,
+  `calculs.js`), quelle que soit la variable `TZ` : `npm test` donne
+  **110/110** sous `TZ=UTC`, `Europe/Paris` et `America/St_Johns`.
 - `npm ci` plutôt que `npm install`, qui peut réécrire `package-lock.json` :
   ce diff ne se committe pas.
 - `npm run lint` : 0 erreur, 41 avertissements (`set-state-in-effect`,
@@ -170,10 +169,6 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
 - `scripts/deploy.sh` fait un `git add -A` sur tout le répertoire : vérifier
   l'état du dépôt avant de le lancer, pour ne pas emporter un fichier de
   travail.
-- Les tests dépendent du fuseau : ils ne passent qu'à l'heure de Paris.
-  Correctif retenu : fixer le fuseau dans `tests/aide.js`, **pas** dans
-  `calculs.js`, dont le calcul est juste tant que l'app et les données
-  partagent le même fuseau, ce qui est le cas en usage réel.
 - Corrections d'AGENTS.md jugées fondées, pas encore appliquées : AGENTS.md
   est partagé avec Codex, il faut l'accord de Sylvain.
   - Documenter le fuseau des tests.
@@ -184,12 +179,10 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
 
 ## Pièges repérés
 
-- **Fuseau** : les horodatages `daily/` et `fc/` n'ont pas de fuseau.
-  - Un résumé de nuit reste cohérent dans n'importe quel fuseau, car tout y
-    est relu localement.
-  - Un résumé de séance, lui, croise des chaînes locales avec des `at`
-    absolus : une séance importée dans un autre fuseau que celui où elle a
-    été faite (voyage, déménagement) décale la fenêtre FC.
+- **Fuseau** : les horodatages `daily/` et `fc/` n'ont pas de fuseau ; ils
+  sont lus comme de l'heure de Paris (celle de la montre), pas comme celle de
+  l'appareil. Les messages de commit de synchro (`Synchro carnet …`) restent
+  en UTC.
 - **Sieste** : `derniereNuit` garde le **dernier** bloc de sommeil. Si le
   relevé du jour est réécrit après une sieste séparée de la nuit par plus de
   `NUIT_TROU` heures, la sieste remplace la nuit. Reproduit sur des données
@@ -226,10 +219,6 @@ Tout changement de forme se signale à Sylvain **avant** d'être fait.
   récupération (cas fréquent : le raccourci dépose vers midi) relit ses 1 à
   2 fichiers à chaque ouverture de l'app jusqu'à J+2, où elle devient
   définitive. Un fichier illisible : rien de définitif, on retente.
-- **Dates limites** : `limit` et `nextDay` passent par `toISOString()`, qui
-  donne une date UTC. Les dates saisies sont locales, d'où un décalage d'un
-  jour possible autour de minuit. C'est sans effet pratique sur une fenêtre
-  de 14 jours.
 - `dailyAImporter` : une entrée `daily` sans `n` (souche créée par `repas`
   ou `decision`) est toujours considérée à résumer.
 - Les messages de commit de l'app sont `Synchro carnet AAAA-MM-JJ HH:MM` et

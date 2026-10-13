@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { pullRemote, pushRemote, listFcFiles, pullFcFile, listDailyFiles, pullDailyFile, pullPlanFile } from "./githubSync.js";
-import { pad, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, dailyAImporter, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp, repriseSeance, carnetValide, carnetVide, lirePlan, avancementPlan, seanceTerminee, planPrevuFait, poserPlanFait, decisionAEcrire, manquesDuPlan, RPE_DEFAUT, RECUP_VERSION, recuperationSeance, recupDefinitive, COLONNES_FC_SERIE, fcSerieExport, tableJours, tableExercices, couverture, nuitContreSeance, syntheseAnalyse, exportAnalyseJours, VARIABLES_NUIT, RESULTATS_SEANCE, ANALYSE_AVERTISSEMENTS, EFFECTIF_UTILE } from "./calculs.js";
+import { pad, jourParis, heureParis, hhmmParis, ajouteJours, GROUPS, e1rm, MIN_PAR_SERIE, parseFcFile, fenetreSeance, resumeSeance, resumeNuit, fusionNuit, dailyAImporter, lendemain, kcalSeance, num, isoWeek, verdictProgression, SERIES_MAX, seriesParGroupe, recordE1rm, exportDerive, PAS_DEFAUT, poserDecision, ecartTemp, repriseSeance, carnetValide, carnetVide, lirePlan, avancementPlan, seanceTerminee, planPrevuFait, poserPlanFait, decisionAEcrire, manquesDuPlan, RPE_DEFAUT, RECUP_VERSION, recuperationSeance, recupDefinitive, COLONNES_FC_SERIE, fcSerieExport, tableJours, tableExercices, couverture, nuitContreSeance, syntheseAnalyse, exportAnalyseJours, VARIABLES_NUIT, RESULTATS_SEANCE, ANALYSE_AVERTISSEMENTS, EFFECTIF_UTILE } from "./calculs.js";
 import {
   LineChart, Line, ComposedChart, ScatterChart, Scatter, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart, ReferenceArea, ReferenceLine, Cell,
 } from "recharts";
@@ -10,8 +10,8 @@ const STORAGE_KEY = "carnet-entrainement-v1";
 // Départ du tapis en cours. Hors de l'état React et de la synchro : le tapis se
 // déroule souvent app fermée, et un départ oublié ne doit pas partir sur GitHub.
 const TAPIS_START = "carnet-tapis-start";
-const hhmm = (ms) => { const d = new Date(ms); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
-const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+const hhmm = hhmmParis;
+const todayISO = () => jourParis();
 const uid = () => Math.random().toString(36).slice(2, 10);
 const fmtDate = (iso) => { const [y, m, d] = iso.split("-"); return `${d}/${m}/${y.slice(2)}`; };
 const DEFAULT_EXERCISES = ["Dev incliné", "Dev couché", "Chest press", "Dips", "PullDown", "Row", "Leg extension", "Leg Curl", "Leg press", "Shoulder press"];
@@ -200,7 +200,7 @@ export default function CarnetEntrainement() {
     catch { return { hasToken: false, status: "", at: "" }; }
   });
   const stamp = (status) => {
-    const at = new Date().toTimeString().slice(0, 5);
+    const at = hhmmParis();
     try { localStorage.setItem(GH_AT, at); } catch (e) { /* privé */ }
     setGhSync((g) => ({ ...g, status, at }));
   };
@@ -275,7 +275,7 @@ export default function CarnetEntrainement() {
   const importFc = async () => {
     try {
       const d = dataRef.current;
-      const limit = new Date(Date.now() - 14 * 864e5).toISOString().slice(0, 10);
+      const limit = ajouteJours(todayISO(), -14);
       const windows = new Map();
       [...new Set(d.sessions.map((s) => s.date))].forEach((dt) => {
         if (dt < limit) return;
@@ -292,7 +292,7 @@ export default function CarnetEntrainement() {
         .filter((dt) => (d.durations.find((x) => x.date === dt) || {}).recupV !== RECUP_VERSION)
         .sort().reverse();
       if (windows.size === 0 && recupAFaire.length === 0) return;
-      const nextDay = (iso) => new Date(new Date(`${iso}T12:00:00`).getTime() + 864e5).toISOString().slice(0, 10);
+      const nextDay = lendemain;
       const days = new Set([...windows.keys()].flatMap((dt) => [dt, nextDay(dt)]));
       const tous = await listFcFiles();
       const fichiersDe = (dt) => tous.filter((n) => n.slice(0, 10) === dt || n.slice(0, 10) === nextDay(dt));
@@ -372,7 +372,7 @@ export default function CarnetEntrainement() {
     try {
       const fichiers = (await listDailyFiles()).sort((a, b) => a.name.localeCompare(b.name));
       setDailyLast(fichiers.length ? fichiers[fichiers.length - 1].name.slice(0, 10) : null);
-      const limit = new Date(Date.now() - 14 * 864e5).toISOString().slice(0, 10);
+      const limit = ajouteJours(todayISO(), -14);
       const have = new Map(dataRef.current.daily.map((x) => [x.date, x]));
       // Nouveaux relevés des deux dernières semaines, plus ceux dont le résumé
       // est d'une version antérieure ou porte sur un contenu réécrit depuis :
@@ -452,7 +452,7 @@ export default function CarnetEntrainement() {
   // n'a pas eu lieu ne se voit qu'ici, en comparant ce qu'on attend à ce qu'on a.
   const alertes = useMemo(() => {
     const out = [];
-    const limit = new Date(Date.now() - 14 * 864e5).toISOString().slice(0, 10);
+    const limit = ajouteJours(todayISO(), -14);
     // Une séance horodatée dont la courbe manque encore, passé un délai de trois
     // heures après la dernière série pour laisser l'automatisation de fin
     // d'entraînement faire son dépôt.
@@ -466,8 +466,7 @@ export default function CarnetEntrainement() {
     // Le relevé quotidien tombe à midi : celui du jour peut légitimement manquer
     // le matin, celui de la veille jamais.
     if (dailyLast !== undefined) {
-      const d = new Date(); d.setDate(d.getDate() - 1);
-      const hier = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+      const hier = ajouteJours(todayISO(), -1);
       if (dailyLast === null) out.push("Aucun relevé quotidien reçu");
       else if (dailyLast < hier) out.push(`Relevé quotidien : dernier reçu le ${fmtDate(dailyLast)}`);
     }
@@ -511,8 +510,8 @@ export default function CarnetEntrainement() {
     const deltaN = Math.min(w.length, 8);
     // La dernière nuit résumée, si elle est récente : celle d'aujourd'hui ou d'hier.
     const dern = data.daily[data.daily.length - 1];
-    const veille = new Date(Date.now() - 864e5);
-    const nuit = dern && (dern.n > 0 || dern.vfc > 0 || dern.somAbsent) && dern.date >= `${veille.getFullYear()}-${pad(veille.getMonth() + 1)}-${pad(veille.getDate())}` ? dern : null;
+    const veille = ajouteJours(todayISO(), -1);
+    const nuit = dern && (dern.n > 0 || dern.vfc > 0 || dern.somAbsent) && dern.date >= veille ? dern : null;
     const tempEcart = nuit ? ecartTemp(data.daily, nuit.date) : null;
     const decision = data.daily.find((x) => x.date === todayISO())?.decision || null;
     return { lastDate, lastGroup, weekSessions, lastW, delta, deltaN, nuit, tempEcart, decision };
@@ -1357,8 +1356,7 @@ function Poids({ data, update, notify }) {
   // cette nuit, à côté de son résumé, pour que repas et minimum de FC se lisent
   // sur la même ligne. Avant 06:00, la nuit est celle du jour même (repas tardif
   // passé minuit) ; sinon celle du lendemain.
-  const maintenant = new Date();
-  const nuitDe = maintenant.getHours() < 6 ? todayISO() : lendemain(todayISO());
+  const nuitDe = heureParis() < 6 ? todayISO() : lendemain(todayISO());
   const repas = data.daily.find((x) => x.date === nuitDe)?.repas || "";
   const setRepas = (h) => update((d) => {
     let x = d.daily.find((y) => y.date === nuitDe);
@@ -1556,7 +1554,7 @@ function CourbesGraphes({ data }) {
     const prVal = Math.max(...strength.map((r) => r.e1rm));
     let prIdx = 0; strength.forEach((r, i) => { if (r.e1rm === prVal) prIdx = i; });
     const since = strength.length - 1 - prIdx; // séances depuis le dernier record
-    const cutoff = new Date(Date.now() - 90 * 86400000).toISOString().slice(0, 10);
+    const cutoff = ajouteJours(todayISO(), -90);
     const win = strength.filter((r) => r.date >= cutoff);
     const d90 = win.length >= 2 && win[0].e1rm > 0 ? ((win[win.length - 1].e1rm - win[0].e1rm) / win[0].e1rm) * 100 : null;
     return { prVal, prDate: strength[prIdx].date, since, d90 };
@@ -2118,7 +2116,7 @@ function Donnees({ data, setData, notify, sync, onToken, onTokenOff, onSync }) {
         <Btn full kind="ghost" onClick={() => exportFile("carnet.json", JSON.stringify(data, null, 2), "application/json")}>Exporter en JSON (sauvegarde)</Btn>
         <Btn full kind="ghost" onClick={() => exportFile("carnet.csv", toCSV(), "text/csv")}>Exporter en CSV (tableur)</Btn>
         <Btn full kind="ghost" onClick={() => exportFile("carnet-jours.csv", exportDerive(data), "text/csv")}>Exporter le tableau journalier (CSV)</Btn>
-        <Btn full kind="ghost" onClick={() => exportFile("carnet-analyse.json", JSON.stringify(syntheseAnalyse(data, new Date().toISOString().slice(0, 10)), null, 1), "application/json")}>Exporter l'analyse (JSON, pour le coach)</Btn>
+        <Btn full kind="ghost" onClick={() => exportFile("carnet-analyse.json", JSON.stringify(syntheseAnalyse(data, todayISO()), null, 1), "application/json")}>Exporter l'analyse (JSON, pour le coach)</Btn>
         <Btn full kind="ghost" onClick={() => exportFile("carnet-analyse-jours.csv", exportAnalyseJours(data), "text/csv")}>Exporter l'analyse journalière (CSV)</Btn>
       </Panel>
       <Panel boot="boot-2" className="space-y-3">

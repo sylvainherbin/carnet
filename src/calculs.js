@@ -6,6 +6,40 @@ export const pad = (n) => String(n).padStart(2, "0");
 export const GROUPS = ["Pecs", "Dos", "Jambes", "Épaules", "Bras", "Autre"];
 export const e1rm = (kg, reps) => (reps === 1 ? kg : kg * (1 + reps / 30));
 
+// ---- Heure de Paris --------------------------------------------------------
+// Toute date de séance, de jour ou de semaine se calcule en heure de Paris, quel
+// que soit le fuseau du processus (TZ du poste, réglage de l'iPhone en voyage).
+// Les horodatages stockés (`at`, `ms`) restent des millisecondes absolues.
+export const FUSEAU = "Europe/Paris";
+const fmtParis = new Intl.DateTimeFormat("en-GB", { timeZone: FUSEAU, hourCycle: "h23", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+// Décalage de Paris à l'instant ms (heure murale moins instant absolu, en ms).
+// Les changements d'heure tombent à 01:00 UTC pile : un cache par heure UTC est
+// exact, et épargne Intl sur les milliers d'échantillons de FC.
+const cacheDecalage = new Map();
+const decalageParis = (ms) => {
+  const h = Math.floor(ms / 3600000);
+  let dec = cacheDecalage.get(h);
+  if (dec === undefined) {
+    const o = {};
+    for (const p of fmtParis.formatToParts(h * 3600000)) if (p.type !== "literal") o[p.type] = +p.value;
+    dec = Date.UTC(o.year, o.month - 1, o.day, o.hour, o.minute, o.second) - h * 3600000;
+    cacheDecalage.set(h, dec);
+  }
+  return dec;
+};
+// Date et heure murales de Paris, lues sur une Date UTC décalée.
+const murale = (ms) => new Date(Number.isFinite(ms) ? ms + decalageParis(ms) : NaN);
+// Instant absolu d'une heure murale de Paris (mois 1-12).
+export const parisMs = (y, mo, d, h = 0, mi = 0, s = 0) => {
+  const mur = Date.UTC(y, mo - 1, d, h, mi, s);
+  return mur - decalageParis(mur - decalageParis(mur));
+};
+export const jourParis = (ms = Date.now()) => { const d = murale(ms); return isNaN(d) ? "" : d.toISOString().slice(0, 10); };
+export const heureParis = (ms = Date.now()) => murale(ms).getUTCHours();
+export const hhmmParis = (ms = Date.now()) => { const d = murale(ms); return isNaN(d) ? "" : d.toISOString().slice(11, 16); };
+// Calendrier pur : ajoute n jours à une date AAAA-MM-JJ, sans fuseau.
+export const ajouteJours = (iso, n) => { const [y, m, d] = iso.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d + n)).toISOString().slice(0, 10); };
+
 // ---- Estimation des calories (nécessite le poids corporel, onglet Poids) ----
 // Tapis : équations ACSM marche (<8 km/h) / course, VO2 en ml/kg/min, 5 kcal par litre d'O2.
 // Muscu : modèle travail/repos — ~6 MET pendant les séries (~40 s chacune), ~2 MET entre.
@@ -24,11 +58,11 @@ export const parseMs = (s) => {
   const str = String(s).trim();
   // Horodatage ISO à fuseau explicite (ancien format) : Date.parse suffit.
   if (/[Zz]$|[+-]\d\d:?\d\d$/.test(str)) return Date.parse(str);
-  // « AAAA-MM-JJ HH:MM:SS » sans fuseau : c'est l'heure locale de la montre, que
-  // WebKit refuse de parser tel quel. On construit la date explicitement, ce qui
-  // la rend comparable aux horodatages de saisie, eux aussi locaux.
+  // « AAAA-MM-JJ HH:MM:SS » sans fuseau : c'est l'heure de Paris (celle de la
+  // montre), que WebKit refuse de parser tel quel. On la construit explicitement
+  // en heure de Paris, ce qui la rend comparable aux horodatages de saisie.
   const m = /^(\d{4})-(\d\d)-(\d\d)[ T](\d\d):(\d\d):(\d\d)/.exec(str);
-  return m ? new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]).getTime() : NaN;
+  return m ? parisMs(+m[1], +m[2], +m[3], +m[4], +m[5], +m[6]) : NaN;
 };
 export const parseFcFile = (raw) => {
   let rows;
@@ -77,8 +111,8 @@ export const NUIT_VERSION = 6;
 export const NUIT_TROU = 4;
 export const splitNum = (s) => String(s ?? "").split("|").map((x) => Number(String(x).replace(",", ".").replace(/[^0-9.]/g, ""))).filter((x) => x > 0);
 export const mediane = (v) => { const s = [...v].sort((a, b) => a - b), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
-export const lendemain = (iso) => { const [y, m, d] = iso.split("-").map(Number); const x = new Date(y, m - 1, d + 1); return `${x.getFullYear()}-${pad(x.getMonth() + 1)}-${pad(x.getDate())}`; };
-export const localMs = (iso, h = 0) => { const [y, m, d] = iso.split("-").map(Number); return new Date(y, m - 1, d, h).getTime(); };
+export const lendemain = (iso) => ajouteJours(iso, 1);
+export const localMs = (iso, h = 0) => { const [y, m, d] = iso.split("-").map(Number); return parisMs(y, m, d, h); };
 // Segments de sommeil : dort = vrai hors « éveillé » et « au lit ». Les libellés
 // viennent de Santé dans la langue du téléphone ; on reconnaît les deux états à
 // exclure et on tient tout le reste (léger, profond, paradoxal, « endormi ») pour
@@ -129,8 +163,7 @@ export const resumeNuit = (raw, date) => {
     // parfois des valeurs fractionnaires (51,6) : on compare les valeurs arrondies,
     // pour que l'heure corresponde au minimum tel qu'il est affiché.
     const premier = nuit.find((s) => Math.round(s.bpm) === rec.min);
-    const d = new Date(premier.ms);
-    rec.hMin = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    rec.hMin = hhmmParis(premier.ms);
   }
   // VFC : Santé mesure aussi le jour, et la valeur de jour vaut la moitié de
   // celle de nuit. Avec les horodatages (vfc_t, raccourci v2), on ne garde que
@@ -477,10 +510,10 @@ export const kcalSeance = (data, date) => {
 };
 export const num = (v) => (v === "" || v === null || isNaN(Number(v)) ? 0 : Number(v));
 export const isoWeek = (iso) => {
-  const d = new Date(iso + "T12:00:00"); const day = (d.getDay() + 6) % 7;
-  d.setDate(d.getDate() - day + 3); const firstThu = new Date(d.getFullYear(), 0, 4);
-  const week = 1 + Math.round(((d - firstThu) / 86400000 - 3 + ((firstThu.getDay() + 6) % 7)) / 7);
-  return `${d.getFullYear()}-S${pad(week)}`;
+  const [y, m, j] = iso.split("-").map(Number);
+  const d = new Date(Date.UTC(y, m - 1, j)); d.setUTCDate(d.getUTCDate() + 3 - ((d.getUTCDay() + 6) % 7)); // jeudi de la semaine
+  const week = 1 + Math.floor((d - Date.UTC(d.getUTCFullYear(), 0, 1)) / 864e5 / 7);
+  return `${d.getUTCFullYear()}-S${pad(week)}`;
 };
 
 // ---- Décisions de séance --------------------------------------------------

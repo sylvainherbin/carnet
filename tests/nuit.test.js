@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { lire, hhmm } from "./aide.js";
-import { resumeNuit, parseSommeil, derniereNuit, fusionNuit, nuitAJour, NUIT_VERSION, NUIT_TROU, mediane } from "../src/calculs.js";
+import { jourParis, resumeNuit, parseSommeil, derniereNuit, fusionNuit, nuitAJour, NUIT_VERSION, NUIT_TROU, mediane } from "../src/calculs.js";
 
 test("nuit du 15/09 : phases de sommeil sur deux nuits, on ne garde que la dernière", () => {
   const r = resumeNuit(lire("daily/2026-09-15.json"), "2026-09-15");
@@ -15,7 +15,7 @@ test("nuit du 15/09 : phases de sommeil sur deux nuits, on ne garde que la derni
   assert.equal(r.dodo, 478); // 7 h 58 dormies
   assert.equal(hhmm(r.coucher), "01:29");
   assert.equal(hhmm(r.lever), "09:35");
-  assert.equal(new Date(r.coucher).getDate(), 15); // pas la nuit du 13 au 14 présente dans le même fichier
+  assert.equal(jourParis(r.coucher), "2026-09-15"); // pas la nuit du 13 au 14 présente dans le même fichier
 });
 
 test("nuit du 16/09 : nuit courte, peu d'échantillons", () => {
