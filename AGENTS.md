@@ -67,6 +67,14 @@ version, sans fusion. Tout est optionnel sauf `date`, un champ inconnu est
 ignoré, et un plan absent ou mal formé ne doit jamais empêcher la saisie à la
 main (`lirePlan`, `avancementPlan`, `seanceTerminee`, `planPrevuFait`).
 
+Deux contraintes de valeur, que l'app ne signale pas si elles sont violées :
+- `decision.d` vaut `maintenu`, `allege` (sans accent) ou `repos`, les clés de
+  `DECISIONS` (`CarnetEntrainement.jsx`) ; « allégé » n'est que l'étiquette
+  affichée. Toute autre valeur s'affiche brute, sans bouton radio coché.
+- `series`, `reps`, `kg`, `pas` et les nombres de `tapis` sont **numériques**
+  (lus par `nb()`) : une fourchette comme `"8-10"` donnerait 0 et
+  disparaîtrait de l'affichage.
+
 La décision venue du plan est écrite sur la ligne `daily` du jour avec
 `decision.par = "coach"` ; dès que Sylvain la saisit ou la modifie, elle passe à
 `"moi"` et une réécriture du plan ne l'écrase plus (`decisionAEcrire`).
@@ -81,14 +89,20 @@ toujours conservés (`CHAMPS_CONSERVES`) : ceux saisis à la main (`repas`,
 ## Commandes
 
 ```
-npm install
+npm ci                             # pas npm install, qui peut réécrire package-lock.json
 npm test                           # node --test "tests/**/*.test.js", Node 24
-npm run lint                       # oxlint, configuration .oxlintrc.json
+npm run lint                       # oxlint sur tout le dépôt, configuration .oxlintrc.json
 npm run build                      # vite build → dist/
 scripts/deploy.sh vNN "message"    # déploiement complet
 ```
 
-`scripts/deploy.sh` incrémente `CACHE` dans `public/sw.js`, lance lint, tests
+Depuis la v53, toute date de jour, de semaine et d'heure se calcule en heure
+de Paris explicite (`parisMs`, `jourParis`, `hhmmParis`, `ajouteJours`,
+`src/calculs.js`), quelle que soit la variable `TZ` : `npm test` passe
+110/110 sous `TZ=UTC`, `Europe/Paris` et `America/St_Johns`.
+
+`scripts/deploy.sh` incrémente `CACHE` dans `public/sw.js`, lance le lint
+(`npx oxlint src` : `src` seulement, contrairement à `npm run lint`), tests
 et build, commit et pousse `main`, copie `dist/` dans `gh-pages` **sans
 supprimer les anciens assets** (Pages sert `index.html` avec dix minutes de
 cache HTTP), puis vérifie en ligne que `sw.js` et chaque asset répondent.
@@ -115,8 +129,10 @@ cache HTTP), puis vérifie en ligne que `sw.js` et chaque asset répondent.
 - **Pas de nouvelle dépendance** sans raison forte : les tests tournent avec
   Node seul.
 - Commentaires et messages de commit en français, dans le style existant.
-- L'API GitHub est lue sans jeton côté app (60 requêtes par heure et par
-  adresse) : toute lecture automatique doit rester économe.
+- L'API GitHub est lue avec le jeton de l'appareil quand il existe (5 000
+  requêtes par heure), sinon sans jeton (60 requêtes par heure et par
+  adresse) ; depuis la v52, `lecture()` (`githubSync.js`) retente sans jeton
+  sur un 401. Toute lecture automatique doit rester économe.
 
 ## Pour un audit
 
