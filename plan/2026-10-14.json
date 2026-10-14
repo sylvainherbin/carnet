@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-14",
+  "v": 1,
+  "ecrit": "2026-10-14T06:46:42Z",
+  "nuit": "4 h 51 de sommeil (coucher 03:36, lever 08:29), plancher 53, moyenne 61, creux à 08:07, VFC 49,9 (trois mesures, 11 % au-dessus de la médiane de 44,8), respiration 15, SpO2 96, minimum 89. Nuit la plus courte de la période, avec un coucher plus tardif que d'habitude. Les signaux FC restent dans leur plage : plancher égal à la médiane, moyenne 1,5 battement au-dessus.",
+  "decision": {
+    "d": "repos",
+    "regle": "Choix de Sylvain. R1 non déclenchée : sommeil 4 h 51 sous 6 h 30, mais VFC au-dessus de la médiane et plancher 53 égal à elle, donc un seul signal sur deux. R2 non déclenchée (53 < 58).",
+    "motif": "Les règles auraient laissé le Dos en maintenu. Le repos est une décision de Sylvain, cohérente avec le sommeil : quatre nuits de 5 h 44, 7 h 12, 6 h 13 et 4 h 51. Deuxième jour de repos de suite, le rythme 2-1 se décale d'un jour."
+  },
+  "points": [
+    "Dos demain 15/10 si la nuit le permet, puis Jambes le 16/10, repos le 17/10. Verdicts du Dos, première série en palier : Row 130 puis 140, PullDown 90 puis 95, Tirage vertical serré 60 puis 65, Pulley 45 puis 50, quatre séries chacun.",
+    "Le sommeil est le point à travailler : trois nuits sur les quatre dernières sont sous 6 h 45 et le coucher recule. Un coucher avant 02:00 la veille d'une séance de Dos ou de Jambes vaut plus que n'importe quelle charge.",
+    "SpO2 minimum 89 : aucun autre signe (respiration 15, SpO2 moyenne 96). À regarder s'il se répète, ce n'est pas une alerte.",
+    "Tour de taille vendredi 16/10 à jeun, sans décision. Maintien strict jusqu'au 23/10 : à 97 cm ou plus ce jour-là, déficit de 200 kcal par jour."
+  ]
+}
