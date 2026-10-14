@@ -16251,7 +16251,13 @@
    "coucher": 1791941802000,
    "lever": 1791959370000,
    "sha": "a6114eabbe057347622fa41136e6af9e70e0cad4",
-   "repas": "19:35"
+   "repas": "19:35",
+   "decision": {
+    "d": "repos",
+    "regle": "Choix de Sylvain. R1 non déclenchée : sommeil 4 h 51 sous 6 h 30, mais VFC au-dessus de la médiane et plancher 53 égal à elle, donc un seul signal sur deux. R2 non déclenchée (53 < 58).",
+    "motif": "Les règles auraient laissé le Dos en maintenu. Le repos est une décision de Sylvain, cohérente avec le sommeil : quatre nuits de 5 h 44, 7 h 12, 6 h 13 et 4 h 51. Deuxième jour de repos de suite, le rythme 2-1 se décale d'un jour.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
