@@ -16911,7 +16911,7 @@
    "decision": {
     "d": "maintenu",
     "regle": "R1 à un seul signal : sommeil 5 h 22 sous 6 h 30, mais la VFC est inutilisable (134, hors plage) et le plancher 54 ne dépasse la médiane de 53 que d'un battement, ce qui est du bruit de montre. R2 non déclenchée (54 < 58).",
-    "motif": "Deux jours de repos viennent d'être pris, les signaux FC restent dans leur plage et la règle ne demande pas d'allégé. Le sommeil court est noté : si le palier du Row passe à RPE 8, la charge ne monte pas. Dos en 16 séries, première série de chaque exercice en palier.",
+    "motif": "Deux jours de repos viennent d'être pris, les signaux FC restent dans leur plage et la règle ne demande pas d'allégé. Le sommeil court est noté : si le palier du Row passe à RPE 8, la charge ne monte pas. Dos en 16 séries, première série de chaque exercice en palier. Fait : 16 séries sur 16, plan respecté, RPE saisis par Sylvain, séance très propre en 69 min. Row 120 puis 140 × 2 puis 130 à la dernière série (RPE 6/7/7/7), PullDown 85 puis 95 × 3 (RPE 6/7/7/7), Tirage vertical serré 60 puis 65 × 3 dont une série à 10 répétitions (RPE 6/7/7/7), Pulley 45 puis 50 × 3 (RPE 6/7/7/7). Palier un peu plus bas que prescrit sur Row (120 au lieu de 130) et PullDown (85 au lieu de 90). Tapis non fait : pas le temps.",
     "par": "coach"
    },
    "plan": {
