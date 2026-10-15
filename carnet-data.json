@@ -16277,7 +16277,13 @@
    "coucher": 1792030420000,
    "lever": 1792050308000,
    "sha": "4451dd4c75ad06c79317a5bbc8a5a36e0bef0116",
-   "repas": "19:52"
+   "repas": "19:52",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 à un seul signal : sommeil 5 h 22 sous 6 h 30, mais la VFC est inutilisable (134, hors plage) et le plancher 54 ne dépasse la médiane de 53 que d'un battement, ce qui est du bruit de montre. R2 non déclenchée (54 < 58).",
+    "motif": "Deux jours de repos viennent d'être pris, les signaux FC restent dans leur plage et la règle ne demande pas d'allégé. Le sommeil court est noté : si le palier du Row passe à RPE 8, la charge ne monte pas. Dos en 16 séries, première série de chaque exercice en palier.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
