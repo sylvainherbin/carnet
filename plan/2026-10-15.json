@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-15",
+  "v": 1,
+  "ecrit": "2026-10-15T08:08:55Z",
+  "nuit": "5 h 22 de sommeil (coucher 04:13, lever 09:45), plancher 54, moyenne 62, creux à 09:41, SpO2 96, minimum 93, respiration 14,5. VFC 134,2 sur trois mesures étalées (69, 134, 187) : au-dessus de ta plage habituelle (13 à 122), donc peu fiable, je ne la compte pas comme un bon signe. Deuxième nuit très courte de suite après 4 h 51. Plancher et moyenne FC en hausse d'un battement par nuit depuis trois nuits (52, 53, 54 et 60, 61, 62), sans approcher le seuil.",
+  "decision": {
+    "d": "maintenu",
+    "regle": "R1 à un seul signal : sommeil 5 h 22 sous 6 h 30, mais la VFC est inutilisable (134, hors plage) et le plancher 54 ne dépasse la médiane de 53 que d'un battement, ce qui est du bruit de montre. R2 non déclenchée (54 < 58).",
+    "motif": "Deux jours de repos viennent d'être pris, les signaux FC restent dans leur plage et la règle ne demande pas d'allégé. Le sommeil court est noté : si le palier du Row passe à RPE 8, la charge ne monte pas. Dos en 16 séries, première série de chaque exercice en palier."
+  },
+  "seance": {
+    "groupe": "Dos",
+    "titre": "Dos — 16 séries, première série en palier",
+    "exercices": [
+      { "nom": "Row", "series": 4, "reps": 10, "kg": 140, "pas": 10, "note": "série 1 en palier à 130, séries 2 à 4 à 140 ; le 08/10 : 130 × 10 × 4 à RPE 7. Si le palier passe à RPE 8, tu gardes 130 pour les trois autres." },
+      { "nom": "PullDown", "series": 4, "reps": 12, "kg": 95, "note": "série 1 en palier à 90, puis 95 × 12 ; le 08/10 : 95 × 12 à RPE 7/7/7/8, la charge reste." },
+      { "nom": "Tirage vertical serré", "series": 4, "reps": 12, "kg": 65, "note": "série 1 en palier à 60, puis 65 × 12 ; le 08/10 : 65 × 12 à RPE 7/7/7/8, la charge reste." },
+      { "nom": "Pulley", "series": 4, "reps": 10, "kg": 50, "note": "série 1 en palier à 45, puis 50 ; le 01/10 : 50 × 10 à RPE 7, le 08/10 tu étais descendu à 45 pour l'exécution. L'exécution d'abord, et dis-moi si le coude se manifeste." }
+    ],
+    "echauffement": ["Row 60 × 10", "Row 100 × 5", "Row 120 × 3", "PullDown 50 × 10", "PullDown 80 × 5"],
+    "tapis": { "min": 15, "pente": 13, "kmh": 5.5 }
+  },
+  "points": [
+    "Plafond RPE 9 sur la dernière série seulement. Un test à RPE 10 se coche « test » dans le formulaire.",
+    "Si une charge passe à RPE 8 dès la série 1 (hors palier), tu la gardes sans monter.",
+    "Tour de taille demain vendredi 16/10 à jeun, avant tout. Jambes demain si la nuit le permet, verdicts demain matin. Maintien strict jusqu'au 23/10.",
+    "Prochaine séance Pecs, première série en palier : Incline chest press 75 puis 80, Dips 160 puis 170, Dev incliné 70 puis 80 (double pas), Chest press 60 puis 65, Triceps poulie 15 puis 17,5 × 15 × 3.",
+    "Le sommeil reste le point faible : trois nuits sur les quatre dernières sous 5 h 30 ou autour. Un coucher plus tôt vaut plus qu'une charge."
+  ]
+}
