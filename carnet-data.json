@@ -6389,6 +6389,22 @@
    "rpe": 6,
    "note": "",
    "at": 1792058270263
+  },
+  {
+   "id": "ioo41m88",
+   "date": "2026-10-15",
+   "group": "Dos",
+   "exercise": "Pulley",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1792058388118
   }
  ],
  "treadmill": [
