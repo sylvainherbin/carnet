@@ -6301,6 +6301,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1792056068443
+  },
+  {
+   "id": "r6ht2tlg",
+   "date": "2026-10-15",
+   "group": "Dos",
+   "exercise": "Row",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 130
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1792056615844
   }
  ],
  "treadmill": [
