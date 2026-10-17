@@ -1,82 +1,15 @@
 {
   "date": "2026-10-17",
-  "v": 1,
-  "ecrit": "2026-10-17T07:43:18Z",
+  "v": 2,
+  "ecrit": "2026-10-17T07:55:20Z",
   "nuit": "6 h 07 de sommeil (coucher 03:10, lever 09:25), plancher 54, moyenne 62, creux à 08:00, SpO2 95, minimum 94. VFC 50,6 sur trois mesures, au-dessus de la médiane récente (environ 49) : bon signe, cette fois lisible. Nuit précédente : 5 h 38, plancher 53, VFC 53, pas de séance le 16/10.",
   "decision": {
-    "d": "maintenu",
-    "regle": "R1 non déclenchée : sommeil 6 h 07 sous 6 h 30, mais la VFC 50,6 est au-dessus de la médiane et le plancher 54 n'est que d'un battement au-dessus de 53 (bruit de montre). Un seul signal ne suffit pas. R2 non déclenchée (54 < 58).",
-    "motif": "Dos le 15/10, rien le 16/10 : deux jours de récupération, les signaux FC sont dans leur plage. Jambes en 16 séries, première série de chaque exercice en palier. Si tu préfères garder le repos du calendrier, Jambes demain à la place d'Épaules ; sinon 17 Jambes, 18 Épaules, 19 repos, 20 Pecs, 21 Dos."
-  },
-  "seance": {
-    "groupe": "Jambes",
-    "titre": "Jambes — 16 séries, palier en série 1",
-    "exercices": [
-      {
-        "nom": "Leg press 2",
-        "series": 3,
-        "reps": 10,
-        "kg": 170,
-        "pas": 10,
-        "note": "série 1 en palier à 160, séries 2 et 3 à 170. Le 09/10 : 160 × 10 × 3 à RPE 7. Pas simple (le saut 140 → 160 était déjà un double pas). Objectif 170 × 10 × 3 au 30/11, donc atteint avec un mois et demi d'avance si ça passe."
-      },
-      {
-        "nom": "Hack squat",
-        "series": 3,
-        "reps": 10,
-        "kg": 55,
-        "pas": 5,
-        "note": "charge totale en disques + élastique ; série 1 en palier à 50, séries 2 et 3 à 55. Le 09/10 : 50 + élastique à RPE 7."
-      },
-      {
-        "nom": "Leg extension",
-        "series": 3,
-        "reps": 10,
-        "kg": 70,
-        "pas": 5,
-        "note": "série 1 en palier à 65, séries 2 et 3 à 70. Le 09/10 : 70 à RPE 8/9/8, donc on reste (pas simple sur l'isolation)."
-      },
-      {
-        "nom": "Leg Curl",
-        "series": 3,
-        "reps": 12,
-        "kg": 60,
-        "pas": 5,
-        "note": "série 1 en palier à 55, séries 2 et 3 à 60. Le 09/10 : 65 × 12 à RPE 8/9 puis 55 à RPE 7 : le double pas était trop fort, on revient à 60."
-      },
-      {
-        "nom": "Rotary Calf",
-        "series": 2,
-        "reps": 22,
-        "kg": 65,
-        "pas": 5,
-        "note": "65 est le maximum de la machine : progression par répétitions (20 le 09/10 à RPE 7). Pas de palier."
-      },
-      {
-        "nom": "Adducteurs",
-        "series": 2,
-        "reps": 20,
-        "kg": 70,
-        "pas": 5,
-        "note": "70 est le maximum de la machine : on garde 20 répétitions (RPE 8 le 09/10). Pas de palier."
-      }
-    ],
-    "echauffement": [
-      "Leg press 80 × 10",
-      "Leg press 120 × 6",
-      "Leg press 140 × 3",
-      "Hack squat 20 + élastique × 8"
-    ],
-    "tapis": {
-      "min": 15,
-      "pente": 13,
-      "kmh": 5.5
-    }
+    "d": "repos",
+    "regle": "Repos du rythme 2-1, à ta demande : Jambes décalé à demain 18/10.",
+    "motif": "Aucun signal d'alerte, la nuit aurait permis la séance. Tu prends le repos prévu au calendrier. Tour de taille 95 cm et poids 76,0 kg notés ce matin."
   },
   "points": [
-    "Tour de taille 95 cm ce matin (96 le 09/10) et poids 76,0 kg (76,2 le 09/10) : dans le bon sens en maintien strict. C'est une mesure intermédiaire, la décision du déficit reste au vendredi 23/10 (97 cm ou plus → déficit de 200 kcal par jour).",
-    "Verdicts : Leg press 160 puis 170 (monte), Hack squat 50 puis 55 + élastique (monte), Leg extension 65 puis 70 (reste), Leg Curl 55 puis 60 (descend d'un pas par rapport au 09/10), Rotary Calf 65 × 22, Adducteurs 70 × 20.",
-    "Plafond RPE 9 sur la dernière série seulement. Si une charge passe à RPE 8 dès la série 1 (hors palier), tu la gardes sans monter. Un test à RPE 10 se coche « test » dans le formulaire.",
-    "Séance Épaules suivante : Shoulder press 80 puis 85, Upper Back 80 puis 85, Haltères latérales 15 puis 17,5, Haltères postérieur 25 puis 27,5 (palier d'abord)."
+    "Jambes demain dimanche 18/10 (plan déjà écrit, relu demain matin avec la nuit).",
+    "Tour de taille 95 cm (96 le 09/10) : bon sens en maintien strict. Décision de déficit le vendredi 23/10."
   ]
 }
