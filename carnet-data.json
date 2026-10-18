@@ -17688,6 +17688,11 @@
     "regle": "R1 non déclenchée : il faut un sommeil sous 6 h 30 ET une VFC nettement sous la médiane ou un plancher en hausse. Sommeil 7 h 10, plancher 51 (en baisse). La VFC basse seule est notée, pas un motif d'allégé. R2 non déclenchée (51 < 58).",
     "motif": "Pecs aujourd'hui à ta demande (salle calme dimanche), six jours après la dernière séance Pecs du 12/10. Les Jambes passent à demain 19/10. 18 séries, première série de chaque exercice en palier. Si le Dev incliné ou la Chest press passent à RPE 8 dès la série 2, tu gardes la charge sans monter.",
     "par": "coach"
+   },
+   "plan": {
+    "prevues": 18,
+    "faites": 18,
+    "conforme": false
    }
   }
  ],
