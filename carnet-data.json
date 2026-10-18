@@ -6585,6 +6585,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1792313046152
+  },
+  {
+   "id": "halir2gb",
+   "date": "2026-10-18",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 170
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1792313380866
   }
  ],
  "treadmill": [
