@@ -6554,6 +6554,21 @@
    "rpe": 7,
    "note": "",
    "at": 1792312215892
+  },
+  {
+   "id": "hafgc0lo",
+   "date": "2026-10-18",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 160
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1792312730692
   }
  ],
  "treadmill": [
