@@ -1,12 +1,12 @@
 {
   "date": "2026-10-18",
-  "v": 2,
-  "ecrit": "2026-10-18T07:18:13Z",
+  "v": 3,
+  "ecrit": "2026-10-18T10:03:17Z",
   "nuit": "7 h 10 de sommeil (coucher 01:50, lever 09:03), plancher 51, moyenne 58, SpO2 minimum 92, VFC 40,4 sur quatre mesures. Meilleure nuit de la semaine pour la durée et le plancher. La VFC est environ 19 % sous la médiane des deux dernières semaines (49,9), mais le sommeil est long : la règle d'allégé ne demande pas les deux signaux ici.",
   "decision": {
     "d": "maintenu",
     "regle": "R1 non déclenchée : il faut un sommeil sous 6 h 30 ET une VFC nettement sous la médiane ou un plancher en hausse. Sommeil 7 h 10, plancher 51 (en baisse). La VFC basse seule est notée, pas un motif d'allégé. R2 non déclenchée (51 < 58).",
-    "motif": "Pecs aujourd'hui à ta demande (salle calme dimanche), six jours après la dernière séance Pecs du 12/10. Les Jambes passent à demain 19/10. 18 séries, première série de chaque exercice en palier. Si le Dev incliné ou la Chest press passent à RPE 8 dès la série 2, tu gardes la charge sans monter."
+    "motif": "Pecs aujourd'hui à ta demande (salle calme dimanche), six jours après la dernière séance Pecs du 12/10. Les Jambes passent à demain 19/10. 18 séries, première série de chaque exercice en palier. Si le Dev incliné ou la Chest press passent à RPE 8 dès la série 2, tu gardes la charge sans monter. Fait : 18 séries sur 18, séance de 1 h 30 environ avec des repos complets (5 minutes sur les séries lourdes), RPE saisis par Sylvain, tapis 15 min à 13 % (1,37 km). Incline chest press 70 puis 80 × 3 (RPE 6/7/7/7, palier à 70 au lieu de 75). Dips 160 puis 170 × 2 puis 180 × 10 en quatrième série (RPE 6/7/7/7, plan 170). Dev incliné 60 puis 75 × 3 (RPE 5/7/8/8, plan 80 non tenu). Chest press 60 puis 70 × 3 (RPE 5/7/7/7, plan 65 dépassé). Triceps poulie 20 puis 22,5 × 20 (RPE 6/7), deux séries au lieu de trois. FC séance moyenne 110, maximum 132."
   },
   "seance": {
     "groupe": "Pecs",
@@ -67,10 +67,9 @@
     }
   },
   "points": [
-    "Verdicts, palier d'abord : Incline chest press 75 puis 80 (reste), Dips 160 puis 170 (reste), Dev incliné 70 puis 80 (double pas), Chest press 60 puis 65 (monte), Triceps poulie 15 puis 17,5.",
-    "Salle calme : prends tes repos complets entre les séries lourdes (Dips, Incline chest press), c'est l'occasion de bien respirer la charge. Plafond RPE 9 sur la dernière série seulement ; un test à RPE 10 se coche « test ».",
-    "Poulie haut du pec toujours exclue pour le coude. Si le coude pique sur les Dips, tu arrêtes à la série en cours et tu me le dis.",
-    "Jambes demain lundi 19/10 (plan à relire demain matin avec la nuit). Calendrier ensuite : 20 repos, 21 Épaules, 22 Dos, 23 repos avec tour de taille à jeun et décision du déficit.",
-    "VFC basse à surveiller : si elle reste sous 42 sur deux nuits de plus de 6 h 30, je la regarde avec le plancher avant de décider."
+    "Verdicts du prochain Pecs, palier d'abord : Incline chest press 80 puis 85 (monte, RPE 7/7/7 à 80), Dips 170 puis 180 (monte, 180 × 10 à RPE 7 le 18/10), Dev incliné 70 puis 75 (reste, RPE 7/8/8 à 75), Chest press 70 puis 75 (monte, 70 à RPE 7 trois fois), Triceps poulie 22,5 puis 25 × 15 (monte).",
+    "FC de récupération (drop60 = pic de fin d'effort − FC à +60 s), 10 séries mesurables sur 17 : Incline chest press 8 et 24 (moyenne 16,0 contre 11,5 avant), Dips 9, 15 et 4 (9,3 contre 15,3), Dev incliné 5 et 13 (9,0 contre 15,6), Chest press 19, 12 et 7 (12,7 contre 13,3). Les Dips et le Dev incliné récupèrent moins vite que ta moyenne, les deux autres non : pas de conclusion avant le 6 novembre.",
+    "Plafond RPE 9 sur la dernière série seulement ; un test à RPE 10 se coche « test ». Poulie haut du pec toujours exclue pour le coude.",
+    "Jambes demain lundi 19/10 (plan relu demain matin avec la nuit). Ensuite 20 repos, 21 Épaules, 22 Dos, 23 repos avec tour de taille à jeun et décision du déficit (97 cm ou plus → 200 kcal par jour ; 95 cm le 17/10)."
   ]
 }
