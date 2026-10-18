@@ -1,71 +1,64 @@
 {
   "date": "2026-10-18",
-  "v": 1,
-  "ecrit": "2026-10-17T07:55:20Z",
-  "nuit": "Plan préparé le 17/10 sur la nuit du 16 au 17 (6 h 07, plancher 54, VFC 50,6). À reconfirmer demain matin avec la nuit du 17 au 18.",
+  "v": 2,
+  "ecrit": "2026-10-18T07:18:13Z",
+  "nuit": "7 h 10 de sommeil (coucher 01:50, lever 09:03), plancher 51, moyenne 58, SpO2 minimum 92, VFC 40,4 sur quatre mesures. Meilleure nuit de la semaine pour la durée et le plancher. La VFC est environ 19 % sous la médiane des deux dernières semaines (49,9), mais le sommeil est long : la règle d'allégé ne demande pas les deux signaux ici.",
   "decision": {
     "d": "maintenu",
-    "regle": "R1 non déclenchée sur la dernière nuit connue : sommeil 6 h 07, mais VFC 50,6 au-dessus de la médiane et plancher 54 (bruit de montre). R2 non déclenchée (54 < 58). Décision provisoire, relue demain matin.",
-    "motif": "Jambes décalé d'un jour à ta demande (repos le 17). Dos le 15/10, donc trois jours de récupération. 16 séries, première série de chaque exercice en palier. Si la nuit du 17 au 18 déclenche R1 (sommeil sous 6 h 30 et VFC nettement sous la médiane ou plancher en hausse), je passe en allégé demain matin."
+    "regle": "R1 non déclenchée : il faut un sommeil sous 6 h 30 ET une VFC nettement sous la médiane ou un plancher en hausse. Sommeil 7 h 10, plancher 51 (en baisse). La VFC basse seule est notée, pas un motif d'allégé. R2 non déclenchée (51 < 58).",
+    "motif": "Pecs aujourd'hui à ta demande (salle calme dimanche), six jours après la dernière séance Pecs du 12/10. Les Jambes passent à demain 19/10. 18 séries, première série de chaque exercice en palier. Si le Dev incliné ou la Chest press passent à RPE 8 dès la série 2, tu gardes la charge sans monter."
   },
   "seance": {
-    "groupe": "Jambes",
-    "titre": "Jambes — 16 séries, palier en série 1",
+    "groupe": "Pecs",
+    "titre": "Pecs — 18 séries, palier en série 1",
     "exercices": [
       {
-        "nom": "Leg press 2",
-        "series": 3,
+        "nom": "Incline chest press",
+        "series": 4,
+        "reps": 10,
+        "kg": 80,
+        "pas": 5,
+        "note": "série 1 en palier à 75, séries 2 à 4 à 80. Le 12/10 : 80 × 10 × 4 à RPE 7/8/8/8, donc on reste à 80."
+      },
+      {
+        "nom": "Dips",
+        "series": 4,
         "reps": 10,
         "kg": 170,
         "pas": 10,
-        "note": "série 1 en palier à 160, séries 2 et 3 à 170. Le 09/10 : 160 × 10 × 3 à RPE 7. Pas simple (le saut 140 → 160 était déjà un double pas). Objectif 170 × 10 × 3 au 30/11, donc atteint avec un mois et demi d'avance si ça passe."
+        "note": "série 1 en palier à 160, séries 2 à 4 à 170. Le 12/10 : 160 à RPE 6, 170 à RPE 8 puis 7. Le 180 × 8 à RPE 10 est un test, exclu du verdict."
       },
       {
-        "nom": "Hack squat",
+        "nom": "Dev incliné",
+        "series": 4,
+        "reps": 10,
+        "kg": 80,
+        "pas": 5,
+        "note": "double pas : 70 × 10 à RPE 7 le 06/10 et le 12/10. Série 1 en palier à 70, séries 2 à 4 à 80. Si la série 2 passe à RPE 8, tu gardes 80 sans monter."
+      },
+      {
+        "nom": "Chest press",
         "series": 3,
         "reps": 10,
-        "kg": 55,
-        "pas": 5,
-        "note": "charge totale en disques + élastique ; série 1 en palier à 50, séries 2 et 3 à 55. Le 09/10 : 50 + élastique à RPE 7."
-      },
-      {
-        "nom": "Leg extension",
-        "series": 3,
-        "reps": 10,
-        "kg": 70,
-        "pas": 5,
-        "note": "série 1 en palier à 65, séries 2 et 3 à 70. Le 09/10 : 70 à RPE 8/9/8, donc on reste (pas simple sur l'isolation)."
-      },
-      {
-        "nom": "Leg Curl",
-        "series": 3,
-        "reps": 12,
-        "kg": 60,
-        "pas": 5,
-        "note": "série 1 en palier à 55, séries 2 et 3 à 60. Le 09/10 : 65 × 12 à RPE 8/9 puis 55 à RPE 7 : le double pas était trop fort, on revient à 60."
-      },
-      {
-        "nom": "Rotary Calf",
-        "series": 2,
-        "reps": 22,
         "kg": 65,
         "pas": 5,
-        "note": "65 est le maximum de la machine : progression par répétitions (20 le 09/10 à RPE 7). Pas de palier."
+        "note": "série 1 en palier à 60, séries 2 et 3 à 65. Le 12/10 : 60 × 10 × 4 à RPE 7."
       },
       {
-        "nom": "Adducteurs",
-        "series": 2,
-        "reps": 20,
-        "kg": 70,
-        "pas": 5,
-        "note": "70 est le maximum de la machine : on garde 20 répétitions (RPE 8 le 09/10). Pas de palier."
+        "nom": "Triceps poulie",
+        "series": 3,
+        "reps": 15,
+        "kg": 17.5,
+        "pas": 2.5,
+        "note": "à la corde ; série 1 en palier à 15, séries 2 et 3 à 17,5. Le 12/10 : 17,5 × 15 à RPE 7."
       }
     ],
     "echauffement": [
-      "Leg press 80 × 10",
-      "Leg press 120 × 6",
-      "Leg press 140 × 3",
-      "Hack squat 20 + élastique × 8"
+      "Incline chest press 40 × 10",
+      "Incline chest press 60 × 5",
+      "Dips 120 × 5",
+      "Dips 150 × 3",
+      "Dev incliné 40 × 8"
     ],
     "tapis": {
       "min": 15,
@@ -74,9 +67,10 @@
     }
   },
   "points": [
-    "Tour de taille 95 cm le 17/10 (96 le 09/10) et poids 76,0 kg : dans le bon sens en maintien strict. La décision du déficit reste au vendredi 23/10 (97 cm ou plus → déficit de 200 kcal par jour).",
-    "Verdicts : Leg press 160 puis 170 (monte), Hack squat 50 puis 55 + élastique (monte), Leg extension 65 puis 70 (reste), Leg Curl 55 puis 60 (descend d'un pas par rapport au 09/10), Rotary Calf 65 × 22, Adducteurs 70 × 20.",
-    "Plafond RPE 9 sur la dernière série seulement. Si une charge passe à RPE 8 dès la série 1 (hors palier), tu la gardes sans monter. Un test à RPE 10 se coche « test » dans le formulaire.",
-    "Suite du calendrier : 19 Épaules (Shoulder press 80 puis 85, Upper Back 80 puis 85, Haltères latérales 15 puis 17,5, Haltères postérieur 25 puis 27,5), 20 repos, 21 Pecs, 22 Dos, 23 repos avec tour de taille à jeun."
+    "Verdicts, palier d'abord : Incline chest press 75 puis 80 (reste), Dips 160 puis 170 (reste), Dev incliné 70 puis 80 (double pas), Chest press 60 puis 65 (monte), Triceps poulie 15 puis 17,5.",
+    "Salle calme : prends tes repos complets entre les séries lourdes (Dips, Incline chest press), c'est l'occasion de bien respirer la charge. Plafond RPE 9 sur la dernière série seulement ; un test à RPE 10 se coche « test ».",
+    "Poulie haut du pec toujours exclue pour le coude. Si le coude pique sur les Dips, tu arrêtes à la série en cours et tu me le dis.",
+    "Jambes demain lundi 19/10 (plan à relire demain matin avec la nuit). Calendrier ensuite : 20 repos, 21 Épaules, 22 Dos, 23 repos avec tour de taille à jeun et décision du déficit.",
+    "VFC basse à surveiller : si elle reste sous 42 sur deux nuits de plus de 6 h 30, je la regarde avec le plancher avant de décider."
   ]
 }
