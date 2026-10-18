@@ -6749,6 +6749,22 @@
    "rpe": 6,
    "note": "",
    "at": 1792316202802
+  },
+  {
+   "id": "f7egzk7o",
+   "date": "2026-10-18",
+   "group": "Pecs",
+   "exercise": "Triceps poulie",
+   "sets": [
+    {
+     "reps": 20,
+     "kg": 22.5
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1792316498168
   }
  ],
  "treadmill": [
