@@ -16985,8 +16985,8 @@
    "sha": "00b883bd315f451d4ccc511685618aeab22cb954",
    "decision": {
     "d": "maintenu",
-    "regle": "R1 non déclenchée sur la dernière nuit connue : sommeil 6 h 07, mais VFC 50,6 au-dessus de la médiane et plancher 54 (bruit de montre). R2 non déclenchée (54 < 58). Décision provisoire, relue demain matin.",
-    "motif": "Jambes décalé d'un jour à ta demande (repos le 17). Dos le 15/10, donc trois jours de récupération. 16 séries, première série de chaque exercice en palier. Si la nuit du 17 au 18 déclenche R1 (sommeil sous 6 h 30 et VFC nettement sous la médiane ou plancher en hausse), je passe en allégé demain matin.",
+    "regle": "R1 non déclenchée : il faut un sommeil sous 6 h 30 ET une VFC nettement sous la médiane ou un plancher en hausse. Sommeil 7 h 10, plancher 51 (en baisse). La VFC basse seule est notée, pas un motif d'allégé. R2 non déclenchée (51 < 58).",
+    "motif": "Pecs aujourd'hui à ta demande (salle calme dimanche), six jours après la dernière séance Pecs du 12/10. Les Jambes passent à demain 19/10. 18 séries, première série de chaque exercice en palier. Si le Dev incliné ou la Chest press passent à RPE 8 dès la série 2, tu gardes la charge sans monter.",
     "par": "coach"
    }
   }
@@ -17002,6 +17002,10 @@
   "Leg extension": 5,
   "Leg Curl": 5,
   "Rotary Calf": 5,
-  "Adducteurs": 5
+  "Adducteurs": 5,
+  "Incline chest press": 5,
+  "Dev incliné": 5,
+  "Chest press": 5,
+  "Triceps poulie": 2.5
  }
 }
