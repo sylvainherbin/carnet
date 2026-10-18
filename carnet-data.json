@@ -6601,6 +6601,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1792313380866
+  },
+  {
+   "id": "6polnvqo",
+   "date": "2026-10-18",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 180
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1792313721985
   }
  ],
  "treadmill": [
