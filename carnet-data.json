@@ -16965,6 +16965,30 @@
    "coucher": 1792199414000,
    "lever": 1792221924000,
    "sha": "55b8947c752398abac0deefa2d1583d1f8ba1e2a"
+  },
+  {
+   "date": "2026-10-18",
+   "v": 6,
+   "n": 101,
+   "min": 51,
+   "moy": 58,
+   "hMin": "07:41",
+   "vfc": 40.4,
+   "vfcN": 4,
+   "resp": 14.5,
+   "respN": 44,
+   "spo2": 95,
+   "spo2Min": 92,
+   "dodo": 430,
+   "coucher": 1792281010000,
+   "lever": 1792307016000,
+   "sha": "00b883bd315f451d4ccc511685618aeab22cb954",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée sur la dernière nuit connue : sommeil 6 h 07, mais VFC 50,6 au-dessus de la médiane et plancher 54 (bruit de montre). R2 non déclenchée (54 < 58). Décision provisoire, relue demain matin.",
+    "motif": "Jambes décalé d'un jour à ta demande (repos le 17). Dos le 15/10, donc trois jours de récupération. 16 séries, première série de chaque exercice en palier. Si la nuit du 17 au 18 déclenche R1 (sommeil sous 6 h 30 et VFC nettement sous la médiane ou plancher en hausse), je passe en allégé demain matin.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
@@ -16973,6 +16997,11 @@
   "Leg press 2": 10,
   "Haltères latérales": 2.5,
   "Row": 10,
-  "Dips": 10
+  "Dips": 10,
+  "Hack squat": 5,
+  "Leg extension": 5,
+  "Leg Curl": 5,
+  "Rotary Calf": 5,
+  "Adducteurs": 5
  }
 }
