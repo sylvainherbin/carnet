@@ -6660,6 +6660,21 @@
    "rpe": 8,
    "note": "",
    "at": 1792314677224
+  },
+  {
+   "id": "nshz5njj",
+   "date": "2026-10-18",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 75
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1792315012050
   }
  ],
  "treadmill": [
