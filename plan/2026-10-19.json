@@ -1,65 +1,16 @@
 {
   "date": "2026-10-19",
-  "v": 2,
-  "ecrit": "2026-10-19T07:48:28Z",
-  "nuit": "6 h 14 de sommeil (coucher 03:19, lever 09:37), plancher 52, moyenne 59, SpO2 minimum 94, respiration 14. VFC 36,7 (mesures de la nuit : 28,3, 33,7, 49,4, 36,7) : environ 26 % sous la médiane des deux dernières semaines (49,9), et deuxième nuit basse de suite après 40,4. Coucher en recul de 1 h 30 par rapport à la nuit précédente.",
+  "v": 3,
+  "ecrit": "2026-10-19T07:59:53Z",
+  "nuit": "6 h 14 de sommeil (coucher 03:19), plancher 52, moyenne 59, VFC 36,7 (26 % sous la médiane de 49,9), deuxième nuit basse de suite.",
   "decision": {
-    "d": "allege",
-    "regle": "R1 à deux signaux déclenchée : sommeil 6 h 14 sous 6 h 30 ET VFC 36,7 plus de 15 % sous la médiane (49,9), lisible (dans ta plage 13 à 122). R2 non déclenchée (plancher 52 < 58).",
-    "motif": "Allégé : 8 séries, aucune charge ne monte, tapis 10 minutes. La VFC est basse deux nuits de suite, et tu viens de faire 18 séries de Pecs avec des charges en hausse. Les Jambes restent au programme aujourd'hui, avec les charges déjà tenues et sans palier à dépasser. Les exercices laissés de côté (Leg extension, Adducteurs) reviennent à la prochaine séance Jambes, avec leurs verdicts inchangés."
-  },
-  "seance": {
-    "groupe": "Jambes",
-    "titre": "Jambes allégé — 8 séries, aucune charge ne monte",
-    "exercices": [
-      {
-        "nom": "Leg press 2",
-        "series": 3,
-        "reps": 10,
-        "kg": 160,
-        "pas": 10,
-        "note": "160 est la charge déjà tenue à RPE 7 trois fois le 09/10. Pas de 170 aujourd'hui, même si ça paraît facile. RPE 7 maximum."
-      },
-      {
-        "nom": "Hack squat",
-        "series": 2,
-        "reps": 10,
-        "kg": 50,
-        "pas": 5,
-        "note": "charge totale en disques + élastique ; 50 + élastique, tenu à RPE 7 le 09/10. Pas de 55 aujourd'hui."
-      },
-      {
-        "nom": "Leg Curl",
-        "series": 2,
-        "reps": 12,
-        "kg": 55,
-        "pas": 5,
-        "note": "55 × 12 à RPE 7 le 09/10. Le 65 est passé à RPE 8/9, on ne le retente pas aujourd'hui."
-      },
-      {
-        "nom": "Rotary Calf",
-        "series": 1,
-        "reps": 20,
-        "kg": 65,
-        "pas": 5,
-        "note": "65, maximum de la machine, 20 répétitions (RPE 7 le 09/10)."
-      }
-    ],
-    "echauffement": [
-      "Leg press 80 × 10",
-      "Leg press 120 × 6",
-      "Hack squat 20 + élastique × 8"
-    ],
-    "tapis": {
-      "min": 10,
-      "pente": 13,
-      "kmh": 5.5
-    }
+    "d": "repos",
+    "regle": "Repos à ta demande. La règle d'allégé était déclenchée (sommeil 6 h 14 et VFC 26 % sous la médiane) : le repos est cohérent avec les signaux.",
+    "motif": "Deux nuits de VFC basse après 18 séries de Pecs avec des charges en hausse : un jour de repos de plus est le bon geste. Jambes décalées à demain 20/10."
   },
   "points": [
-    "Verdicts du prochain Jambes complet, palier d'abord : Leg press 160 puis 170 (monte), Hack squat 50 puis 55 + élastique (monte), Leg extension 65 puis 70 (reste), Leg Curl 55 puis 60 (reste après le recul du 09/10), Rotary Calf 65 × 22, Adducteurs 70 × 20. Rien ne change par rapport au plan prévu : on ne perd que de la progression, pas de la charge.",
-    "Plafond RPE 7 sur toute la séance aujourd'hui. Si la série 1 de Leg press passe à RPE 8 après l'échauffement, tu t'arrêtes à 2 séries.",
-    "VFC basse à surveiller : deux nuits de suite sous 41. Si elle reste basse après le repos de demain et une nuit de plus de 6 h 30, je regarde la tendance avec le plancher (52, stable) avant de décider d'Épaules mercredi.",
-    "Calendrier : 20 repos, 21 Épaules (Shoulder press 80 puis 85, Upper Back 80 puis 85, Haltères latérales 15 puis 17,5, Haltères postérieur 25 puis 27,5, confirmé mercredi matin), 22 Dos, 23 repos avec tour de taille à jeun et décision du déficit (97 cm ou plus → 200 kcal par jour ; 95 cm le 17/10)."
+    "Jambes demain mardi 20/10 : plan complet ou allégé décidé demain matin avec la nuit (R1 : sommeil sous 6 h 30 et VFC nettement sous la médiane).",
+    "Pour aider la VFC : coucher avant 02:00 ce soir. Une nuit de plus de 7 h après un jour de repos remonte en général la VFC.",
+    "Calendrier : 20 Jambes, 21 Épaules, 22 repos, 23 Dos après le tour de taille à jeun (décision du déficit : 97 cm ou plus → 200 kcal par jour ; 95 cm le 17/10)."
   ]
 }
