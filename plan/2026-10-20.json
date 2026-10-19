@@ -1,0 +1,82 @@
+{
+  "date": "2026-10-20",
+  "v": 1,
+  "ecrit": "2026-10-19T07:59:53Z",
+  "nuit": "Plan préparé le 19/10, à reconfirmer mardi matin avec la nuit du 19 au 20 (dernière nuit connue : 6 h 14, plancher 52, VFC 36,7).",
+  "decision": {
+    "d": "maintenu",
+    "regle": "Provisoire. Si la nuit du 19 au 20 donne un sommeil sous 6 h 30 ET une VFC plus de 15 % sous la médiane (environ 42), je passe en allégé (8 séries, aucune charge ne monte, tapis 10 minutes). Sinon, séance complète. R2 : plancher à 58 ou plus → allégé.",
+    "motif": "Jambes décalées du 19 au 20/10 : repos le 19 à ta demande, deux nuits de VFC basse. 16 séries, première série de chaque exercice en palier, relues mardi matin."
+  },
+  "seance": {
+    "groupe": "Jambes",
+    "titre": "Jambes — 16 séries, palier en série 1",
+    "exercices": [
+      {
+        "nom": "Leg press 2",
+        "series": 3,
+        "reps": 10,
+        "kg": 170,
+        "pas": 10,
+        "note": "série 1 en palier à 160, séries 2 et 3 à 170. Le 09/10 : 160 × 10 × 3 à RPE 7. Pas simple (le saut 140 → 160 était déjà un double pas). Objectif 170 × 10 × 3 au 30/11, donc atteint avec un mois et demi d'avance si ça passe."
+      },
+      {
+        "nom": "Hack squat",
+        "series": 3,
+        "reps": 10,
+        "kg": 55,
+        "pas": 5,
+        "note": "charge totale en disques + élastique ; série 1 en palier à 50, séries 2 et 3 à 55. Le 09/10 : 50 + élastique à RPE 7."
+      },
+      {
+        "nom": "Leg extension",
+        "series": 3,
+        "reps": 10,
+        "kg": 70,
+        "pas": 5,
+        "note": "série 1 en palier à 65, séries 2 et 3 à 70. Le 09/10 : 70 à RPE 8/9/8, donc on reste (pas simple sur l'isolation)."
+      },
+      {
+        "nom": "Leg Curl",
+        "series": 3,
+        "reps": 12,
+        "kg": 60,
+        "pas": 5,
+        "note": "série 1 en palier à 55, séries 2 et 3 à 60. Le 09/10 : 65 × 12 à RPE 8/9 puis 55 à RPE 7 : le double pas était trop fort, on revient à 60."
+      },
+      {
+        "nom": "Rotary Calf",
+        "series": 2,
+        "reps": 22,
+        "kg": 65,
+        "pas": 5,
+        "note": "65 est le maximum de la machine : progression par répétitions (20 le 09/10 à RPE 7). Pas de palier."
+      },
+      {
+        "nom": "Adducteurs",
+        "series": 2,
+        "reps": 20,
+        "kg": 70,
+        "pas": 5,
+        "note": "70 est le maximum de la machine : on garde 20 répétitions (RPE 8 le 09/10). Pas de palier."
+      }
+    ],
+    "echauffement": [
+      "Leg press 80 × 10",
+      "Leg press 120 × 6",
+      "Leg press 140 × 3",
+      "Hack squat 20 + élastique × 8"
+    ],
+    "tapis": {
+      "min": 15,
+      "pente": 13,
+      "kmh": 5.5
+    }
+  },
+  "points": [
+    "Tour de taille 95 cm le 17/10 (96 le 09/10) et poids 76,0 kg : dans le bon sens en maintien strict. La décision du déficit reste au vendredi 23/10 (97 cm ou plus → déficit de 200 kcal par jour).",
+    "Verdicts : Leg press 160 puis 170 (monte), Hack squat 50 puis 55 + élastique (monte), Leg extension 65 puis 70 (reste), Leg Curl 55 puis 60 (descend d'un pas par rapport au 09/10), Rotary Calf 65 × 22, Adducteurs 70 × 20.",
+    "Plafond RPE 9 sur la dernière série seulement. Si une charge passe à RPE 8 dès la série 1 (hors palier), tu la gardes sans monter. Un test à RPE 10 se coche « test » dans le formulaire.",
+    "Calendrier : 21 Épaules (Shoulder press 80 puis 85, Upper Back 80 puis 85, Haltères latérales 15 puis 17,5, Haltères postérieur 25 puis 27,5), 22 repos, 23 Dos après le tour de taille à jeun."
+  ]
+}
