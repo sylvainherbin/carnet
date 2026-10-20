@@ -6644,6 +6644,22 @@
    "rpe": 6,
    "note": "",
    "at": 1792490008685
+  },
+  {
+   "id": "rcuzweif",
+   "date": "2026-10-20",
+   "group": "Jambes",
+   "exercise": "Leg Curl",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1792490359768
   }
  ],
  "treadmill": [
