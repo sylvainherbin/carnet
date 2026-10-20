@@ -17035,8 +17035,8 @@
    "sha": "35e6c10f97ba38d6c612bc86a0614876c1cd001e",
    "decision": {
     "d": "maintenu",
-    "regle": "Provisoire. Si la nuit du 19 au 20 donne un sommeil sous 6 h 30 ET une VFC plus de 15 % sous la médiane (environ 42), je passe en allégé (8 séries, aucune charge ne monte, tapis 10 minutes). Sinon, séance complète. R2 : plancher à 58 ou plus → allégé.",
-    "motif": "Jambes décalées du 19 au 20/10 : repos le 19 à ta demande, deux nuits de VFC basse. 16 séries, première série de chaque exercice en palier, relues mardi matin.",
+    "regle": "R1 à la limite des deux côtés : sommeil 6 h 27 pour un seuil de 6 h 30 (3 minutes) et VFC 41,7 à 15,1 % sous la médiane pour un seuil de 15 % (0,1 point). Ces écarts sont dans le bruit de mesure et la VFC remonte après le jour de repos : je ne déclenche pas l'allégé. Plancher 52, stable. R2 non déclenchée (52 < 58).",
+    "motif": "Jambes complètes (16 séries, première série de chaque exercice en palier), avec un garde-fou : si la série 1 de Leg press, après l'échauffement, passe à RPE 8 ou plus, tu arrêtes la séance après le Hack squat (allégé de fait) et tu passes directement au tapis 10 minutes. Si la nuit prochaine rebaisse la VFC sous 40, on en reparle pour Épaules.",
     "par": "coach"
    }
   }
