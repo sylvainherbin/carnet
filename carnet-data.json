@@ -6660,6 +6660,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1792490359768
+  },
+  {
+   "id": "iuhtynga",
+   "date": "2026-10-20",
+   "group": "Jambes",
+   "exercise": "Leg Curl",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 60
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1792490761976
   }
  ],
  "treadmill": [
