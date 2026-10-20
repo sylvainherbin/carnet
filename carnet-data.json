@@ -17014,6 +17014,31 @@
     "motif": "Jambes décalées au 19/10 à ta demande (Pecs le 18). Elles viennent après une séance Pecs de 18 séries, avec 16 séries, premières séries en palier. Si la nuit du 18 au 19 déclenche R1 (sommeil sous 6 h 30 et VFC nettement sous la médiane ou plancher en hausse), je passe en allégé lundi matin.",
     "par": "coach"
    }
+  },
+  {
+   "date": "2026-10-20",
+   "v": 6,
+   "n": 91,
+   "min": 52,
+   "moy": 60,
+   "hMin": "09:01",
+   "vfc": 41.7,
+   "vfcN": 2,
+   "resp": 14.5,
+   "respN": 39,
+   "spo2": 95,
+   "spo2Min": 94,
+   "temp": 35.71,
+   "dodo": 387,
+   "coucher": 1792455646000,
+   "lever": 1792479784000,
+   "sha": "35e6c10f97ba38d6c612bc86a0614876c1cd001e",
+   "decision": {
+    "d": "maintenu",
+    "regle": "Provisoire. Si la nuit du 19 au 20 donne un sommeil sous 6 h 30 ET une VFC plus de 15 % sous la médiane (environ 42), je passe en allégé (8 séries, aucune charge ne monte, tapis 10 minutes). Sinon, séance complète. R2 : plancher à 58 ou plus → allégé.",
+    "motif": "Jambes décalées du 19 au 20/10 : repos le 19 à ta demande, deux nuits de VFC basse. 16 séries, première série de chaque exercice en palier, relues mardi matin.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
