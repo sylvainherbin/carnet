@@ -6570,6 +6570,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1792488480824
+  },
+  {
+   "id": "ki1ndt90",
+   "date": "2026-10-20",
+   "group": "Jambes",
+   "exercise": "Hack squat",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 50
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1792488813399
   }
  ],
  "treadmill": [
