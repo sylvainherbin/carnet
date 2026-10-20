@@ -6720,6 +6720,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1792491315478
+  },
+  {
+   "id": "q3bkc2l8",
+   "date": "2026-10-20",
+   "group": "Jambes",
+   "exercise": "Adducteurs",
+   "sets": [
+    {
+     "reps": 25,
+     "kg": 70
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1792491676446
   }
  ],
  "treadmill": [
@@ -17264,6 +17280,11 @@
     "regle": "R1 à la limite des deux côtés : sommeil 6 h 27 pour un seuil de 6 h 30 (3 minutes) et VFC 41,7 à 15,1 % sous la médiane pour un seuil de 15 % (0,1 point). Ces écarts sont dans le bruit de mesure et la VFC remonte après le jour de repos : je ne déclenche pas l'allégé. Plancher 52, stable. R2 non déclenchée (52 < 58).",
     "motif": "Jambes complètes (16 séries, première série de chaque exercice en palier), avec un garde-fou : si la série 1 de Leg press, après l'échauffement, passe à RPE 8 ou plus, tu arrêtes la séance après le Hack squat (allégé de fait) et tu passes directement au tapis 10 minutes. Si la nuit prochaine rebaisse la VFC sous 40, on en reparle pour Épaules.",
     "par": "coach"
+   },
+   "plan": {
+    "prevues": 16,
+    "faites": 16,
+    "conforme": true
    }
   }
  ],
