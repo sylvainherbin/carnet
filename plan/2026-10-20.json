@@ -1,12 +1,12 @@
 {
   "date": "2026-10-20",
-  "v": 2,
-  "ecrit": "2026-10-20T07:40:09Z",
+  "v": 3,
+  "ecrit": "2026-10-20T10:23:41Z",
   "nuit": "6 h 27 de sommeil (coucher 02:20, lever 09:03), plancher 52, moyenne 60, SpO2 minimum 94, respiration 14,5. VFC 41,7 (mesures de la nuit : 61,5, 48,5, 40,1, 43,3), en remontée depuis 36,7 hier. Médiane des deux dernières semaines : 49,1. Coucher avancé de 1 heure par rapport à avant-hier.",
   "decision": {
     "d": "maintenu",
     "regle": "R1 à la limite des deux côtés : sommeil 6 h 27 pour un seuil de 6 h 30 (3 minutes) et VFC 41,7 à 15,1 % sous la médiane pour un seuil de 15 % (0,1 point). Ces écarts sont dans le bruit de mesure et la VFC remonte après le jour de repos : je ne déclenche pas l'allégé. Plancher 52, stable. R2 non déclenchée (52 < 58).",
-    "motif": "Jambes complètes (16 séries, première série de chaque exercice en palier), avec un garde-fou : si la série 1 de Leg press, après l'échauffement, passe à RPE 8 ou plus, tu arrêtes la séance après le Hack squat (allégé de fait) et tu passes directement au tapis 10 minutes. Si la nuit prochaine rebaisse la VFC sous 40, on en reparle pour Épaules."
+    "motif": "Jambes complètes (16 séries, première série de chaque exercice en palier), avec un garde-fou : si la série 1 de Leg press, après l'échauffement, passe à RPE 8 ou plus, tu arrêtes la séance après le Hack squat (allégé de fait) et tu passes directement au tapis 10 minutes. Si la nuit prochaine rebaisse la VFC sous 40, on en reparle pour Épaules. Fait : 16 séries sur 16, environ 1 h 25 entre la première et la dernière série, RPE saisis par Sylvain, tapis non fait (choix de Sylvain). Leg press 160, 170 puis 180 × 10 (RPE 6/6/7, trois charges différentes au lieu de 160 puis 170 × 2). Hack squat 40 puis 50 × 2 (RPE 6/7/7, sans mention de l'élastique dans la saisie). Leg extension 60 puis 70 × 2 (RPE 6/7/7). Leg Curl 55 puis 60 × 2 (RPE 6/7/7). Rotary Calf 65 × 25 × 2 (RPE 7). Adducteurs 70 × 20 puis 70 × 25 (RPE 7). FC séance moyenne 106, maximum 134."
   },
   "seance": {
     "groupe": "Jambes",
@@ -74,9 +74,10 @@
     }
   },
   "points": [
-    "Verdicts, palier d'abord : Leg press 160 puis 170 (monte), Hack squat 50 puis 55 + élastique (monte), Leg extension 65 puis 70 (reste), Leg Curl 55 puis 60 (le 65 était passé à RPE 8/9), Rotary Calf 65 × 22, Adducteurs 70 × 20.",
-    "Plafond RPE 9 sur la dernière série seulement ; un test à RPE 10 se coche « test ».",
-    "Tour de taille 95 cm le 17/10 (96 le 09/10) et poids 76,0 kg : dans le bon sens en maintien strict. La décision du déficit reste au vendredi 23/10 (97 cm ou plus → 200 kcal par jour).",
-    "Calendrier : 21 Épaules (Shoulder press 80 puis 85, Upper Back 80 puis 85, Haltères latérales 15 puis 17,5, Haltères postérieur 25 puis 27,5), 22 repos, 23 Dos après le tour de taille à jeun."
+    "Verdicts du prochain Jambes complet, palier d'abord : Leg press 170 puis 180 (monte, 180 × 10 à RPE 7 une fois, 170 à RPE 6), Hack squat 50 puis 55 (monte, 50 à RPE 7 deux fois), Leg extension 70 puis 75 (monte, 70 à RPE 7 deux fois, pas simple), Leg Curl 60 puis 65 (monte, le 65 de la dernière fois était passé à RPE 8/9 : si ça se reproduit, tu restes à 60), Rotary Calf 65 × 30 (maximum de la machine, 25 répétitions à RPE 7), Adducteurs 70 × 25 (maximum de la machine).",
+    "Objectif Leg press 2 au 30/11 (170 × 10 × 3 sous RPE 8) : 170 et 180 tenus à RPE 6-7 sur une série chacun, il reste à le confirmer sur trois séries de suite à 170 ou plus.",
+    "FC de récupération (drop60 = pic de fin d'effort − FC à +60 s), 9 séries mesurables sur 16 : Leg press 16 et 7 (moyenne 11,5 contre 19,8 avant), Hack squat 12 et 13 (12,5 contre 16,7), Leg extension 28 (contre 20,1), Leg Curl 5 et 13 (9,0 contre 9,7), Rotary Calf 25 (contre 18,9), Adducteurs 11 (contre 12,6). Leg press et Hack squat, comme les Dips et le Dev incliné du 18/10, récupèrent moins vite que ta moyenne ; l'isolation est normale. À juger vers le 6 novembre.",
+    "Précise-moi si le Hack squat était avec ou sans élastique : la saisie ne le dit pas, et la charge de 50 n'a de sens que dans la même configuration que le 09/10 (50 + élastique).",
+    "Calendrier : 21 Épaules (plan provisoire, relu demain matin avec la nuit), 22 repos, 23 Dos après le tour de taille à jeun (95 cm le 17/10 ; 97 cm ou plus → déficit de 200 kcal par jour)."
   ]
 }
