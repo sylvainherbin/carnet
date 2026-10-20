@@ -6599,6 +6599,22 @@
    "rpe": 6,
    "note": "",
    "at": 1792489131242
+  },
+  {
+   "id": "rracud1v",
+   "date": "2026-10-20",
+   "group": "Jambes",
+   "exercise": "Leg extension",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 70
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1792489468409
   }
  ],
  "treadmill": [
