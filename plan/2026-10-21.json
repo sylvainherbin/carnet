@@ -1,65 +1,16 @@
 {
   "date": "2026-10-21",
-  "v": 2,
-  "ecrit": "2026-10-21T07:50:29Z",
-  "nuit": "5 h 53 de sommeil (coucher 03:24, lever 09:26), plancher 53, moyenne 61, SpO2 minimum 90, respiration 14,3. VFC 30,8 (mesures de la nuit : 24,6, 27,2, 37,5, 30,8) : environ 35 % sous la médiane des 14 dernières nuits (47,6). Troisième nuit sous 42 en quatre nuits (40,4, 36,7, 41,7, 30,8), et la plus basse depuis le début du relevé.",
+  "v": 3,
+  "ecrit": "2026-10-21T07:52:16Z",
+  "nuit": "5 h 53 de sommeil (coucher 03:24), plancher 53, moyenne 61, VFC 30,8 (35 % sous la médiane de 47,6), la plus basse du relevé ; troisième nuit sous 42 en quatre nuits.",
   "decision": {
-    "d": "allege",
-    "regle": "R1 à deux signaux déclenchée : sommeil 5 h 53 sous 6 h 30 ET VFC 30,8 plus de 15 % sous la médiane (47,6), lisible (dans ta plage 13 à 122). Plancher 53, en hausse d’un point seulement. R2 non déclenchée (53 < 58).",
-    "motif": "Allégé : 8 séries, aucune charge ne monte, tapis 10 minutes. Épaules aux charges tenues le 11/10, deux séries par exercice, sans palier à dépasser. La VFC baisse depuis quatre nuits alors que tu enchaînes Pecs le 18 et Jambes le 20 : on garde le volume bas aujourd’hui et la progression attend la prochaine séance Épaules, avec les verdicts inchangés."
-  },
-  "seance": {
-    "groupe": "Épaules",
-    "titre": "Épaules allégé — 8 séries, aucune charge ne monte",
-    "exercices": [
-      {
-        "nom": "Shoulder press",
-        "series": 2,
-        "reps": 10,
-        "kg": 80,
-        "pas": 5,
-        "note": "80 × 10 tenu à RPE 7 deux fois le 11/10. Pas de 85 aujourd’hui."
-      },
-      {
-        "nom": "Upper Back",
-        "series": 2,
-        "reps": 12,
-        "kg": 80,
-        "pas": 5,
-        "note": "80 × 12 tenu à RPE 7 deux fois le 11/10. Pas de 85 aujourd’hui."
-      },
-      {
-        "nom": "Haltères latérales",
-        "series": 2,
-        "reps": 10,
-        "kg": 15,
-        "pas": 2.5,
-        "note": "15 × 10 tenu à RPE 7 le 11/10. Pas de 17,5 aujourd’hui."
-      },
-      {
-        "nom": "Haltères postérieur",
-        "series": 2,
-        "reps": 15,
-        "kg": 25,
-        "pas": 2.5,
-        "note": "25 × 15 tenu à RPE 7 le 11/10. Pas de 27,5 aujourd’hui."
-      }
-    ],
-    "echauffement": [
-      "Shoulder press 40 × 10",
-      "Shoulder press 60 × 6",
-      "Upper Back 50 × 8"
-    ],
-    "tapis": {
-      "min": 10,
-      "pente": 13,
-      "kmh": 5.5
-    }
+    "d": "repos",
+    "regle": "Repos à ta demande. La règle d’allégé était déclenchée (sommeil 5 h 53 et VFC 35 % sous la médiane) : le repos est cohérent avec les signaux.",
+    "motif": "VFC en baisse depuis quatre nuits après Pecs le 18 et Jambes le 20, avec une nuit courte : un jour de repos est le bon geste. Épaules décalées à demain 22/10."
   },
   "points": [
-    "Plafond RPE 7 sur toute la séance, aucun test. Si la série 1 de Shoulder press passe à RPE 8 après l’échauffement, tu fais seulement une série par exercice.",
-    "Verdicts du prochain Épaules complet, inchangés, palier d’abord : Shoulder press 80 puis 85, Upper Back 80 puis 85, Haltères latérales 15 puis 17,5, Haltères postérieur 25 puis 27,5.",
-    "VFC à surveiller : si elle reste sous 40 après le repos de demain, je regarde le plancher et le sommeil avant de décider du Dos le 23.",
-    "Calendrier : 22 repos, 23 Dos après le tour de taille à jeun (décision du déficit : 97 cm ou plus → 200 kcal par jour ; 95 cm le 17/10)."
+    "Épaules demain jeudi 22/10 : plan complet (Shoulder press 80 puis 85, Upper Back 80 puis 85, Haltères latérales 15 puis 17,5, Haltères postérieur 25 puis 27,5) ou allégé, décidé demain matin avec la nuit.",
+    "Pour aider la VFC : coucher avant 02:00 ce soir. Les trois dernières nuits ont commencé après 02:00.",
+    "Calendrier : 22 Épaules, 23 Dos après le tour de taille à jeun (décision du déficit : 97 cm ou plus → 200 kcal par jour ; 95 cm le 17/10)."
   ]
 }
