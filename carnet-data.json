@@ -17746,9 +17746,9 @@
    "sha": "3f8093bccb2858b8af1f48edb4d391344d2fb176",
    "repas": "19:40",
    "decision": {
-    "d": "maintenu",
-    "regle": "Provisoire. Allégé si la nuit du 20 au 21 donne un sommeil sous 6 h 30 ET une VFC plus de 15 % sous la médiane (environ 42), ou un plancher à 58 ou plus (R2).",
-    "motif": "Épaules complètes : 16 séries, première série de chaque exercice en palier. Dernière séance Épaules le 11/10 (dix jours). Si la VFC rebaisse sous 40 avec un sommeil court, je passe en allégé mercredi matin.",
+    "d": "repos",
+    "regle": "Repos à ta demande. La règle d’allégé était déclenchée (sommeil 5 h 53 et VFC 35 % sous la médiane) : le repos est cohérent avec les signaux.",
+    "motif": "VFC en baisse depuis quatre nuits après Pecs le 18 et Jambes le 20, avec une nuit courte : un jour de repos est le bon geste. Épaules décalées à demain 22/10.",
     "par": "coach"
    }
   }
