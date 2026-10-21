@@ -17728,7 +17728,29 @@
   },
   {
    "date": "2026-10-21",
-   "repas": "19:40"
+   "v": 6,
+   "n": 83,
+   "min": 53,
+   "moy": 61,
+   "hMin": "08:31",
+   "vfc": 30.8,
+   "vfcN": 3,
+   "resp": 14.3,
+   "respN": 36,
+   "spo2": 95,
+   "spo2Min": 90,
+   "temp": 35.79,
+   "dodo": 353,
+   "coucher": 1792545888000,
+   "lever": 1792567585000,
+   "sha": "3f8093bccb2858b8af1f48edb4d391344d2fb176",
+   "repas": "19:40",
+   "decision": {
+    "d": "maintenu",
+    "regle": "Provisoire. Allégé si la nuit du 20 au 21 donne un sommeil sous 6 h 30 ET une VFC plus de 15 % sous la médiane (environ 42), ou un plancher à 58 ou plus (R2).",
+    "motif": "Épaules complètes : 16 séries, première série de chaque exercice en palier. Dernière séance Épaules le 11/10 (dix jours). Si la VFC rebaisse sous 40 avec un sommeil court, je passe en allégé mercredi matin.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
@@ -17746,6 +17768,7 @@
   "Incline chest press": 5,
   "Dev incliné": 5,
   "Chest press": 5,
-  "Triceps poulie": 2.5
+  "Triceps poulie": 2.5,
+  "Upper Back": 5
  }
 }
