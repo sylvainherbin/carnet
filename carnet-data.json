@@ -17751,6 +17751,24 @@
     "motif": "VFC en baisse depuis quatre nuits après Pecs le 18 et Jambes le 20, avec une nuit courte : un jour de repos est le bon geste. Épaules décalées à demain 22/10.",
     "par": "coach"
    }
+  },
+  {
+   "date": "2026-10-22",
+   "v": 6,
+   "n": 55,
+   "min": 53,
+   "moy": 61,
+   "hMin": "09:16",
+   "vfc": 48.6,
+   "vfcN": 2,
+   "resp": 14,
+   "respN": 23,
+   "spo2": 95,
+   "spo2Min": 94,
+   "dodo": 238,
+   "coucher": 1792639190000,
+   "lever": 1792653535000,
+   "sha": "401d124c44a833a18627cf67d59d5514da93a1c8"
   }
  ],
  "pas": {
