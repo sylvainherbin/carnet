@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-23",
+  "v": 1,
+  "ecrit": "2026-10-23T08:21:56Z",
+  "nuit": "5 h 55 de sommeil (coucher 03:41, lever 09:45), plancher 51, moyenne 59, SpO2 minimum 91, respiration 14,5. VFC 41,6, 5 % sous la médiane des 14 dernières nuits (43,9). La nuit précédente était très courte : 3 h 58 (coucher 05:19), VFC 48,6.",
+  "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée : sommeil 5 h 55 sous 6 h 30, mais la VFC n’est que 5 % sous la médiane (seuil 15 %) et le plancher baisse (51). Un seul signal sur deux. R2 non déclenchée (51 < 58).",
+    "motif": "Épaules complètes (16 séries, première série de chaque exercice en palier), décalées du 21 et non faites le 22 : dernière séance Épaules le 11/10, il y a douze jours. Garde-fou à cause de deux nuits courtes de suite : si la série 1 de Shoulder press passe à RPE 8 ou plus après l’échauffement, tu restes à 80 sur toute la séance, sans monter aucune charge, et tu t’arrêtes à deux séries par exercice. Dos demain 24/10."
+  },
+  "seance": {
+    "groupe": "Épaules",
+    "titre": "Épaules — 16 séries, palier en série 1",
+    "exercices": [
+      {
+        "nom": "Shoulder press",
+        "series": 4,
+        "reps": 10,
+        "kg": 85,
+        "pas": 5,
+        "note": "série 1 en palier à 80, séries 2 à 4 à 85. Le 11/10 : 80 × 10 × 2 à RPE 7 ; le saut 70 → 80 était déjà un double pas, donc pas simple. Objectif 85 × 10 × 3 au 30/11."
+      },
+      {
+        "nom": "Upper Back",
+        "series": 4,
+        "reps": 12,
+        "kg": 85,
+        "pas": 5,
+        "note": "série 1 en palier à 80, séries 2 à 4 à 85. Le 11/10 : 80 × 12 × 2 à RPE 7, test 95 × 10 à RPE 9 (marge confirmée)."
+      },
+      {
+        "nom": "Haltères latérales",
+        "series": 4,
+        "reps": 10,
+        "kg": 17.5,
+        "pas": 2.5,
+        "note": "série 1 en palier à 15, séries 2 à 4 à 17,5. Le 11/10 : 15 × 10 × 2 à RPE 7."
+      },
+      {
+        "nom": "Haltères postérieur",
+        "series": 4,
+        "reps": 15,
+        "kg": 27.5,
+        "pas": 2.5,
+        "note": "série 1 en palier à 25, séries 2 à 4 à 27,5. Le 11/10 : 25 × 15 × 2 à RPE 7 ; le 30 était un test."
+      }
+    ],
+    "echauffement": [
+      "Shoulder press 40 × 10",
+      "Shoulder press 60 × 6",
+      "Upper Back 50 × 8",
+      "Upper Back 70 × 5"
+    ],
+    "tapis": {
+      "min": 15,
+      "pente": 13,
+      "kmh": 5.5
+    }
+  },
+  "points": [
+    "Verdicts, palier d’abord : Shoulder press 80 puis 85, Upper Back 80 puis 85, Haltères latérales 15 puis 17,5, Haltères postérieur 25 puis 27,5.",
+    "Plafond RPE 9 sur la dernière série seulement ; un test à RPE 10 se coche « test ».",
+    "Tour de taille à jeun ce matin, à saisir dans Carnet : 97 cm ou plus → déficit de 200 kcal par jour ; 95 cm le 17/10.",
+    "Coucher avant 02:00 ce soir : tes quatre dernières nuits ont commencé entre 02:20 et 05:19.",
+    "Calendrier : 24 Dos (Row, PullDown, Pulley, Tirage vertical serré), 25 Pecs ou repos selon la nuit."
+  ]
+}
