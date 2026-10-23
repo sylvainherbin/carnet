@@ -1,12 +1,12 @@
 {
   "date": "2026-10-23",
-  "v": 1,
-  "ecrit": "2026-10-23T08:21:56Z",
+  "v": 2,
+  "ecrit": "2026-10-23T09:55:36Z",
   "nuit": "5 h 55 de sommeil (coucher 03:41, lever 09:45), plancher 51, moyenne 59, SpO2 minimum 91, respiration 14,5. VFC 41,6, 5 % sous la médiane des 14 dernières nuits (43,9). La nuit précédente était très courte : 3 h 58 (coucher 05:19), VFC 48,6.",
   "decision": {
     "d": "maintenu",
     "regle": "R1 non déclenchée : sommeil 5 h 55 sous 6 h 30, mais la VFC n’est que 5 % sous la médiane (seuil 15 %) et le plancher baisse (51). Un seul signal sur deux. R2 non déclenchée (51 < 58).",
-    "motif": "Épaules complètes (16 séries, première série de chaque exercice en palier), décalées du 21 et non faites le 22 : dernière séance Épaules le 11/10, il y a douze jours. Garde-fou à cause de deux nuits courtes de suite : si la série 1 de Shoulder press passe à RPE 8 ou plus après l’échauffement, tu restes à 80 sur toute la séance, sans monter aucune charge, et tu t’arrêtes à deux séries par exercice. Dos demain 24/10."
+    "motif": "Épaules complètes (16 séries, première série de chaque exercice en palier), décalées du 21 et non faites le 22 : dernière séance Épaules le 11/10, il y a douze jours. Garde-fou à cause de deux nuits courtes de suite : si la série 1 de Shoulder press passe à RPE 8 ou plus après l’échauffement, tu restes à 80 sur toute la séance, sans monter aucune charge, et tu t’arrêtes à deux séries par exercice. Dos demain 24/10. Fait : 12 séries sur 16 en 52 minutes (11 h 00 à 11 h 52), séance écourtée par manque de temps (choix de Sylvain), sans Haltères postérieur ni tapis. Garde-fou non déclenché (série 1 de Shoulder press à RPE 6). Shoulder press 80, 85, 85 puis 90 × 10 (RPE 6/7/7/8, le 90 en plus du plan). Upper Back 80, 85 puis 90 × 2 × 12 (RPE 6/6/7/7, 90 au lieu de 85). Haltères latérales 15 × 10 × 4 (RPE 7, non saisi par Sylvain : valeur automatique). FC séance moyenne 108, maximum 138."
   },
   "seance": {
     "groupe": "Épaules",
@@ -58,10 +58,9 @@
     }
   },
   "points": [
-    "Verdicts, palier d’abord : Shoulder press 80 puis 85, Upper Back 80 puis 85, Haltères latérales 15 puis 17,5, Haltères postérieur 25 puis 27,5.",
-    "Plafond RPE 9 sur la dernière série seulement ; un test à RPE 10 se coche « test ».",
-    "Tour de taille à jeun ce matin, à saisir dans Carnet : 97 cm ou plus → déficit de 200 kcal par jour ; 95 cm le 17/10.",
-    "Coucher avant 02:00 ce soir : tes quatre dernières nuits ont commencé entre 02:20 et 05:19.",
-    "Calendrier : 24 Dos (Row, PullDown, Pulley, Tirage vertical serré), 25 Pecs ou repos selon la nuit."
+    "Verdicts du prochain Épaules, palier d’abord : Shoulder press 85 puis 90, Upper Back 90 puis 95, Haltères latérales 15 puis 17,5 (RPE à saisir : celui d’aujourd’hui est automatique), Haltères postérieur 25 puis 27,5 (pas fait aujourd’hui).",
+    "Shoulder press : 85 × 10 tenu à RPE 7 deux fois ; l’objectif 85 × 10 × 3 sous RPE 8 se confirme à la prochaine séance.",
+    "Calendrier : 24 Dos, 25 repos ou Pecs selon la nuit.",
+    "Coucher avant 02:00 ce soir."
   ]
 }
