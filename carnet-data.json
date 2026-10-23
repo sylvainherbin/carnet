@@ -7141,6 +7141,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1792748277711
+  },
+  {
+   "id": "gc6vkgoe",
+   "date": "2026-10-23",
+   "group": "Épaules",
+   "exercise": "Haltères latérales",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 15
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1792748557011
   }
  ],
  "treadmill": [
