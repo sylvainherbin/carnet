@@ -18519,7 +18519,13 @@
    "coucher": 1792719678000,
    "lever": 1792741526000,
    "sha": "c91d30c2e39f7634f41360c4fadc3cac9d99769b",
-   "repas": "19:11"
+   "repas": "19:11",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée : sommeil 5 h 55 sous 6 h 30, mais la VFC n’est que 5 % sous la médiane (seuil 15 %) et le plancher baisse (51). Un seul signal sur deux. R2 non déclenchée (51 < 58).",
+    "motif": "Épaules complètes (16 séries, première série de chaque exercice en palier), décalées du 21 et non faites le 22 : dernière séance Épaules le 11/10, il y a douze jours. Garde-fou à cause de deux nuits courtes de suite : si la série 1 de Shoulder press passe à RPE 8 ou plus après l’échauffement, tu restes à 80 sur toute la séance, sans monter aucune charge, et tu t’arrêtes à deux séries par exercice. Dos demain 24/10.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
