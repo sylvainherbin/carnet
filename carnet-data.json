@@ -7080,6 +7080,21 @@
    "rpe": 6,
    "note": "",
    "at": 1792747155412
+  },
+  {
+   "id": "bi8rwq1d",
+   "date": "2026-10-23",
+   "group": "Épaules",
+   "exercise": "Upper Back",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 85
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1792747432547
   }
  ],
  "treadmill": [
