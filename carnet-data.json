@@ -7215,6 +7215,22 @@
    "rpe": 7,
    "note": "",
    "at": 1792923700852
+  },
+  {
+   "id": "rbff0n43",
+   "date": "2026-10-25",
+   "group": "Pecs",
+   "exercise": "Incline chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 85
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1792923918051
   }
  ],
  "treadmill": [
