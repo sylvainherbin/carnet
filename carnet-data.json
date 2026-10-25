@@ -7305,6 +7305,22 @@
    "rpe": 5,
    "note": "",
    "at": 1792926274278
+  },
+  {
+   "id": "k1kybeit",
+   "date": "2026-10-25",
+   "group": "Pecs",
+   "exercise": "Chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 75
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1792926526863
   }
  ],
  "treadmill": [
