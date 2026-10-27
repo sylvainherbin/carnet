@@ -1,12 +1,12 @@
 {
   "date": "2026-10-27",
-  "v": 2,
-  "ecrit": "2026-10-27T11:00:52Z",
+  "v": 3,
+  "ecrit": "2026-10-27T11:07:45Z",
   "nuit": "6 h 47 de sommeil (coucher 02:14, lever 09:04), plancher 53, moyenne 60, SpO2 minimum 90, VFC 42,9 (médiane des 14 dernières nuits : 41,7). La meilleure nuit depuis le 18/10. Les relevés des nuits du 24 et du 26 manquent.",
   "decision": {
     "d": "maintenu",
     "regle": "R1 non déclenchée : sommeil 6 h 47, au-dessus de 6 h 30, et VFC 42,9 au niveau de la médiane (pas 15 % sous). Plancher 53, stable. R2 non déclenchée (53 < 58).",
-    "motif": "Dos complet : 16 séries, première série de chaque exercice en palier. Dernière séance Dos le 15/10, douze jours, et deux jours après les Pecs du 25/10, qui ne chargent pas les mêmes muscles. Fait : 14 séries sur 16 en 1 h 20 environ (10 h 43 à 11 h 59 pour la dernière série), RPE saisis par Sylvain, tapis non fait. PullDown dans l’ordre en premier : 95, 100, 100 puis 105 × 12 (RPE 6/6/6/7, plan 95 puis 100). Row 140 puis 150 × 3 × 10 (RPE 6/7/7/7), plan respecté. Pulley 55 × 10 × 3 (RPE 7), sans palier à 50 et une série de moins. Tirage vertical serré 60, 65 puis 70 × 12 (RPE 7/7/8), une série de moins, le 70 monte à RPE 8. FC séance moyenne 113, maximum 145 (au Row)."
+    "motif": "Dos complet : 16 séries, première série de chaque exercice en palier. Dernière séance Dos le 15/10, douze jours, et deux jours après les Pecs du 25/10, qui ne chargent pas les mêmes muscles. Fait : 14 séries sur 16 en 1 h 20 environ (10 h 43 à 11 h 59 pour la dernière série), RPE saisis par Sylvain, tapis non fait. PullDown dans l’ordre en premier : 95, 100, 100 puis 105 × 12 (RPE 6/6/6/7, plan 95 puis 100). Row 140 puis 150 × 3 × 10 (RPE 6/7/7/7), plan respecté. Pulley 55 × 10 × 3 (RPE 7), sans palier à 50 et une série de moins, par choix de Sylvain après le Row. Tirage vertical serré 60, 65 puis 70 × 12 (RPE 7/7/8), une série de moins (voir étoiles), le 70 monte à RPE 8. FC séance moyenne 113, maximum 145 (au Row). Étourdissement : à la 3e série du Row (150 × 10, RPE 7), Sylvain a vu des étoiles ; il a limité Pulley et Tirage vertical serré à 3 séries."
   },
   "seance": {
     "groupe": "Dos",
@@ -59,8 +59,8 @@
     }
   },
   "points": [
-    "Verdicts du prochain Dos, palier d’abord : Row 150 puis 160 (monte, trois séries à 150 à RPE 7), PullDown 100 puis 105 (monte, le 105 est passé à RPE 7), Pulley 55 puis 60 (monte), Tirage vertical serré 65 puis 70 (reste, le 70 est passé à RPE 8).",
-    "Row 150 × 10 × 3 à RPE 7 : tu es à un pas de l’objectif 160 × 10 × 3 sous RPE 8 du 30/11.",
+    "Verdicts du prochain Dos, palier d’abord : Row 150 puis 150 (le 160 attend de savoir si les étoiles reviennent), PullDown 100 puis 105, Pulley 55 puis 60, Tirage vertical serré 65 puis 70 (reste, le 70 est passé à RPE 8).",
+    "Row 150 × 10 × 3 à RPE 7 : à un pas de l’objectif 160 × 10 × 3 du 30/11, mais le Row passe après la santé : pas de 160 tant que les étoiles reviennent.",
     "Calendrier : 28 repos, 29 Jambes ou Épaules selon la nuit. Tour de taille à jeun le 06/11.",
     "Coucher avant 02:00 : cette nuit était ta meilleure depuis le 18/10 et la séance l’a montré."
   ]
