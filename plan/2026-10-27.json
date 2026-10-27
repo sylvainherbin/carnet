@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-27",
+  "v": 1,
+  "ecrit": "2026-10-27T09:02:55Z",
+  "nuit": "6 h 47 de sommeil (coucher 02:14, lever 09:04), plancher 53, moyenne 60, SpO2 minimum 90, VFC 42,9 (médiane des 14 dernières nuits : 41,7). La meilleure nuit depuis le 18/10. Les relevés des nuits du 24 et du 26 manquent.",
+  "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée : sommeil 6 h 47, au-dessus de 6 h 30, et VFC 42,9 au niveau de la médiane (pas 15 % sous). Plancher 53, stable. R2 non déclenchée (53 < 58).",
+    "motif": "Dos complet : 16 séries, première série de chaque exercice en palier. Dernière séance Dos le 15/10, douze jours, et deux jours après les Pecs du 25/10, qui ne chargent pas les mêmes muscles."
+  },
+  "seance": {
+    "groupe": "Dos",
+    "titre": "Dos — 16 séries, première série en palier",
+    "exercices": [
+      {
+        "nom": "Row",
+        "series": 4,
+        "reps": 10,
+        "kg": 150,
+        "pas": 10,
+        "note": "série 1 en palier à 140, séries 2 à 4 à 150 ; le 15/10 : 140 × 10 × 3 à RPE 7. Si le palier passe à RPE 8, tu gardes 140 pour les trois autres."
+      },
+      {
+        "nom": "PullDown",
+        "series": 4,
+        "reps": 12,
+        "kg": 100,
+        "pas": 5,
+        "note": "série 1 en palier à 95, puis 100 × 12 ; le 15/10 : 95 × 12 × 3 à RPE 7."
+      },
+      {
+        "nom": "Tirage vertical serré",
+        "series": 4,
+        "reps": 12,
+        "kg": 65,
+        "pas": 5,
+        "note": "série 1 en palier à 60, puis 65 × 12 ; le 15/10 : 65 à RPE 7 mais une série à 10 répétitions au lieu de 12, donc la charge reste."
+      },
+      {
+        "nom": "Pulley",
+        "series": 4,
+        "reps": 10,
+        "kg": 55,
+        "pas": 5,
+        "note": "série 1 en palier à 50, puis 55 ; le 15/10 : 50 × 10 × 3 à RPE 7. L’exécution d’abord, et dis-moi si le coude se manifeste."
+      }
+    ],
+    "echauffement": [
+      "Row 60 × 10",
+      "Row 100 × 5",
+      "Row 130 × 3",
+      "PullDown 50 × 10",
+      "PullDown 80 × 5"
+    ],
+    "tapis": {
+      "min": 15,
+      "pente": 13,
+      "kmh": 5.5
+    }
+  },
+  "points": [
+    "Verdicts, palier d’abord : Row 140 puis 150, PullDown 95 puis 100, Tirage vertical serré 60 puis 65, Pulley 50 puis 55.",
+    "Plafond RPE 9 sur la dernière série seulement ; un test à RPE 10 se coche « test ». Si une charge passe à RPE 8 dès la série 1 (hors palier), tu la gardes sans monter.",
+    "Tapis 15 min, 13 %, 5,5 km/h : fais-le s’il te reste du temps, sinon dis-le-moi.",
+    "Calendrier : 28 repos ou Jambes selon ta nuit, puis Jambes et Épaules. Tour de taille à jeun le 06/11.",
+    "Coucher avant 02:00 : tes nuits du 22 au 25 ont commencé entre 03:41 et 05:19."
+  ]
+}
