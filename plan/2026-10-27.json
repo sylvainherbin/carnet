@@ -1,12 +1,12 @@
 {
   "date": "2026-10-27",
-  "v": 1,
-  "ecrit": "2026-10-27T09:02:55Z",
+  "v": 2,
+  "ecrit": "2026-10-27T11:00:52Z",
   "nuit": "6 h 47 de sommeil (coucher 02:14, lever 09:04), plancher 53, moyenne 60, SpO2 minimum 90, VFC 42,9 (médiane des 14 dernières nuits : 41,7). La meilleure nuit depuis le 18/10. Les relevés des nuits du 24 et du 26 manquent.",
   "decision": {
     "d": "maintenu",
     "regle": "R1 non déclenchée : sommeil 6 h 47, au-dessus de 6 h 30, et VFC 42,9 au niveau de la médiane (pas 15 % sous). Plancher 53, stable. R2 non déclenchée (53 < 58).",
-    "motif": "Dos complet : 16 séries, première série de chaque exercice en palier. Dernière séance Dos le 15/10, douze jours, et deux jours après les Pecs du 25/10, qui ne chargent pas les mêmes muscles."
+    "motif": "Dos complet : 16 séries, première série de chaque exercice en palier. Dernière séance Dos le 15/10, douze jours, et deux jours après les Pecs du 25/10, qui ne chargent pas les mêmes muscles. Fait : 14 séries sur 16 en 1 h 20 environ (10 h 43 à 11 h 59 pour la dernière série), RPE saisis par Sylvain, tapis non fait. PullDown dans l’ordre en premier : 95, 100, 100 puis 105 × 12 (RPE 6/6/6/7, plan 95 puis 100). Row 140 puis 150 × 3 × 10 (RPE 6/7/7/7), plan respecté. Pulley 55 × 10 × 3 (RPE 7), sans palier à 50 et une série de moins. Tirage vertical serré 60, 65 puis 70 × 12 (RPE 7/7/8), une série de moins, le 70 monte à RPE 8. FC séance moyenne 113, maximum 145 (au Row)."
   },
   "seance": {
     "groupe": "Dos",
@@ -59,10 +59,9 @@
     }
   },
   "points": [
-    "Verdicts, palier d’abord : Row 140 puis 150, PullDown 95 puis 100, Tirage vertical serré 60 puis 65, Pulley 50 puis 55.",
-    "Plafond RPE 9 sur la dernière série seulement ; un test à RPE 10 se coche « test ». Si une charge passe à RPE 8 dès la série 1 (hors palier), tu la gardes sans monter.",
-    "Tapis 15 min, 13 %, 5,5 km/h : fais-le s’il te reste du temps, sinon dis-le-moi.",
-    "Calendrier : 28 repos ou Jambes selon ta nuit, puis Jambes et Épaules. Tour de taille à jeun le 06/11.",
-    "Coucher avant 02:00 : tes nuits du 22 au 25 ont commencé entre 03:41 et 05:19."
+    "Verdicts du prochain Dos, palier d’abord : Row 150 puis 160 (monte, trois séries à 150 à RPE 7), PullDown 100 puis 105 (monte, le 105 est passé à RPE 7), Pulley 55 puis 60 (monte), Tirage vertical serré 65 puis 70 (reste, le 70 est passé à RPE 8).",
+    "Row 150 × 10 × 3 à RPE 7 : tu es à un pas de l’objectif 160 × 10 × 3 sous RPE 8 du 30/11.",
+    "Calendrier : 28 repos, 29 Jambes ou Épaules selon la nuit. Tour de taille à jeun le 06/11.",
+    "Coucher avant 02:00 : cette nuit était ta meilleure depuis le 18/10 et la séance l’a montré."
   ]
 }
