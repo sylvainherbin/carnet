@@ -7335,6 +7335,21 @@
    "rpe": 7,
    "note": "",
    "at": 1792926909174
+  },
+  {
+   "id": "rm43ausx",
+   "date": "2026-10-27",
+   "group": "Dos",
+   "exercise": "PullDown",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 95
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1793094223469
   }
  ],
  "treadmill": [
