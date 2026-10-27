@@ -19503,7 +19503,13 @@
    "dodo": 407,
    "coucher": 1793063682000,
    "lever": 1793088242000,
-   "sha": "83f241323ae87e135d6f6826fbb47a64679c6c9f"
+   "sha": "83f241323ae87e135d6f6826fbb47a64679c6c9f",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 non déclenchée : sommeil 6 h 47, au-dessus de 6 h 30, et VFC 42,9 au niveau de la médiane (pas 15 % sous). Plancher 53, stable. R2 non déclenchée (53 < 58).",
+    "motif": "Dos complet : 16 séries, première série de chaque exercice en palier. Dernière séance Dos le 15/10, douze jours, et deux jours après les Pecs du 25/10, qui ne chargent pas les mêmes muscles.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
@@ -19522,6 +19528,9 @@
   "Dev incliné": 5,
   "Chest press": 5,
   "Triceps poulie": 2.5,
-  "Upper Back": 5
+  "Upper Back": 5,
+  "PullDown": 5,
+  "Tirage vertical serré": 5,
+  "Pulley": 5
  }
 }
