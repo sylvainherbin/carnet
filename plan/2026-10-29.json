@@ -1,8 +1,8 @@
 {
   "date": "2026-10-29",
-  "v": 1,
-  "ecrit": "2026-10-28T00:33:33Z",
-  "nuit": "Plan préparé le 28/10, à reconfirmer jeudi matin avec la nuit du 28 au 29 (dernière nuit connue : 27 au 28 non relevée ; 26 au 27 : 6 h 47, plancher 53, VFC 42,9).",
+  "v": 2,
+  "ecrit": "2026-10-28T08:03:40Z",
+  "nuit": "Plan préparé le 28/10, à reconfirmer jeudi matin avec la nuit du 28 au 29. Dernière nuit connue (27 au 28) : 6 h 31 de sommeil (coucher 01:54, lever 08:29), plancher 54, VFC 34,1, soit 19 % sous la médiane des 14 dernières nuits (42,3). R1 non déclenchée à une minute près (6 h 31 contre un seuil de 6 h 30).",
   "decision": {
     "d": "maintenu",
     "regle": "Provisoire. Allégé si la nuit donne un sommeil sous 6 h 30 ET une VFC plus de 15 % sous la médiane (environ 36), ou un plancher à 58 ou plus (R2).",
