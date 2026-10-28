@@ -20114,6 +20114,17 @@
   },
   {
    "date": "2026-10-28",
+   "v": 6,
+   "n": 84,
+   "somAbsent": true,
+   "min": 55,
+   "moy": 63,
+   "hMin": "05:16",
+   "vfc": 28,
+   "vfcN": 4,
+   "spo2": 95,
+   "spo2Min": 91,
+   "sha": "6d5ada64f059ebda22f27ba98b3f7a6f71d6fd39",
    "repas": "19:54"
   }
  ],
