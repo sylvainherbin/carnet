@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-29",
+  "v": 1,
+  "ecrit": "2026-10-28T00:33:33Z",
+  "nuit": "Plan préparé le 28/10, à reconfirmer jeudi matin avec la nuit du 28 au 29 (dernière nuit connue : 27 au 28 non relevée ; 26 au 27 : 6 h 47, plancher 53, VFC 42,9).",
+  "decision": {
+    "d": "maintenu",
+    "regle": "Provisoire. Allégé si la nuit donne un sommeil sous 6 h 30 ET une VFC plus de 15 % sous la médiane (environ 36), ou un plancher à 58 ou plus (R2).",
+    "motif": "Jambes lourdes : 13 séries, première série de chaque exercice en palier. Première séance du nouveau découpage (Jambes deux fois par semaine, ta priorité 1) ; dernière séance Jambes le 20/10, neuf jours. Tu y vas après 14 h, donc après un repas : note ce que tu as mangé et à quelle heure. Garde-fou : si la série 1 de Leg press, après l’échauffement, passe à RPE 8 ou plus, tu gardes 180 sur toute la séance."
+  },
+  "seance": {
+    "groupe": "Jambes",
+    "titre": "Jambes lourdes — 13 séries, palier en série 1",
+    "exercices": [
+      {
+        "nom": "Leg press 2",
+        "series": 4,
+        "reps": 10,
+        "kg": 190,
+        "pas": 10,
+        "note": "série 1 en palier à 180, séries 2 à 4 à 190 ; le 20/10 : 160, 170 puis 180 × 10 à RPE 6/6/7. Objectif 170 × 10 × 3 au 30/11 déjà dans la zone."
+      },
+      {
+        "nom": "Hack squat",
+        "series": 4,
+        "reps": 10,
+        "kg": 55,
+        "pas": 5,
+        "note": "série 1 en palier à 50, puis 55 × 10, sans élastique ; le 20/10 : 50 × 10 × 2 à RPE 7, nouvelle référence sans élastique."
+      },
+      {
+        "nom": "Leg Curl",
+        "series": 3,
+        "reps": 12,
+        "kg": 65,
+        "pas": 5,
+        "note": "série 1 en palier à 60, puis 65 × 12 ; le 20/10 : 60 × 12 × 2 à RPE 7."
+      },
+      {
+        "nom": "Rotary Calf",
+        "series": 2,
+        "reps": 25,
+        "kg": 70,
+        "pas": 5,
+        "note": "série 1 à 65, série 2 à 70 × 25 ; le 20/10 : 65 × 25 × 2 à RPE 7."
+      }
+    ],
+    "echauffement": [
+      "Leg press 80 × 10",
+      "Leg press 120 × 6",
+      "Leg press 160 × 3",
+      "Hack squat 30 × 8"
+    ],
+    "tapis": {
+      "min": 10,
+      "pente": 13,
+      "kmh": 5.5
+    }
+  },
+  "points": [
+    "Verdicts, palier d’abord : Leg press 180 puis 190, Hack squat 50 puis 55, Leg Curl 60 puis 65, Rotary Calf 65 puis 70.",
+    "Plafond RPE 9 sur la dernière série seulement ; un test à RPE 10 se coche « test ».",
+    "Leg extension et Adducteurs passent dans la deuxième séance Jambes, trois jours plus tard : Leg extension 70 puis 75, Adducteurs 70 × 25.",
+    "Mange et bois avant la séance ; expire sur l’effort. Dis-moi si des étoiles reviennent.",
+    "Prochain Pecs orienté haut et centre : Incline chest press, Dev incliné, Chest press, Écarté incliné haltères 3 séries de 12 à 15 (10 kg par main pour commencer), Dips 2 séries."
+  ]
+}
