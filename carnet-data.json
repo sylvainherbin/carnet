@@ -7592,6 +7592,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1793269049585
+  },
+  {
+   "id": "9k34te88",
+   "date": "2026-10-29",
+   "group": "Jambes",
+   "exercise": "Leg press 2",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 200
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1793269568970
   }
  ],
  "treadmill": [
