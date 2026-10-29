@@ -7680,6 +7680,22 @@
    "rpe": 6,
    "note": "",
    "at": 1793271364318
+  },
+  {
+   "id": "rme2l0u3",
+   "date": "2026-10-29",
+   "group": "Jambes",
+   "exercise": "Leg Curl",
+   "sets": [
+    {
+     "reps": 12,
+     "kg": 65
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1793271640358
   }
  ],
  "treadmill": [
