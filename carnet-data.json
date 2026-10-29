@@ -7725,6 +7725,22 @@
    "rpe": 6,
    "note": "Max machine",
    "at": 1793272173718
+  },
+  {
+   "id": "nwqswhgv",
+   "date": "2026-10-29",
+   "group": "Jambes",
+   "exercise": "Rotary Calf",
+   "sets": [
+    {
+     "reps": 36,
+     "kg": 65
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1793272437544
   }
  ],
  "treadmill": [
@@ -20351,6 +20367,11 @@
     "regle": "R1 : sommeil 6 h 51, pas sous 6 h 30 ; VFC 41,6, pas plus de 15 % sous la médiane (42,3). R2 : plancher 53, sous 58. Maintenu.",
     "motif": "Nuit correcte, plan lourd confirmé. Jambes lourdes : 13 séries, première série de chaque exercice en palier. Première séance du nouveau découpage (Jambes deux fois par semaine, ta priorité 1) ; dernière séance Jambes le 20/10, neuf jours. Tu y vas après 14 h, donc après un repas : note ce que tu as mangé et à quelle heure. Garde-fou : si la série 1 de Leg press, après l’échauffement, passe à RPE 8 ou plus, tu gardes 180 sur toute la séance.",
     "par": "coach"
+   },
+   "plan": {
+    "prevues": 13,
+    "faites": 13,
+    "conforme": true
    }
   }
  ],
