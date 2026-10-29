@@ -1,12 +1,12 @@
 {
   "date": "2026-10-29",
-  "v": 3,
-  "ecrit": "2026-10-29T08:43:46Z",
+  "v": 4,
+  "ecrit": "2026-10-29T11:16:34Z",
   "nuit": "Nuit du 28 au 29 : 6 h 51 de sommeil (coucher 01:50, lever 09:39), plancher 53, VFC 41,6, soit 2 % sous la médiane des 14 dernières nuits (42,3). R1 non déclenchée (sommeil au-dessus de 6 h 30, VFC dans la normale) ; R2 loin (plancher 53 contre 58).",
   "decision": {
     "d": "maintenu",
     "regle": "R1 : sommeil 6 h 51, pas sous 6 h 30 ; VFC 41,6, pas plus de 15 % sous la médiane (42,3). R2 : plancher 53, sous 58. Maintenu.",
-    "motif": "Nuit correcte, plan lourd confirmé. Jambes lourdes : 13 séries, première série de chaque exercice en palier. Première séance du nouveau découpage (Jambes deux fois par semaine, ta priorité 1) ; dernière séance Jambes le 20/10, neuf jours. Tu y vas après 14 h, donc après un repas : note ce que tu as mangé et à quelle heure. Garde-fou : si la série 1 de Leg press, après l’échauffement, passe à RPE 8 ou plus, tu gardes 180 sur toute la séance."
+    "motif": "Nuit correcte, plan lourd confirmé. Jambes lourdes : 13 séries, première série de chaque exercice en palier. Première séance du nouveau découpage (Jambes deux fois par semaine, ta priorité 1) ; dernière séance Jambes le 20/10, neuf jours. Tu y vas après 14 h, donc après un repas : note ce que tu as mangé et à quelle heure. Garde-fou : si la série 1 de Leg press, après l’échauffement, passe à RPE 8 ou plus, tu gardes 180 sur toute la séance. Fait : 13 séries sur 13 en 70 min (11 h 04 à 12 h 13), tonnage 16 670 kg, FC moyenne 113, max 143, sans tapis. Leg press 2 180, 190, 200, 200 × 10 à RPE 6,5/7/7/7 (objectif 170 × 10 × 3 atteint) ; Hack squat 60 × 10 × 4 à RPE 7 (au-dessus du plan, 50 puis 55) ; Leg Curl 60, 65, 65 × 12 à RPE 6/7/7 ; Rotary Calf 65 × 30 puis 36 à RPE 6/7 (« Max machine »). Red Bull avant : aucune étoile."
   },
   "seance": {
     "groupe": "Jambes",
@@ -58,10 +58,10 @@
     }
   },
   "points": [
-    "Verdicts, palier d’abord : Leg press 180 puis 190, Hack squat 50 puis 55, Leg Curl 60 puis 65, Rotary Calf 65 puis 70.",
-    "Plafond RPE 9 sur la dernière série seulement ; un test à RPE 10 se coche « test ».",
-    "Leg extension et Adducteurs passent dans la deuxième séance Jambes, trois jours plus tard : Leg extension 70 puis 75, Adducteurs 70 × 25.",
-    "Mange et bois avant la séance ; expire sur l’effort. Dis-moi si des étoiles reviennent.",
-    "Prochain Pecs orienté haut et centre : Incline chest press, Dev incliné, Chest press, Écarté incliné haltères 3 séries de 12 à 15 (10 kg par main pour commencer), Dips 2 séries."
+    "Verdicts de la prochaine séance Jambes, palier d’abord : Leg press 2 200 puis 210, Hack squat 60 puis 65, Leg Curl 65 puis 70.",
+    "Rotary Calf : 65 est le maximum de la machine (ta note), donc on monte en répétitions : 36 puis 40, avec une pause de 2 secondes en bas.",
+    "Jambes court (trois jours plus tard) : Leg extension 70 puis 75, Adducteurs 70 puis 75 × 25.",
+    "Row 160 : tu n’as pas eu d’étoiles aux Jambes avec un Red Bull. Au prochain Dos, même Red Bull avant ; si le Row à 150 passe sans étoile en série 3, on passe à 160 la séance suivante.",
+    "Leg press 2 : l’objectif du 30/11 est déjà atteint (200 × 10 × 2 à RPE 7). On fixera le nouvel objectif Jambes avec toi."
   ]
 }
