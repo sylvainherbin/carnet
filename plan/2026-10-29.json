@@ -1,12 +1,12 @@
 {
   "date": "2026-10-29",
-  "v": 2,
-  "ecrit": "2026-10-28T08:03:40Z",
-  "nuit": "Plan préparé le 28/10, à reconfirmer jeudi matin avec la nuit du 28 au 29. Dernière nuit connue (27 au 28) : 6 h 31 de sommeil (coucher 01:54, lever 08:29), plancher 54, VFC 34,1, soit 19 % sous la médiane des 14 dernières nuits (42,3). R1 non déclenchée à une minute près (6 h 31 contre un seuil de 6 h 30).",
+  "v": 3,
+  "ecrit": "2026-10-29T08:43:46Z",
+  "nuit": "Nuit du 28 au 29 : 6 h 51 de sommeil (coucher 01:50, lever 09:39), plancher 53, VFC 41,6, soit 2 % sous la médiane des 14 dernières nuits (42,3). R1 non déclenchée (sommeil au-dessus de 6 h 30, VFC dans la normale) ; R2 loin (plancher 53 contre 58).",
   "decision": {
     "d": "maintenu",
-    "regle": "Provisoire. Allégé si la nuit donne un sommeil sous 6 h 30 ET une VFC plus de 15 % sous la médiane (environ 36), ou un plancher à 58 ou plus (R2).",
-    "motif": "Jambes lourdes : 13 séries, première série de chaque exercice en palier. Première séance du nouveau découpage (Jambes deux fois par semaine, ta priorité 1) ; dernière séance Jambes le 20/10, neuf jours. Tu y vas après 14 h, donc après un repas : note ce que tu as mangé et à quelle heure. Garde-fou : si la série 1 de Leg press, après l’échauffement, passe à RPE 8 ou plus, tu gardes 180 sur toute la séance."
+    "regle": "R1 : sommeil 6 h 51, pas sous 6 h 30 ; VFC 41,6, pas plus de 15 % sous la médiane (42,3). R2 : plancher 53, sous 58. Maintenu.",
+    "motif": "Nuit correcte, plan lourd confirmé. Jambes lourdes : 13 séries, première série de chaque exercice en palier. Première séance du nouveau découpage (Jambes deux fois par semaine, ta priorité 1) ; dernière séance Jambes le 20/10, neuf jours. Tu y vas après 14 h, donc après un repas : note ce que tu as mangé et à quelle heure. Garde-fou : si la série 1 de Leg press, après l’échauffement, passe à RPE 8 ou plus, tu gardes 180 sur toute la séance."
   },
   "seance": {
     "groupe": "Jambes",
