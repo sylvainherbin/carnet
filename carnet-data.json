@@ -20141,6 +20141,15 @@
    "lever": 1793172581000,
    "sha": "9d05a8d19ad9459ef1671d55100648cc42ecf707",
    "repas": "19:54"
+  },
+  {
+   "date": "2026-10-29",
+   "decision": {
+    "d": "maintenu",
+    "regle": "Provisoire. Allégé si la nuit donne un sommeil sous 6 h 30 ET une VFC plus de 15 % sous la médiane (environ 36), ou un plancher à 58 ou plus (R2).",
+    "motif": "Jambes lourdes : 13 séries, première série de chaque exercice en palier. Première séance du nouveau découpage (Jambes deux fois par semaine, ta priorité 1) ; dernière séance Jambes le 20/10, neuf jours. Tu y vas après 14 h, donc après un repas : note ce que tu as mangé et à quelle heure. Garde-fou : si la série 1 de Leg press, après l’échauffement, passe à RPE 8 ou plus, tu gardes 180 sur toute la séance.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
