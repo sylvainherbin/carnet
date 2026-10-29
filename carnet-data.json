@@ -19022,7 +19022,8 @@
      130,
      124
     ]
-   }
+   },
+   "recupV": 3
   }
  ],
  "daily": [
@@ -20144,6 +20145,22 @@
   },
   {
    "date": "2026-10-29",
+   "v": 6,
+   "n": 96,
+   "min": 53,
+   "moy": 59,
+   "hMin": "06:02",
+   "vfc": 41.6,
+   "vfcN": 3,
+   "resp": 14.5,
+   "respN": 41,
+   "spo2": 95,
+   "spo2Min": 93,
+   "temp": 36.13,
+   "dodo": 411,
+   "coucher": 1793235004000,
+   "lever": 1793263180000,
+   "sha": "314035d0c871c0199f6c0590c3bf31be31007575",
    "decision": {
     "d": "maintenu",
     "regle": "Provisoire. Allégé si la nuit donne un sommeil sous 6 h 30 ET une VFC plus de 15 % sous la médiane (environ 36), ou un plancher à 58 ou plus (R2).",
