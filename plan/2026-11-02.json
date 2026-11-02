@@ -1,0 +1,74 @@
+{
+  "date": "2026-11-02",
+  "v": 1,
+  "ecrit": "2026-11-02T08:05:37Z",
+  "nuit": "Nuit du 1er au 2 novembre : 5 h 48 de sommeil (coucher 02:46, lever 08:38), plancher 55, VFC 46,8, soit 12 % au-dessus de la médiane des 14 dernières nuits (41,6). Pas de relevé pour la nuit du 31 au 1er (retour d’Italie). Dernière séance : Jambes le 29/10, quatre jours de coupure.",
+  "decision": {
+    "d": "maintenu",
+    "regle": "R1 : sommeil sous 6 h 30, mais VFC au-dessus de la médiane (pas plus de 15 % en dessous) et plancher 55 contre une médiane de 53 : sommeil court seul, donc maintenu. R2 : plancher 55, sous 58.",
+    "motif": "Pecs orientés haut et centre, première séance du nouveau découpage : 15 séries, première série de chaque exercice en palier, sans volume de plus qu’avant (13 à 18 séries). Pecs : dernier passage le 25/10, huit jours. Garde-fou : si la série 1 d’Incline chest press, après l’échauffement, passe à RPE 8 ou plus, tu gardes 85 sur toute la séance. Avant : Powerade 500 ml entre 45 et 30 minutes avant l’échauffement ; note ce que tu bois et si les brûlures ou les étoiles reviennent."
+  },
+  "seance": {
+    "groupe": "Pecs",
+    "titre": "Pecs haut et centre — 15 séries, palier en série 1",
+    "exercices": [
+      {
+        "nom": "Incline chest press",
+        "series": 4,
+        "reps": 10,
+        "kg": 90,
+        "pas": 5,
+        "note": "série 1 en palier à 85, séries 2 à 4 à 90 × 10 ; le 25/10 : 80, 85, 85, 90 × 10 à RPE 6/7/7/7. Banc incliné : c’est le mouvement du haut du pec."
+      },
+      {
+        "nom": "Dev incliné",
+        "series": 3,
+        "reps": 10,
+        "kg": 75,
+        "pas": 5,
+        "note": "série 1 en palier à 70, séries 2 et 3 à 75 × 10 ; le 18/10 : 75 × 10 × 3 à RPE 7/8/8, donc la charge reste à 75."
+      },
+      {
+        "nom": "Chest press",
+        "series": 3,
+        "reps": 10,
+        "kg": 80,
+        "pas": 5,
+        "note": "série 1 en palier à 75, séries 2 et 3 à 80 × 10 ; le 25/10 : 75 × 10 × 2 à RPE 7."
+      },
+      {
+        "nom": "Écarté incliné haltères",
+        "series": 3,
+        "reps": 12,
+        "kg": 10,
+        "pas": 2.5,
+        "note": "nouvel exercice, banc à 30°, 10 kg par main, 12 à 15 répétitions, RPE 7 en série 2. Coudes un peu fléchis, étirement sans douleur ; arrêt à la première gêne au coude. L’exercice se crée à la première saisie."
+      },
+      {
+        "nom": "Dips",
+        "series": 2,
+        "reps": 10,
+        "kg": 190,
+        "pas": 10,
+        "note": "série 1 à 180, série 2 à 190 × 10 ; le 25/10 : 180 × 10 × 3 à RPE 7."
+      }
+    ],
+    "echauffement": [
+      "Incline chest press 40 × 10",
+      "Incline chest press 60 × 6",
+      "Incline chest press 75 × 3",
+      "Dev incliné 40 × 8"
+    ],
+    "tapis": {
+      "min": 10,
+      "pente": 13,
+      "kmh": 5.5
+    }
+  },
+  "points": [
+    "Plafond RPE 9 sur la dernière série seulement ; un test à RPE 10 se coche « test ».",
+    "Écarté incliné haltères : dis-moi où tu sens le travail (haut ou centre du pec) et si le coude réagit.",
+    "Pèse-toi ce matin : dernière pesée le 29/10 (77,0 kg). Tour de taille à jeun le 06/11.",
+    "Prochaine séance Jambes, plus courte : Leg extension 70 puis 75, Adducteurs 70 puis 75 × 25, avec Leg press 2 à 200 puis 210 si tes jambes sont fraîches."
+  ]
+}
