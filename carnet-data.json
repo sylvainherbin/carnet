@@ -7847,6 +7847,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1793613032451
+  },
+  {
+   "id": "86fla7qi",
+   "date": "2026-11-02",
+   "group": "Pecs",
+   "exercise": "Écarté incliné haltères",
+   "sets": [
+    {
+     "reps": 15,
+     "kg": 15
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1793613415036
   }
  ],
  "treadmill": [
