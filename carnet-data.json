@@ -20761,7 +20761,7 @@
    "dodo": 348,
    "coucher": 1793584008000,
    "lever": 1793605132000,
-   "sha": "7c63857a051b619c06462ae283fccd4ea14dc869",
+   "sha": "15c5f764172477f707ae6c15c229e071aa6931f0",
    "decision": {
     "d": "maintenu",
     "regle": "R1 : sommeil sous 6 h 30, mais VFC au-dessus de la médiane (pas plus de 15 % en dessous) et plancher 55 contre une médiane de 53 : sommeil court seul, donc maintenu. R2 : plancher 55, sous 58.",
