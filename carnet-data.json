@@ -7893,6 +7893,21 @@
    "rpeAuto": true,
    "note": "",
    "at": 1793614497913
+  },
+  {
+   "id": "zbrvo06v",
+   "date": "2026-11-02",
+   "group": "Pecs",
+   "exercise": "Dev incliné",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 80
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1793615145657
   }
  ],
  "treadmill": [
