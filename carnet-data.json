@@ -7906,6 +7906,22 @@
    "rpe": 8,
    "note": "",
    "at": 1793615145657
+  },
+  {
+   "id": "wnxoezk9",
+   "date": "2026-11-02",
+   "group": "Pecs",
+   "exercise": "Chest press",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 75
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1793615409458
   }
  ],
  "treadmill": [
