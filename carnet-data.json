@@ -7967,6 +7967,21 @@
    "rpeAuto": true,
    "note": "",
    "at": 1793616797868
+  },
+  {
+   "id": "5l2kxnkh",
+   "date": "2026-11-02",
+   "group": "Pecs",
+   "exercise": "Dips",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 180
+    }
+   ],
+   "rpe": 8,
+   "note": "",
+   "at": 1793617263488
   }
  ],
  "treadmill": [
@@ -20993,6 +21008,11 @@
     "regle": "R1 : sommeil sous 6 h 30, mais VFC au-dessus de la médiane (pas plus de 15 % en dessous) et plancher 55 contre une médiane de 53 : sommeil court seul, donc maintenu. R2 : plancher 55, sous 58.",
     "motif": "Pecs orientés haut et centre, première séance du nouveau découpage : 15 séries, première série de chaque exercice en palier, sans volume de plus qu’avant (13 à 18 séries). Pecs : dernier passage le 25/10, huit jours. Garde-fou : si la série 1 d’Incline chest press, après l’échauffement, passe à RPE 8 ou plus, tu gardes 85 sur toute la séance. Avant : Powerade 500 ml entre 45 et 30 minutes avant l’échauffement ; note ce que tu bois et si les brûlures ou les étoiles reviennent.",
     "par": "coach"
+   },
+   "plan": {
+    "prevues": 15,
+    "faites": 16,
+    "conforme": false
    }
   }
  ],
