@@ -7981,6 +7981,21 @@
    "rpe": 8,
    "note": "",
    "at": 1793617263488
+  },
+  {
+   "id": "s26qz3lr",
+   "date": "2026-11-03",
+   "group": "Jambes",
+   "exercise": "Leg press 2",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 200
+    }
+   ],
+   "rpe": 6,
+   "note": "",
+   "at": 1793698547790
   }
  ],
  "treadmill": [
