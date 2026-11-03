@@ -1,12 +1,12 @@
 {
   "date": "2026-11-03",
-  "v": 1,
-  "ecrit": "2026-11-03T08:35:19Z",
+  "v": 2,
+  "ecrit": "2026-11-03T08:35:29Z",
   "nuit": "Nuit du 2 au 3 novembre : 6 h 18 de sommeil (coucher 02:07, lever 09:28), plancher 55, VFC 47, soit 13 % au-dessus de la médiane des 14 dernières nuits (41,6, plancher médian 53). Relevé présent. Dernière séance : Pecs hier 02/11, Jambes lourdes le 29/10.",
   "decision": {
     "d": "maintenu",
     "regle": "R1 : sommeil sous 6 h 30 (6 h 18), mais VFC au-dessus de la médiane et plancher 55 contre 53 : sommeil court seul, donc maintenu (à noter). R2 : plancher 55, sous 58.",
-    "motif": "Jambes courtes, deuxième séance de jambes de la semaine : 9 séries, cinq jours après les Jambes lourdes, la veille d’aucun gros presse (Pecs hier, rien sur les cuisses). Série 1 de chaque exercice en palier. Leg press 2 : 200 puis 210 seulement si les jambes sont fraîches à la série 1 ; sinon tu restes à 200 sur les trois. Avant : Powerade 500 ml entre 45 et 30 minutes avant l’échauffement, note ce que tu bois et si les étoiles ou les brûlures reviennent. Au lever à 09:28 : c’est une séance du matin, pas de solide."
+    "motif": "Jambes court, deuxième séance de jambes de la semaine : 9 séries, cinq jours après les Jambes lourdes, et les cuisses n’ont pas été sollicitées hier aux Pecs. Série 1 de chaque exercice en palier. Leg press 2 : 200 puis 210 seulement si les jambes sont fraîches à la série 1, sinon tu restes à 200 sur les trois. Avant : Powerade 500 ml entre 45 et 30 minutes avant l’échauffement ; note ce que tu bois et si les étoiles ou les brûlures reviennent."
   },
   "seance": {
     "groupe": "Jambes",
