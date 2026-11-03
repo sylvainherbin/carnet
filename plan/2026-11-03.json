@@ -1,12 +1,12 @@
 {
   "date": "2026-11-03",
-  "v": 2,
-  "ecrit": "2026-11-03T08:35:29Z",
+  "v": 3,
+  "ecrit": "2026-11-03T10:30:17Z",
   "nuit": "Nuit du 2 au 3 novembre : 6 h 18 de sommeil (coucher 02:07, lever 09:28), plancher 55, VFC 47, soit 13 % au-dessus de la médiane des 14 dernières nuits (41,6, plancher médian 53). Relevé présent. Dernière séance : Pecs hier 02/11, Jambes lourdes le 29/10.",
   "decision": {
     "d": "maintenu",
     "regle": "R1 : sommeil sous 6 h 30 (6 h 18), mais VFC au-dessus de la médiane et plancher 55 contre 53 : sommeil court seul, donc maintenu (à noter). R2 : plancher 55, sous 58.",
-    "motif": "Jambes court, deuxième séance de jambes de la semaine : 9 séries, cinq jours après les Jambes lourdes, et les cuisses n’ont pas été sollicitées hier aux Pecs. Série 1 de chaque exercice en palier. Leg press 2 : 200 puis 210 seulement si les jambes sont fraîches à la série 1, sinon tu restes à 200 sur les trois. Avant : Powerade 500 ml entre 45 et 30 minutes avant l’échauffement ; note ce que tu bois et si les étoiles ou les brûlures reviennent."
+    "motif": "Jambes court, deuxième séance de jambes de la semaine : 9 séries, cinq jours après les Jambes lourdes, et les cuisses n’ont pas été sollicitées hier aux Pecs. Série 1 de chaque exercice en palier. Leg press 2 : 200 puis 210 seulement si les jambes sont fraîches à la série 1, sinon tu restes à 200 sur les trois. Avant : Powerade 500 ml entre 45 et 30 minutes avant l’échauffement ; note ce que tu bois et si les étoiles ou les brûlures reviennent. Fait : 9 séries sur 9 prévues, de 10 h 32 à 11 h 27 (environ 55 min), tonnage 13 650 kg, FC moyenne 109, max 135, sans tapis. Avant : double expresso au réveil, puis un Red Bull. Leg press 2 200 × 10 (RPE 6), 210 × 10 × 2 (7/7) ; Leg extension 70 × 10 (6), 75 × 10 × 2 (7/7) ; Adducteurs 70 × 25 × 3 à RPE 7 (70 est le maximum de la machine : le 75 du plan n’existe pas, erreur du plan). Drop60 : Leg extension 20 (moyenne 20,8), Adducteurs 20 et 15 (moyenne 12,4) ; Leg press non mesuré (trous de mesure), moyenne habituelle 19,1."
   },
   "seance": {
     "groupe": "Jambes",
@@ -50,8 +50,9 @@
     }
   },
   "points": [
-    "Hack squat et Leg Curl ne sont pas au programme court : prochain Jambes lourdes, Hack squat 60 puis 65, Leg Curl 65 puis 70.",
-    "Dos + Épaules fusionnés : prochaine séance, après ce Jambes (Row, Shoulder press, environ 8 séries chacun). Row 160 : Powerade avant, test des étoiles en série 3 à 150.",
+    "Verdicts du prochain Jambes lourdes, palier d’abord : Leg press 2 210 puis 220 (objectif du 30/11 : 220 × 10 × 3), Hack squat 60 puis 65, Leg Curl 65 puis 70. Double pas non appliqué : la charge a changé entre les deux séances (200 le 29/10, 210 aujourd’hui), le verdict de l’app est 220.",
+    "Prochain Jambes court : Leg extension 75 puis 80, Adducteurs 70 × 30 (maximum machine, on monte en répétitions comme au Rotary Calf).",
+    "Dos + Épaules fusionnés : prochaine séance (Row, Shoulder press, environ 8 séries chacun). Row 160 : Red Bull ou Powerade avant, test des étoiles en série 3 à 150.",
     "Tour de taille à jeun le 06/11 ; poids 78,1 kg au 02/11 : au-dessus de 79 ou tour de taille à 95 ou plus, on en reparle (quantités, pas retrait de plaisirs)."
   ]
 }
