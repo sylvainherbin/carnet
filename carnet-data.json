@@ -8103,6 +8103,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1793701361721
+  },
+  {
+   "id": "9njam2al",
+   "date": "2026-11-03",
+   "group": "Jambes",
+   "exercise": "Adducteurs",
+   "sets": [
+    {
+     "reps": 25,
+     "kg": 75
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1793701651649
   }
  ],
  "treadmill": [
@@ -21650,6 +21666,11 @@
     "regle": "R1 : sommeil sous 6 h 30 (6 h 18), mais VFC au-dessus de la médiane et plancher 55 contre 53 : sommeil court seul, donc maintenu (à noter). R2 : plancher 55, sous 58.",
     "motif": "Jambes court, deuxième séance de jambes de la semaine : 9 séries, cinq jours après les Jambes lourdes, et les cuisses n’ont pas été sollicitées hier aux Pecs. Série 1 de chaque exercice en palier. Leg press 2 : 200 puis 210 seulement si les jambes sont fraîches à la série 1, sinon tu restes à 200 sur les trois. Avant : Powerade 500 ml entre 45 et 30 minutes avant l’échauffement ; note ce que tu bois et si les étoiles ou les brûlures reviennent.",
     "par": "coach"
+   },
+   "plan": {
+    "prevues": 9,
+    "faites": 9,
+    "conforme": true
    }
   }
  ],
