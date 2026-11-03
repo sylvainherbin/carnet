@@ -21504,6 +21504,25 @@
     "faites": 16,
     "conforme": false
    }
+  },
+  {
+   "date": "2026-11-03",
+   "v": 6,
+   "n": 87,
+   "min": 55,
+   "moy": 62,
+   "hMin": "04:20",
+   "vfc": 47,
+   "vfcN": 4,
+   "resp": 14,
+   "respN": 38,
+   "spo2": 94,
+   "spo2Min": 92,
+   "temp": 35.38,
+   "dodo": 378,
+   "coucher": 1793668051000,
+   "lever": 1793694508000,
+   "sha": "82d264f530d26ca459f3a1c20e572fca478a8398"
   }
  ],
  "pas": {
