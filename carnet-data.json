@@ -8103,6 +8103,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1793701361721
+  },
+  {
+   "id": "dt0qindj",
+   "date": "2026-11-03",
+   "group": "Jambes",
+   "exercise": "Adducteurs",
+   "sets": [
+    {
+     "reps": 25,
+     "kg": 70
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1793701662453
   }
  ],
  "treadmill": [
