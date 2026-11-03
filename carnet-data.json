@@ -8012,6 +8012,22 @@
    "rpeAuto": true,
    "note": "",
    "at": 1793698944694
+  },
+  {
+   "id": "cxqia1o9",
+   "date": "2026-11-03",
+   "group": "Jambes",
+   "exercise": "Leg press 2",
+   "sets": [
+    {
+     "reps": 10,
+     "kg": 210
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "",
+   "at": 1793699573996
   }
  ],
  "treadmill": [
