@@ -8071,6 +8071,22 @@
    "rpe": 7,
    "note": "",
    "at": 1793700859867
+  },
+  {
+   "id": "76j6cyfh",
+   "date": "2026-11-03",
+   "group": "Jambes",
+   "exercise": "Adducteurs",
+   "sets": [
+    {
+     "reps": 25,
+     "kg": 70
+    }
+   ],
+   "rpe": 7,
+   "rpeAuto": true,
+   "note": "Max machine",
+   "at": 1793701005831
   }
  ],
  "treadmill": [
