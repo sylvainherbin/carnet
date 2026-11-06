@@ -21968,7 +21968,13 @@
    "dodo": 392,
    "coucher": 1793930002000,
    "lever": 1793953779000,
-   "sha": "c6a9211ca27a5a3bf2d3b1aca489bb8dec38ede3"
+   "sha": "c6a9211ca27a5a3bf2d3b1aca489bb8dec38ede3",
+   "decision": {
+    "d": "maintenu",
+    "regle": "R1 : sommeil 6 h 32, au-dessus de 6 h 30, VFC 14 % au-dessus de la médiane : pas de déclenchement. R2 : plancher 55, sous 58.",
+    "motif": "Première séance Dos + Épaules fusionnée, 16 séries (8 Dos, 8 Épaules), série 1 de chaque exercice en palier. Dos : dernier passage le 27/10, dix jours ; Épaules : 23/10, treize jours. Test du Row : 140 en palier puis 150 × 3 ; si la série 3 et la série 4 passent sans étoile, le Row passe à 160 à la prochaine séance (objectif du 30/11). Avant : Powerade 500 ml ou Red Bull, entre 45 et 30 minutes avant l’échauffement, note ce que tu bois et si les étoiles ou les brûlures reviennent. Tour de taille à jeun ce matin, avant de boire.",
+    "par": "coach"
+   }
   }
  ],
  "pas": {
