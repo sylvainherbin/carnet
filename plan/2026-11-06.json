@@ -1,0 +1,85 @@
+{
+  "date": "2026-11-06",
+  "v": 1,
+  "ecrit": "2026-11-06T08:39:55Z",
+  "nuit": "Nuit du 5 au 6 novembre : 6 h 32 de sommeil (coucher 02:53, lever 09:29), plancher 55, VFC 47,3, soit 14 % au-dessus de la médiane des 14 dernières nuits (41,6 ; plancher médian 53,5). Relevé présent. Relevés absents : nuit du 4 au 5 novembre et nuit du 31 octobre au 1er novembre. Dernière séance : Jambes court le 03/11 ; dernier Dos le 27/10, dernières Épaules le 23/10.",
+  "decision": {
+    "d": "maintenu",
+    "regle": "R1 : sommeil 6 h 32, au-dessus de 6 h 30, VFC 14 % au-dessus de la médiane : pas de déclenchement. R2 : plancher 55, sous 58.",
+    "motif": "Première séance Dos + Épaules fusionnée, 16 séries (8 Dos, 8 Épaules), série 1 de chaque exercice en palier. Dos : dernier passage le 27/10, dix jours ; Épaules : 23/10, treize jours. Test du Row : 140 en palier puis 150 × 3 ; si la série 3 et la série 4 passent sans étoile, le Row passe à 160 à la prochaine séance (objectif du 30/11). Avant : Powerade 500 ml ou Red Bull, entre 45 et 30 minutes avant l’échauffement, note ce que tu bois et si les étoiles ou les brûlures reviennent. Tour de taille à jeun ce matin, avant de boire."
+  },
+  "seance": {
+    "groupe": "Dos",
+    "titre": "Dos + Épaules — 16 séries, palier en série 1",
+    "exercices": [
+      {
+        "nom": "Row",
+        "series": 4,
+        "reps": 10,
+        "kg": 150,
+        "pas": 10,
+        "note": "série 1 en palier à 140, séries 2 à 4 à 150 × 10 ; le 27/10 : 140, 150, 150, 150 × 10 à RPE 6/7/7/7, avec des étoiles. C’est le test des étoiles : série 3 et 4 à 150 sans étoile, alors 160 la prochaine fois."
+      },
+      {
+        "nom": "PullDown",
+        "series": 2,
+        "reps": 12,
+        "kg": 105,
+        "pas": 5,
+        "note": "série 1 en palier à 100, série 2 à 105 × 12 ; le 27/10 : 95, 100, 100, 105 × 12 à RPE 6/6/6/7."
+      },
+      {
+        "nom": "Pulley",
+        "series": 2,
+        "reps": 10,
+        "kg": 60,
+        "pas": 5,
+        "note": "série 1 en palier à 55, série 2 à 60 × 10 ; le 27/10 : 55 × 10 × 3 à RPE 7."
+      },
+      {
+        "nom": "Shoulder press",
+        "series": 3,
+        "reps": 10,
+        "kg": 90,
+        "pas": 5,
+        "note": "série 1 en palier à 85, séries 2 et 3 à 90 × 10 ; le 23/10 : 80, 85, 85, 90 × 10 à RPE 6/7/7/8. Objectif du 30/11 : 85 × 10 × 3 sous RPE 8, déjà tenu."
+      },
+      {
+        "nom": "Upper Back",
+        "series": 2,
+        "reps": 12,
+        "kg": 95,
+        "pas": 5,
+        "note": "série 1 en palier à 90, série 2 à 95 × 12 ; le 23/10 : 80, 85, 90, 90 × 12 à RPE 6/6/7/7."
+      },
+      {
+        "nom": "Haltères latérales",
+        "series": 3,
+        "reps": 10,
+        "kg": 17.5,
+        "pas": 2.5,
+        "note": "série 1 en palier à 15, séries 2 et 3 à 17,5 × 10 ; le 23/10 : 15 × 10 × 4 à RPE 7."
+      }
+    ],
+    "echauffement": [
+      "Row 60 × 10",
+      "Row 100 × 6",
+      "Row 130 × 3",
+      "PullDown 60 × 10",
+      "Shoulder press 40 × 10",
+      "Shoulder press 60 × 6",
+      "Shoulder press 75 × 3"
+    ],
+    "tapis": {
+      "min": 10,
+      "pente": 13,
+      "kmh": 5.5
+    }
+  },
+  "points": [
+    "Verdicts du prochain Dos + Épaules, palier d’abord : Row 150 puis 160 si le test des étoiles passe, PullDown 105 puis 110, Pulley 60 puis 65, Shoulder press 90 puis 95, Upper Back 95 puis 100, Haltères latérales 17,5 puis 20.",
+    "Row : double pas non appliqué (150 serait 170) : le Row à 150 n’a été tenu qu’une seule séance et les étoiles du 27/10 ne sont pas levées ; l’objectif du 30/11 est 160.",
+    "Tour de taille à jeun aujourd’hui 06/11, et photos vers le 11/11. Poids : dernier saisi 78,1 kg le 02/11 ; au-dessus de 79 ou tour de taille à 95 ou plus, on en reparle (quantités, pas retrait de plaisirs).",
+    "Prochain Jambes lourdes : Leg press 2 210 puis 220, Hack squat 60 puis 65, Leg Curl 65 puis 70."
+  ]
+}
